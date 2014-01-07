@@ -3,18 +3,18 @@ package com.norbitltd.spoiwo.excel
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.ss.usermodel.Row
 
-object XRow {
+object Row {
 
   val Empty = apply()
 
-  def apply(cells : XCell*) : XRow = apply(cells.toVector)
+  def apply(cells : Cell*) : Row = apply(cells.toVector)
 
-  def apply(cellStyle : XCellStyle, cellValues : List[Any]) : XRow = {
+  def apply(cellStyle : CellStyle, cellValues : List[Any]) : Row = {
     val cells = cellValues.map(value => value match {
-      case stringValue : String => XCell(stringValue, cellStyle)
-      case doubleValue : Double => XCell(doubleValue, cellStyle)
-      case intValue : Int => XCell(intValue, cellStyle)
-      case longValue : Long => XCell(longValue, cellStyle)
+      case stringValue : String => Cell(stringValue, cellStyle)
+      case doubleValue : Double => Cell(doubleValue, cellStyle)
+      case intValue : Int => Cell(intValue, cellStyle)
+      case longValue : Long => Cell(longValue, cellStyle)
       case _ => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     })
     apply(cells.toVector)
@@ -22,7 +22,7 @@ object XRow {
 
 }
 
-case class XRow(cells: Vector[XCell]) {
+case class Row(cells: Vector[Cell]) {
 
   def convert(sheet: XSSFSheet): Row = {
     val row = sheet.createRow(getNextRowNumber(sheet))

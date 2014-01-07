@@ -6,7 +6,7 @@ abstract class AbstractReportGenerator {
 
   def log = LogFactory.getLog(this.getClass)
 
-  def getWorkbook : XWorkbook
+  def getWorkbook : Workbook
 
   def main(args : Array[String]) {
     try {

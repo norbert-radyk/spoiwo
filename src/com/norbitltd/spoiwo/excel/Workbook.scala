@@ -4,13 +4,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileOutputStream
 
 
-object XWorkbook {
+object Workbook {
 
-   def apply(sheets : XSheet*) : XWorkbook = new XWorkbook(sheets.toList)
+   def apply(sheets : Sheet*) : Workbook = new Workbook(sheets.toList)
 
 }
 
-class XWorkbook(sheets : List[XSheet], activeSheet : Int = 0) {
+class Workbook(sheets : List[Sheet], activeSheet : Int = 0) {
   require(!sheets.isEmpty, "Unable to construct Excel workbook with no sheets!")
 
   def convert() : XSSFWorkbook = {

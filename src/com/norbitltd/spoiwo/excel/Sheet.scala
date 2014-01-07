@@ -2,11 +2,11 @@ package com.norbitltd.spoiwo.excel
 
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
-object XSheet {
+object Sheet {
 
 }
 
-case class XSheet(name: String, columns: List[XColumn] = Nil, rows: List[XRow]) {
+case class Sheet(name: String, columns: List[Column] = Nil, rows: List[Row]) {
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
     val sheet = workbook.createSheet(name)
