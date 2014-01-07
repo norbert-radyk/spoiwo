@@ -12,12 +12,17 @@ object XCellStyle {
 
 case class XCellStyle(font : XFont = XFont(),
                        backgroundColor : XColor = XColor.WHITE,
-                       borderStyle : XCellBorder = XCellBorder(BorderStyle.NONE),
-                       wrapText : Boolean = false) {
+                       borders : XCellBorder = XCellBorder(BorderStyle.NONE),
+                       wrapText : Boolean = false,
+                       horizontalAlignment : HorizontalAlignment = HorizontalAlignment.GENERAL,
+                       verticalAlignment : VerticalAlignment = VerticalAlignment.BOTTOM) {
 
   def convert(cell : XSSFCell) : CellStyle = convert(cell.getRow)
+
   def convert(row : XSSFRow) : CellStyle = convert(row.getSheet)
+
   def convert(sheet : XSSFSheet) : CellStyle = convert(sheet.getWorkbook)
+
   def convert(workbook : XSSFWorkbook) : CellStyle = {
     val workbookCache = XCellStyle.cache.getOrElseUpdate(workbook, collection.mutable.Map[XCellStyle, CellStyle]())
     workbookCache.getOrElseUpdate(this, createCellStyle(workbook, this))
@@ -29,10 +34,9 @@ case class XCellStyle(font : XFont = XFont(),
     cellStyle.setFillBackgroundColor(backgroundColor.convert())
     cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND)
     cellStyle.setWrapText(wrapText)
-    cellStyle.setBorderBottom(borderStyle.bottom)
-    cellStyle.setBorderLeft(borderStyle.left)
-    cellStyle.setBorderRight(borderStyle.right)
-    cellStyle.setBorderTop(borderStyle.top)
+    cellStyle.setAlignment(horizontalAlignment)
+    cellStyle.setVerticalAlignment(verticalAlignment)
+    borders.convert(cellStyle)
     cellStyle
   }
 
