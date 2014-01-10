@@ -1,12 +1,13 @@
 package com.norbitltd.spoiwo.excel
 
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFRow}
+import java.util.{Calendar, Date}
 
 object Cell {
 
   val Empty = apply("", CellStyle())
 
-  def apply(value : String, cellStyle: CellStyle) = if( value.startsWith("=")) {
+  def apply(value : String, cellStyle: CellStyle = CellStyle.Default) = if( value.startsWith("=")) {
     val formula = value.drop(1).trim
     FormulaCell(formula, cellStyle)
   } else {
@@ -17,12 +18,17 @@ object Cell {
     StringCell(value, valueBoundStyle)
   }
 
-  def apply(value : Double, cellStyle : CellStyle) : Cell = NumericCell(value, cellStyle)
+  def apply(value : Double, cellStyle : CellStyle = CellStyle.Default) : Cell = NumericCell(value, cellStyle)
 
   def apply(value : Int, cellStyle : CellStyle) : Cell = apply(value.toDouble, cellStyle)
 
   def apply(value : Long, cellStyle : CellStyle) : Cell = apply(value.toDouble, cellStyle)
 
+  def apply(value : Boolean, cellStyle : CellStyle = CellStyle.Default) : Cell = BooleanCell(value, cellStyle)
+
+  def apply(value : Date, cellStyle : CellStyle = CellStyle.Default) : Cell = DateCell(value, cellStyle)
+
+  def apply(value: Calendar, cellStyle : CellStyle = CellStyle.Default) : Cell =
 }
 
 sealed trait Cell {
@@ -52,6 +58,24 @@ case class FormulaCell(formula: String, style : CellStyle) extends Cell {
 
 case class NumericCell(value : Double, style : CellStyle) extends Cell {
   override def convert(row : XSSFRow) = convert(row, style) {
+    cell => cell.setCellValue(value)
+  }
+}
+
+case class BooleanCell(value : Boolean, style : CellStyle) extends Cell {
+  override def convert(row : XSSFRow) = convert(row, style) {
+    cell => cell.setCellValue(value)
+  }
+}
+
+case class DateCell(value : Date, style : CellStyle) extends Cell {
+  override def convert(row : XSSFRow) = convert(row, style) {
+    cell => cell.setCellValue(value)
+  }
+}
+
+case class CalendarCell(value : Calendar, style : CellStyle) extends Cell {
+  override def convert(row: XSSFRow) = convert(row, style) {
     cell => cell.setCellValue(value)
   }
 }

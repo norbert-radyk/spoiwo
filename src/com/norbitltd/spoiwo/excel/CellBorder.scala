@@ -7,9 +7,6 @@ object CellBorder {
 
   lazy val Default = apply()
 
-  def apply(borderStyle: BorderStyle, borderColor: Color = Color.BLACK): CellBorder =
-    CellBorder(borderStyle, borderColor, borderStyle, borderColor, borderStyle, borderColor, borderStyle, borderColor)
-
 }
 
 case class CellBorder(leftStyle: BorderStyle = BorderStyle.NONE, leftColor: Color = Color.BLACK,

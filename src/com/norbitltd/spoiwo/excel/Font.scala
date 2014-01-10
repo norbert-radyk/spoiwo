@@ -1,11 +1,11 @@
 package com.norbitltd.spoiwo.excel
 
 import org.apache.poi.ss.usermodel._
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
 
 object Font {
 
-  private[Font] val cache = collection.mutable.Map[Font, Font]()
+  private[Font] val cache = collection.mutable.Map[Font, XSSFFont]()
 
 }
 
@@ -20,10 +20,10 @@ case class Font(
                   strikeout: Boolean = false,
                   underline: FontUnderline = FontUnderline.NONE) {
 
-  def convert(workbook: XSSFWorkbook): Font =
+  def convert(workbook: XSSFWorkbook): XSSFFont =
     Font.cache.getOrElseUpdate(this, createFont(workbook))
 
-  private def createFont(workbook: XSSFWorkbook): Font = {
+  private def createFont(workbook: XSSFWorkbook): XSSFFont = {
     val font = workbook.createFont()
     font.setBold(bold)
     font.setCharSet(fontCharset)

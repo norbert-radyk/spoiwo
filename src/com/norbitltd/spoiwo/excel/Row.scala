@@ -1,7 +1,6 @@
 package com.norbitltd.spoiwo.excel
 
-import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.xssf.usermodel.{XSSFRow, XSSFSheet}
 
 object Row {
 
@@ -24,7 +23,7 @@ object Row {
 
 case class Row(cells: Vector[Cell]) {
 
-  def convert(sheet: XSSFSheet): Row = {
+  def convert(sheet: XSSFSheet): XSSFRow = {
     val row = sheet.createRow(getNextRowNumber(sheet))
     cells.foreach(cell => cell.convert(row))
     row

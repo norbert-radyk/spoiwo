@@ -14,6 +14,7 @@ case class CellStyle(font : Font = Font(),
                        backgroundColor : Color = Color.WHITE,
                        borders : CellBorder = CellBorder(),
                        wrapText : Boolean = false,
+                       dataFormat : CellDataFormat = CellDataFormat.Undefined,
                        horizontalAlignment : HorizontalAlignment = HorizontalAlignment.GENERAL,
                        verticalAlignment : VerticalAlignment = VerticalAlignment.BOTTOM) {
 
@@ -37,6 +38,7 @@ case class CellStyle(font : Font = Font(),
     cellStyle.setAlignment(horizontalAlignment)
     cellStyle.setVerticalAlignment(verticalAlignment)
     borders.convert(cellStyle)
+    dataFormat.applyTo(workbook, cellStyle)
     cellStyle
   }
 

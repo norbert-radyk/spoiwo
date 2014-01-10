@@ -4,9 +4,11 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 object Sheet {
 
+
+
 }
 
-case class Sheet(name: String, columns: List[Column] = Nil, rows: List[Row]) {
+case class Sheet(name: String, columns: List[Column] = Nil, rows: List[Row] = Nil) {
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
     val sheet = workbook.createSheet(name)
