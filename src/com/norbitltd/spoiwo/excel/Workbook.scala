@@ -26,6 +26,7 @@ class Workbook(sheets : List[Sheet], activeSheet : Int = 0) {
       val xssfWorkbook = convert()
       xssfWorkbook.write(stream)
     } finally {
+      stream.flush()
       stream.close()
     }
   }

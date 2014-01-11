@@ -23,7 +23,6 @@ public class T002Original {
         Cell cell = row.createCell(0);
         cell.setCellValue(1);
 
-        // Or do it on one line.
         row.createCell(1).setCellValue(1.2);
         row.createCell(2).setCellValue(
                 createHelper.createRichTextString("This is a string"));

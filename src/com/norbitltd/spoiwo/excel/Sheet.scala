@@ -4,14 +4,17 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 object Sheet {
 
-
+  def apply(rows : Row*) = apply(rows = rows.toList)
 
 }
 
-case class Sheet(name: String, columns: List[Column] = Nil, rows: List[Row] = Nil) {
+case class Sheet(name: String = "", columns: List[Column] = Nil, rows: List[Row] = Nil) {
+
+  def withSheetName(name : String) = copy(name = name)
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
-    val sheet = workbook.createSheet(name)
+    val sheetName = if( name.isEmpty ) "Sheet " + (workbook.getNumberOfSheets + 1) else sheetName
+    val sheet = workbook.createSheet(sheetName)
     initializeColumns(sheet)
     initializeRows(sheet)
     sheet
@@ -28,6 +31,10 @@ case class Sheet(name: String, columns: List[Column] = Nil, rows: List[Row] = Ni
       sheet.setColumnHidden(columnIndex, column.hidden)
       sheet.setColumnGroupCollapsed(columnIndex, column.groupCollapsed)
     })
+  }
+
+  def save(fileName : String) {
+    Workbook(this).save(fileName)
   }
 
 }
