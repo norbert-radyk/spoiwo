@@ -17,6 +17,7 @@ case class Font(
                   fontColor: Color = Color.BLACK,
                   fontFamily: FontFamily = FontFamily.MODERN,
                   fontScheme: FontScheme = FontScheme.NONE,
+                  fontName : String = "Calibri",
                   strikeout: Boolean = false,
                   underline: FontUnderline = FontUnderline.NONE) {
 
@@ -32,6 +33,7 @@ case class Font(
     font.setFontHeightInPoints(heightInPoints)
     font.setItalic(italic)
     font.setScheme(fontScheme)
+    font.setFontName(fontName)
     font.setStrikeout(strikeout)
     font.setUnderline(underline)
     font

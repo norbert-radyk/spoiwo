@@ -8,7 +8,7 @@ object Sheet {
 
 }
 
-case class Sheet(name: String = "", columns: List[Column] = Nil, rows: List[Row] = Nil) {
+case class Sheet(name: String = "", columns: List[Column] = Nil, mergedRegions : List[CellRangeAddress] = Nil, rows: List[Row] = Nil) {
 
   def withSheetName(name : String) = copy(name = name)
 
@@ -17,6 +17,7 @@ case class Sheet(name: String = "", columns: List[Column] = Nil, rows: List[Row]
     val sheet = workbook.createSheet(sheetName)
     initializeColumns(sheet)
     initializeRows(sheet)
+    initializeMergedRegions(sheet)
     sheet
   }
 
@@ -31,6 +32,10 @@ case class Sheet(name: String = "", columns: List[Column] = Nil, rows: List[Row]
       sheet.setColumnHidden(columnIndex, column.hidden)
       sheet.setColumnGroupCollapsed(columnIndex, column.groupCollapsed)
     })
+  }
+
+  def initializeMergedRegions(sheet: XSSFSheet) {
+    mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(mergedRegion.convert()))
   }
 
   def save(fileName : String) {
