@@ -4,20 +4,24 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 object Sheet {
 
-  def apply(rows : Row*) = apply(rows = rows.toList)
+  def apply(rows: Row*) = apply(rows = rows.toList)
 
 }
 
-case class Sheet(name: String = "", columns: List[Column] = Nil, mergedRegions : List[CellRangeAddress] = Nil, rows: List[Row] = Nil) {
+case class Sheet(name: String = "", columns: List[Column] = Nil, mergedRegions: List[CellRangeAddress] = Nil, autoBreaks: Boolean = false, printSetup: PrintSetup = PrintSetup.Default, rows: List[Row] = Nil) {
 
-  def withSheetName(name : String) = copy(name = name)
+  def withSheetName(name: String) = copy(name = name)
+
+  def withAutoBreaks(autoBreaks: Boolean) = copy(autoBreaks = autoBreaks)
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
-    val sheetName = if( name.isEmpty ) "Sheet " + (workbook.getNumberOfSheets + 1) else sheetName
+    val sheetName = if (name.isEmpty) "Sheet " + (workbook.getNumberOfSheets + 1) else sheetName
     val sheet = workbook.createSheet(sheetName)
     initializeColumns(sheet)
     initializeRows(sheet)
     initializeMergedRegions(sheet)
+    printSetup.applyTo(sheet)
+    sheet.setAutobreaks(autoBreaks)
     sheet
   }
 
@@ -38,7 +42,7 @@ case class Sheet(name: String = "", columns: List[Column] = Nil, mergedRegions :
     mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(mergedRegion.convert()))
   }
 
-  def save(fileName : String) {
+  def save(fileName: String) {
     Workbook(this).save(fileName)
   }
 
