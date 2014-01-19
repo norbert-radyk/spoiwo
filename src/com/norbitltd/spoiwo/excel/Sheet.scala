@@ -8,11 +8,26 @@ object Sheet {
 
 }
 
-case class Sheet(name: String = "", columns: List[Column] = Nil, mergedRegions: List[CellRangeAddress] = Nil, autoBreaks: Boolean = false, printSetup: PrintSetup = PrintSetup.Default, rows: List[Row] = Nil) {
+case class Sheet(name: String = "",
+                 columns: List[Column] = Nil,
+                 rows: List[Row] = Nil,
+                 mergedRegions: List[CellRangeAddress] = Nil,
+                 autoBreaks: Boolean = false,
+                 printSetup: PrintSetup = PrintSetup.Default,
+                 header: Header = Header.None,
+                 footer: Footer = Footer.None) {
 
   def withSheetName(name: String) = copy(name = name)
 
   def withAutoBreaks(autoBreaks: Boolean) = copy(autoBreaks = autoBreaks)
+
+  def withPrintSetup(printSetup : PrintSetup) = copy(printSetup = printSetup)
+
+  def withHeader(header: Header) = copy(header = header)
+
+  def withFooter(footer : Footer) = copy(footer = footer)
+
+
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
     val sheetName = if (name.isEmpty) "Sheet " + (workbook.getNumberOfSheets + 1) else sheetName
@@ -20,8 +35,14 @@ case class Sheet(name: String = "", columns: List[Column] = Nil, mergedRegions: 
     initializeColumns(sheet)
     initializeRows(sheet)
     initializeMergedRegions(sheet)
-    printSetup.applyTo(sheet)
+
     sheet.setAutobreaks(autoBreaks)
+    sheet.set
+
+    printSetup.applyTo(sheet)
+
+    header.apply(sheet)
+    footer.apply(sheet)
     sheet
   }
 

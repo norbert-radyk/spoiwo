@@ -1,5 +1,6 @@
 package com.norbitltd.spoiwo.excel;
 
+import org.apache.poi.hssf.usermodel.HeaderFooter;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Row;
@@ -7,6 +8,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.PrintSetup;
+import org.apache.poi.ss.usermodel.Footer;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
@@ -28,10 +30,10 @@ public class POIDocumentation {
         cell.setCellStyle(cs);
 
         //increase row height to accomodate two lines of text
-        row.setHeightInPoints((2*sheet.getDefaultRowHeightInPoints()));
+        row.setHeightInPoints((2 * sheet.getDefaultRowHeightInPoints()));
 
         //adjust column width to fit the content
-        sheet.autoSizeColumn((short)2);
+        sheet.autoSizeColumn((short) 2);
 
         FileOutputStream fileOut = new FileOutputStream("ooxml-newlines.xlsx");
         wb.write(fileOut);
@@ -74,8 +76,23 @@ public class POIDocumentation {
 
         sheet.setAutobreaks(true);
 
-        ps.setFitHeight((short)1);
-        ps.setFitWidth((short)1);
+        ps.setFitHeight((short) 1);
+        ps.setFitWidth((short) 1);
+
+
+        // Create various cells and rows for spreadsheet.
+
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    public void setPageNumbersOnFooter() throws IOException {
+        Workbook wb = new XSSFWorkbook(); // or new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("format sheet");
+        Footer footer = sheet.getFooter();
+
+        footer.setRight("Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages());
 
 
         // Create various cells and rows for spreadsheet.

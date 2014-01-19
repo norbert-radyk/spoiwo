@@ -1,5 +1,7 @@
 package com.norbitltd.spoiwo.excel
 
+import org.apache.poi.hssf.usermodel.HeaderFooter
+
 class SpoiwoDocumentation {
 
   def usingNewLinesInCells() {
@@ -23,9 +25,19 @@ class SpoiwoDocumentation {
   }
 
   def fitSheetToOnePage() {
-    val printSetup = PrintSetup.Default.withFitHeight(1).withFitWidth(1)
+
+    val printSetup = PrintSetup.Default
+      .withFitHeight(1)
+      .withFitWidth(1)
+
     Sheet(name = "format sheet", autoBreaks = true, printSetup = printSetup)
       .save("workbook.xlsx")
+  }
+
+  def setPageNumbersOnFooter() {
+    Sheet(name = "format sheet", footer = Footer(pageFooterData =
+      FooterData(right = "Page " + HeaderFooter.page + " of " + HeaderFooter.numPages))
+    ).save("workbook.xlsx")
   }
 
 }
