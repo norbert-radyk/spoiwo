@@ -9,7 +9,7 @@ object PrintSetup {
 
 }
 
-case class PrintSetup private[Excel](copies: Option[Short] = None,
+case class PrintSetup private[excel](copies: Option[Short] = None,
                                      draft: Option[Boolean] = None,
                                      fitHeight: Option[Short] = None,
                                      fitWidth: Option[Short] = None,

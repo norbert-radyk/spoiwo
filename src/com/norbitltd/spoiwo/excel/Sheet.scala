@@ -4,7 +4,7 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 object Sheet {
 
-  def apply(rows: Row*) = apply(rows = rows.toList)
+  def apply(rows: Row*) : Sheet = apply(rows = rows.toList)
 
 }
 
@@ -30,14 +30,14 @@ case class Sheet(name: String = "",
 
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
-    val sheetName = if (name.isEmpty) "Sheet " + (workbook.getNumberOfSheets + 1) else sheetName
+    val sheetName = if (name.isEmpty) "Sheet " + (workbook.getNumberOfSheets + 1) else name
     val sheet = workbook.createSheet(sheetName)
     initializeColumns(sheet)
     initializeRows(sheet)
     initializeMergedRegions(sheet)
 
     sheet.setAutobreaks(autoBreaks)
-    sheet.set
+    //TODO Add sheet properties
 
     printSetup.applyTo(sheet)
 

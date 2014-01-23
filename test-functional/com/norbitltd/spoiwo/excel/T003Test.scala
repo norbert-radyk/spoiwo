@@ -5,8 +5,6 @@ import java.util.{Calendar, Date}
 
 class T003Test {
 
-  val format = XSSFDataFormat
-
   def creatingDateCells() {
     val dateCellStyle = CellStyle(dataFormat = CellDataFormat("m/d/yy h:mm"))
     Sheet(
@@ -17,6 +15,17 @@ class T003Test {
         Cell(Calendar.getInstance(), dateCellStyle)
       ) :: Nil
     ).save("workbook.xlsx")
+  }
+
+
+  case class Book(author : String, price : Double)
+
+  def printBooks(books : List[Book]) {
+    val bookRows = books.map(book => Row(Cell(book.author), Cell(book.price)))
+    Sheet(
+      name = "Koki books",
+      rows = Row(Cell("Autor"), Cell("Cena")) :: Row.Empty :: bookRows
+    ).save("books.xlsx")
   }
 
 }

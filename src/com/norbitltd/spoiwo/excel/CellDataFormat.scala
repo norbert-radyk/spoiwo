@@ -6,7 +6,7 @@ object CellDataFormat {
 
   val Undefined = apply(None)
 
-  def apply(formatString : String) = CellDataFormat(Option(formatString))
+  def apply(formatString : String) : CellDataFormat = CellDataFormat(Option(formatString))
 
   val cache = collection.mutable.Map[XSSFWorkbook, XSSFDataFormat]()
 

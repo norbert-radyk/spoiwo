@@ -35,7 +35,7 @@ class SpoiwoDocumentation {
   }
 
   def setPageNumbersOnFooter() {
-    Sheet(name = "format sheet", footer = Footer(pageFooterData =
+    Sheet(name = "format sheet", footer = UnifiedFooter(pageFooterData =
       FooterData(right = "Page " + HeaderFooter.page + " of " + HeaderFooter.numPages))
     ).save("workbook.xlsx")
   }

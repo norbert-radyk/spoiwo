@@ -14,17 +14,6 @@ object Footer {
 
   val None = UnifiedFooter()
 
-  def apply(pageFooterData : FooterData = FooterData.Empty) : Footer =
-    apply(pageFooterData, FooterData.Empty)
-
-  def apply(pageFooterData: FooterData = FooterData.Empty,
-            firstPageFooterData: FooterData = FooterData.Empty): Footer =
-    UnifiedFooter(pageFooterData, firstPageFooterData)
-
-  def apply(oddPageFooterData: FooterData = FooterData.Empty,
-            evenPageFooterData: FooterData = FooterData.Empty,
-            firstPageFooterData: FooterData = FooterData.Empty) : Footer =
-    OddEvenPageFooter(oddPageFooterData, evenPageFooterData, firstPageFooterData)
 }
 
 sealed trait Footer {

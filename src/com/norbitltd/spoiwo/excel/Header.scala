@@ -14,17 +14,6 @@ object Header {
 
   val None = UnifiedHeader()
 
-  def apply(pageHeaderData : HeaderData = HeaderData.Empty) : Header =
-    apply(pageHeaderData, HeaderData.Empty)
-
-  def apply(pageHeaderData: HeaderData = HeaderData.Empty,
-            firstPageHeaderData: HeaderData = HeaderData.Empty): Header =
-    UnifiedHeader(pageHeaderData, firstPageHeaderData)
-
-  def apply(oddPageHeaderData: HeaderData = HeaderData.Empty,
-            evenPageHeaderData: HeaderData = HeaderData.Empty,
-            firstPageHeaderData: HeaderData = HeaderData.Empty) : Header =
-    OddEvenPageHeader(oddPageHeaderData, evenPageHeaderData, firstPageHeaderData)
 }
 
 sealed trait Header {
