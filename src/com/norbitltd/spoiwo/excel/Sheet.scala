@@ -4,12 +4,12 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 object Sheet {
 
-  def apply(rows: Row*) : Sheet = apply(rows = rows.toList)
+  def apply(rows: Row*): Sheet = apply(rows = rows.toList)
 
 }
 
 case class Sheet(name: String = "",
-                 columns: List[Column] = Nil,
+                 columns: Map[Short, Column] = Nil,
                  rows: List[Row] = Nil,
                  mergedRegions: List[CellRangeAddress] = Nil,
                  autoBreaks: Boolean = false,
@@ -19,15 +19,27 @@ case class Sheet(name: String = "",
 
   def withSheetName(name: String) = copy(name = name)
 
+  def withColumns(columns: Map[Short, Column]) = copy(columns = columns)
+
+  def withColumns(columns: Iterable[Column]) = withColumns(
+    columns.zipWithIndex.map {
+      case (column, index) => index.toShort -> column
+    }.toMap
+  )
+
+  def withColumns(columns : Column*) = withColumns(columns)
+
+  def withRows(rows : Iterable[Row]) = copy(rows = rows.toList)
+
+  def withRows(rows : Row*) = withRows(rows)
+
   def withAutoBreaks(autoBreaks: Boolean) = copy(autoBreaks = autoBreaks)
 
-  def withPrintSetup(printSetup : PrintSetup) = copy(printSetup = printSetup)
+  def withPrintSetup(printSetup: PrintSetup) = copy(printSetup = printSetup)
 
   def withHeader(header: Header) = copy(header = header)
 
-  def withFooter(footer : Footer) = copy(footer = footer)
-
-
+  def withFooter(footer: Footer) = copy(footer = footer)
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
     val sheetName = if (name.isEmpty) "Sheet " + (workbook.getNumberOfSheets + 1) else name
@@ -37,6 +49,7 @@ case class Sheet(name: String = "",
     initializeMergedRegions(sheet)
 
     sheet.setAutobreaks(autoBreaks)
+
     //TODO Add sheet properties
 
     printSetup.applyTo(sheet)
@@ -51,12 +64,9 @@ case class Sheet(name: String = "",
   }
 
   def initializeColumns(sheet: XSSFSheet) {
-    columns.foreach(column => {
-      val columnIndex = column.index
-      sheet.setColumnWidth(columnIndex, 256 * column.width)
-      sheet.setColumnHidden(columnIndex, column.hidden)
-      sheet.setColumnGroupCollapsed(columnIndex, column.groupCollapsed)
-    })
+    columns.foreach {
+      case (index, column) => column.applyTo(index, sheet)
+    }
   }
 
   def initializeMergedRegions(sheet: XSSFSheet) {
