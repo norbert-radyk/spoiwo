@@ -4,12 +4,14 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 object Sheet {
 
+  val Blank = Sheet()
+
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
 
 }
 
 case class Sheet(name: String = "",
-                 columns: Map[Short, Column] = Nil,
+                 columns: Map[Short, Column] = Map(),
                  rows: List[Row] = Nil,
                  mergedRegions: List[CellRangeAddress] = Nil,
                  autoBreaks: Boolean = false,
@@ -19,19 +21,19 @@ case class Sheet(name: String = "",
 
   def withSheetName(name: String) = copy(name = name)
 
-  def withColumns(columns: Map[Short, Column]) = copy(columns = columns)
+  def withColumns(columns: Map[Short, Column]) : Sheet = copy(columns = columns)
 
-  def withColumns(columns: Iterable[Column]) = withColumns(
+  def withColumns(columns: Iterable[Column]) : Sheet = withColumns(
     columns.zipWithIndex.map {
       case (column, index) => index.toShort -> column
     }.toMap
   )
 
-  def withColumns(columns : Column*) = withColumns(columns)
+  def withColumns(columns : Column*) : Sheet = withColumns(columns)
 
-  def withRows(rows : Iterable[Row]) = copy(rows = rows.toList)
+  def withRows(rows : Iterable[Row]) : Sheet = copy(rows = rows.toList)
 
-  def withRows(rows : Row*) = withRows(rows)
+  def withRows(rows : Row*) : Sheet = withRows(rows)
 
   def withAutoBreaks(autoBreaks: Boolean) = copy(autoBreaks = autoBreaks)
 
@@ -51,7 +53,7 @@ case class Sheet(name: String = "",
     sheet.setAutobreaks(autoBreaks)
 
     //TODO Add sheet properties
-
+    //TODO on the sheet level: workbook.setPrintArea()
     printSetup.applyTo(sheet)
 
     header.apply(sheet)
