@@ -6,6 +6,8 @@ import org.apache.poi.xssf.model.ThemesTable
 
 object Font {
 
+  val Default = Font()
+
   private[excel] val cache = collection.mutable.Map[Font, XSSFFont]()
 
 }

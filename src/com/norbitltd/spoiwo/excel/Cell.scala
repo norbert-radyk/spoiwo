@@ -13,7 +13,7 @@ object Cell {
     FormulaCell(formula, cellStyle)
   } else {
     val valueBoundStyle = if( value.contains("\n"))
-      cellStyle.copy(wrapText = true)
+      cellStyle.withWrapText(true)
     else
       cellStyle
     StringCell(value, valueBoundStyle)
