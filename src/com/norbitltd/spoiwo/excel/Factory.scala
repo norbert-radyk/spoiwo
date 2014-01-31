@@ -15,13 +15,4 @@ trait Factory {
     None
   }
 
-  /*def wrap[T](value : T, defaultValue : Option[T]) : Option[T] = {
-    val value0ption = Option(value)
-    if( value0ption != defaultValue ){
-      value0ption
-    } else {
-      None
-    }
-  } */
-
 }

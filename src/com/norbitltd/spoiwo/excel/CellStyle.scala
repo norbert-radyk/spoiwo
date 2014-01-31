@@ -51,7 +51,8 @@ object CellStyle extends Factory {
       wrap(wrapText, defaultWrapText)
     )
 
-  private[excel] val cache = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[CellStyle, XSSFCellStyle]]()
+  private[excel] val cache = collection.mutable.Map[XSSFWorkbook,
+    collection.mutable.Map[CellStyle, XSSFCellStyle]]()
 }
 
 case class CellStyle private[excel](
