@@ -6,6 +6,8 @@ trait Factory {
 
   lazy val defaultPOIWorkbook = new XSSFWorkbook()
   lazy val defaultPOISheet = defaultPOIWorkbook.createSheet()
+  lazy val defaultPOIRow = defaultPOISheet.createRow(0)
+  lazy val defaultPOICell = defaultPOIRow.createCell(0)
   lazy val defaultPOICellStyle = defaultPOIWorkbook.createCellStyle()
   lazy val defaultPOIFont = defaultPOIWorkbook.createFont()
 

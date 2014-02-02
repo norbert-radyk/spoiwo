@@ -2,7 +2,9 @@ package com.norbitltd.spoiwo.excel
 
 import org.apache.poi.xssf.usermodel.{XSSFRow, XSSFSheet}
 
-object Row {
+object Row extends Factory {
+
+  private lazy val heightInPoints =
 
   val Empty = apply()
 

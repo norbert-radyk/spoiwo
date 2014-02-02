@@ -2,7 +2,9 @@ package com.norbitltd.spoiwo.excel
 
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
-object Sheet {
+object Sheet extends Factory {
+
+  private lazy val name = defaultPOISheet
 
   val Blank = Sheet()
 
