@@ -16,28 +16,27 @@ case class Sheet(name: String = "",
                  columns: Map[Short, Column] = Map(),
                  rows: List[Row] = Nil,
                  mergedRegions: List[CellRangeAddress] = Nil,
-                 autoBreaks: Boolean = false,
                  printSetup: PrintSetup = PrintSetup.Default,
                  header: Header = Header.None,
-                 footer: Footer = Footer.None) {
+                 footer: Footer = Footer.None,
+                 properties: SheetProperties = SheetProperties.Default,
+                  margins : Margins = Margins.Default) {
 
   def withSheetName(name: String) = copy(name = name)
 
-  def withColumns(columns: Map[Short, Column]) : Sheet = copy(columns = columns)
+  def withColumns(columns: Map[Short, Column]): Sheet = copy(columns = columns)
 
-  def withColumns(columns: Iterable[Column]) : Sheet = withColumns(
+  def withColumns(columns: Iterable[Column]): Sheet = withColumns(
     columns.zipWithIndex.map {
       case (column, index) => index.toShort -> column
     }.toMap
   )
 
-  def withColumns(columns : Column*) : Sheet = withColumns(columns)
+  def withColumns(columns: Column*): Sheet = withColumns(columns)
 
-  def withRows(rows : Iterable[Row]) : Sheet = copy(rows = rows.toList)
+  def withRows(rows: Iterable[Row]): Sheet = copy(rows = rows.toList)
 
-  def withRows(rows : Row*) : Sheet = withRows(rows)
-
-  def withAutoBreaks(autoBreaks: Boolean) = copy(autoBreaks = autoBreaks)
+  def withRows(rows: Row*): Sheet = withRows(rows)
 
   def withPrintSetup(printSetup: PrintSetup) = copy(printSetup = printSetup)
 
@@ -52,14 +51,13 @@ case class Sheet(name: String = "",
     initializeRows(sheet)
     initializeMergedRegions(sheet)
 
-    sheet.setAutobreaks(autoBreaks)
-
     //TODO Add sheet properties
     //TODO on the sheet level: workbook.setPrintArea()
     printSetup.applyTo(sheet)
 
     header.apply(sheet)
     footer.apply(sheet)
+    properties.applyTo(sheet)
     sheet
   }
 

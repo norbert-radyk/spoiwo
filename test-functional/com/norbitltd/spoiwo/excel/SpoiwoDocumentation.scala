@@ -30,7 +30,7 @@ class SpoiwoDocumentation {
       .withFitHeight(1)
       .withFitWidth(1)
 
-    Sheet(name = "format sheet", autoBreaks = true, printSetup = printSetup)
+    Sheet(name = "format sheet", printSetup = printSetup)
       .save("workbook.xlsx")
   }
 
