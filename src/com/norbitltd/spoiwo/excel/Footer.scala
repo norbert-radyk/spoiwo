@@ -18,7 +18,7 @@ object Footer {
 
 sealed trait Footer {
 
-  def apply(sheet: XSSFSheet)
+  def applyTo(sheet: XSSFSheet)
 
   private[excel] def applyData(footer: org.apache.poi.ss.usermodel.Footer, data: FooterData) {
     if (data.left != "") footer.setLeft(data.left)
@@ -30,7 +30,7 @@ sealed trait Footer {
 case class UnifiedFooter(pageFooterData: FooterData = FooterData.Empty,
                          firstPageFooterData: FooterData = FooterData.Empty) extends Footer {
 
-  def apply(sheet: XSSFSheet) {
+  def applyTo(sheet: XSSFSheet) {
     if (pageFooterData != FooterData.Empty) applyData(sheet.getFooter, pageFooterData)
     if (firstPageFooterData != FooterData.Empty) applyData(sheet.getFirstFooter, firstPageFooterData)
   }
@@ -40,7 +40,7 @@ case class OddEvenPageFooter(oddPageFooterData: FooterData = FooterData.Empty,
                              evenPageFooterData: FooterData = FooterData.Empty,
                              firstPageFooterData: FooterData = FooterData.Empty) extends Footer {
 
-  def apply(sheet: XSSFSheet) {
+  def applyTo(sheet: XSSFSheet) {
     if (oddPageFooterData != FooterData.Empty) applyData(sheet.getOddFooter, oddPageFooterData)
     if (evenPageFooterData != FooterData.Empty) applyData(sheet.getEvenFooter, evenPageFooterData)
     if (firstPageFooterData != FooterData.Empty) applyData(sheet.getFirstFooter, firstPageFooterData)

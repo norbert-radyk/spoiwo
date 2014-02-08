@@ -4,6 +4,11 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 object Sheet extends Factory {
 
+  private lazy val defaultName = ""
+  private lazy val defaultColumns = Nil
+  private lazy val defaultRows = Nil
+  private lazy val default
+
   private lazy val name = defaultPOISheet
 
   val Blank = Sheet()
@@ -13,26 +18,20 @@ object Sheet extends Factory {
 }
 
 case class Sheet(name: String = "",
-                 columns: Map[Short, Column] = Map(),
+                 columns: List[Column] = Nil,
                  rows: List[Row] = Nil,
-                 mergedRegions: List[CellRangeAddress] = Nil,
+                 mergedRegions: List[CellRange] = Nil,
                  printSetup: PrintSetup = PrintSetup.Default,
                  header: Header = Header.None,
                  footer: Footer = Footer.None,
                  properties: SheetProperties = SheetProperties.Default,
-                  margins : Margins = Margins.Default) {
+                 margins: Margins = Margins.Default) {
 
   def withSheetName(name: String) = copy(name = name)
 
-  def withColumns(columns: Map[Short, Column]): Sheet = copy(columns = columns)
+  def withColumns(columns: List[Column]): Sheet = copy(columns = columns)
 
-  def withColumns(columns: Iterable[Column]): Sheet = withColumns(
-    columns.zipWithIndex.map {
-      case (column, index) => index.toShort -> column
-    }.toMap
-  )
-
-  def withColumns(columns: Column*): Sheet = withColumns(columns)
+  def withColumns(columns: Column*): Sheet = withColumns(columns.toList)
 
   def withRows(rows: Iterable[Row]): Sheet = copy(rows = rows.toList)
 
@@ -51,12 +50,9 @@ case class Sheet(name: String = "",
     initializeRows(sheet)
     initializeMergedRegions(sheet)
 
-    //TODO Add sheet properties
-    //TODO on the sheet level: workbook.setPrintArea()
     printSetup.applyTo(sheet)
-
-    header.apply(sheet)
-    footer.apply(sheet)
+    header.applyTo(sheet)
+    footer.applyTo(sheet)
     properties.applyTo(sheet)
     sheet
   }
@@ -66,8 +62,8 @@ case class Sheet(name: String = "",
   }
 
   def initializeColumns(sheet: XSSFSheet) {
-    columns.foreach {
-      case (index, column) => column.applyTo(index, sheet)
+    updateColumnsWithIndexes().foreach {
+      _.applyTo(sheet)
     }
   }
 
@@ -77,6 +73,21 @@ case class Sheet(name: String = "",
 
   def save(fileName: String) {
     Workbook(this).save(fileName)
+  }
+
+  private def updateColumnsWithIndexes(): List[Column] = {
+    val currentColumnIndexes = columns.map(_.index).flatten.toSet
+    if (currentColumnIndexes.isEmpty) {
+      columns.zipWithIndex.map {
+        case (column, index) => column.withIndex(index)
+      }
+    } else if (currentColumnIndexes.size == columns.size) {
+      columns
+    } else {
+      throw new IllegalArgumentException(
+        "When explicitly specifying column index you are required to provide it " +
+          "uniquely for all columns in this sheet definition!")
+    }
   }
 
 }

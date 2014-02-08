@@ -17,7 +17,7 @@ object Workbook extends Factory {
 
   //TODO defaultPOIWorkbook.isHidden throw Not implemented yet exception - to be replaced in the future.
   private lazy val defaultHidden = false
-  //TODO no getSelectedTab method available on apache POI, so using sensible default.
+  //TODO no getSelectedTab method not available on Apache POI, so using sensible default.
   private lazy val defaultSelectedTab = 0
 
   val Empty = apply()

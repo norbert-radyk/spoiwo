@@ -2,26 +2,67 @@ package com.norbitltd.spoiwo.excel
 
 import org.apache.poi.xssf.usermodel.XSSFSheet
 
-object Column {
+object Column extends Factory {
+
+  private lazy val defaultIndex = -1
+  private lazy val defaultBreak = false
+  private lazy val defaultGroupCollapsed = false
+  private lazy val defaultHidden = false
+  private lazy val defaultStyle = CellStyle.Default
+  private lazy val defaultWidth = defaultPOISheet.getDefaultColumnWidth
 
   val Default = Column()
 
+  def apply(
+             index: Int = defaultIndex,
+             break: Boolean = defaultBreak,
+             groupCollapsed: Boolean = defaultGroupCollapsed,
+             hidden: Boolean = defaultHidden,
+             style: CellStyle = defaultStyle,
+             width: Int = defaultWidth): Column =
+    Column(
+      index = wrap(index, defaultIndex),
+      break = wrap(break, defaultBreak),
+      groupCollapsed = wrap(groupCollapsed, defaultGroupCollapsed),
+      hidden = wrap(hidden, defaultHidden),
+      style = wrap(style, defaultStyle),
+      width = wrap(width, defaultWidth)
+    )
 }
 
-case class Column(width: Int = 20, hidden: Boolean = false, groupCollapsed: Boolean = false, columnStyle: CellStyle = CellStyle.Default) {
+case class Column private[excel](index : Option[Int],
+                                 break: Option[Boolean],
+                                 groupCollapsed: Option[Boolean],
+                                 hidden: Option[Boolean],
+                                 style: Option[CellStyle],
+                                 width: Option[Int]) {
 
-  def withWidth(width: Int) = copy(width = width)
+  def withIndex(index : Int) =
+    copy(index = Option(index))
 
-  def withHidden(hidden: Boolean) = copy(hidden = hidden)
+  def withBreak() =
+    copy(break = Option(true))
 
-  def withGroupCollapsed(groupCollapsed: Boolean) = copy(groupCollapsed = groupCollapsed)
+  def withGroupCollapsed(groupCollapsed: Boolean) =
+    copy(groupCollapsed = Option(groupCollapsed))
 
-  def withColumnStyle(columnStyle: CellStyle) = copy(columnStyle = columnStyle)
+  def withHidden(hidden: Boolean) =
+    copy(hidden = Option(hidden))
 
-  def applyTo(index : Short, sheet: XSSFSheet) {
-    sheet.setColumnWidth(index, 256 * width)
-    sheet.setColumnHidden(index, hidden)
-    sheet.setColumnGroupCollapsed(index, groupCollapsed)
-    sheet.setDefaultColumnStyle(index, columnStyle.convert(sheet))
+  def withStyle(style: CellStyle) =
+    copy(style = Option(style))
+
+  def withWidth(width: Int) =
+    copy(width = Option(width))
+
+  def applyTo(sheet: XSSFSheet) {
+    val i = index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
+      "Something went terribly wrong as it should have been derived if not specified explicitly!"))
+
+    break.foreach(b => sheet.setColumnBreak(i))
+    groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
+    hidden.foreach(h => sheet.setColumnHidden(i, h))
+    style.foreach(s => sheet.setDefaultColumnStyle(i, s.convert(sheet)))
+    width.foreach(w => sheet.setColumnWidth(i, w))
   }
 }

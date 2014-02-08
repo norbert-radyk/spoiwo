@@ -18,7 +18,7 @@ object Header {
 
 sealed trait Header {
 
-  def apply(sheet: XSSFSheet)
+  def applyTo(sheet: XSSFSheet)
 
   private[excel] def applyData(Header: org.apache.poi.ss.usermodel.Header, data: HeaderData) {
     if (data.left != "") Header.setLeft(data.left)
@@ -30,7 +30,7 @@ sealed trait Header {
 case class UnifiedHeader(pageHeaderData: HeaderData = HeaderData.Empty,
                          firstPageHeaderData: HeaderData = HeaderData.Empty) extends Header {
 
-  def apply(sheet: XSSFSheet) {
+  def applyTo(sheet: XSSFSheet) {
     if (pageHeaderData != HeaderData.Empty) applyData(sheet.getHeader, pageHeaderData)
     if (firstPageHeaderData != HeaderData.Empty) applyData(sheet.getFirstHeader, firstPageHeaderData)
   }
@@ -40,7 +40,7 @@ case class OddEvenPageHeader(oddPageHeaderData: HeaderData = HeaderData.Empty,
                              evenPageHeaderData: HeaderData = HeaderData.Empty,
                              firstPageHeaderData: HeaderData = HeaderData.Empty) extends Header {
 
-  def apply(sheet: XSSFSheet) {
+  def applyTo(sheet: XSSFSheet) {
     if (oddPageHeaderData != HeaderData.Empty) applyData(sheet.getOddHeader, oddPageHeaderData)
     if (evenPageHeaderData != HeaderData.Empty) applyData(sheet.getEvenHeader, evenPageHeaderData)
     if (firstPageHeaderData != HeaderData.Empty) applyData(sheet.getFirstHeader, firstPageHeaderData)

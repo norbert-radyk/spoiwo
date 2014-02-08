@@ -1,14 +1,15 @@
 package com.norbitltd.spoiwo.excel
 
-import org.apache.poi.xssf.usermodel.{XSSFSheet}
+import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.ss.usermodel.IndexedColors
 
 object SheetProperties extends Factory {
 
+  private lazy val defaultAutoFilter = CellRange.None
   private lazy val defaultActiveCell = defaultPOISheet.getActiveCell
   private lazy val defaultAutoBreaks = defaultPOISheet.getAutobreaks
   private lazy val defaultDefaultColumnWidth = defaultPOISheet.getDefaultColumnWidth
   private lazy val defaultDefaultRowHeight = defaultPOISheet.getDefaultRowHeight
-
   private lazy val defaultDisplayFormulas = true
   private lazy val defaultDisplayGridLines = true
   private lazy val defaultDisplayGuts = defaultPOISheet.getDisplayGuts
@@ -17,18 +18,20 @@ object SheetProperties extends Factory {
   private lazy val defaultFitToPage = defaultPOISheet.getFitToPage
   private lazy val defaultForceFormulaRecalculation = defaultPOISheet.getForceFormulaRecalculation
   private lazy val defaultHorizontallyCenter = defaultPOISheet.getHorizontallyCenter
+  private lazy val defaultPrintArea = CellRange.None
   private lazy val defaultPrintGridLines = false
   private lazy val defaultRightToLeft = false
   private lazy val defaultRowSumsBelow = defaultPOISheet.getRowSumsBelow
   private lazy val defaultRowSumsRight = defaultPOISheet.getRowSumsRight
   private lazy val defaultSelected = false
-  private lazy val defaultTabColor = Color.WHITE
+  private lazy val defaultTabColor = IndexedColors.WHITE.index.toInt
   private lazy val defaultVirtuallyCenter = defaultPOISheet.getVerticallyCenter
   private lazy val defaultZoom = 100
 
   lazy val Default = SheetProperties()
 
-  def apply(activeCell: String = defaultActiveCell,
+  def apply(autoFilter: CellRange = defaultAutoFilter,
+            activeCell: String = defaultActiveCell,
             autoBreaks: Boolean = defaultAutoBreaks,
             defaultColumnWidth: Int = defaultDefaultColumnWidth,
             defaultRowHeight: Short = defaultDefaultRowHeight,
@@ -40,16 +43,18 @@ object SheetProperties extends Factory {
             fitToPage: Boolean = defaultFitToPage,
             forceFormulaRecalculation: Boolean = defaultForceFormulaRecalculation,
             horizontallyCenter: Boolean = defaultHorizontallyCenter,
+            printArea: CellRange = defaultPrintArea,
             printGridLines: Boolean = defaultPrintGridLines,
             rightToLeft: Boolean = defaultRightToLeft,
             rowSumsBelow: Boolean = defaultRowSumsBelow,
             rowSumsRight: Boolean = defaultRowSumsRight,
             selected: Boolean = defaultSelected,
-            tabColor: Color = defaultTabColor,
+            //FIXME Tab color should be using color instead of Int, though this require mapping function to one of the indexed colors or (better) changes in Apache POI
+            tabColor: Int = defaultTabColor,
             virtuallyCenter: Boolean = defaultVirtuallyCenter,
             zoom: Int = defaultZoom
-
              ): SheetProperties = SheetProperties(
+    wrap(autoFilter, autoFilter),
     wrap(activeCell, defaultActiveCell),
     wrap(autoBreaks, defaultAutoBreaks),
     wrap(defaultColumnWidth, defaultDefaultColumnWidth),
@@ -62,6 +67,7 @@ object SheetProperties extends Factory {
     wrap(fitToPage, defaultFitToPage),
     wrap(forceFormulaRecalculation, defaultForceFormulaRecalculation),
     wrap(horizontallyCenter, defaultHorizontallyCenter),
+    wrap(printArea, defaultPrintArea),
     wrap(printGridLines, defaultPrintGridLines),
     wrap(rightToLeft, defaultRightToLeft),
     wrap(rowSumsBelow, defaultRowSumsBelow),
@@ -71,10 +77,15 @@ object SheetProperties extends Factory {
     wrap(virtuallyCenter, defaultVirtuallyCenter),
     wrap(zoom, defaultZoom)
   )
-
 }
 
+/**
+ * Represents the complete set of Apache POI sheet properties.
+ * The following methods are not supported:
+ * setRepeatingColumns and setRepeatingRows
+ */
 case class SheetProperties private[excel](
+                                           autoFilter: Option[CellRange],
                                            activeCell: Option[String],
                                            autoBreaks: Option[Boolean],
                                            defaultColumnWidth: Option[Int],
@@ -87,14 +98,18 @@ case class SheetProperties private[excel](
                                            fitToPage: Option[Boolean],
                                            forceFormulaRecalculation: Option[Boolean],
                                            horizontallyCenter: Option[Boolean],
+                                           printArea: Option[CellRange],
                                            printGridLines: Option[Boolean],
                                            rightToLeft: Option[Boolean],
                                            rowSumsBelow: Option[Boolean],
                                            rowSumsRight: Option[Boolean],
                                            selected: Option[Boolean],
-                                           tabColor: Option[Color],
+                                           tabColor: Option[Int],
                                            virtuallyCenter: Option[Boolean],
                                            zoom: Option[Int]) {
+
+  def withAutoFilter(autoFilterRange: CellRange) =
+    copy(autoFilter = Option(autoFilterRange))
 
   def withActiveCell(activeCell: String) =
     copy(activeCell = Option(activeCell))
@@ -132,6 +147,9 @@ case class SheetProperties private[excel](
   def withHorizontallyCenter(horizontallyCenter: Boolean) =
     copy(horizontallyCenter = Option(horizontallyCenter))
 
+  def withPrintArea(printArea: CellRange) =
+    copy(printArea = Option(printArea))
+
   def withPrintGridLines(printGridLines: Boolean) =
     copy(printGridLines = Option(printGridLines))
 
@@ -147,7 +165,7 @@ case class SheetProperties private[excel](
   def withSelected(selected: Boolean) =
     copy(selected = Option(selected))
 
-  def withTabColor(tabColor: Color) =
+  def withTabColor(tabColor: Int) =
     copy(tabColor = Option(tabColor))
 
   def withVirtuallyCenter(virtuallyCenter: Boolean) =
@@ -157,6 +175,7 @@ case class SheetProperties private[excel](
     copy(zoom = Option(zoom))
 
   def applyTo(sheet: XSSFSheet) {
+    autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(autoFilterRange.convert()))
     activeCell.foreach(sheet.setActiveCell)
     autoBreaks.foreach(sheet.setAutobreaks)
     defaultColumnWidth.foreach(sheet.setDefaultColumnWidth)
@@ -169,15 +188,24 @@ case class SheetProperties private[excel](
     fitToPage.foreach(sheet.setFitToPage)
     forceFormulaRecalculation.foreach(sheet.setForceFormulaRecalculation)
     horizontallyCenter.foreach(sheet.setHorizontallyCenter)
+    applyPrintAreaTo(sheet)
     printGridLines.foreach(sheet.setPrintGridlines)
     rightToLeft.foreach(sheet.setRightToLeft)
     rowSumsBelow.foreach(sheet.setRowSumsBelow)
     rowSumsRight.foreach(sheet.setRowSumsRight)
     selected.foreach(sheet.setSelected)
-    //TODO Apply tabColor
+    tabColor.foreach(sheet.setTabColor)
     virtuallyCenter.foreach(sheet.setVerticallyCenter)
     zoom.foreach(sheet.setZoom)
   }
 
-
+  private def applyPrintAreaTo(sheet: XSSFSheet) {
+    printArea.foreach {
+      case CellRange((startRow, endRow), (startColumn, endColumn)) => {
+        val workbook = sheet.getWorkbook
+        val sheetIndex = workbook.getNumberOfSheets - 1
+        workbook.setPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow)
+      }
+    }
+  }
 }
