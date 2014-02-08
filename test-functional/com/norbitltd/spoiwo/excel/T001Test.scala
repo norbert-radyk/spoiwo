@@ -12,4 +12,9 @@ class T001Test {
     ).save("workbook.xlsx")
   }
 
+
+  def test() {
+    Row(Cell("AAA"), Cell(2.30))
+
+  }
 }

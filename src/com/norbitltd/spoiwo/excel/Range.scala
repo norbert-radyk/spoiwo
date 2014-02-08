@@ -17,7 +17,6 @@ case class CellRange(rowRange: (Int, Int), columnRange: (Int, Int)) {
 
 }
 
-
 object RowRange {
 
   val None = RowRange(0, 0)
@@ -34,7 +33,7 @@ object ColumnRange {
 
   val None = ColumnRange("A", "A")
 
-  def apply(firstColumnIndex: Int, lastColumnIndex: Int) = {
+  def apply(firstColumnIndex: Int, lastColumnIndex: Int) : ColumnRange = {
     require(firstColumnIndex <= lastColumnIndex,
       "First column index can't be greater that the last column index!")
     ColumnRange(

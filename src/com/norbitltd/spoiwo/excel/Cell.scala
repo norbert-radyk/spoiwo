@@ -4,97 +4,120 @@ import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFRow}
 import java.util.{Calendar, Date}
 import org.apache.poi.ss.usermodel.FormulaError
 
-object Cell {
+object Cell extends Factory {
 
-  val Empty = apply("", CellStyle())
+  //TODO Implementation for Hyperlink and Comment
+  val defaultActive = false
+  val defaultIndex = -1
+  val defaultStyle = CellStyle.Default
 
-  def apply(value : String, cellStyle: CellStyle = CellStyle.Default) = if( value.startsWith("=")) {
-    val formula = value.drop(1).trim
-    FormulaCell(formula, cellStyle)
-  } else {
-    val valueBoundStyle = if( value.contains("\n"))
-      cellStyle.withWrapText(true)
-    else
-      cellStyle
-    StringCell(value, valueBoundStyle)
+  val Empty = apply("")
+
+  def apply(value : String) : Cell = apply(value, defaultIndex, defaultStyle)
+  def apply(value : String, index : Int) : Cell = apply(value, index, defaultStyle)
+  def apply(value : String, style : CellStyle) : Cell = apply(value, defaultIndex, style)
+  def apply(value : String, index : Int, style : CellStyle) : Cell = {
+
+    val indexOption = wrap(index, defaultIndex)
+    val styleOption = wrap(style, defaultStyle)
+
+    if( value.startsWith("=")) {
+      FormulaCell(value, indexOption, styleOption)
+    } else if( value.contains("\n")) {
+      StringCell(value, indexOption, Option(style.withWrapText(true)))
+    } else {
+      StringCell(value, indexOption, styleOption)
+    }
   }
 
-  def apply(value : Double) : Cell = apply(value, CellStyle.Default)
+  def apply(value : Double) : Cell = apply(value, defaultIndex, defaultStyle)
+  def apply(value : Double, index : Int) : Cell = apply(value, index, defaultStyle)
+  def apply(value : Double, style : CellStyle) : Cell = apply(value, defaultIndex, style)
+  def apply(value : Double, index : Int, style : CellStyle) : Cell =
+    NumericCell(value, wrap(index, defaultIndex), wrap(style, defaultStyle))
 
-  def apply(value : Double, cellStyle : CellStyle) : Cell = NumericCell(value, cellStyle)
+  def apply(value : Int) : Cell = apply(value, defaultIndex, defaultStyle)
+  def apply(value : Int, index : Int) : Cell = apply(value, index, defaultStyle)
+  def apply(value : Int, style : CellStyle) : Cell = apply(value, defaultIndex, style)
+  def apply(value : Int, index : Int, style : CellStyle) : Cell =
+    apply(value.toDouble, index, style)
 
-  def apply(value : Int) : Cell = apply(value, CellStyle.Default)
+  def apply(value : Long) : Cell = apply(value, defaultIndex, defaultStyle)
+  def apply(value : Long, index : Int) : Cell = apply(value, index, defaultStyle)
+  def apply(value : Long, style : CellStyle) : Cell = apply(value, defaultIndex, style)
+  def apply(value : Long, index : Int, style : CellStyle) : Cell =
+    apply(value.toDouble, index, style)
 
-  def apply(value : Int, cellStyle : CellStyle) : Cell = apply(value.toDouble, cellStyle)
+  def apply(value : Boolean) : Cell = apply(value, defaultIndex, defaultStyle)
+  def apply(value : Boolean, index : Int) : Cell = apply(value, index, defaultStyle)
+  def apply(value : Boolean, style : CellStyle) : Cell = apply(value, defaultIndex, style)
+  def apply(value : Boolean, index : Int, style : CellStyle) : Cell =
+    BooleanCell(value, wrap(index, defaultIndex), wrap(style, defaultStyle))
 
-  def apply(value : Long) : Cell = apply(value, CellStyle.Default)
+  def apply(value : Date) : Cell = apply(value, defaultIndex, defaultStyle)
+  def apply(value : Date, index : Int) : Cell = apply(value, index, defaultStyle)
+  def apply(value : Date, style : CellStyle) : Cell = apply(value, defaultIndex, style)
+  def apply(value : Date, index : Int, style : CellStyle) : Cell =
+    DateCell(value, wrap(index, defaultIndex), wrap(style, defaultStyle))
 
-  def apply(value : Long, cellStyle : CellStyle) : Cell = apply(value.toDouble, cellStyle)
-
-  def apply(value : Boolean) : Cell = apply(value, CellStyle.Default)
-
-  def apply(value : Boolean, cellStyle : CellStyle) : Cell = BooleanCell(value, cellStyle)
-
-  def apply(value : Date) : Cell = apply(value, CellStyle.Default)
-
-  def apply(value : Date, cellStyle : CellStyle) : Cell = DateCell(value, cellStyle)
-
-  def apply(value: Calendar) : Cell = apply(value, CellStyle.Default)
-
-  def apply(value: Calendar, cellStyle : CellStyle) : Cell = CalendarCell(value, cellStyle)
+  def apply(value : Calendar) : Cell = apply(value, defaultIndex, defaultStyle)
+  def apply(value : Calendar, index : Int) : Cell = apply(value, index, defaultStyle)
+  def apply(value : Calendar, style : CellStyle) : Cell = apply(value, defaultIndex, style)
+  def apply(value: Calendar, index : Int, style : CellStyle) : Cell =
+    CalendarCell(value, wrap(index, defaultIndex), wrap(style, defaultStyle))
 }
 
-sealed trait Cell {
+sealed abstract class Cell(index : Option[Int], style : Option[CellStyle]) {
 
   def convert(row : XSSFRow) : XSSFCell
 
-  def convert(row : XSSFRow, style : CellStyle)(initializeCell : XSSFCell => Unit) : XSSFCell = {
-    val cellNumber = if( row.getLastCellNum < 0 ) 0 else row.getLastCellNum
+  private[excel] def convertInternal(row : XSSFRow)(initializeCell : XSSFCell => Unit) : XSSFCell = {
+    val cellNumber = index.getOrElse(if( row.getLastCellNum < 0 ) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
-    cell.setCellStyle(style.convert(cell))
+    style.foreach(s => cell.setCellStyle(s.convert(cell)))
     initializeCell(cell)
     cell
   }
 }
 
-case class StringCell(value : String, style : CellStyle) extends Cell {
-  override def convert(row : XSSFRow) = convert(row, style) {
-    cell => cell.setCellValue(value)
+case class StringCell(value : String, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
+  override def convert(row : XSSFRow) = convertInternal(row) {
+    cell : XSSFCell => cell.setCellValue(value)
   }
 }
 
-case class FormulaCell(formula: String, style : CellStyle) extends Cell {
-  override def convert(row : XSSFRow) = convert(row, style) {
-    cell => cell.setCellFormula(formula)
+case class FormulaCell(formula: String, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
+  override def convert(row : XSSFRow) = convertInternal(row) {
+    cell : XSSFCell  => cell.setCellFormula(formula)
   }
 }
 
-case class FormulaErrorCell(formulaError : FormulaError, style : CellStyle) extends Cell {
-  override def convert(row : XSSFRow) = convert(row, style) {
-    cell => cell.setCellErrorValue(formulaError)
+case class ErrorValueCell(formulaError : FormulaError, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
+  override def convert(row : XSSFRow) = convertInternal(row) {
+    cell : XSSFCell  => cell.setCellErrorValue(formulaError)
   }
 }
 
-case class NumericCell(value : Double, style : CellStyle) extends Cell {
-  override def convert(row : XSSFRow) = convert(row, style) {
-    cell => cell.setCellValue(value)
+case class NumericCell(value : Double, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
+  override def convert(row : XSSFRow) = convertInternal(row) {
+    cell : XSSFCell  => cell.setCellValue(value)
   }
 }
 
-case class BooleanCell(value : Boolean, style : CellStyle) extends Cell {
-  override def convert(row : XSSFRow) = convert(row, style) {
-    cell => cell.setCellValue(value)
+case class BooleanCell(value : Boolean, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
+  override def convert(row : XSSFRow) = convertInternal(row) {
+    cell : XSSFCell  => cell.setCellValue(value)
   }
 }
 
-case class DateCell(value : Date, style : CellStyle) extends Cell {
-  override def convert(row : XSSFRow) = convert(row, style) {
-    cell => cell.setCellValue(value)
+case class DateCell(value : Date, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
+  override def convert(row : XSSFRow) = convertInternal(row) {
+    cell : XSSFCell  => cell.setCellValue(value)
   }
 }
 
-case class CalendarCell(value : Calendar, style : CellStyle) extends Cell {
-  override def convert(row: XSSFRow) = convert(row, style) {
-    cell => cell.setCellValue(value)
+case class CalendarCell(value : Calendar, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
+  override def convert(row: XSSFRow) = convertInternal(row) {
+    cell : XSSFCell  => cell.setCellValue(value)
   }
 }

@@ -49,11 +49,9 @@ object SheetProperties extends Factory {
             rowSumsBelow: Boolean = defaultRowSumsBelow,
             rowSumsRight: Boolean = defaultRowSumsRight,
             selected: Boolean = defaultSelected,
-            //FIXME Tab color should be using color instead of Int, though this require mapping function to one of the indexed colors or (better) changes in Apache POI
             tabColor: Int = defaultTabColor,
             virtuallyCenter: Boolean = defaultVirtuallyCenter,
-            zoom: Int = defaultZoom
-             ): SheetProperties = SheetProperties(
+            zoom: Int = defaultZoom): SheetProperties = SheetProperties(
     wrap(autoFilter, autoFilter),
     wrap(activeCell, defaultActiveCell),
     wrap(autoBreaks, defaultAutoBreaks),

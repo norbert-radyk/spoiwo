@@ -7,68 +7,92 @@ object Sheet extends Factory {
   private lazy val defaultName = ""
   private lazy val defaultColumns = Nil
   private lazy val defaultRows = Nil
-  private lazy val default
-
-  private lazy val name = defaultPOISheet
+  private lazy val defaultMergedRegions = Nil
+  private lazy val defaultPrintSetup = PrintSetup.Default
+  private lazy val defaultHeader = Header.None
+  private lazy val defaultFooter = Footer.None
+  private lazy val defaultProperties = SheetProperties.Default
+  private lazy val defaultMargins = Margins.Default
 
   val Blank = Sheet()
+
+  def apply(name: String = defaultName,
+            columns: List[Column] = defaultColumns,
+            rows: List[Row] = defaultRows,
+            mergedRegions: List[CellRange] = defaultMergedRegions,
+            printSetup: PrintSetup = defaultPrintSetup,
+            header: Header = defaultHeader,
+            footer: Footer = defaultFooter,
+            properties: SheetProperties = defaultProperties,
+            margins: Margins = defaultMargins): Sheet =
+    Sheet(
+      name = wrap(name, defaultName),
+      columns = columns,
+      rows = rows,
+      mergedRegions = mergedRegions,
+      printSetup = wrap(printSetup, defaultPrintSetup),
+      header = wrap(header, defaultHeader),
+      footer = wrap(footer, defaultFooter),
+      properties = wrap(properties, defaultProperties),
+      margins = wrap(margins, defaultMargins)
+    )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
 
 }
 
-case class Sheet(name: String = "",
-                 columns: List[Column] = Nil,
-                 rows: List[Row] = Nil,
-                 mergedRegions: List[CellRange] = Nil,
-                 printSetup: PrintSetup = PrintSetup.Default,
-                 header: Header = Header.None,
-                 footer: Footer = Footer.None,
-                 properties: SheetProperties = SheetProperties.Default,
-                 margins: Margins = Margins.Default) {
+case class Sheet private(
+                          name: Option[String],
+                          columns: List[Column],
+                          rows: List[Row],
+                          mergedRegions: List[CellRange],
+                          printSetup: Option[PrintSetup],
+                          header: Option[Header],
+                          footer: Option[Footer],
+                          properties: Option[SheetProperties],
+                          margins: Option[Margins]) {
 
-  def withSheetName(name: String) = copy(name = name)
+  def withSheetName(name: String) =
+    copy(name = Option(name))
 
-  def withColumns(columns: List[Column]): Sheet = copy(columns = columns)
+  def withColumns(columns: List[Column]): Sheet =
+    copy(columns = columns)
 
-  def withColumns(columns: Column*): Sheet = withColumns(columns.toList)
+  def withColumns(columns: Column*): Sheet =
+    withColumns(columns.toList)
 
-  def withRows(rows: Iterable[Row]): Sheet = copy(rows = rows.toList)
+  def withRows(rows: Iterable[Row]): Sheet =
+    copy(rows = rows.toList)
 
-  def withRows(rows: Row*): Sheet = withRows(rows)
+  def withRows(rows: Row*): Sheet =
+    withRows(rows)
 
-  def withPrintSetup(printSetup: PrintSetup) = copy(printSetup = printSetup)
+  def withPrintSetup(printSetup: PrintSetup) =
+    copy(printSetup = Option(printSetup))
 
-  def withHeader(header: Header) = copy(header = header)
+  def withHeader(header: Header) =
+    copy(header = Option(header))
 
-  def withFooter(footer: Footer) = copy(footer = footer)
+  def withFooter(footer: Footer) =
+    copy(footer = Option(footer))
+
+  def withMargins(margins: Margins) =
+    copy(margins = Option(margins))
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
-    val sheetName = if (name.isEmpty) "Sheet " + (workbook.getNumberOfSheets + 1) else name
+    val sheetName = name.getOrElse("Sheet " + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
-    initializeColumns(sheet)
-    initializeRows(sheet)
-    initializeMergedRegions(sheet)
 
-    printSetup.applyTo(sheet)
-    header.applyTo(sheet)
-    footer.applyTo(sheet)
-    properties.applyTo(sheet)
-    sheet
-  }
-
-  def initializeRows(sheet: XSSFSheet) {
+    updateColumnsWithIndexes().foreach( _.applyTo(sheet))
     rows.foreach(row => row.convert(sheet))
-  }
-
-  def initializeColumns(sheet: XSSFSheet) {
-    updateColumnsWithIndexes().foreach {
-      _.applyTo(sheet)
-    }
-  }
-
-  def initializeMergedRegions(sheet: XSSFSheet) {
     mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(mergedRegion.convert()))
+
+    printSetup.foreach(_.applyTo(sheet))
+    header.foreach(_.applyTo(sheet))
+    footer.foreach(_.applyTo(sheet))
+    properties.foreach(_.applyTo(sheet))
+    margins.foreach(_.applyTo(sheet))
+    sheet
   }
 
   def save(fileName: String) {
