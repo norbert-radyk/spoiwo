@@ -3,6 +3,9 @@ package com.norbitltd.spoiwo.ss
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.FileOutputStream
+import scala.io.Source
+import com.norbitltd.spoiwo.csv.CSVProperties
+import com.norbitltd.spoiwo.utils.FileUtils
 
 object Workbook extends Factory {
 
@@ -52,6 +55,7 @@ case class Workbook private[ss](
                                     selectedTab: Option[Int],
                                     sheets: Iterable[Sheet]) {
 
+
   def withActiveSheet(activeSheet: Int) =
     copy(activeSheet = Option(activeSheet))
 
@@ -76,7 +80,17 @@ case class Workbook private[ss](
   def withSheets(sheets: Sheet*) =
     copy(sheets = sheets)
 
-  def convert(): XSSFWorkbook = {
+  /**
+   * Converts the defined workbook into the sheet name -> csv content map for all of the sheets.
+   * @return A sheet name -> CSV content map for each of the sheets
+   */
+  def convertToCSV(properties : CSVProperties = CSVProperties.Default) : Map[String, String] = {
+    require(sheets.size <= 1 || sheets.forall(_.name.isDefined),
+      "When converting workbook with multiple sheets to CSV format it is required to specify the unique name for each of them!")
+    sheets.map(s => s.convertToCSV(properties)).toMap
+  }
+
+  def convertToXLSX(): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()
     sheets.foreach(sheet => sheet.convert(workbook))
 
@@ -90,14 +104,28 @@ case class Workbook private[ss](
     workbook
   }
 
-  def save(fileName: String) = {
+  def saveXLSX(fileName: String) {
     val stream = new FileOutputStream(fileName)
     try {
-      val workbook = convert()
+      val workbook = convertToXLSX()
       workbook.write(stream)
     } finally {
       stream.flush()
       stream.close()
     }
   }
+
+  def saveCSV(fileName : String, properties : CSVProperties = CSVProperties.Default) {
+    val convertedCsvData = convertToCSV(properties)
+    if( sheets.size <= 1 ) {
+      convertedCsvData.values.foreach(csvContent => FileUtils.write(fileName, csvContent))
+    } else {
+      val fileNameCore = fileName.replace(".csv", "").replace(".CSV", "")
+      convertedCsvData.foreach { case( sheetName, csvContent) =>
+        val sheetFileName = fileNameCore + "_" + sheetName + ".csv"
+        FileUtils.write(sheetFileName, csvContent)
+      }
+    }
+  }
+
 }

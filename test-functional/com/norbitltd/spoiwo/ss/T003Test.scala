@@ -14,7 +14,7 @@ class T003Test {
         Cell(new Date(), dateCellStyle),
         Cell(Calendar.getInstance(), dateCellStyle)
       ) :: Nil
-    ).save("workbook.xlsx")
+    ).saveXLSX("workbook.xlsx")
   }
 
 
@@ -25,7 +25,7 @@ class T003Test {
     Sheet(
       name = "Koki books",
       rows = Row(Cell("Autor"), Cell("Cena")) :: Row.Empty :: bookRows
-    ).save("books.xlsx")
+    ).saveXLSX("books.xlsx")
   }
 
 }

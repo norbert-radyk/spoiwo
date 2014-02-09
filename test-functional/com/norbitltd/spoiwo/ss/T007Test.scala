@@ -12,7 +12,7 @@ class T007Test {
     )
 
     Sheet(name = "new sheet", rows = contentRow :: Nil)
-      .save("workbook.xlsx")
+      .saveXLSX("workbook.xlsx")
   }
 
 }

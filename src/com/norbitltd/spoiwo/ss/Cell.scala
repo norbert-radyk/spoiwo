@@ -3,6 +3,7 @@ package com.norbitltd.spoiwo.ss
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFRow}
 import java.util.{Calendar, Date}
 import org.apache.poi.ss.usermodel.FormulaError
+import com.norbitltd.spoiwo.csv.CSVProperties
 
 object Cell extends Factory {
 
@@ -69,9 +70,15 @@ object Cell extends Factory {
 
 sealed abstract class Cell(index : Option[Int], style : Option[CellStyle]) {
 
-  def convert(row : XSSFRow) : XSSFCell
+  def getIndex = index
 
-  private[ss] def convertInternal(row : XSSFRow)(initializeCell : XSSFCell => Unit) : XSSFCell = {
+  def getStyle = style
+
+  def convertToCSV(properties : CSVProperties) : String
+
+  def convertToXLSX(row : XSSFRow) : XSSFCell
+
+  private[ss] def convertToXLSXInternal(row : XSSFRow)(initializeCell : XSSFCell => Unit) : XSSFCell = {
     val cellNumber = index.getOrElse(if( row.getLastCellNum < 0 ) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
     style.foreach(s => cell.setCellStyle(s.convert(cell)))
@@ -81,43 +88,70 @@ sealed abstract class Cell(index : Option[Int], style : Option[CellStyle]) {
 }
 
 case class StringCell(value : String, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
-  override def convert(row : XSSFRow) = convertInternal(row) {
+
+  override def convertToCSV(properties : CSVProperties) = value
+
+  override def convertToXLSX(row : XSSFRow) = convertToXLSXInternal(row) {
     cell : XSSFCell => cell.setCellValue(value)
   }
 }
 
 case class FormulaCell(formula: String, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
-  override def convert(row : XSSFRow) = convertInternal(row) {
+
+  override def convertToCSV(properties : CSVProperties) =
+    throw new IllegalArgumentException("Use of formulas not allowed when converting to CSV format!")
+
+  override def convertToXLSX(row : XSSFRow) = convertToXLSXInternal(row) {
     cell : XSSFCell  => cell.setCellFormula(formula)
   }
 }
 
 case class ErrorValueCell(formulaError : FormulaError, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
-  override def convert(row : XSSFRow) = convertInternal(row) {
+
+  override def convertToCSV(properties : CSVProperties) =
+    throw new IllegalArgumentException("Use of formulas not allowed when converting to CSV format!")
+
+  override def convertToXLSX(row : XSSFRow) = convertToXLSXInternal(row) {
     cell : XSSFCell  => cell.setCellErrorValue(formulaError)
   }
 }
 
 case class NumericCell(value : Double, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
-  override def convert(row : XSSFRow) = convertInternal(row) {
+
+  override def convertToCSV(properties : CSVProperties) =
+    value.toString
+
+  override def convertToXLSX(row : XSSFRow) = convertToXLSXInternal(row) {
     cell : XSSFCell  => cell.setCellValue(value)
   }
 }
 
 case class BooleanCell(value : Boolean, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
-  override def convert(row : XSSFRow) = convertInternal(row) {
+
+  override def convertToCSV(properties : CSVProperties) =
+    value.toString
+
+  override def convertToXLSX(row : XSSFRow) = convertToXLSXInternal(row) {
     cell : XSSFCell  => cell.setCellValue(value)
   }
 }
 
 case class DateCell(value : Date, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
-  override def convert(row : XSSFRow) = convertInternal(row) {
+
+  override def convertToCSV(properties : CSVProperties) =
+    value.toString
+
+  override def convertToXLSX(row : XSSFRow) = convertToXLSXInternal(row) {
     cell : XSSFCell  => cell.setCellValue(value)
   }
 }
 
 case class CalendarCell(value : Calendar, index : Option[Int], style : Option[CellStyle]) extends Cell(index, style) {
-  override def convert(row: XSSFRow) = convertInternal(row) {
+
+  override def convertToCSV(properties : CSVProperties) =
+    value.toString
+
+  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
     cell : XSSFCell  => cell.setCellValue(value)
   }
 }

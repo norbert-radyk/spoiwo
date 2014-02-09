@@ -18,7 +18,7 @@ class T005Test {
       createCell(HorizontalAlignment.RIGHT, VerticalAlignment.TOP)
     ).withHeightInPoints(10)
 
-    Sheet(Row.Empty, Row.Empty, rowWithAlignments).save("xssf-align.xlsx")
+    Sheet(Row.Empty, Row.Empty, rowWithAlignments).saveXLSX("xssf-align.xlsx")
   }
 
 }

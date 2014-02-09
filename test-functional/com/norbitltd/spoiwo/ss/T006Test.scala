@@ -16,6 +16,6 @@ class T006Test {
 
     Sheet( Row(Cell(4, borderStyle)) )
       .withSheetName("new sheet")
-      .save("workbook.xlsx")
+      .saveXLSX("workbook.xlsx")
   }
 }

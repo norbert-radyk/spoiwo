@@ -9,7 +9,7 @@ class T001Test {
       Sheet(name = "new sheet"),
       Sheet(name = "second sheet"),
       Sheet(name = WorkbookUtil.createSafeSheetName("[O'Brien's sales*?]"))
-    ).save("workbook.xlsx")
+    ).saveXLSX("workbook.xlsx")
   }
 
 

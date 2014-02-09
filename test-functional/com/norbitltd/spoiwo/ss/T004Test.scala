@@ -10,5 +10,5 @@ class T004Test {
     Row(Cell(1.1), Cell(new Date()), Cell(Calendar.getInstance()), Cell("a string"), Cell("=1/0"))
   ).withSheetName("new sheet")
 
-  sheet.save("workbook.xlsx")
+  sheet.saveXLSX("workbook.xlsx")
 }

@@ -2,6 +2,7 @@ package com.norbitltd.spoiwo.ss
 
 import org.apache.poi.xssf.usermodel.{XSSFRow, XSSFSheet}
 import java.util.{Calendar, Date}
+import com.norbitltd.spoiwo.csv.CSVProperties
 
 object Row extends Factory {
 
@@ -28,7 +29,17 @@ object Row extends Factory {
       zeroHeight = wrap(zeroHeight, defaultZeroHeight)
     )
 
-  def apply(cells: Cell*): Row = apply(cells = cells.toVector)
+  def apply(cells: Cell*): Row =
+    apply(cells = cells.toVector)
+
+  def apply(index : Int, cells : Cell*) : Row =
+    apply(index = index, cells = cells.toVector)
+
+  def apply(style: CellStyle, cells : Cell*) : Row =
+    apply(style = style, cells = cells.toVector)
+
+  def apply(index : Int, style : CellStyle, cells : Cell*) : Row =
+    apply(index = index, style = style, cells = cells.toVector)
 
 }
 
@@ -45,7 +56,21 @@ case class Row(cells: Iterable[Cell],
   def withCells(cells: Iterable[Cell]) =
     copy(cells = cells)
 
-  def withCellValues(cellValues: Any*) = {
+  def withCellValues(cellValues: List[Any]) : Row = {
+    val cells = cellValues.map {
+      case stringValue: String => Cell(stringValue)
+      case doubleValue: Double => Cell(doubleValue)
+      case intValue: Int => Cell(intValue.toDouble)
+      case longValue: Long => Cell(longValue.toDouble)
+      case booleanValue: Boolean => Cell(booleanValue)
+      case dateValue: Date => Cell(dateValue)
+      case calendarValue: Calendar => Cell(calendarValue)
+      case value => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
+    }
+    copy(cells = cells.toVector)
+  }
+
+  def withCellValues(cellValues: Any*) : Row = {
     val cells = cellValues.map {
       case stringValue: String => Cell(stringValue)
       case doubleValue: Double => Cell(doubleValue)
@@ -71,12 +96,14 @@ case class Row(cells: Iterable[Cell],
   def withZeroHeight(zeroHeight: Boolean) =
     copy(zeroHeight = Option(zeroHeight))
 
+  def convertToCSV(properties : CSVProperties = CSVProperties.Default) : String =
+    cells.map(c => c.convertToCSV(properties)).mkString(properties.separator)
 
-  def convert(sheet: XSSFSheet): XSSFRow = {
+  def convertToXLSX(sheet: XSSFSheet): XSSFRow = {
     val indexNumber = index.getOrElse(getNextRowNumber(sheet))
     val row = sheet.createRow(indexNumber)
 
-    cells.foreach(cell => cell.convert(row))
+    cells.foreach(cell => cell.convertToXLSX(row))
     height.foreach(row.setHeight)
     heightInPoints.foreach(row.setHeightInPoints)
     style.foreach(s => row.setRowStyle(s.convert(row)))

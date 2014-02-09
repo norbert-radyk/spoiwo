@@ -1,6 +1,7 @@
 package com.norbitltd.spoiwo.ss
 
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
+import com.norbitltd.spoiwo.csv.CSVProperties
 
 object Sheet extends Factory {
 
@@ -38,6 +39,8 @@ object Sheet extends Factory {
     )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
+
+  def apply(name : String, row : Row, rows: Row*) : Sheet = apply(name = name, rows = row :: rows.toList)
 
 }
 
@@ -79,12 +82,17 @@ case class Sheet private(
   def withMargins(margins: Margins) =
     copy(margins = Option(margins))
 
+  def convertToCSV(properties : CSVProperties = CSVProperties.Default) : (String, String) = {
+    name.getOrElse("") -> rows.map(r => r.convertToCSV(properties)).mkString("\n")
+  }
+
+
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
     val sheetName = name.getOrElse("Sheet " + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
 
     updateColumnsWithIndexes().foreach( _.applyTo(sheet))
-    rows.foreach(row => row.convert(sheet))
+    rows.foreach(row => row.convertToXLSX(sheet))
     mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(mergedRegion.convert()))
 
     printSetup.foreach(_.applyTo(sheet))
@@ -95,8 +103,12 @@ case class Sheet private(
     sheet
   }
 
-  def save(fileName: String) {
-    Workbook(this).save(fileName)
+  def saveXLSX(fileName: String) {
+    Workbook(this).saveXLSX(fileName)
+  }
+
+  def saveCSV(fileName : String, properties : CSVProperties = CSVProperties.Default) {
+    Workbook(this).saveCSV(fileName, properties)
   }
 
   private def updateColumnsWithIndexes(): List[Column] = {
