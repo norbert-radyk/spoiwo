@@ -1,0 +1,45 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.norbitltd</groupId>
+    <artifactId>spoiwo</artifactId>
+    <packaging>jar</packaging>
+    <name>SPOIWO (Scala POI wrapping object)</name>
+    <version>1.0</version>
+    <description>The functional way of generating spreadsheets in Scala</description>
+    <url>http://norbert-radyk.github.io/spoiwo/</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/norbert-radyk/spoiwo</url>
+        <connection>https://github.com/norbert-radyk/spoiwo</connection>
+    </scm>
+    <developers>
+        <developer>
+            <id>norbert-radyk</id>
+            <name>Norbert Radyk</name>
+            <email>norbert.radyk@norbitltd.com</email>
+        </developer>
+    </developers>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+    </dependencies>
+</project>

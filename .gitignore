@@ -2,6 +2,7 @@
 ## Eclipse
 #################
 
+target/
 *.pydevproject
 .project
 .metadata
