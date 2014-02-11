@@ -3,7 +3,9 @@ package com.norbitltd.spoiwo.examples.quickguide
 import com.norbitltd.spoiwo.ss._
 import org.apache.poi.ss.util.WorkbookUtil
 import java.util.{Calendar, Date}
-import org.apache.poi.ss.usermodel.{FillPatternType, BorderStyle, VerticalAlignment, HorizontalAlignment}
+import org.apache.poi.ss.usermodel.{FillPatternType, BorderStyle}
+import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA}
+import org.apache.poi.ss.usermodel.{VerticalAlignment => VA}
 
 class SpoiwoExamples {
 
@@ -39,11 +41,10 @@ class SpoiwoExamples {
   ).saveAsXlsx("workbook.xlsx")
 
 
-  def createCell(ha : HorizontalAlignment, va : VerticalAlignment) =
+  def createCell(ha: HA, va: VA) =
     Cell("Align It", style = CellStyle(horizontalAlignment = ha, verticalAlignment = va))
 
   def variousAlignmentOptions() {
-    val HA = HorizontalAlignment; val VA = VerticalAlignment
     val alignments = List(HA.CENTER -> VA.BOTTOM, HA.CENTER_SELECTION -> VA.BOTTOM, HA.FILL -> VA.CENTER,
       HA.GENERAL -> VA.CENTER, HA.JUSTIFY -> VA.JUSTIFY, HA.LEFT -> VA.TOP, HA.RIGHT -> VA.TOP)
 
@@ -61,18 +62,28 @@ class SpoiwoExamples {
     )
 
     Sheet(name = "new sheet",
-      row = Row(index = 1).withCells(
-        Cell(value = 4, index = 1, style = CellStyle(borders = borders))
-      )
+      row = Row(index = 1, Cell(value = 4, index = 1, style = CellStyle(borders = borders)))
     ).saveAsXlsx("workbook.xls")
   }
 
   def fillsAndColors() = Sheet(name = "new sheet",
-    row = Row(index = 1).withCells(
+    row = Row(index = 1,
       Cell.Empty,
       Cell("X", CellStyle(fillBackgroundColor = Color.AQUA, fillPattern = FillPatternType.BIG_SPOTS)),
       Cell("X", CellStyle(fillForegroundColor = Color.ORANGE, fillPattern = FillPatternType.SOLID_FOREGROUND))
     )
   ).saveAsXlsx("workbook.xls")
 
+  def mergingCells() = Sheet(name = "new sheet")
+    .withRows(Row(index = 1, Cell("This is a test of merging", index = 1)))
+    .withMergedRegions(CellRange(1 -> 1, 1 -> 2))
+    .saveAsXlsx("workbook.xls")
+
+  def workingWithFonts() {
+    val style = CellStyle(font = Font(heightInPoints = 24, fontName = "Courier New", italic = true, strikeout = true))
+
+    Sheet(name = "new sheet",
+      row = Row(index = 1, Cell("This is a test of fonts", 1, style))
+    ).saveAsXlsx("workbook.xls")
+  }
 }

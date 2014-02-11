@@ -70,6 +70,12 @@ case class Sheet private(
   def withRows(rows: Row*): Sheet =
     withRows(rows)
 
+  def withMergedRegions(mergedRegions: Iterable[CellRange]): Sheet =
+    copy(mergedRegions = mergedRegions.toList)
+
+  def withMergedRegions(mergedRegions: CellRange*): Sheet =
+    withMergedRegions(mergedRegions)
+
   def withPrintSetup(printSetup: PrintSetup) =
     copy(printSetup = Option(printSetup))
 

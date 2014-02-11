@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
 object Font extends Factory {
 
   private lazy val defaultHeight = defaultPOIFont.getFontHeight
+  private lazy val defaultHeightInPoints = defaultPOIFont.getFontHeightInPoints
   private lazy val defaultBold = defaultPOIFont.getBold
   private lazy val defaultItalic = defaultPOIFont.getItalic
   private lazy val defaultCharSet = FontCharset.valueOf(defaultPOIFont.getCharSet)
@@ -20,6 +21,7 @@ object Font extends Factory {
   val Default = Font()
 
   def apply(height: Short = defaultHeight,
+            heightInPoints: Short = defaultHeightInPoints,
             bold: Boolean = defaultBold,
             italic: Boolean = defaultItalic,
             charSet: FontCharset = defaultCharSet,
@@ -31,6 +33,7 @@ object Font extends Factory {
             typeOffset: Short = defaultTypeOffset,
             underline: FontUnderline = defaultUnderline) : Font = Font(
     height = wrap(height, defaultHeight),
+      heightInPoints = wrap(heightInPoints, defaultHeightInPoints),
     bold = wrap(bold, defaultBold),
     italic = wrap(italic, defaultItalic),
     charSet = wrap(charSet, defaultCharSet),
@@ -50,6 +53,7 @@ object Font extends Factory {
 
 case class Font private[ss](
                  height: Option[Short],
+        heightInPoints: Option[Short],
                  bold: Option[Boolean],
                  italic: Option[Boolean],
                  charSet: Option[FontCharset],
@@ -63,6 +67,9 @@ case class Font private[ss](
 
   def withHeight(height: Short) =
     copy(height = Option(height))
+
+  def withHeightInPoints(heightInPoints: Short) =
+    copy(heightInPoints = Option(heightInPoints))
 
   def withBold(bold: Boolean) =
     copy(bold = Option(bold))
@@ -107,6 +114,7 @@ case class Font private[ss](
     color.foreach(c => font.setColor(c.convert()))
     family.foreach(font.setFamily)
     height.foreach(font.setFontHeight)
+    heightInPoints.foreach(font.setFontHeightInPoints)
     italic.foreach(font.setItalic)
     scheme.foreach(font.setScheme)
     fontName.foreach(font.setFontName)

@@ -1,6 +1,8 @@
 package com.norbitltd.spoiwo.examples.quickguide;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -173,6 +175,56 @@ public class JavaPoiExamples {
         style.setFillPattern(CellStyle.SOLID_FOREGROUND);
         cell = row.createCell((short) 2);
         cell.setCellValue("X");
+        cell.setCellStyle(style);
+
+        // Write the output to a file
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void mergingCells() throws IOException {
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("new sheet");
+
+        Row row = sheet.createRow((short) 1);
+        Cell cell = row.createCell((short) 1);
+        cell.setCellValue("This is a test of merging");
+
+        sheet.addMergedRegion(new CellRangeAddress(
+                1, //first row (0-based)
+                1, //last row  (0-based)
+                1, //first column (0-based)
+                2  //last column  (0-based)
+        ));
+
+        // Write the output to a file
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void workingWithFonts() throws IOException {
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("new sheet");
+
+        // Create a row and put some cells in it. Rows are 0 based.
+        Row row = sheet.createRow(1);
+
+        // Create a new font and alter it.
+        Font font = wb.createFont();
+        font.setFontHeightInPoints((short)24);
+        font.setFontName("Courier New");
+        font.setItalic(true);
+        font.setStrikeout(true);
+
+        // Fonts are set into a style so create a new one to use.
+        CellStyle style = wb.createCellStyle();
+        style.setFont(font);
+
+        // Create a cell and put a value in it.
+        Cell cell = row.createCell(1);
+        cell.setCellValue("This is a test of fonts");
         cell.setCellStyle(style);
 
         // Write the output to a file
