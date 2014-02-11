@@ -10,7 +10,7 @@ class SpoiwoDocumentation {
       cells = Vector(Cell.Empty, Cell("Use \n with word wrap on to create a new line"))
     )
 
-    Sheet(Row.Empty, row).saveXLSX("ooxml-newlines.xlsx")
+    Sheet(Row.Empty, row).saveAsXlsx("ooxml-newlines.xlsx")
   }
 
   def dataFormats() {
@@ -21,7 +21,7 @@ class SpoiwoDocumentation {
       name = "format sheet",
       rows = createFormattedCellRow(11111.25, "0.0") ::
         createFormattedCellRow(11111.25, "#,##0.0000") :: Nil
-    ).saveXLSX("workbook.xls")
+    ).saveAsXlsx("workbook.xls")
   }
 
   def fitSheetToOnePage() {
@@ -31,13 +31,13 @@ class SpoiwoDocumentation {
       .withFitWidth(1)
 
     Sheet(name = "format sheet", printSetup = printSetup)
-      .saveXLSX("workbook.xlsx")
+      .saveAsXlsx("workbook.xlsx")
   }
 
   def setPageNumbersOnFooter() {
     Sheet(name = "format sheet", footer = UnifiedFooter(pageFooterData =
       FooterData(right = "Page " + HeaderFooter.page + " of " + HeaderFooter.numPages))
-    ).saveXLSX("workbook.xlsx")
+    ).saveAsXlsx("workbook.xlsx")
   }
 
 }

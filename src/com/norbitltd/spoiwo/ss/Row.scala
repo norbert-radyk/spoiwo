@@ -32,18 +32,9 @@ object Row extends Factory {
   def apply(cells: Cell*): Row =
     apply(cells = cells.toVector)
 
-  def apply(index : Int, cells : Cell*) : Row =
-    apply(index = index, cells = cells.toVector)
-
-  def apply(style: CellStyle, cells : Cell*) : Row =
-    apply(style = style, cells = cells.toVector)
-
-  def apply(index : Int, style : CellStyle, cells : Cell*) : Row =
-    apply(index = index, style = style, cells = cells.toVector)
-
 }
 
-case class Row(cells: Iterable[Cell],
+case class Row private(cells: Iterable[Cell],
                height: Option[Short],
                heightInPoints: Option[Float],
                index: Option[Int],

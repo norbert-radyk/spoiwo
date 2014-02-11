@@ -17,12 +17,12 @@ object CellStyle extends Factory {
   private lazy val defaultRotation = defaultPOICellStyle.getRotation
   private lazy val defaultWrapText = defaultPOICellStyle.getWrapText
 
-  private lazy val defaultBorders = CellBorder.Default
+  private lazy val defaultBorders = CellBorders.Default
   private lazy val defaultFont = Font.Default
 
   val Default = CellStyle()
 
-  def apply(borders: CellBorder = defaultBorders,
+  def apply(borders: CellBorders = defaultBorders,
             dataFormat: CellDataFormat = defaultDataFormat,
             font: Font = defaultFont,
             fillPattern: FillPatternType = defaultFillPattern,
@@ -56,7 +56,7 @@ object CellStyle extends Factory {
 }
 
 case class CellStyle private[ss](
-                                     borders: Option[CellBorder],
+                                     borders: Option[CellBorders],
                                      dataFormat: Option[CellDataFormat],
                                      font: Option[Font],
                                      fillPattern: Option[FillPatternType],
@@ -70,7 +70,7 @@ case class CellStyle private[ss](
                                      rotation: Option[Short],
                                      wrapText: Option[Boolean]) {
 
-  def withBorders(borders: CellBorder) =
+  def withBorders(borders: CellBorders) =
     copy(borders = Option(borders))
 
   def withDataFormat(dataFormat: CellDataFormat) =

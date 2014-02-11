@@ -3,7 +3,7 @@ package com.norbitltd.spoiwo.ss
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 
-object CellBorder extends Factory {
+object CellBorders extends Factory {
 
   private lazy val defaultLeftStyle = defaultPOICellStyle.getBorderLeftEnum
   private lazy val defaultLeftColor = Color(defaultPOICellStyle.getLeftBorderXSSFColor)
@@ -14,12 +14,12 @@ object CellBorder extends Factory {
   private lazy val defaultBottomStyle = defaultPOICellStyle.getBorderBottomEnum
   private lazy val defaultBottomColor = Color(defaultPOICellStyle.getBottomBorderXSSFColor)
 
-  val Default = CellBorder()
+  val Default = CellBorders()
 
   def apply(leftStyle: BorderStyle = defaultLeftStyle, leftColor: Color = defaultLeftColor,
             topStyle: BorderStyle = defaultTopStyle, topColor: Color = defaultTopColor,
             rightStyle: BorderStyle = defaultRightStyle, rightColor: Color = defaultRightColor,
-            bottomStyle: BorderStyle = defaultBottomStyle, bottomColor: Color = defaultBottomColor): CellBorder = CellBorder(
+            bottomStyle: BorderStyle = defaultBottomStyle, bottomColor: Color = defaultBottomColor): CellBorders = CellBorders(
     wrap(leftStyle, defaultLeftStyle), wrap(leftColor, defaultLeftColor),
     wrap(topStyle, defaultTopStyle), wrap(topColor, defaultTopColor),
     wrap(rightStyle, defaultRightStyle), wrap(rightColor, defaultRightColor),
@@ -27,7 +27,7 @@ object CellBorder extends Factory {
   )
 }
 
-case class CellBorder(leftStyle: Option[BorderStyle], leftColor: Option[Color],
+case class CellBorders(leftStyle: Option[BorderStyle], leftColor: Option[Color],
                       topStyle: Option[BorderStyle], topColor: Option[Color],
                       rightStyle: Option[BorderStyle], rightColor: Option[Color],
                       bottomStyle: Option[BorderStyle], bottomColor: Option[Color]) {

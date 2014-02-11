@@ -9,6 +9,6 @@ class T009Test {
 
     Sheet(Row(Cell("This is a test of fonts", CellStyle(font = font))))
       .withSheetName("new sheet")
-      .saveXLSX("workbook.xls")
+      .saveAsXlsx("workbook.xls")
   }
 }

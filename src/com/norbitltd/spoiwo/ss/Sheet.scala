@@ -103,12 +103,12 @@ case class Sheet private(
     sheet
   }
 
-  def saveXLSX(fileName: String) {
-    Workbook(this).saveXLSX(fileName)
+  def saveAsXlsx(fileName: String) {
+    Workbook(this).saveAsXlsx(fileName)
   }
 
-  def saveCSV(fileName : String, properties : CSVProperties = CSVProperties.Default) {
-    Workbook(this).saveCSV(fileName, properties)
+  def saveAsCsv(fileName : String, properties : CSVProperties = CSVProperties.Default) {
+    Workbook(this).saveAsCsv(fileName, properties)
   }
 
   private def updateColumnsWithIndexes(): List[Column] = {

@@ -14,8 +14,8 @@ abstract class AbstractReportGenerator {
       val csvFileName = args.tail.head
       println("Generating test report for XLSX:" + xlsxFileName + " and CSV: " + csvFileName)
       val workbook = getWorkbook
-      workbook.saveXLSX(xlsxFileName)
-      workbook.saveCSV(csvFileName)
+      workbook.saveAsXlsx(xlsxFileName)
+      workbook.saveAsCsv(csvFileName)
       println("Report generated successfully!")
     } catch {
       case e : Exception => {

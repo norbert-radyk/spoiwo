@@ -103,8 +103,8 @@ case class Workbook private[ss](
     selectedTab.foreach(workbook.setSelectedTab)
     workbook
   }
-
-  def saveXLSX(fileName: String) {
+  
+  def saveAsXlsx(fileName: String) {
     val stream = new FileOutputStream(fileName)
     try {
       val workbook = convertToXLSX()
@@ -115,7 +115,7 @@ case class Workbook private[ss](
     }
   }
 
-  def saveCSV(fileName : String, properties : CSVProperties = CSVProperties.Default) {
+  def saveAsCsv(fileName : String, properties : CSVProperties = CSVProperties.Default) {
     val convertedCsvData = convertToCSV(properties)
     if( sheets.size <= 1 ) {
       convertedCsvData.values.foreach(csvContent => FileUtils.write(fileName, csvContent))

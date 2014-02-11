@@ -8,7 +8,7 @@ class T002Test {
         name = "new sheet",
         rows = Row(Cell(1), Cell(1.2), Cell("This is a string"), Cell(true)) :: Nil
       )
-    ).saveXLSX("workbook.xls")
+    ).saveAsXlsx("workbook.xls")
   }
 
 }

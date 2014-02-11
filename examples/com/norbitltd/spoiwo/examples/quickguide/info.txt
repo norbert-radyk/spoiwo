@@ -1,0 +1,3 @@
+In this package you will find a extract from the Apache POI quick guide (http://poi.apache.org/spreadsheet/quick-guide.html)
+together with the similar function implemented using SPOIWO. The aim of this is to get you up&running quickly and
+allow an easy transition (especially if you're experienced POI developer you might find it very useful).

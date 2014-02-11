@@ -8,7 +8,7 @@ class T006Test {
 
   def workingWithBorders() {
 
-    val borderStyle = CellStyle(borders = CellBorder(
+    val borderStyle = CellStyle(borders = CellBorders(
         bottomStyle = THIN, bottomColor = BLACK,
         leftStyle = THIN, leftColor = GREEN,
         rightStyle = THIN, rightColor = BLUE,
@@ -16,6 +16,6 @@ class T006Test {
 
     Sheet( Row(Cell(4, borderStyle)) )
       .withSheetName("new sheet")
-      .saveXLSX("workbook.xlsx")
+      .saveAsXlsx("workbook.xlsx")
   }
 }
