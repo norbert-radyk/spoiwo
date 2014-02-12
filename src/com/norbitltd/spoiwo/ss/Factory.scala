@@ -10,6 +10,7 @@ trait Factory {
   lazy val defaultPOICell = defaultPOIRow.createCell(0)
   lazy val defaultPOICellStyle = defaultPOIWorkbook.createCellStyle()
   lazy val defaultPOIFont = defaultPOIWorkbook.createFont()
+  lazy val defaultPOIPrintSetup = defaultPOISheet.getPrintSetup
 
   def wrap[T](value : T, defaultValue : T) : Option[T] = if( value != defaultValue) {
     Option(value)

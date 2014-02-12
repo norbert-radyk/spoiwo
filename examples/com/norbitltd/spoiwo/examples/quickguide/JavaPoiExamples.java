@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HeaderFooter;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -319,14 +320,41 @@ public class JavaPoiExamples {
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("format sheet");
         PrintSetup ps = sheet.getPrintSetup();
-
         sheet.setAutobreaks(true);
-
         ps.setFitHeight((short)1);
         ps.setFitWidth((short)1);
 
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
 
-        // Create various cells and rows for spreadsheet.
+    private static void setPrintArea() throws IOException {
+        Workbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet("Sheet1");
+        //sets the print area for the first sheet
+        wb.setPrintArea(0, "$A$1:$C$2");
+
+        //Alternatively:
+        wb.setPrintArea(
+                0, //sheet index
+                0, //start column
+                1, //end column
+                0, //start row
+                0  //end row
+        );
+
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void setPageNumbersOnFooter() throws IOException {
+        Workbook wb = new XSSFWorkbook(); // or new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("format sheet");
+        Footer footer = sheet.getFooter();
+
+        footer.setRight( "Page " + HeaderFooter.page() + " of " + HeaderFooter.numPages() );
 
         FileOutputStream fileOut = new FileOutputStream("workbook.xls");
         wb.write(fileOut);

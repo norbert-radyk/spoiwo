@@ -4,6 +4,7 @@ import com.norbitltd.spoiwo.ss._
 import org.apache.poi.ss.util.WorkbookUtil
 import java.util.{Calendar, Date}
 import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA, VerticalAlignment => VA, FillPatternType, BorderStyle}
+import org.apache.poi.hssf.usermodel.HeaderFooter
 
 class SpoiwoExamples {
 
@@ -107,10 +108,19 @@ class SpoiwoExamples {
     Row(Cell(11111.25, CellStyle(dataFormat = CellDataFormat("#,##0.0000"))))
   ).saveAsXlsx("workbook.xls")
 
-  //TODO Refactor print setup
   def fitSheetToOnePage() = Sheet(name = "format sheet",
     properties = SheetProperties(autoBreaks = true),
-    printSetup = PrintSetup(fitWidth = Some(1.toShort), fitHeight = Some(1.toShort))
+    printSetup = PrintSetup(fitWidth = 1, fitHeight = 1)
   ).saveAsXlsx("workbook.xls")
+
+  def setPrintArea = Sheet(name = "Sheet1",
+    properties = SheetProperties(printArea = CellRange(0 -> 0, 0 -> 1))
+  ).saveAsXlsx("workbook.xlsx")
+
+  //TOOD Do something easier with the footer
+  def setPageNumbersOnFooter = Sheet(name = "format sheet",
+    footer = UnifiedFooter(pageFooterData = FooterData(right = "Page " + HeaderFooter.page + " of " + HeaderFooter.numPages))
+  ).saveAsXlsx("workbook.xlsx")
+
 
 }
