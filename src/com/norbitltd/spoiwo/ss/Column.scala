@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 object Column extends Factory {
 
   private lazy val defaultIndex = -1
+  private lazy val defaultAutoSized = false
   private lazy val defaultBreak = false
   private lazy val defaultGroupCollapsed = false
   private lazy val defaultHidden = false
@@ -15,6 +16,7 @@ object Column extends Factory {
 
   def apply(
              index: Int = defaultIndex,
+             autoSized: Boolean = defaultAutoSized,
              break: Boolean = defaultBreak,
              groupCollapsed: Boolean = defaultGroupCollapsed,
              hidden: Boolean = defaultHidden,
@@ -22,6 +24,7 @@ object Column extends Factory {
              width: Int = defaultWidth): Column =
     Column(
       index = wrap(index, defaultIndex),
+      autoSized = wrap(autoSized, defaultAutoSized),
       break = wrap(break, defaultBreak),
       groupCollapsed = wrap(groupCollapsed, defaultGroupCollapsed),
       hidden = wrap(hidden, defaultHidden),
@@ -30,15 +33,19 @@ object Column extends Factory {
     )
 }
 
-case class Column private[ss](index : Option[Int],
-                                 break: Option[Boolean],
-                                 groupCollapsed: Option[Boolean],
-                                 hidden: Option[Boolean],
-                                 style: Option[CellStyle],
-                                 width: Option[Int]) {
+case class Column private[ss](index: Option[Int],
+                              autoSized: Option[Boolean],
+                              break: Option[Boolean],
+                              groupCollapsed: Option[Boolean],
+                              hidden: Option[Boolean],
+                              style: Option[CellStyle],
+                              width: Option[Int]) {
 
-  def withIndex(index : Int) =
+  def withIndex(index: Int) =
     copy(index = Option(index))
+
+  def withAutoSized(autoSized: Boolean) =
+    copy(autoSized = Option(autoSized))
 
   def withBreak() =
     copy(break = Option(true))
@@ -59,6 +66,7 @@ case class Column private[ss](index : Option[Int],
     val i = index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
       "Something went terribly wrong as it should have been derived if not specified explicitly!"))
 
+    autoSized.foreach(as => sheet.autoSizeColumn(i))
     break.foreach(b => sheet.setColumnBreak(i))
     groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
     hidden.foreach(h => sheet.setColumnHidden(i, h))

@@ -4,7 +4,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class JavaPoiExamples {
         Workbook wb = new XSSFWorkbook();
         CreationHelper createHelper = wb.getCreationHelper();
         Sheet sheet = wb.createSheet("new sheet");
-        Row row = sheet.createRow((short)0);
+        Row row = sheet.createRow((short) 0);
         Cell cell = row.createCell(0);
         cell.setCellValue(1);
         row.createCell(1).setCellValue(1.2);
@@ -81,7 +81,7 @@ public class JavaPoiExamples {
     public static void workingWithDifferentTypesOfCells() throws IOException {
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("new sheet");
-        Row row = sheet.createRow((short)2);
+        Row row = sheet.createRow((short) 2);
         row.createCell(0).setCellValue(1.1);
         row.createCell(1).setCellValue(new Date());
         row.createCell(2).setCellValue(Calendar.getInstance());
@@ -95,7 +95,7 @@ public class JavaPoiExamples {
         fileOut.close();
     }
 
-    public static void variousAlignmentOptions()  throws Exception {
+    public static void variousAlignmentOptions() throws Exception {
         Workbook wb = new XSSFWorkbook();
 
         Sheet sheet = wb.createSheet();
@@ -213,7 +213,7 @@ public class JavaPoiExamples {
 
         // Create a new font and alter it.
         Font font = wb.createFont();
-        font.setFontHeightInPoints((short)24);
+        font.setFontHeightInPoints((short) 24);
         font.setFontName("Courier New");
         font.setItalic(true);
         font.setStrikeout(true);
@@ -228,6 +228,106 @@ public class JavaPoiExamples {
         cell.setCellStyle(style);
 
         // Write the output to a file
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void workingWithMultipleFonts() throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("new sheet");
+
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        style.setFont(font);
+        for (int i = 0; i < 10000; i++) {
+            Row row = sheet.createRow(i);
+            Cell cell = row.createCell((short) 0);
+            cell.setCellStyle(style);
+        }
+    }
+
+    private static void customColors() {
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet();
+        XSSFRow row = sheet.createRow(0);
+        XSSFCell cell = row.createCell( 0);
+        cell.setCellValue("custom XSSF colors");
+
+        XSSFCellStyle style1 = wb.createCellStyle();
+        style1.setFillForegroundColor(new XSSFColor(new java.awt.Color(128, 0, 128)));
+        style1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        //FIXME Fix required in POI documentation
+        cell.setCellStyle(style1);
+    }
+
+    private static void usingNewlinesInCells() throws IOException {
+        Workbook wb = new XSSFWorkbook();   //or new HSSFWorkbook();
+        Sheet sheet = wb.createSheet();
+
+        Row row = sheet.createRow(2);
+        Cell cell = row.createCell(2);
+        cell.setCellValue("Use \n with word wrap on to create a new line");
+
+        //to enable newlines you need set a cell styles with wrap=true
+        CellStyle cs = wb.createCellStyle();
+        cs.setWrapText(true);
+        cell.setCellStyle(cs);
+
+        //increase row height to accomodate two lines of text
+        row.setHeightInPoints((2*sheet.getDefaultRowHeightInPoints()));
+
+        //adjust column width to fit the content
+        sheet.autoSizeColumn((short)2);
+
+        FileOutputStream fileOut = new FileOutputStream("ooxml-newlines.xlsx");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void dataFormats() throws IOException {
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("format sheet");
+        CellStyle style;
+        DataFormat format = wb.createDataFormat();
+        Row row;
+        Cell cell;
+        short rowNum = 0;
+        short colNum = 0;
+
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(colNum);
+        cell.setCellValue(11111.25);
+        style = wb.createCellStyle();
+        style.setDataFormat(format.getFormat("0.0"));
+        cell.setCellStyle(style);
+
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(colNum);
+        cell.setCellValue(11111.25);
+        style = wb.createCellStyle();
+        style.setDataFormat(format.getFormat("#,##0.0000"));
+        cell.setCellStyle(style);
+
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void fitSheetToOnePage() throws IOException {
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("format sheet");
+        PrintSetup ps = sheet.getPrintSetup();
+
+        sheet.setAutobreaks(true);
+
+        ps.setFitHeight((short)1);
+        ps.setFitWidth((short)1);
+
+
+        // Create various cells and rows for spreadsheet.
+
         FileOutputStream fileOut = new FileOutputStream("workbook.xls");
         wb.write(fileOut);
         fileOut.close();

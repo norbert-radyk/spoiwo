@@ -3,9 +3,7 @@ package com.norbitltd.spoiwo.examples.quickguide
 import com.norbitltd.spoiwo.ss._
 import org.apache.poi.ss.util.WorkbookUtil
 import java.util.{Calendar, Date}
-import org.apache.poi.ss.usermodel.{FillPatternType, BorderStyle}
-import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA}
-import org.apache.poi.ss.usermodel.{VerticalAlignment => VA}
+import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA, VerticalAlignment => VA, FillPatternType, BorderStyle}
 
 class SpoiwoExamples {
 
@@ -81,9 +79,38 @@ class SpoiwoExamples {
 
   def workingWithFonts() {
     val style = CellStyle(font = Font(heightInPoints = 24, fontName = "Courier New", italic = true, strikeout = true))
-
     Sheet(name = "new sheet",
       row = Row(index = 1, Cell("This is a test of fonts", 1, style))
     ).saveAsXlsx("workbook.xls")
   }
+
+  def workingWithMultipleFonts() {
+    val cell = Cell(value = 0, style = CellStyle(font = Font(bold = true)))
+    Sheet(name = "new sheet",
+      rows = (0 to 10000).map(i => Row(cell)).toList
+    ).saveAsXlsx("workbook.xls")
+  }
+
+  def customColors() = Sheet(Row(Cell("custom XSSF colors", style =
+    CellStyle(fillForegroundColor = Color(128, 0, 128), fillPattern = FillPatternType.SOLID_FOREGROUND)
+  )))
+
+  def usingNewLinesInCells() = {
+    val cell = Cell("Use \n with word wrap on to create a new line", index = 2)
+    val row = Row(index = 2, heightInPoints = 2 * Row.DefaultHeightInPoints, cells = List(cell))
+    val sheet = Sheet(row).withColumns(Column(2, autoSized = true))
+    sheet.saveAsXlsx("ooxml-newlines.xlsx")
+  }
+
+  def dataFormats() = Sheet(name = "format sheet",
+    Row(Cell(11111.25, CellStyle(dataFormat = CellDataFormat("0.0")))),
+    Row(Cell(11111.25, CellStyle(dataFormat = CellDataFormat("#,##0.0000"))))
+  ).saveAsXlsx("workbook.xls")
+
+  //TODO Refactor print setup
+  def fitSheetToOnePage() = Sheet(name = "format sheet",
+    properties = SheetProperties(autoBreaks = true),
+    printSetup = PrintSetup(fitWidth = Some(1.toShort), fitHeight = Some(1.toShort))
+  ).saveAsXlsx("workbook.xls")
+
 }

@@ -8,7 +8,7 @@ object Row extends Factory {
 
   private lazy val defaultCells = Nil
   private lazy val defaultHeight = defaultPOIRow.getHeight
-  private lazy val defaultHeightInPoints = defaultPOIRow.getHeightInPoints
+  lazy val DefaultHeightInPoints = defaultPOIRow.getHeightInPoints
   private lazy val defaultIndex = -1
   private lazy val defaultStyle = CellStyle.Default
   private lazy val defaultZeroHeight = false
@@ -17,13 +17,13 @@ object Row extends Factory {
 
   def apply(cells: Iterable[Cell] = defaultCells,
             height: Short = defaultHeight,
-            heightInPoints: Float = defaultHeightInPoints,
+            heightInPoints: Float = DefaultHeightInPoints,
             index: Int = defaultIndex,
             style: CellStyle = defaultStyle,
             zeroHeight: Boolean = defaultZeroHeight): Row =
     Row(cells = cells,
       height = wrap(height, defaultHeight),
-      heightInPoints = wrap(heightInPoints, defaultHeightInPoints),
+      heightInPoints = wrap(heightInPoints, DefaultHeightInPoints),
       index = wrap(index, defaultIndex),
       style = wrap(style, defaultStyle),
       zeroHeight = wrap(zeroHeight, defaultZeroHeight)
