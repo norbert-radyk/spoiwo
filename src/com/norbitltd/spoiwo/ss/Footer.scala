@@ -2,47 +2,100 @@ package com.norbitltd.spoiwo.ss
 
 import org.apache.poi.xssf.usermodel.XSSFSheet
 
-object FooterData {
-  val Empty = FooterData()
+object Footer extends Factory {
+
+  private lazy val defaultLeft = defaultPOISheet.getFooter.getLeft
+  private lazy val defaultCenter = defaultPOISheet.getFooter.getCenter
+  private lazy val defaultRight = defaultPOISheet.getFooter.getRight
+  private lazy val defaultFirstLeft = defaultPOISheet.getFirstFooter.getLeft
+  private lazy val defaultFirstCenter = defaultPOISheet.getFirstFooter.getCenter
+  private lazy val defaultFirstRight = defaultPOISheet.getFirstFooter.getRight
+  private lazy val defaultOddLeft = defaultPOISheet.getOddFooter.getLeft
+  private lazy val defaultOddCenter = defaultPOISheet.getOddFooter.getCenter
+  private lazy val defaultOddRight = defaultPOISheet.getOddFooter.getRight
+  private lazy val defaultEvenLeft = defaultPOISheet.getEvenFooter.getLeft
+  private lazy val defaultEvenCenter = defaultPOISheet.getEvenFooter.getCenter
+  private lazy val defaultEvenRight = defaultPOISheet.getEvenFooter.getRight
+
+  val Empty = Standard()
+
+  def Standard(left: String = defaultLeft,
+            center: String = defaultCenter,
+            right: String = defaultRight,
+            firstLeft: String = defaultFirstLeft,
+            firstCenter: String = defaultFirstCenter,
+            firstRight: String = defaultFirstRight): Footer =
+    Footer(left = wrap(left, defaultLeft),
+      center = wrap(center, defaultCenter),
+      right = wrap(right, defaultRight),
+      firstLeft = wrap(firstLeft, defaultFirstLeft),
+      firstCenter = wrap(firstCenter, defaultFirstCenter),
+      firstRight = wrap(firstRight, defaultFirstRight),
+      oddLeft = None, oddCenter = None, oddRight = None,
+      evenLeft = None, evenCenter = None, evenRight = None)
+
+  def EvenOdd(oddLeft : String = defaultOddLeft,
+    oddCenter : String = defaultOddCenter,
+    oddRight : String = defaultOddRight,
+    evenLeft : String = defaultEvenLeft,
+    evenCenter : String = defaultEvenCenter,
+    evenRight : String = defaultEvenRight,
+    firstLeft: String = defaultFirstLeft,
+    firstCenter: String = defaultFirstCenter,
+    firstRight: String = defaultFirstRight) : Footer =
+    Footer(
+      oddLeft = wrap(oddLeft, defaultOddLeft),
+      oddCenter = wrap(oddCenter, defaultOddCenter),
+      oddRight = wrap(oddRight, defaultOddRight),
+      evenLeft = wrap(evenLeft, defaultEvenLeft),
+      evenCenter = wrap(evenCenter, defaultEvenCenter),
+      evenRight = wrap(evenRight, defaultEvenRight),
+      firstLeft = wrap(firstLeft, defaultFirstLeft),
+      firstCenter = wrap(firstCenter, defaultFirstCenter),
+      firstRight = wrap(firstRight, defaultFirstRight),
+      left = None, center = None, right = None
+    )
 }
 
-case class FooterData(left: String = "",
-                      center: String = "",
-                      right: String = "")
+case class Footer private(
+                   left: Option[String],
+                   center: Option[String],
+                   right: Option[String],
+                   firstLeft: Option[String],
+                   firstCenter: Option[String],
+                   firstRight: Option[String],
+                   oddLeft: Option[String],
+                   oddCenter: Option[String],
+                   oddRight: Option[String],
+                   evenLeft: Option[String],
+                   evenCenter: Option[String],
+                   evenRight: Option[String]) {
 
-object Footer {
+  def withFirstPageLeft(firstLeft : String) =
+    copy(firstLeft = Option(firstLeft))
 
-  val None = UnifiedFooter()
+  def withFirstPageCenter(firstCenter : String) =
+    copy(firstCenter = Option(firstCenter))
 
-}
+  def withFirstPageRight(firstRight : String) =
+    copy(firstLeft = Option(firstRight))
 
-sealed trait Footer {
-
-  def applyTo(sheet: XSSFSheet)
-
-  private[ss] def applyData(footer: org.apache.poi.ss.usermodel.Footer, data: FooterData) {
-    if (data.left != "") footer.setLeft(data.left)
-    if (data.center != "") footer.setCenter(data.center)
-    if (data.right != "") footer.setRight(data.right)
-  }
-}
-
-case class UnifiedFooter(pageFooterData: FooterData = FooterData.Empty,
-                         firstPageFooterData: FooterData = FooterData.Empty) extends Footer {
 
   def applyTo(sheet: XSSFSheet) {
-    if (pageFooterData != FooterData.Empty) applyData(sheet.getFooter, pageFooterData)
-    if (firstPageFooterData != FooterData.Empty) applyData(sheet.getFirstFooter, firstPageFooterData)
-  }
-}
+    left.foreach(sheet.getFooter.setLeft)
+    center.foreach(sheet.getFooter.setCenter)
+    right.foreach(sheet.getFooter.setRight)
 
-case class OddEvenPageFooter(oddPageFooterData: FooterData = FooterData.Empty,
-                             evenPageFooterData: FooterData = FooterData.Empty,
-                             firstPageFooterData: FooterData = FooterData.Empty) extends Footer {
+    firstLeft.foreach(sheet.getFirstFooter.setLeft)
+    firstCenter.foreach(sheet.getFirstFooter.setCenter)
+    firstRight.foreach(sheet.getFirstFooter.setRight)
 
-  def applyTo(sheet: XSSFSheet) {
-    if (oddPageFooterData != FooterData.Empty) applyData(sheet.getOddFooter, oddPageFooterData)
-    if (evenPageFooterData != FooterData.Empty) applyData(sheet.getEvenFooter, evenPageFooterData)
-    if (firstPageFooterData != FooterData.Empty) applyData(sheet.getFirstFooter, firstPageFooterData)
+    oddLeft.foreach(sheet.getOddFooter.setLeft)
+    oddCenter.foreach(sheet.getOddFooter.setCenter)
+    oddRight.foreach(sheet.getOddFooter.setRight)
+
+    evenLeft.foreach(sheet.getEvenFooter.setLeft)
+    evenCenter.foreach(sheet.getEvenFooter.setCenter)
+    evenRight.foreach(sheet.getEvenFooter.setRight)
   }
 }

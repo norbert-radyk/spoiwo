@@ -10,10 +10,13 @@ object Sheet extends Factory {
   private lazy val defaultRows = Nil
   private lazy val defaultMergedRegions = Nil
   private lazy val defaultPrintSetup = PrintSetup.Default
-  private lazy val defaultHeader = Header.None
-  private lazy val defaultFooter = Footer.None
+  private lazy val defaultHeader = Header.Empty
+  private lazy val defaultFooter = Footer.Empty
   private lazy val defaultProperties = SheetProperties.Default
   private lazy val defaultMargins = Margins.Default
+  private lazy val defaultPaneAction = NoSplitOrFreeze()
+  private lazy val defaultRepeatingRows = RowRange.None
+  private lazy val defaultRepeatingColumns = ColumnRange.None
 
   val Blank = Sheet()
 
@@ -25,8 +28,11 @@ object Sheet extends Factory {
             header: Header = defaultHeader,
             footer: Footer = defaultFooter,
             properties: SheetProperties = defaultProperties,
-            margins: Margins = defaultMargins): Sheet =
-    Sheet(
+            margins: Margins = defaultMargins,
+            paneAction: PaneAction = defaultPaneAction,
+            repeatingRows : RowRange = defaultRepeatingRows,
+            repeatingColumns : ColumnRange = defaultRepeatingColumns): Sheet =
+    apply(
       name = wrap(name, defaultName),
       columns = columns,
       rows = rows,
@@ -35,7 +41,10 @@ object Sheet extends Factory {
       header = wrap(header, defaultHeader),
       footer = wrap(footer, defaultFooter),
       properties = wrap(properties, defaultProperties),
-      margins = wrap(margins, defaultMargins)
+      margins = wrap(margins, defaultMargins),
+      paneAction = wrap(paneAction, defaultPaneAction),
+      repeatingRows = wrap(repeatingRows, defaultRepeatingRows),
+      repeatingColumns = wrap(repeatingColumns, defaultRepeatingColumns)
     )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
@@ -53,7 +62,10 @@ case class Sheet private(
                           header: Option[Header],
                           footer: Option[Footer],
                           properties: Option[SheetProperties],
-                          margins: Option[Margins]) {
+                          margins: Option[Margins],
+                          paneAction : Option[PaneAction],
+                          repeatingRows : Option[RowRange],
+                          repeatingColumns : Option[ColumnRange]) {
 
   def withSheetName(name: String) =
     copy(name = Option(name))
@@ -88,6 +100,18 @@ case class Sheet private(
   def withMargins(margins: Margins) =
     copy(margins = Option(margins))
 
+  def withSplitPane(splitPane : SplitPane) =
+    copy(paneAction = Option(splitPane))
+
+  def withFreezePane(freezePane : FreezePane) =
+    copy(paneAction = Option(freezePane))
+
+  def withRepeatingRows(repeatingRows : RowRange) =
+    copy(repeatingRows = Option(repeatingRows))
+
+  def withRepeatingColumns(repeatingColumns : ColumnRange) =
+    copy(repeatingColumns = Option(repeatingColumns))
+
   def convertToCSV(properties : CSVProperties = CSVProperties.Default) : (String, String) = {
     name.getOrElse("") -> rows.map(r => r.convertToCSV(properties)).mkString("\n")
   }
@@ -106,6 +130,11 @@ case class Sheet private(
     footer.foreach(_.applyTo(sheet))
     properties.foreach(_.applyTo(sheet))
     margins.foreach(_.applyTo(sheet))
+    paneAction.foreach(_.applyTo(sheet))
+
+    repeatingRows.foreach(rr => sheet.setRepeatingRows(rr.convert()))
+    repeatingColumns.foreach(rc => sheet.setRepeatingColumns(rc.convert()))
+
     sheet
   }
 

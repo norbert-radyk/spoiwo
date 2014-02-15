@@ -1,5 +1,6 @@
 package com.norbitltd.spoiwo.examples.quickguide;
 
+import org.apache.poi.hssf.usermodel.HSSFHeader;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -360,4 +361,69 @@ public class JavaPoiExamples {
         wb.write(fileOut);
         fileOut.close();
     }
+
+    private static void setSheetAsSelected() {
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("row sheet");
+        sheet.setSelected(true);
+    }
+
+    private static void setZoomMagnification() {
+        Workbook wb = new HSSFWorkbook();
+        Sheet sheet1 = wb.createSheet("new sheet");
+        sheet1.setZoom(3,4);   // 75 percent magnification
+    }
+
+    private static void splitAndFreezePanes() throws IOException {
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet1 = wb.createSheet("new sheet");
+        Sheet sheet2 = wb.createSheet("second sheet");
+        Sheet sheet3 = wb.createSheet("third sheet");
+        Sheet sheet4 = wb.createSheet("fourth sheet");
+
+        // Freeze just one row
+        sheet1.createFreezePane( 0, 1, 0, 1 );
+        // Freeze just one column
+        sheet2.createFreezePane( 1, 0, 1, 0 );
+        // Freeze the columns and rows (forget about scrolling position of the lower right quadrant).
+        sheet3.createFreezePane( 2, 2 );
+        // Create a split with the lower left side being the active quadrant
+        sheet4.createSplitPane( 2000, 2000, 0, 0, Sheet.PANE_LOWER_LEFT );
+
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void repeatingRowsAndColumns() throws IOException {
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet1 = wb.createSheet("Sheet1");
+        Sheet sheet2 = wb.createSheet("Sheet2");
+
+        // Set the rows to repeat from row 4 to 5 on the first sheet.
+        sheet1.setRepeatingRows(CellRangeAddress.valueOf("4:5"));
+        // Set the columns to repeat from column A to C on the second sheet
+        sheet2.setRepeatingColumns(CellRangeAddress.valueOf("A:C"));
+
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+    }
+
+    private static void headersAndFooters() throws IOException {
+        Workbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet("new sheet");
+
+        Header header = sheet.getHeader();
+        header.setCenter("Center Header");
+        header.setLeft("Left Header");
+        header.setRight(HSSFHeader.font("Stencil-Normal", "Italic") +
+                HSSFHeader.fontSize((short) 16) + "Right w/ Stencil-Normal Italic font and size 16");
+
+        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        wb.write(fileOut);
+        fileOut.close();
+
+    }
+
 }

@@ -21,6 +21,8 @@ object RowRange {
 
   val None = RowRange(0, 0)
 
+  def apply(rowRange : (Int, Int)) : RowRange = RowRange(rowRange._1, rowRange._2)
+
 }
 
 case class RowRange(firstRowIndex: Int, lastRowIndex: Int) {
@@ -32,6 +34,8 @@ case class RowRange(firstRowIndex: Int, lastRowIndex: Int) {
 object ColumnRange {
 
   val None = ColumnRange("A", "A")
+
+  def apply(columnRange : (String, String)) : ColumnRange = ColumnRange(columnRange._1, columnRange._2)
 
   def apply(firstColumnIndex: Int, lastColumnIndex: Int) : ColumnRange = {
     require(firstColumnIndex <= lastColumnIndex,
