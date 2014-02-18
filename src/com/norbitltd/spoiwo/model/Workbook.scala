@@ -80,15 +80,7 @@ case class Workbook private[model](
   def withSheets(sheets: Sheet*) =
     copy(sheets = sheets)
 
-  /**
-   * Converts the defined workbook into the sheet name -> csv content map for all of the sheets.
-   * @return A sheet name -> CSV content map for each of the sheets
-   */
-  def convertToCSV(properties : CsvProperties = CsvProperties.Default) : Map[String, String] = {
-    require(sheets.size <= 1 || sheets.forall(_.name.isDefined),
-      "When converting workbook with multiple sheets to CSV format it is required to specify the unique name for each of them!")
-    sheets.map(s => s.convertToCSV(properties)).toMap
-  }
+
 
   def convertToXLSX(): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()
@@ -115,17 +107,6 @@ case class Workbook private[model](
     }
   }
 
-  def saveAsCsv(fileName : String, properties : CsvProperties = CsvProperties.Default) {
-    val convertedCsvData = convertToCSV(properties)
-    if( sheets.size <= 1 ) {
-      convertedCsvData.values.foreach(csvContent => FileUtils.write(fileName, csvContent))
-    } else {
-      val fileNameCore = fileName.replace(".csv", "").replace(".CSV", "")
-      convertedCsvData.foreach { case( sheetName, csvContent) =>
-        val sheetFileName = fileNameCore + "_" + sheetName + ".csv"
-        FileUtils.write(sheetFileName, csvContent)
-      }
-    }
-  }
+
 
 }

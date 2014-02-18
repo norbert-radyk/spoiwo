@@ -1,6 +1,7 @@
 package com.norbitltd.spoiwo.model
 
 import org.apache.commons.logging.LogFactory
+import com.norbitltd.spoiwo.natures.csv.Model2CsvConversions._
 
 abstract class AbstractReportGenerator {
 

@@ -112,10 +112,6 @@ case class Sheet private(
   def withRepeatingColumns(repeatingColumns : ColumnRange) =
     copy(repeatingColumns = Option(repeatingColumns))
 
-  def convertToCSV(properties : CsvProperties = CsvProperties.Default) : (String, String) = {
-    name.getOrElse("") -> rows.map(r => r.convertToCSV(properties)).mkString("\n")
-  }
-
 
   def convert(workbook: XSSFWorkbook): XSSFSheet = {
     val sheetName = name.getOrElse("Sheet " + (workbook.getNumberOfSheets + 1))
@@ -140,10 +136,6 @@ case class Sheet private(
 
   def saveAsXlsx(fileName: String) {
     Workbook(this).saveAsXlsx(fileName)
-  }
-
-  def saveAsCsv(fileName : String, properties : CsvProperties = CsvProperties.Default) {
-    Workbook(this).saveAsCsv(fileName, properties)
   }
 
   private def updateColumnsWithIndexes(): List[Column] = {
