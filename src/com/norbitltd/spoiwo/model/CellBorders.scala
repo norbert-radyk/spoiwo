@@ -1,18 +1,17 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 
 object CellBorders extends Factory {
 
-  private lazy val defaultLeftStyle = defaultPOICellStyle.getBorderLeftEnum
-  private lazy val defaultLeftColor = Color(defaultPOICellStyle.getLeftBorderXSSFColor)
-  private lazy val defaultTopStyle = defaultPOICellStyle.getBorderTopEnum
-  private lazy val defaultTopColor = Color(defaultPOICellStyle.getTopBorderXSSFColor)
-  private lazy val defaultRightStyle = defaultPOICellStyle.getBorderRightEnum
-  private lazy val defaultRightColor = Color(defaultPOICellStyle.getRightBorderXSSFColor)
-  private lazy val defaultBottomStyle = defaultPOICellStyle.getBorderBottomEnum
-  private lazy val defaultBottomColor = Color(defaultPOICellStyle.getBottomBorderXSSFColor)
+  private lazy val defaultLeftStyle = BorderStyle.None
+  private lazy val defaultLeftColor = Color.Undefined
+  private lazy val defaultTopStyle = BorderStyle.None
+  private lazy val defaultTopColor = Color.Undefined
+  private lazy val defaultRightStyle = BorderStyle.None
+  private lazy val defaultRightColor = Color.Undefined
+  private lazy val defaultBottomStyle = BorderStyle.None
+  private lazy val defaultBottomColor = Color.Undefined
 
   val Default = CellBorders()
 
@@ -67,13 +66,13 @@ case class CellBorders(leftStyle: Option[BorderStyle], leftColor: Option[Color],
   }
 
   def applyTo(style: XSSFCellStyle) {
-    leftStyle.foreach(style.setBorderLeft)
+    leftStyle.foreach(s => style.setBorderLeft(s.convert()))
     leftColor.foreach(c => style.setLeftBorderColor(c.convert()))
-    bottomStyle.foreach(style.setBorderBottom)
+    bottomStyle.foreach(s => style.setBorderBottom(s.convert()))
     bottomColor.foreach(c => style.setBottomBorderColor(c.convert()))
-    rightStyle.foreach(style.setBorderRight)
+    rightStyle.foreach(s => style.setBorderRight(s.convert()))
     rightColor.foreach(c => style.setRightBorderColor(c.convert()))
-    topStyle.foreach(style.setBorderTop)
+    topStyle.foreach(s => style.setBorderTop(s.convert()))
     topColor.foreach(c => style.setTopBorderColor(c.convert()))
   }
 }

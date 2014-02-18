@@ -4,14 +4,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 
 object Pane {
 
-  object LowerRightPane extends Pane
-  object LowerLeftPane extends Pane
-  object UpperRightPane extends Pane
-  object UpperLeftPane extends Pane
+  lazy val LowerRightPane = Pane(1)
+  lazy val LowerLeftPane = Pane(2)
+  lazy val UpperRightPane = Pane(3)
+  lazy val UpperLeftPane = Pane(4)
 
 }
 
-case class Pane private() {
+case class Pane private(id : Int) {
 
   import Pane._
 

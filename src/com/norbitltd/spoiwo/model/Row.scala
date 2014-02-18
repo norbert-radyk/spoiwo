@@ -96,9 +96,6 @@ case class Row private(cells: Iterable[Cell],
   def withZeroHeight(zeroHeight: Boolean) =
     copy(zeroHeight = Option(zeroHeight))
 
-  def convertToCSV(properties : CsvProperties = CsvProperties.Default) : String =
-    cells.map(c => c.convertToCSV(properties)).mkString(properties.separator)
-
   def convertToXLSX(sheet: XSSFSheet): XSSFRow = {
     val indexNumber = index.getOrElse(getNextRowNumber(sheet))
     val row = sheet.createRow(indexNumber)

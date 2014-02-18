@@ -3,7 +3,7 @@ package com.norbitltd.spoiwo.examples.quickguide
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.ss.util.WorkbookUtil
 import java.util.{Calendar, Date}
-import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA, VerticalAlignment => VA, FillPatternType, BorderStyle}
+import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA, VerticalAlignment => VA}
 
 class SpoiwoExamples {
 
@@ -60,10 +60,10 @@ class SpoiwoExamples {
 
   def workingWithBorders() {
     val borders = CellBorders(
-      bottomStyle = BorderStyle.THIN, bottomColor = Color.BLACK,
-      leftStyle = BorderStyle.THIN, leftColor = Color.GREEN,
-      rightStyle = BorderStyle.THIN, rightColor = Color.BLUE,
-      topStyle = BorderStyle.MEDIUM_DASHED, topColor = Color.BLACK
+      bottomStyle = BorderStyle.Thin, bottomColor = Color.Black,
+      leftStyle = BorderStyle.Thin, leftColor = Color.Green,
+      rightStyle = BorderStyle.Thin, rightColor = Color.Blue,
+      topStyle = BorderStyle.MediumDashed, topColor = Color.Black
     )
 
     Sheet(name = "new sheet",
@@ -75,8 +75,8 @@ class SpoiwoExamples {
   def fillsAndColors() = Sheet(name = "new sheet",
     row = Row(index = 1,
       Cell.Empty,
-      Cell("X", CellStyle(fillBackgroundColor = Color.AQUA, fillPattern = FillPatternType.BIG_SPOTS)),
-      Cell("X", CellStyle(fillForegroundColor = Color.ORANGE, fillPattern = FillPatternType.SOLID_FOREGROUND))
+      Cell("X", CellStyle(fillBackgroundColor = Color.Aqua, fillPattern = Fill.Pattern.BigSpots)),
+      Cell("X", CellStyle(fillForegroundColor = Color.Orange, fillPattern = Fill.Solid))
     )
   ).saveAsXlsx("workbook.xls")
 
@@ -104,7 +104,7 @@ class SpoiwoExamples {
 
 
   def customColors() = Sheet(Row(Cell("custom XSSF colors", style =
-    CellStyle(fillForegroundColor = Color(128, 0, 128), fillPattern = FillPatternType.SOLID_FOREGROUND)
+    CellStyle(fillForegroundColor = Color(128, 0, 128), fillPattern = Fill.Solid)
   )))
 
 

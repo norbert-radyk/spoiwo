@@ -6,7 +6,7 @@ import org.apache.poi.ss.usermodel.{VerticalAlignment, HorizontalAlignment, Fill
 object CellStyle extends Factory {
 
   private lazy val defaultDataFormat = CellDataFormat(defaultPOICellStyle.getDataFormatString)
-  private lazy val defaultFillPattern = defaultPOICellStyle.getFillPatternEnum
+  private lazy val defaultFillPattern = Fill.None
   private lazy val defaultFillForegroundColor = Color(defaultPOICellStyle.getFillForegroundXSSFColor)
   private lazy val defaultFillBackgroundColor = Color(defaultPOICellStyle.getFillBackgroundXSSFColor)
   private lazy val defaultHorizontalAlignment = defaultPOICellStyle.getAlignmentEnum
@@ -25,7 +25,7 @@ object CellStyle extends Factory {
   def apply(borders: CellBorders = defaultBorders,
             dataFormat: CellDataFormat = defaultDataFormat,
             font: Font = defaultFont,
-            fillPattern: FillPatternType = defaultFillPattern,
+            fillPattern: Fill = defaultFillPattern,
             fillForegroundColor: Color = defaultFillForegroundColor,
             fillBackgroundColor: Color = defaultFillBackgroundColor,
             horizontalAlignment: HorizontalAlignment = defaultHorizontalAlignment,
@@ -59,7 +59,7 @@ case class CellStyle private[model](
                                      borders: Option[CellBorders],
                                      dataFormat: Option[CellDataFormat],
                                      font: Option[Font],
-                                     fillPattern: Option[FillPatternType],
+                                     fillPattern: Option[Fill],
                                      fillForegroundColor: Option[Color],
                                      fillBackgroundColor: Option[Color],
                                      horizontalAlignment: Option[HorizontalAlignment],
@@ -79,7 +79,7 @@ case class CellStyle private[model](
   def withFont(font: Font) =
     copy(font = Option(font))
 
-  def withFillPattern(fillPattern: FillPatternType) =
+  def withFillPattern(fillPattern: Fill) =
     copy(fillPattern = Option(fillPattern))
 
   def withFillForegroundColor(fillForegroundColor: Color) =
@@ -133,7 +133,7 @@ case class CellStyle private[model](
   }
 
   private def setFill(cellStyle: XSSFCellStyle) {
-    fillPattern.foreach(cellStyle.setFillPattern)
+    fillPattern.foreach(fp => cellStyle.setFillPattern(fp.convert()))
     fillBackgroundColor.foreach(c => cellStyle.setFillBackgroundColor(c.convert()))
     fillForegroundColor.foreach(c => cellStyle.setFillForegroundColor(c.convert()))
   }
