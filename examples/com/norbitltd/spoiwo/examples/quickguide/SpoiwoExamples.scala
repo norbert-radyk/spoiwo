@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.examples.quickguide
 
-import com.norbitltd.spoiwo.ss._
+import com.norbitltd.spoiwo.model._
 import org.apache.poi.ss.util.WorkbookUtil
 import java.util.{Calendar, Date}
 import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA, VerticalAlignment => VA, FillPatternType, BorderStyle}
