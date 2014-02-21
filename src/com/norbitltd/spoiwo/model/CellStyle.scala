@@ -1,21 +1,21 @@
 package com.norbitltd.spoiwo.model
 
 import org.apache.poi.xssf.usermodel._
-import org.apache.poi.ss.usermodel.{VerticalAlignment, HorizontalAlignment, FillPatternType}
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object CellStyle extends Factory {
 
-  private lazy val defaultDataFormat = CellDataFormat(defaultPOICellStyle.getDataFormatString)
-  private lazy val defaultFillPattern = Fill.None
-  private lazy val defaultFillForegroundColor = Color(defaultPOICellStyle.getFillForegroundXSSFColor)
-  private lazy val defaultFillBackgroundColor = Color(defaultPOICellStyle.getFillBackgroundXSSFColor)
-  private lazy val defaultHorizontalAlignment = defaultPOICellStyle.getAlignmentEnum
-  private lazy val defaultVerticalAlignment = defaultPOICellStyle.getVerticalAlignmentEnum
-  private lazy val defaultHidden = defaultPOICellStyle.getHidden
-  private lazy val defaultIndention = defaultPOICellStyle.getIndention
-  private lazy val defaultLocked = defaultPOICellStyle.getLocked
-  private lazy val defaultRotation = defaultPOICellStyle.getRotation
-  private lazy val defaultWrapText = defaultPOICellStyle.getWrapText
+  private lazy val defaultDataFormat = CellDataFormat.Undefined
+  private lazy val defaultFillPattern = CellFill.None
+  private lazy val defaultFillForegroundColor = Color.Undefined
+  private lazy val defaultFillBackgroundColor = Color.Undefined
+  private lazy val defaultHorizontalAlignment = CellHorizontalAlignment.Undefined
+  private lazy val defaultVerticalAlignment = CellVerticalAlignment.Undefined
+  private lazy val defaultHidden = false
+  private lazy val defaultIndention = -1.toShort
+  private lazy val defaultLocked = false
+  private lazy val defaultRotation = -1.toShort
+  private lazy val defaultWrapText = false
 
   private lazy val defaultBorders = CellBorders.Default
   private lazy val defaultFont = Font.Default
@@ -25,11 +25,11 @@ object CellStyle extends Factory {
   def apply(borders: CellBorders = defaultBorders,
             dataFormat: CellDataFormat = defaultDataFormat,
             font: Font = defaultFont,
-            fillPattern: Fill = defaultFillPattern,
+            fillPattern: CellFill = defaultFillPattern,
             fillForegroundColor: Color = defaultFillForegroundColor,
             fillBackgroundColor: Color = defaultFillBackgroundColor,
-            horizontalAlignment: HorizontalAlignment = defaultHorizontalAlignment,
-            verticalAlignment: VerticalAlignment = defaultVerticalAlignment,
+            horizontalAlignment: CellHorizontalAlignment = defaultHorizontalAlignment,
+            verticalAlignment: CellVerticalAlignment = defaultVerticalAlignment,
             hidden: Boolean = defaultHidden,
             indention: Short = defaultIndention,
             locked: Boolean = defaultLocked,
@@ -59,11 +59,11 @@ case class CellStyle private[model](
                                      borders: Option[CellBorders],
                                      dataFormat: Option[CellDataFormat],
                                      font: Option[Font],
-                                     fillPattern: Option[Fill],
+                                     fillPattern: Option[CellFill],
                                      fillForegroundColor: Option[Color],
                                      fillBackgroundColor: Option[Color],
-                                     horizontalAlignment: Option[HorizontalAlignment],
-                                     verticalAlignment: Option[VerticalAlignment],
+                                     horizontalAlignment: Option[CellHorizontalAlignment],
+                                     verticalAlignment: Option[CellVerticalAlignment],
                                      hidden: Option[Boolean],
                                      indention: Option[Short],
                                      locked: Option[Boolean],
@@ -79,7 +79,7 @@ case class CellStyle private[model](
   def withFont(font: Font) =
     copy(font = Option(font))
 
-  def withFillPattern(fillPattern: Fill) =
+  def withFillPattern(fillPattern: CellFill) =
     copy(fillPattern = Option(fillPattern))
 
   def withFillForegroundColor(fillForegroundColor: Color) =
@@ -88,10 +88,10 @@ case class CellStyle private[model](
   def withFillBackgroundColor(fillBackgroundColor: Color) =
     copy(fillBackgroundColor = Option(fillBackgroundColor))
 
-  def withHorizontalAlignment(horizontalAlignment: HorizontalAlignment) =
+  def withHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment) =
     copy(horizontalAlignment = Option(horizontalAlignment))
 
-  def withVerticalAlignment(verticalAlignment: VerticalAlignment) =
+  def withVerticalAlignment(verticalAlignment: CellVerticalAlignment) =
     copy(verticalAlignment = Option(verticalAlignment))
 
   def withHidden(hidden: Boolean) =
@@ -139,8 +139,8 @@ case class CellStyle private[model](
   }
 
   private def setAlignment(cellStyle: XSSFCellStyle) {
-    horizontalAlignment.foreach(cellStyle.setAlignment)
-    verticalAlignment.foreach(cellStyle.setVerticalAlignment)
+    horizontalAlignment.foreach(ha => cellStyle.setAlignment(ha.convertAsXlsx()))
+    verticalAlignment.foreach(va => cellStyle.setVerticalAlignment(va.convertAsXlsx()))
   }
 
   private def setProperties(cellStyle: XSSFCellStyle) {

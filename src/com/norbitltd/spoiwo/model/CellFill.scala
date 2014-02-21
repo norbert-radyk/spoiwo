@@ -2,51 +2,46 @@ package com.norbitltd.spoiwo.model
 
 import org.apache.poi.ss.usermodel.FillPatternType
 
-object Fill {
+object CellFill {
 
-  lazy val None = Fill(0)
-  lazy val Solid = Fill(1)
+  lazy val None = CellFill(0)
+  lazy val Solid = CellFill(1)
 
   object Pattern {
 
-    lazy val AltBars = Fill(2)
-    lazy val BigSpots = Fill(3)
-    lazy val Bricks = Fill(4)
-    lazy val Diamonds = Fill(5)
-    lazy val Squares = Fill(6)
+    lazy val AltBars = CellFill(2)
+    lazy val BigSpots = CellFill(3)
+    lazy val Bricks = CellFill(4)
+    lazy val Diamonds = CellFill(5)
+    lazy val Squares = CellFill(6)
 
     object Dots {
-      lazy val Fine = Fill(10)
-      lazy val Least = Fill(11)
-      lazy val Less = Fill(12)
-      lazy val Sparse = Fill(13)
+      lazy val Fine = CellFill(10)
+      lazy val Least = CellFill(11)
+      lazy val Less = CellFill(12)
+      lazy val Sparse = CellFill(13)
     }
 
     object Diagonals {
-      lazy val ThinBackward = Fill(20)
-      lazy val ThinForward = Fill(21)
-      lazy val ThickBackward = Fill(22)
-      lazy val ThickForward = Fill(23)
+      lazy val ThinBackward = CellFill(20)
+      lazy val ThinForward = CellFill(21)
+      lazy val ThickBackward = CellFill(22)
+      lazy val ThickForward = CellFill(23)
     }
 
     object Bands {
-      lazy val ThickHorizontal = Fill(30)
-      lazy val ThickVertical = Fill(31)
-      lazy val ThinHorizontal = Fill(32)
-      lazy val ThinVertical = Fill(33)
+      lazy val ThickHorizontal = CellFill(30)
+      lazy val ThickVertical = CellFill(31)
+      lazy val ThinHorizontal = CellFill(32)
+      lazy val ThinVertical = CellFill(33)
     }
 
   }
 
-
-
-
-
 }
 
-
-case class Fill private(id: Int) {
-  import Fill._
+case class CellFill private(id: Int) {
+  import CellFill._
 
   def convert(): FillPatternType = this match {
     case None => FillPatternType.NO_FILL
@@ -68,6 +63,5 @@ case class Fill private(id: Int) {
     case Pattern.Bands.ThickVertical => FillPatternType.THICK_VERT_BANDS
     case Pattern.Bands.ThinHorizontal => FillPatternType.THIN_HORZ_BANDS
     case Pattern.Bands.ThinVertical => FillPatternType.THIN_VERT_BANDS
-
   }
 }

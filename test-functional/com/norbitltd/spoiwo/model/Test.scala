@@ -6,7 +6,7 @@ object Test {
     println(Color.Undefined == Color.Black)
     println(Color.Undefined == Color.Undefined)
     println(Color(0,0,0) == Color.Black)*/
-    println(BorderStyle.DashDotDot == BorderStyle.Dotted)
+    println(CellBorderStyle.DashDotDot == CellBorderStyle.Dotted)
     println(Pane.LowerLeftPane == Pane.UpperLeftPane)
   }
 }

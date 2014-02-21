@@ -3,13 +3,13 @@ package com.norbitltd.spoiwo.examples.quickguide
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.ss.util.WorkbookUtil
 import java.util.{Calendar, Date}
-import org.apache.poi.ss.usermodel.{HorizontalAlignment => HA, VerticalAlignment => VA}
+
+import com.norbitltd.spoiwo.model.{CellHorizontalAlignment => HA}
+import com.norbitltd.spoiwo.model.{CellVerticalAlignment => VA}
 
 class SpoiwoExamples {
 
-
   def newWorkbook() = Workbook().saveAsXlsx("workbook.xlsx")
-
 
   def newSheet() = Workbook(
     Sheet(name = "new sheet"),
@@ -49,8 +49,8 @@ class SpoiwoExamples {
 
 
   def variousAlignmentOptions() {
-    val alignments = List(HA.CENTER -> VA.BOTTOM, HA.CENTER_SELECTION -> VA.BOTTOM, HA.FILL -> VA.CENTER,
-      HA.GENERAL -> VA.CENTER, HA.JUSTIFY -> VA.JUSTIFY, HA.LEFT -> VA.TOP, HA.RIGHT -> VA.TOP)
+    val alignments = List(HA.Center -> VA.Bottom, HA.CenterSelection -> VA.Bottom, HA.Fill -> VA.Center,
+      HA.General -> VA.Center, HA.Justify -> VA.Justify, HA.Left -> VA.Top, HA.Right -> VA.Top)
 
     Sheet(
       Row(index = 2, heightInPoints = 30).withCells(alignments.map((createCell _).tupled))
@@ -60,10 +60,10 @@ class SpoiwoExamples {
 
   def workingWithBorders() {
     val borders = CellBorders(
-      bottomStyle = BorderStyle.Thin, bottomColor = Color.Black,
-      leftStyle = BorderStyle.Thin, leftColor = Color.Green,
-      rightStyle = BorderStyle.Thin, rightColor = Color.Blue,
-      topStyle = BorderStyle.MediumDashed, topColor = Color.Black
+      bottomStyle = CellBorderStyle.Thin, bottomColor = Color.Black,
+      leftStyle = CellBorderStyle.Thin, leftColor = Color.Green,
+      rightStyle = CellBorderStyle.Thin, rightColor = Color.Blue,
+      topStyle = CellBorderStyle.MediumDashed, topColor = Color.Black
     )
 
     Sheet(name = "new sheet",
@@ -75,8 +75,8 @@ class SpoiwoExamples {
   def fillsAndColors() = Sheet(name = "new sheet",
     row = Row(index = 1,
       Cell.Empty,
-      Cell("X", CellStyle(fillBackgroundColor = Color.Aqua, fillPattern = Fill.Pattern.BigSpots)),
-      Cell("X", CellStyle(fillForegroundColor = Color.Orange, fillPattern = Fill.Solid))
+      Cell("X", CellStyle(fillBackgroundColor = Color.Aqua, fillPattern = CellFill.Pattern.BigSpots)),
+      Cell("X", CellStyle(fillForegroundColor = Color.Orange, fillPattern = CellFill.Solid))
     )
   ).saveAsXlsx("workbook.xls")
 
@@ -104,7 +104,7 @@ class SpoiwoExamples {
 
 
   def customColors() = Sheet(Row(Cell("custom XSSF colors", style =
-    CellStyle(fillForegroundColor = Color(128, 0, 128), fillPattern = Fill.Solid)
+    CellStyle(fillForegroundColor = Color(128, 0, 128), fillPattern = CellFill.Solid)
   )))
 
 

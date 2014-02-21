@@ -5,9 +5,9 @@ import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
 
 object Font extends Factory {
 
-  private lazy val defaultHeight = defaultPOIFont.getFontHeight
-  private lazy val defaultHeightInPoints = defaultPOIFont.getFontHeightInPoints
-  private lazy val defaultBold = defaultPOIFont.getBold
+  private lazy val defaultHeight = -1.toShort
+  private lazy val defaultHeightInPoints = -1.toShort
+  private lazy val defaultBold = false
   private lazy val defaultItalic = defaultPOIFont.getItalic
   private lazy val defaultCharSet = FontCharset.valueOf(defaultPOIFont.getCharSet)
   private lazy val defaultColor = Color(defaultPOIFont.getXSSFColor)

@@ -15,7 +15,7 @@ object CellDataFormat {
 case class CellDataFormat private[model](formatString : Option[String]) {
 
   private def convert(workbook : XSSFWorkbook) : Short = {
-    val dataFormat = CellDataFormat.cache.getOrElseUpdate(workbook, workbook.createDataFormat());
+    val dataFormat = CellDataFormat.cache.getOrElseUpdate(workbook, workbook.createDataFormat())
     dataFormat.getFormat(formatString.get)
   }
 
