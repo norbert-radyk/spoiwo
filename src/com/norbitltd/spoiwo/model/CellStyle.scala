@@ -1,8 +1,5 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel._
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
-
 object CellStyle extends Factory {
 
   private lazy val defaultDataFormat = CellDataFormat.Undefined
@@ -51,24 +48,22 @@ object CellStyle extends Factory {
       wrap(wrapText, defaultWrapText)
     )
 
-  private[model] val cache = collection.mutable.Map[XSSFWorkbook,
-    collection.mutable.Map[CellStyle, XSSFCellStyle]]()
 }
 
-case class CellStyle private[model](
-                                     borders: Option[CellBorders],
-                                     dataFormat: Option[CellDataFormat],
-                                     font: Option[Font],
-                                     fillPattern: Option[CellFill],
-                                     fillForegroundColor: Option[Color],
-                                     fillBackgroundColor: Option[Color],
-                                     horizontalAlignment: Option[CellHorizontalAlignment],
-                                     verticalAlignment: Option[CellVerticalAlignment],
-                                     hidden: Option[Boolean],
-                                     indention: Option[Short],
-                                     locked: Option[Boolean],
-                                     rotation: Option[Short],
-                                     wrapText: Option[Boolean]) {
+case class CellStyle private(
+                              borders: Option[CellBorders],
+                              dataFormat: Option[CellDataFormat],
+                              font: Option[Font],
+                              fillPattern: Option[CellFill],
+                              fillForegroundColor: Option[Color],
+                              fillBackgroundColor: Option[Color],
+                              horizontalAlignment: Option[CellHorizontalAlignment],
+                              verticalAlignment: Option[CellVerticalAlignment],
+                              hidden: Option[Boolean],
+                              indention: Option[Short],
+                              locked: Option[Boolean],
+                              rotation: Option[Short],
+                              wrapText: Option[Boolean]) {
 
   def withBorders(borders: CellBorders) =
     copy(borders = Option(borders))
@@ -108,47 +103,5 @@ case class CellStyle private[model](
 
   def withWrapText(wrapText: Boolean) =
     copy(wrapText = Option(wrapText))
-
-  def convert(cell: XSSFCell): XSSFCellStyle = convert(cell.getRow)
-
-  def convert(row: XSSFRow): XSSFCellStyle = convert(row.getSheet)
-
-  def convert(sheet: XSSFSheet): XSSFCellStyle = convert(sheet.getWorkbook)
-
-  def convert(workbook: XSSFWorkbook): XSSFCellStyle = {
-    val workbookCache = CellStyle.cache.getOrElseUpdate(workbook, collection.mutable.Map[CellStyle, XSSFCellStyle]())
-    workbookCache.getOrElseUpdate(this, createCellStyle(workbook, this))
-  }
-
-  private def createCellStyle(workbook: XSSFWorkbook, cellStyle: CellStyle): XSSFCellStyle = {
-    val cellStyle = workbook.createCellStyle()
-    borders.foreach(b => b.applyTo(cellStyle))
-    dataFormat.foreach(df => df.applyTo(workbook, cellStyle))
-    font.foreach(f => f.convert(workbook))
-
-    setFill(cellStyle)
-    setAlignment(cellStyle)
-    setProperties(cellStyle)
-    cellStyle
-  }
-
-  private def setFill(cellStyle: XSSFCellStyle) {
-    fillPattern.foreach(fp => cellStyle.setFillPattern(fp.convert()))
-    fillBackgroundColor.foreach(c => cellStyle.setFillBackgroundColor(c.convert()))
-    fillForegroundColor.foreach(c => cellStyle.setFillForegroundColor(c.convert()))
-  }
-
-  private def setAlignment(cellStyle: XSSFCellStyle) {
-    horizontalAlignment.foreach(ha => cellStyle.setAlignment(ha.convertAsXlsx()))
-    verticalAlignment.foreach(va => cellStyle.setVerticalAlignment(va.convertAsXlsx()))
-  }
-
-  private def setProperties(cellStyle: XSSFCellStyle) {
-    hidden.foreach(cellStyle.setHidden)
-    indention.foreach(cellStyle.setIndention)
-    locked.foreach(cellStyle.setLocked)
-    rotation.foreach(cellStyle.setRotation)
-    wrapText.foreach(cellStyle.setWrapText)
-  }
 
 }

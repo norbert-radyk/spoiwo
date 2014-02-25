@@ -2,7 +2,7 @@ package com.norbitltd.spoiwo.model
 
 import org.apache.poi.xssf.usermodel.{XSSFRow, XSSFSheet}
 import java.util.{Calendar, Date}
-import com.norbitltd.spoiwo.natures.csv.CsvProperties
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object Row extends Factory {
 
@@ -103,7 +103,7 @@ case class Row private(cells: Iterable[Cell],
     cells.foreach(cell => cell.convertToXLSX(row))
     height.foreach(row.setHeight)
     heightInPoints.foreach(row.setHeightInPoints)
-    style.foreach(s => row.setRowStyle(s.convert(row)))
+    style.foreach(s => row.setRowStyle(s.convertAsXlsx(row)))
     zeroHeight.foreach(row.setZeroHeight)
     row
   }

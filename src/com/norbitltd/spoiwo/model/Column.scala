@@ -1,6 +1,7 @@
 package com.norbitltd.spoiwo.model
 
 import org.apache.poi.xssf.usermodel.XSSFSheet
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object Column extends Factory {
 
@@ -70,7 +71,7 @@ case class Column private[model](index: Option[Int],
     break.foreach(b => sheet.setColumnBreak(i))
     groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
     hidden.foreach(h => sheet.setColumnHidden(i, h))
-    style.foreach(s => sheet.setDefaultColumnStyle(i, s.convert(sheet)))
+    style.foreach(s => sheet.setDefaultColumnStyle(i, s.convertAsXlsx(sheet)))
     width.foreach(w => sheet.setColumnWidth(i, w))
   }
 }

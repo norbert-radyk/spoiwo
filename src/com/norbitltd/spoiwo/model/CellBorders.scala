@@ -1,8 +1,5 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.XSSFCellStyle
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
-
 object CellBorders extends Factory {
 
   private lazy val defaultLeftStyle = CellBorderStyle.None
@@ -66,14 +63,4 @@ case class CellBorders(leftStyle: Option[CellBorderStyle], leftColor: Option[Col
     copy(leftColor = colorOption, topColor = colorOption, rightColor = colorOption, bottomColor = colorOption)
   }
 
-  def applyTo(style: XSSFCellStyle) {
-    leftStyle.foreach(s => style.setBorderLeft(s.convertAsXlsx()))
-    leftColor.foreach(c => style.setLeftBorderColor(c.convert()))
-    bottomStyle.foreach(s => style.setBorderBottom(s.convertAsXlsx()))
-    bottomColor.foreach(c => style.setBottomBorderColor(c.convert()))
-    rightStyle.foreach(s => style.setBorderRight(s.convertAsXlsx()))
-    rightColor.foreach(c => style.setRightBorderColor(c.convert()))
-    topStyle.foreach(s => style.setBorderTop(s.convertAsXlsx()))
-    topColor.foreach(c => style.setTopBorderColor(c.convert()))
-  }
 }

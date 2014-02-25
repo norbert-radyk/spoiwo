@@ -2,6 +2,7 @@ package com.norbitltd.spoiwo.model
 
 import org.apache.poi.ss.usermodel.{FontCharset, FontFamily, FontUnderline, FontScheme}
 import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object Font extends Factory {
 
@@ -10,7 +11,7 @@ object Font extends Factory {
   private lazy val defaultBold = false
   private lazy val defaultItalic = defaultPOIFont.getItalic
   private lazy val defaultCharSet = FontCharset.valueOf(defaultPOIFont.getCharSet)
-  private lazy val defaultColor = Color(defaultPOIFont.getXSSFColor)
+  private lazy val defaultColor = Color.Undefined
   private lazy val defaultFamily = FontFamily.valueOf(defaultPOIFont.getFamily)
   private lazy val defaultScheme = defaultPOIFont.getScheme
   private lazy val defaultFontName = defaultPOIFont.getFontName
@@ -111,7 +112,7 @@ case class Font private[model](
     val font = workbook.createFont()
     bold.foreach(font.setBold)
     charSet.foreach(font.setCharSet)
-    color.foreach(c => font.setColor(c.convert()))
+    color.foreach(c => font.setColor(c.convertAsXlsx()))
     family.foreach(font.setFamily)
     height.foreach(font.setFontHeight)
     heightInPoints.foreach(font.setFontHeightInPoints)

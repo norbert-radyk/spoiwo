@@ -3,6 +3,7 @@ package com.norbitltd.spoiwo.model
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFRow}
 import java.util.{Calendar, Date}
 import org.apache.poi.ss.usermodel.FormulaError
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object Cell extends Factory {
 
@@ -99,7 +100,7 @@ sealed abstract class Cell(index: Option[Int], style: Option[CellStyle]) {
   private[model] def convertToXLSXInternal(row: XSSFRow)(initializeCell: XSSFCell => Unit): XSSFCell = {
     val cellNumber = index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
-    style.foreach(s => cell.setCellStyle(s.convert(cell)))
+    style.foreach(s => cell.setCellStyle(s.convertAsXlsx(cell)))
     initializeCell(cell)
     cell
   }
