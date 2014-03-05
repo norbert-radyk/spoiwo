@@ -49,7 +49,7 @@ object Model2XlsxConversions {
     def convertAsXlsx() = convertHorizontalAlignment(ha)
   }
 
-  implicit class XslxSheet(s: Sheet) {
+  implicit class XlsxSheet(s: Sheet) {
     def convertAsXlsx(workbook: XSSFWorkbook) = convertSheet(s, workbook)
 
     def saveAsXlsx(fileName: String) {
@@ -103,7 +103,7 @@ object Model2XlsxConversions {
     Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
   )
 
-  def convertCell(c : Cell, row : XSSFRow): XSSFCell = {
+  private def convertCell(c : Cell, row : XSSFRow): XSSFCell = {
     val cellNumber = c.getIndex.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
     c.getStyle.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
@@ -164,7 +164,7 @@ object Model2XlsxConversions {
     }
   }
 
-  def convertCellRange(cr: CellRange): CellRangeAddress =
+  private def convertCellRange(cr: CellRange): CellRangeAddress =
     new org.apache.poi.ss.util.CellRangeAddress(cr.rowRange._1, cr.rowRange._2, cr.columnRange._1, cr.columnRange._2)
 
   private def convertCellStyle(cs: CellStyle, workbook: XSSFWorkbook): XSSFCellStyle =
@@ -190,7 +190,7 @@ object Model2XlsxConversions {
     }
 
 
-  def convertColumn(c : Column, sheet: XSSFSheet) {
+  private def convertColumn(c : Column, sheet: XSSFSheet) {
     val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
       "Something went terribly wrong as it should have been derived if not specified explicitly!"))
 
@@ -202,9 +202,9 @@ object Model2XlsxConversions {
     c.width.foreach(w => sheet.setColumnWidth(i, w))
   }
 
-  def convertColumnRange(cr: ColumnRange) = CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))
+  private def convertColumnRange(cr: ColumnRange) = CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))
 
-  def convertFooter(f: Footer, sheet: XSSFSheet) {
+  private def convertFooter(f: Footer, sheet: XSSFSheet) {
     f.left.foreach(sheet.getFooter.setLeft)
     f.center.foreach(sheet.getFooter.setCenter)
     f.right.foreach(sheet.getFooter.setRight)
@@ -241,7 +241,7 @@ object Model2XlsxConversions {
     }
 
 
-  def convertHeader(h: Header, sheet: XSSFSheet) {
+  private def convertHeader(h: Header, sheet: XSSFSheet) {
     h.left.foreach(sheet.getHeader.setLeft)
     h.center.foreach(sheet.getHeader.setCenter)
     h.right.foreach(sheet.getHeader.setRight)
@@ -279,7 +279,7 @@ object Model2XlsxConversions {
     }
   }
 
-  def convertMargins(margins: Margins, sheet: XSSFSheet) {
+  private def convertMargins(margins: Margins, sheet: XSSFSheet) {
     margins.top.foreach(topMargin => sheet.setMargin(TopMargin, topMargin))
     margins.bottom.foreach(bottomMargin => sheet.setMargin(BottomMargin, bottomMargin))
     margins.right.foreach(rightMargin => sheet.setMargin(RightMargin, rightMargin))
@@ -288,14 +288,14 @@ object Model2XlsxConversions {
     margins.footer.foreach(footerMargin => sheet.setMargin(FooterMargin, footerMargin))
   }
 
-  def convertPane(pane: Pane): Int = pane match {
+  private def convertPane(pane: Pane): Int = pane match {
     case Pane.LowerLeftPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_LEFT
     case Pane.LowerRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_RIGHT
     case Pane.UpperLeftPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_LEFT
     case Pane.UpperRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_RIGHT
   }
 
-  def convertPaneAction(paneAction: PaneAction, sheet: XSSFSheet) {
+  private def convertPaneAction(paneAction: PaneAction, sheet: XSSFSheet) {
     paneAction match {
       case NoSplitOrFreeze() =>
         sheet.createFreezePane(0, 0)
@@ -306,7 +306,7 @@ object Model2XlsxConversions {
     }
   }
 
-  def convertRow(r : com.norbitltd.spoiwo.model.Row, sheet: XSSFSheet): XSSFRow = {
+  private def convertRow(r : com.norbitltd.spoiwo.model.Row, sheet: XSSFSheet): XSSFRow = {
     val indexNumber = r.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = sheet.createRow(indexNumber)
 
@@ -318,7 +318,7 @@ object Model2XlsxConversions {
     row
   }
 
-  def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
+  private def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
     val sheetName = s.name.getOrElse("Sheet " + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
 
@@ -353,7 +353,7 @@ object Model2XlsxConversions {
     }
   }
 
-  def convertSheetProperties(sp: SheetProperties, sheet: XSSFSheet) {
+  private def convertSheetProperties(sp: SheetProperties, sheet: XSSFSheet) {
     sp.autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(convertCellRange(autoFilterRange)))
     sp.activeCell.foreach(sheet.setActiveCell)
     sp.autoBreaks.foreach(sheet.setAutobreaks)
@@ -384,7 +384,7 @@ object Model2XlsxConversions {
     sp.zoom.foreach(sheet.setZoom)
   }
 
-  def convertPrintSetup(printSetup: PrintSetup, sheet: XSSFSheet) {
+  private def convertPrintSetup(printSetup: PrintSetup, sheet: XSSFSheet) {
     if (printSetup != PrintSetup.Default) {
       val ps = sheet.getPrintSetup
       printSetup.copies.foreach(ps.setCopies)
@@ -408,7 +408,7 @@ object Model2XlsxConversions {
     }
   }
 
-  def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
+  private def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
 
   private def convertVerticalAlignment(verticalAlignment: CellVerticalAlignment): VerticalAlignment = {
     import CellVerticalAlignment._
@@ -427,7 +427,7 @@ object Model2XlsxConversions {
     }
   }
 
-  def convertWorkbook(wb : Workbook): XSSFWorkbook = {
+  private def convertWorkbook(wb : Workbook): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()
     wb.sheets.foreach(sheet => convertSheet(sheet, workbook))
 
@@ -442,7 +442,7 @@ object Model2XlsxConversions {
   }
 
   //================= Cache processing ====================
-  def getCachedOrUpdate[K, V](cache: Cache[K, V], value: K, workbook: XSSFWorkbook)(newValue: => V): V = {
+  private def getCachedOrUpdate[K, V](cache: Cache[K, V], value: K, workbook: XSSFWorkbook)(newValue: => V): V = {
     val workbookCache = cache.getOrElseUpdate(workbook, collection.mutable.Map[K, V]())
     workbookCache.getOrElseUpdate(value, newValue)
   }

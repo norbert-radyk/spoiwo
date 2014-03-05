@@ -64,36 +64,72 @@ case class Font private[model](
   def withHeight(height: Short) =
     copy(height = Option(height))
 
+  def withoutHeight =
+    copy(height = None)
+
   def withHeightInPoints(heightInPoints: Short) =
     copy(heightInPoints = Option(heightInPoints))
 
-  def withBold(bold: Boolean) =
-    copy(bold = Option(bold))
+  def withoutHeightInPaints =
+    copy(heightInPoints = None)
 
-  def withItalic(italic: Boolean) =
-    copy(italic = Option(italic))
+  def withBold =
+    copy(bold = Some(true))
+
+  def withoutBold =
+    copy(bold = Some(false))
+
+  def withItalic =
+    copy(italic = Some(true))
+
+  def withoutItalic =
+    copy(italic = Some(false))
 
   def withCharSet(charSet: FontCharset) =
     copy(charSet = Option(charSet))
 
+  def withoutCharSet =
+    copy(charSet = None)
+
   def withColor(color: Color) =
     copy(color = Option(color))
+
+  def withoutColor =
+    copy(color = None)
 
   def withFamily(family: FontFamily) =
     copy(family = Option(family))
 
+  def withoutFamily =
+    copy(family = None)
+
   def withScheme(scheme: FontScheme) =
     copy(scheme = Option(scheme))
+
+  def withoutScheme =
+    copy(scheme = None)
 
   def withFontName(fontName: String) =
     copy(fontName = Option(fontName))
 
-  def withStrikeout(strikeout: Boolean) =
-    copy(strikeout = Option(strikeout))
+  def withoutFontName =
+    copy(fontName = None)
+
+  def withStrikeout =
+    copy(strikeout = Some(true))
+
+  def withoutStrikeout =
+    copy(strikeout = Some(false))
 
   def withTypeOffset(typeOffset: Short) =
     copy(typeOffset = Option(typeOffset))
 
+  def withoutTypeOffset =
+    copy(typeOffset = None)
+
   def withUnderline(underline: FontUnderline) =
     copy(underline = Option(underline))
+
+  def withoutUnderline =
+    copy(underline = None)
 }

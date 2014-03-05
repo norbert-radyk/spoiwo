@@ -68,40 +68,79 @@ case class CellStyle private(
   def withBorders(borders: CellBorders) =
     copy(borders = Option(borders))
 
+  def withoutBorders =
+    copy(borders = None)
+
   def withDataFormat(dataFormat: CellDataFormat) =
     copy(dataFormat = Option(dataFormat))
+
+  def withoutDataFormat =
+    copy(dataFormat = None)
 
   def withFont(font: Font) =
     copy(font = Option(font))
 
+  def withoutFont =
+    copy(font = None)
+
   def withFillPattern(fillPattern: CellFill) =
     copy(fillPattern = Option(fillPattern))
+
+  def withoutFillPattern =
+    copy(fillPattern = None)
 
   def withFillForegroundColor(fillForegroundColor: Color) =
     copy(fillForegroundColor = Option(fillForegroundColor))
 
+  def withoutFillForegroundColor =
+    copy(fillForegroundColor = None)
+
   def withFillBackgroundColor(fillBackgroundColor: Color) =
     copy(fillBackgroundColor = Option(fillBackgroundColor))
+
+  def withoutFillBackgroundColor =
+    copy(fillBackgroundColor = None)
 
   def withHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment) =
     copy(horizontalAlignment = Option(horizontalAlignment))
 
+  def withoutHorizontalAlignment =
+    copy(horizontalAlignment = None)
+
   def withVerticalAlignment(verticalAlignment: CellVerticalAlignment) =
     copy(verticalAlignment = Option(verticalAlignment))
 
-  def withHidden(hidden: Boolean) =
-    copy(hidden = Option(hidden))
+  def withoutVerticalAlignment =
+    copy(verticalAlignment = None)
+
+  def withHidden =
+    copy(hidden = Some(true))
+
+  def withoutHidden =
+    copy(hidden = Some(false))
 
   def withIndention(indention: Short) =
     copy(indention = Option(indention))
 
-  def withLocked(locked: Boolean) =
-    copy(locked = Option(locked))
+  def withoutIndention =
+    copy(indention = None)
+
+  def withLocked =
+    copy(locked = Some(true))
+
+  def withoutLocked =
+    copy(locked = Some(false))
 
   def withRotation(rotation: Short) =
     copy(rotation = Option(rotation))
 
-  def withWrapText(wrapText: Boolean) =
-    copy(wrapText = Option(wrapText))
+  def withoutRotation =
+    copy(rotation = None)
+
+  def withWrapText =
+    copy(wrapText = Some(true))
+
+  def withoutWrapText =
+    copy(wrapText = Some(false))
 
 }

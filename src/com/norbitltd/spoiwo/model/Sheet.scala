@@ -88,14 +88,26 @@ case class Sheet private(
   def withPrintSetup(printSetup: PrintSetup) =
     copy(printSetup = Option(printSetup))
 
+  def withoutPrintSetup =
+    copy(printSetup = None)
+
   def withHeader(header: Header) =
     copy(header = Option(header))
+
+  def withoutHeader =
+    copy(header = None)
 
   def withFooter(footer: Footer) =
     copy(footer = Option(footer))
 
+  def withoutFooter =
+    copy(footer = None)
+
   def withMargins(margins: Margins) =
     copy(margins = Option(margins))
+
+  def withoutMargins =
+    copy(margins = None)
 
   def withSplitPane(splitPane: SplitPane) =
     copy(paneAction = Option(splitPane))
@@ -103,9 +115,18 @@ case class Sheet private(
   def withFreezePane(freezePane: FreezePane) =
     copy(paneAction = Option(freezePane))
 
+  def withoutSplitOrFreezePane =
+    copy(paneAction = Some(NoSplitOrFreeze()))
+
   def withRepeatingRows(repeatingRows: RowRange) =
     copy(repeatingRows = Option(repeatingRows))
 
+  def withoutRepeatingRows =
+    copy(repeatingRows = None)
+
   def withRepeatingColumns(repeatingColumns: ColumnRange) =
     copy(repeatingColumns = Option(repeatingColumns))
+
+  def withoutRepeatingColumns =
+    copy(repeatingColumns = None)
 }

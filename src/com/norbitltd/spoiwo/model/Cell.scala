@@ -27,7 +27,7 @@ object Cell extends Factory {
     if (value.startsWith("=")) {
       FormulaCell(value, indexOption, styleOption)
     } else if (value.contains("\n")) {
-      StringCell(value, indexOption, Option(style.withWrapText(wrapText = true)))
+      StringCell(value, indexOption, Option(style.withWrapText))
     } else {
       StringCell(value, indexOption, styleOption)
     }
