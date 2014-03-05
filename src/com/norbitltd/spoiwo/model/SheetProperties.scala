@@ -75,11 +75,6 @@ object SheetProperties extends Factory {
   )
 }
 
-/**
- * Represents the complete set of Apache POI sheet properties.
- * The following methods are not supported:
- * setRepeatingColumns and setRepeatingRows
- */
 case class SheetProperties private[model](
                                            autoFilter: Option[CellRange],
                                            activeCell: Option[String],
@@ -107,67 +102,133 @@ case class SheetProperties private[model](
   def withAutoFilter(autoFilterRange: CellRange) =
     copy(autoFilter = Option(autoFilterRange))
 
+  def withoutAutoFilter(autoFilterRange: CellRange) =
+    copy(autoFilter = None)
+
   def withActiveCell(activeCell: String) =
     copy(activeCell = Option(activeCell))
 
-  def withAutoBreaks(autoBreaks: Boolean) =
-    copy(autoBreaks = Option(autoBreaks))
+  def withoutActiveCell(activeCell: String) =
+    copy(activeCell = None)
+
+  def withAutoBreaks =
+    copy(autoBreaks = Some(true))
+
+  def withoutAutoBreaks =
+    copy(autoBreaks = Some(false))
 
   def withDefaultColumnWidth(defaultColumnWidth: Int) =
     copy(defaultColumnWidth = Option(defaultColumnWidth))
 
+  def withoutDefaultColumnWidth(defaultColumnWidth: Int) =
+    copy(defaultColumnWidth = None)
+
   def withDefaultRowHeight(defaultRowHeight: Short) =
     copy(defaultRowHeight = Option(defaultRowHeight))
 
-  def withDisplayFormulas(displayFormulas: Boolean) =
-    copy(displayFormulas = Option(displayFormulas))
+  def withoutDefaultRowHeight(defaultRowHeight: Short) =
+    copy(defaultRowHeight = None)
 
-  def withDisplayGridLines(displayGridLines: Boolean) =
-    copy(displayGridLines = Option(displayGridLines))
+  def withDisplayFormulas =
+    copy(displayFormulas = Some(true))
 
-  def withDisplayGuts(displayGuts: Boolean) =
-    copy(displayGuts = Option(displayGuts))
+  def withoutDisplayFormulas =
+    copy(displayFormulas = Some(false))
 
-  def withDisplayRowColHeadings(displayRowColHeadings: Boolean) =
-    copy(displayRowColHeadings = Option(displayRowColHeadings))
+  def withDisplayGridLines =
+    copy(displayGridLines = Some(true))
 
-  def withDisplayZeros(displayZeros: Boolean) =
-    copy(displayZeros = Option(displayZeros))
+  def withoutDisplayGridLines =
+    copy(displayGridLines = Some(false))
 
-  def withFitToPage(fitToPage: Boolean) =
-    copy(fitToPage = Option(fitToPage))
+  def withDisplayGuts =
+    copy(displayGuts = Some(true))
 
-  def withForceFormulaRecalculation(forceFormulaRecalculation: Boolean) =
-    copy(forceFormulaRecalculation = Option(forceFormulaRecalculation))
+  def withoutDisplayGuts =
+    copy(displayGuts = Some(false))
 
-  def withHorizontallyCenter(horizontallyCenter: Boolean) =
-    copy(horizontallyCenter = Option(horizontallyCenter))
+  def withDisplayRowColHeadings =
+    copy(displayRowColHeadings = Some(true))
+
+  def withoutDisplayRowColHeadings =
+    copy(displayRowColHeadings = Some(false))
+
+  def withDisplayZeros =
+    copy(displayZeros = Some(true))
+
+  def withoutDisplayZeros =
+    copy(displayZeros = Some(false))
+
+  def withFitToPage =
+    copy(fitToPage = Some(true))
+
+  def withoutFitToPage =
+    copy(fitToPage = Some(false))
+
+  def withForceFormulaRecalculation =
+    copy(forceFormulaRecalculation = Some(true))
+
+  def withoutForceFormulaRecalculation =
+    copy(forceFormulaRecalculation = Some(false))
+
+  def withHorizontallyCenter =
+    copy(horizontallyCenter = Some(true))
+
+  def withoutHorizontallyCenter =
+    copy(horizontallyCenter = Some(false))
 
   def withPrintArea(printArea: CellRange) =
     copy(printArea = Option(printArea))
 
-  def withPrintGridLines(printGridLines: Boolean) =
-    copy(printGridLines = Option(printGridLines))
+  def withoutPrintArea(printArea: CellRange) =
+    copy(printArea = None)
 
-  def withRightToLeft(rightToLeft: Boolean) =
-    copy(rightToLeft = Option(rightToLeft))
+  def withPrintGridLines =
+    copy(printGridLines = Some(true))
 
-  def withRowSumsBelow(rowSumsBelow: Boolean) =
-    copy(rowSumsBelow = Option(rowSumsBelow))
+  def withoutPrintGridLines =
+    copy(printGridLines = Some(false))
 
-  def withRowSumsRight(rowSumsRight: Boolean) =
-    copy(rowSumsRight = Option(rowSumsRight))
+  def withRightToLeft =
+    copy(rightToLeft = Some(true))
 
-  def withSelected(selected: Boolean) =
-    copy(selected = Option(selected))
+  def withoutRightToLeft =
+    copy(rightToLeft = Some(false))
+
+  def withRowSumsBelow =
+    copy(rowSumsBelow = Some(true))
+
+  def withoutRowSumsBelow =
+    copy(rowSumsBelow = Some(false))
+
+  def withRowSumsRight =
+    copy(rowSumsRight = Some(true))
+
+  def withoutRowSumsRight =
+    copy(rowSumsRight = Some(false))
+
+  def withSelected =
+    copy(selected = Some(true))
+
+  def withoutSelected =
+    copy(selected = Some(false))
 
   def withTabColor(tabColor: Int) =
     copy(tabColor = Option(tabColor))
 
-  def withVirtuallyCenter(virtuallyCenter: Boolean) =
-    copy(virtuallyCenter = Option(virtuallyCenter))
+  def withoutTabColor =
+    copy(tabColor = None)
+
+  def withVirtuallyCenter =
+    copy(virtuallyCenter = Option(true))
+
+  def withoutVirtuallyCenter =
+    copy(virtuallyCenter = Option(false))
 
   def withZoom(zoom: Int) =
     copy(zoom = Option(zoom))
+
+  def withoutZoom =
+    copy(zoom = None)
 
 }
