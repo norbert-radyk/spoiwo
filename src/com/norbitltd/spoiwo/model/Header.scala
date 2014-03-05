@@ -1,7 +1,5 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.XSSFSheet
-
 object Header extends Factory {
 
   private lazy val defaultLeft = defaultPOISheet.getHeader.getLeft
@@ -80,21 +78,4 @@ case class Header private(
   def withFirstPageRight(firstRight : String) =
     copy(firstLeft = Option(firstRight))
 
-  def applyTo(sheet: XSSFSheet) {
-    left.foreach(sheet.getHeader.setLeft)
-    center.foreach(sheet.getHeader.setCenter)
-    right.foreach(sheet.getHeader.setRight)
-
-    firstLeft.foreach(sheet.getFirstHeader.setLeft)
-    firstCenter.foreach(sheet.getFirstHeader.setCenter)
-    firstRight.foreach(sheet.getFirstHeader.setRight)
-
-    oddLeft.foreach(sheet.getOddHeader.setLeft)
-    oddCenter.foreach(sheet.getOddHeader.setCenter)
-    oddRight.foreach(sheet.getOddHeader.setRight)
-
-    evenLeft.foreach(sheet.getEvenHeader.setLeft)
-    evenCenter.foreach(sheet.getEvenHeader.setCenter)
-    evenRight.foreach(sheet.getEvenHeader.setRight)
-  }
 }

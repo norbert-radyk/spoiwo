@@ -1,8 +1,5 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.apache.poi.ss.usermodel.IndexedColors
-
 object SheetProperties extends Factory {
 
   private lazy val defaultAutoFilter = CellRange.None
@@ -11,6 +8,7 @@ object SheetProperties extends Factory {
   private lazy val defaultDefaultColumnWidth = defaultPOISheet.getDefaultColumnWidth
   private lazy val defaultDefaultRowHeight = defaultPOISheet.getDefaultRowHeight
   private lazy val defaultDisplayFormulas = true
+
   private lazy val defaultDisplayGridLines = true
   private lazy val defaultDisplayGuts = defaultPOISheet.getDisplayGuts
   private lazy val defaultDisplayRowColHeadings = true
@@ -24,7 +22,7 @@ object SheetProperties extends Factory {
   private lazy val defaultRowSumsBelow = defaultPOISheet.getRowSumsBelow
   private lazy val defaultRowSumsRight = defaultPOISheet.getRowSumsRight
   private lazy val defaultSelected = false
-  private lazy val defaultTabColor = IndexedColors.WHITE.index.toInt
+  private lazy val defaultTabColor = -1
   private lazy val defaultVirtuallyCenter = defaultPOISheet.getVerticallyCenter
   private lazy val defaultZoom = 100
 
@@ -172,38 +170,4 @@ case class SheetProperties private[model](
   def withZoom(zoom: Int) =
     copy(zoom = Option(zoom))
 
-  def applyTo(sheet: XSSFSheet) {
-    autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(autoFilterRange.convert()))
-    activeCell.foreach(sheet.setActiveCell)
-    autoBreaks.foreach(sheet.setAutobreaks)
-    defaultColumnWidth.foreach(sheet.setDefaultColumnWidth)
-    defaultRowHeight.foreach(sheet.setDefaultRowHeight)
-    displayFormulas.foreach(sheet.setDisplayFormulas)
-    displayGridLines.foreach(sheet.setDisplayGridlines)
-    displayGuts.foreach(sheet.setDisplayGuts)
-    displayRowColHeadings.foreach(sheet.setDisplayRowColHeadings)
-    displayZeros.foreach(sheet.setDisplayZeros)
-    fitToPage.foreach(sheet.setFitToPage)
-    forceFormulaRecalculation.foreach(sheet.setForceFormulaRecalculation)
-    horizontallyCenter.foreach(sheet.setHorizontallyCenter)
-    applyPrintAreaTo(sheet)
-    printGridLines.foreach(sheet.setPrintGridlines)
-    rightToLeft.foreach(sheet.setRightToLeft)
-    rowSumsBelow.foreach(sheet.setRowSumsBelow)
-    rowSumsRight.foreach(sheet.setRowSumsRight)
-    selected.foreach(sheet.setSelected)
-    tabColor.foreach(sheet.setTabColor)
-    virtuallyCenter.foreach(sheet.setVerticallyCenter)
-    zoom.foreach(sheet.setZoom)
-  }
-
-  private def applyPrintAreaTo(sheet: XSSFSheet) {
-    printArea.foreach {
-      case CellRange((startRow, endRow), (startColumn, endColumn)) => {
-        val workbook = sheet.getWorkbook
-        val sheetIndex = workbook.getNumberOfSheets - 1
-        workbook.setPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow)
-      }
-    }
-  }
 }

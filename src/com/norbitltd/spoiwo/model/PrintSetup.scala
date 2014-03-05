@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.XSSFSheet
+//TODO Enums for the following
 import org.apache.poi.ss.usermodel.{PaperSize, PageOrder}
 
 object PrintSetup extends Factory {
@@ -122,27 +122,4 @@ case class PrintSetup private(copies: Option[Short],
 
   def withVResolution(vResolution: Short) = copy(vResolution = Option(vResolution))
 
-  def applyTo(sheet: XSSFSheet) {
-    if (this != PrintSetup.Default) {
-      val ps = sheet.getPrintSetup
-      copies.foreach(ps.setCopies)
-      draft.foreach(ps.setDraft)
-      fitHeight.foreach(ps.setFitHeight)
-      fitWidth.foreach(ps.setFitWidth)
-      footerMargin.foreach(ps.setFooterMargin)
-      headerMargin.foreach(ps.setHeaderMargin)
-      hResolution.foreach(ps.setHResolution)
-      landscape.foreach(ps.setLandscape)
-      leftToRight.foreach(ps.setLeftToRight)
-      noColor.foreach(ps.setNoColor)
-      noOrientation.foreach(ps.setNoOrientation)
-      pageOrder.foreach(ps.setPageOrder)
-      pageStart.foreach(ps.setPageStart)
-      paperSize.foreach(ps.setPaperSize)
-      scale.foreach(ps.setScale)
-      usePage.foreach(ps.setUsePage)
-      validSettings.foreach(ps.setValidSettings)
-      vResolution.foreach(ps.setVResolution)
-    }
-  }
 }

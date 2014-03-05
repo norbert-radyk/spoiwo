@@ -2,9 +2,6 @@ package com.norbitltd.spoiwo.utils
 
 import java.io.File
 
-/**
- * Created by Norbert on 09/02/14.
- */
 object FileUtils {
 
   private def printToFile(f: java.io.File)(op: java.io.PrintWriter => Unit) {

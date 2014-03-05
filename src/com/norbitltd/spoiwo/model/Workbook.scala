@@ -1,11 +1,6 @@
 package com.norbitltd.spoiwo.model
 
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import java.io.FileOutputStream
-import scala.io.Source
-import com.norbitltd.spoiwo.natures.csv.CsvProperties
-import com.norbitltd.spoiwo.utils.FileUtils
 
 object Workbook extends Factory {
 
@@ -18,9 +13,7 @@ object Workbook extends Factory {
   private lazy val defaultMissingCellPolicy =
     defaultPOIWorkbook.getMissingCellPolicy
 
-  //TODO defaultPOIWorkbook.isHidden throw Not implemented yet exception - to be replaced in the future.
   private lazy val defaultHidden = false
-  //TODO no getSelectedTab method not available on Apache POI, so using sensible default.
   private lazy val defaultSelectedTab = 0
 
   val Empty = apply()
@@ -79,34 +72,5 @@ case class Workbook private[model](
 
   def withSheets(sheets: Sheet*) =
     copy(sheets = sheets)
-
-
-
-  def convertToXLSX(): XSSFWorkbook = {
-    val workbook = new XSSFWorkbook()
-    sheets.foreach(sheet => sheet.convert(workbook))
-
-    //Parameters
-    activeSheet.foreach(workbook.setActiveSheet)
-    firstVisibleTab.foreach(workbook.setFirstVisibleTab)
-    forceFormulaRecalculation.foreach(workbook.setForceFormulaRecalculation)
-    hidden.foreach(workbook.setHidden)
-    missingCellPolicy.foreach(workbook.setMissingCellPolicy)
-    selectedTab.foreach(workbook.setSelectedTab)
-    workbook
-  }
-  
-  def saveAsXlsx(fileName: String) {
-    val stream = new FileOutputStream(fileName)
-    try {
-      val workbook = convertToXLSX()
-      workbook.write(stream)
-    } finally {
-      stream.flush()
-      stream.close()
-    }
-  }
-
-
 
 }

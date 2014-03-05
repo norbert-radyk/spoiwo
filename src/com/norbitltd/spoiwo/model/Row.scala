@@ -1,8 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.{XSSFRow, XSSFSheet}
 import java.util.{Calendar, Date}
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object Row extends Factory {
 
@@ -32,23 +30,23 @@ object Row extends Factory {
   def apply(cells: Cell*): Row =
     apply(cells = cells.toVector)
 
-  def apply(index : Int, cell : Cell, cells : Cell*): Row =
+  def apply(index: Int, cell: Cell, cells: Cell*): Row =
     apply(index = index, cells = cell :: cells.toList)
 
-  def apply(style : CellStyle, cell : Cell, cells : Cell*): Row =
+  def apply(style: CellStyle, cell: Cell, cells: Cell*): Row =
     apply(style = style, cells = cell :: cells.toList)
 
-  def apply(index : Int, style : CellStyle, cell : Cell, cells : Cell*): Row =
+  def apply(index: Int, style: CellStyle, cell: Cell, cells: Cell*): Row =
     apply(index = index, style = style, cells = cell :: cells.toList)
 
 }
 
 case class Row private(cells: Iterable[Cell],
-               height: Option[Short],
-               heightInPoints: Option[Float],
-               index: Option[Int],
-               style: Option[CellStyle],
-               zeroHeight: Option[Boolean]) {
+                       height: Option[Short],
+                       heightInPoints: Option[Float],
+                       index: Option[Int],
+                       style: Option[CellStyle],
+                       zeroHeight: Option[Boolean]) {
 
   def withCells(cells: Cell*) =
     copy(cells = cells)
@@ -56,7 +54,7 @@ case class Row private(cells: Iterable[Cell],
   def withCells(cells: Iterable[Cell]) =
     copy(cells = cells)
 
-  def withCellValues(cellValues: List[Any]) : Row = {
+  def withCellValues(cellValues: List[Any]): Row = {
     val cells = cellValues.map {
       case stringValue: String => Cell(stringValue)
       case doubleValue: Double => Cell(doubleValue)
@@ -70,7 +68,7 @@ case class Row private(cells: Iterable[Cell],
     copy(cells = cells.toVector)
   }
 
-  def withCellValues(cellValues: Any*) : Row = {
+  def withCellValues(cellValues: Any*): Row = {
     val cells = cellValues.map {
       case stringValue: String => Cell(stringValue)
       case doubleValue: Double => Cell(doubleValue)
@@ -95,24 +93,6 @@ case class Row private(cells: Iterable[Cell],
 
   def withZeroHeight(zeroHeight: Boolean) =
     copy(zeroHeight = Option(zeroHeight))
-
-  def convertToXLSX(sheet: XSSFSheet): XSSFRow = {
-    val indexNumber = index.getOrElse(getNextRowNumber(sheet))
-    val row = sheet.createRow(indexNumber)
-
-    cells.foreach(cell => cell.convertToXLSX(row))
-    height.foreach(row.setHeight)
-    heightInPoints.foreach(row.setHeightInPoints)
-    style.foreach(s => row.setRowStyle(s.convertAsXlsx(row)))
-    zeroHeight.foreach(row.setZeroHeight)
-    row
-  }
-
-  private def getNextRowNumber(sheet: XSSFSheet) = if (sheet.rowIterator().hasNext)
-    sheet.getLastRowNum + 1
-  else
-    0
-
 }
 
 

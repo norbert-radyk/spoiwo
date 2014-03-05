@@ -1,7 +1,5 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.XSSFSheet
-
 object Footer extends Factory {
 
   private lazy val defaultLeft = defaultPOISheet.getFooter.getLeft
@@ -80,22 +78,4 @@ case class Footer private(
   def withFirstPageRight(firstRight : String) =
     copy(firstLeft = Option(firstRight))
 
-
-  def applyTo(sheet: XSSFSheet) {
-    left.foreach(sheet.getFooter.setLeft)
-    center.foreach(sheet.getFooter.setCenter)
-    right.foreach(sheet.getFooter.setRight)
-
-    firstLeft.foreach(sheet.getFirstFooter.setLeft)
-    firstCenter.foreach(sheet.getFirstFooter.setCenter)
-    firstRight.foreach(sheet.getFirstFooter.setRight)
-
-    oddLeft.foreach(sheet.getOddFooter.setLeft)
-    oddCenter.foreach(sheet.getOddFooter.setCenter)
-    oddRight.foreach(sheet.getOddFooter.setRight)
-
-    evenLeft.foreach(sheet.getEvenFooter.setLeft)
-    evenCenter.foreach(sheet.getEvenFooter.setCenter)
-    evenRight.foreach(sheet.getEvenFooter.setRight)
-  }
 }

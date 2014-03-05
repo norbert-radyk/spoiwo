@@ -1,8 +1,5 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
-import com.norbitltd.spoiwo.natures.csv.CsvProperties
-
 object Sheet extends Factory {
 
   private lazy val defaultName = ""
@@ -30,8 +27,8 @@ object Sheet extends Factory {
             properties: SheetProperties = defaultProperties,
             margins: Margins = defaultMargins,
             paneAction: PaneAction = defaultPaneAction,
-            repeatingRows : RowRange = defaultRepeatingRows,
-            repeatingColumns : ColumnRange = defaultRepeatingColumns): Sheet =
+            repeatingRows: RowRange = defaultRepeatingRows,
+            repeatingColumns: ColumnRange = defaultRepeatingColumns): Sheet =
     apply(
       name = wrap(name, defaultName),
       columns = columns,
@@ -49,7 +46,7 @@ object Sheet extends Factory {
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
 
-  def apply(name : String, row : Row, rows: Row*) : Sheet = apply(name = name, rows = row :: rows.toList)
+  def apply(name: String, row: Row, rows: Row*): Sheet = apply(name = name, rows = row :: rows.toList)
 
 }
 
@@ -63,9 +60,9 @@ case class Sheet private(
                           footer: Option[Footer],
                           properties: Option[SheetProperties],
                           margins: Option[Margins],
-                          paneAction : Option[PaneAction],
-                          repeatingRows : Option[RowRange],
-                          repeatingColumns : Option[ColumnRange]) {
+                          paneAction: Option[PaneAction],
+                          repeatingRows: Option[RowRange],
+                          repeatingColumns: Option[ColumnRange]) {
 
   def withSheetName(name: String) =
     copy(name = Option(name))
@@ -100,57 +97,15 @@ case class Sheet private(
   def withMargins(margins: Margins) =
     copy(margins = Option(margins))
 
-  def withSplitPane(splitPane : SplitPane) =
+  def withSplitPane(splitPane: SplitPane) =
     copy(paneAction = Option(splitPane))
 
-  def withFreezePane(freezePane : FreezePane) =
+  def withFreezePane(freezePane: FreezePane) =
     copy(paneAction = Option(freezePane))
 
-  def withRepeatingRows(repeatingRows : RowRange) =
+  def withRepeatingRows(repeatingRows: RowRange) =
     copy(repeatingRows = Option(repeatingRows))
 
-  def withRepeatingColumns(repeatingColumns : ColumnRange) =
+  def withRepeatingColumns(repeatingColumns: ColumnRange) =
     copy(repeatingColumns = Option(repeatingColumns))
-
-
-  def convert(workbook: XSSFWorkbook): XSSFSheet = {
-    val sheetName = name.getOrElse("Sheet " + (workbook.getNumberOfSheets + 1))
-    val sheet = workbook.createSheet(sheetName)
-
-    updateColumnsWithIndexes().foreach( _.applyTo(sheet))
-    rows.foreach(row => row.convertToXLSX(sheet))
-    mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(mergedRegion.convert()))
-
-    printSetup.foreach(_.applyTo(sheet))
-    header.foreach(_.applyTo(sheet))
-    footer.foreach(_.applyTo(sheet))
-    properties.foreach(_.applyTo(sheet))
-    margins.foreach(_.applyTo(sheet))
-    paneAction.foreach(_.applyTo(sheet))
-
-    repeatingRows.foreach(rr => sheet.setRepeatingRows(rr.convert()))
-    repeatingColumns.foreach(rc => sheet.setRepeatingColumns(rc.convert()))
-
-    sheet
-  }
-
-  def saveAsXlsx(fileName: String) {
-    Workbook(this).saveAsXlsx(fileName)
-  }
-
-  private def updateColumnsWithIndexes(): List[Column] = {
-    val currentColumnIndexes = columns.map(_.index).flatten.toSet
-    if (currentColumnIndexes.isEmpty) {
-      columns.zipWithIndex.map {
-        case (column, index) => column.withIndex(index)
-      }
-    } else if (currentColumnIndexes.size == columns.size) {
-      columns
-    } else {
-      throw new IllegalArgumentException(
-        "When explicitly specifying column index you are required to provide it " +
-          "uniquely for all columns in this sheet definition!")
-    }
-  }
-
 }

@@ -1,9 +1,8 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFRow}
 import java.util.{Calendar, Date}
+//TODO Customized Formula Error
 import org.apache.poi.ss.usermodel.FormulaError
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object Cell extends Factory {
 
@@ -95,63 +94,25 @@ sealed abstract class Cell(index: Option[Int], style: Option[CellStyle]) {
 
   def getStyle = style
 
-  def convertToXLSX(row: XSSFRow): XSSFCell
-
-  private[model] def convertToXLSXInternal(row: XSSFRow)(initializeCell: XSSFCell => Unit): XSSFCell = {
-    val cellNumber = index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
-    val cell = row.createCell(cellNumber)
-    style.foreach(s => cell.setCellStyle(s.convertAsXlsx(cell)))
-    initializeCell(cell)
-    cell
-  }
 }
 
-case class StringCell(value: String, index: Option[Int], style: Option[CellStyle]) extends Cell(index, style) {
+case class StringCell(value: String, index: Option[Int], style: Option[CellStyle])
+  extends Cell(index, style)
 
-  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
-    cell: XSSFCell => cell.setCellValue(value)
-  }
-}
+case class FormulaCell(formula: String, index: Option[Int], style: Option[CellStyle])
+  extends Cell(index, style)
 
-case class FormulaCell(formula: String, index: Option[Int], style: Option[CellStyle]) extends Cell(index, style) {
+case class ErrorValueCell(formulaError: FormulaError, index: Option[Int], style: Option[CellStyle])
+  extends Cell(index, style)
 
-  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
-    cell: XSSFCell => cell.setCellFormula(formula)
-  }
-}
+case class NumericCell(value: Double, index: Option[Int], style: Option[CellStyle])
+  extends Cell(index, style)
 
-case class ErrorValueCell(formulaError: FormulaError, index: Option[Int], style: Option[CellStyle]) extends Cell(index, style) {
+case class BooleanCell(value: Boolean, index: Option[Int], style: Option[CellStyle])
+  extends Cell(index, style)
 
-  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
-    cell: XSSFCell => cell.setCellErrorValue(formulaError)
-  }
-}
+case class DateCell(value: Date, index: Option[Int], style: Option[CellStyle])
+  extends Cell(index, style)
 
-case class NumericCell(value: Double, index: Option[Int], style: Option[CellStyle]) extends Cell(index, style) {
-
-  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
-    cell: XSSFCell => cell.setCellValue(value)
-  }
-}
-
-case class BooleanCell(value: Boolean, index: Option[Int], style: Option[CellStyle]) extends Cell(index, style) {
-
-  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
-    cell: XSSFCell => cell.setCellValue(value)
-  }
-}
-
-case class DateCell(value: Date, index: Option[Int], style: Option[CellStyle]) extends Cell(index, style) {
-
-
-  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
-    cell: XSSFCell => cell.setCellValue(value)
-  }
-}
-
-case class CalendarCell(value: Calendar, index: Option[Int], style: Option[CellStyle]) extends Cell(index, style) {
-
-  override def convertToXLSX(row: XSSFRow) = convertToXLSXInternal(row) {
-    cell: XSSFCell => cell.setCellValue(value)
-  }
-}
+case class CalendarCell(value: Calendar, index: Option[Int], style: Option[CellStyle])
+  extends Cell(index, style)

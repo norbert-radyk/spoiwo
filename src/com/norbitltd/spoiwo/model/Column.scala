@@ -1,8 +1,5 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.xssf.usermodel.XSSFSheet
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
-
 object Column extends Factory {
 
   private lazy val defaultIndex = -1
@@ -62,16 +59,4 @@ case class Column private[model](index: Option[Int],
 
   def withWidth(width: Int) =
     copy(width = Option(width))
-
-  def applyTo(sheet: XSSFSheet) {
-    val i = index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
-      "Something went terribly wrong as it should have been derived if not specified explicitly!"))
-
-    autoSized.foreach(as => sheet.autoSizeColumn(i))
-    break.foreach(b => sheet.setColumnBreak(i))
-    groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
-    hidden.foreach(h => sheet.setColumnHidden(i, h))
-    style.foreach(s => sheet.setDefaultColumnStyle(i, s.convertAsXlsx(sheet)))
-    width.foreach(w => sheet.setColumnWidth(i, w))
-  }
 }

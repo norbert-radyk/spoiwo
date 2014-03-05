@@ -1,8 +1,7 @@
 package com.norbitltd.spoiwo.model
 
+//TODO Replace custom POI enums
 import org.apache.poi.ss.usermodel.{FontCharset, FontFamily, FontUnderline, FontScheme}
-import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object Font extends Factory {
 
@@ -46,10 +45,6 @@ object Font extends Factory {
     typeOffset = wrap(typeOffset, defaultTypeOffset),
     underline = wrap(underline, defaultUnderline)
   )
-
-  private[model] val cache = collection.mutable.Map[XSSFWorkbook,
-    collection.mutable.Map[Font, XSSFFont]]()
-
 }
 
 case class Font private[model](
@@ -101,29 +96,4 @@ case class Font private[model](
 
   def withUnderline(underline: FontUnderline) =
     copy(underline = Option(underline))
-
-  def convert(workbook: XSSFWorkbook): XSSFFont = {
-    val workbookCache = Font.cache.getOrElseUpdate(workbook, collection.mutable.Map[Font, XSSFFont]())
-    workbookCache.getOrElseUpdate(this, createFont(workbook))
-  }
-
-
-  private def createFont(workbook: XSSFWorkbook): XSSFFont = {
-    val font = workbook.createFont()
-    bold.foreach(font.setBold)
-    charSet.foreach(font.setCharSet)
-    color.foreach(c => font.setColor(c.convertAsXlsx()))
-    family.foreach(font.setFamily)
-    height.foreach(font.setFontHeight)
-    heightInPoints.foreach(font.setFontHeightInPoints)
-    italic.foreach(font.setItalic)
-    scheme.foreach(font.setScheme)
-    fontName.foreach(font.setFontName)
-    strikeout.foreach(font.setStrikeout)
-    typeOffset.foreach(font.setTypeOffset)
-    underline.foreach(font.setUnderline)
-    font
-  }
-
-
 }

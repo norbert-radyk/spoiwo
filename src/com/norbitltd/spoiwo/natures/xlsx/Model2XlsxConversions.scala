@@ -3,6 +3,11 @@ package com.norbitltd.spoiwo.natures.xlsx
 import org.apache.poi.ss.usermodel.{FillPatternType, HorizontalAlignment, VerticalAlignment, BorderStyle}
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.xssf.usermodel._
+import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.ss.usermodel.Sheet._
+import com.norbitltd.spoiwo.model.SplitPane
+import com.norbitltd.spoiwo.model.NoSplitOrFreeze
+import java.io.FileOutputStream
 
 object Model2XlsxConversions {
 
@@ -12,6 +17,7 @@ object Model2XlsxConversions {
 
   private lazy val cellStyleCache = Cache[CellStyle, XSSFCellStyle]()
   private lazy val dataFormatCache = collection.mutable.Map[XSSFWorkbook, XSSFDataFormat]()
+  private lazy val fontCache = Cache[Font, XSSFFont]()
 
   implicit class XlsxBorderStyle(bs: CellBorderStyle) {
     def convertAsXlsx() = convertBorderStyle(bs)
@@ -29,15 +35,45 @@ object Model2XlsxConversions {
     def convertAsXlsx(cell: XSSFCell): XSSFCellStyle = convertAsXlsx(cell.getRow)
     def convertAsXlsx(row: XSSFRow): XSSFCellStyle = convertAsXlsx(row.getSheet)
     def convertAsXlsx(sheet: XSSFSheet): XSSFCellStyle = convertAsXlsx(sheet.getWorkbook)
-    def convertAsXlsx(workbook: XSSFWorkbook) : XSSFCellStyle = convertCellStyle(cs, workbook)
+    def convertAsXlsx(workbook: XSSFWorkbook): XSSFCellStyle = convertCellStyle(cs, workbook)
+  }
+
+  implicit class XlsxFont(f: Font) {
+    def convertAsXlsx(cell: XSSFCell): XSSFFont = convertAsXlsx(cell.getRow)
+    def convertAsXlsx(row: XSSFRow): XSSFFont = convertAsXlsx(row.getSheet)
+    def convertAsXlsx(sheet: XSSFSheet): XSSFFont = convertAsXlsx(sheet.getWorkbook)
+    def convertAsXlsx(workbook: XSSFWorkbook): XSSFFont = convertFont(f, workbook)
   }
 
   implicit class XlsxHorizontalAlignment(ha: CellHorizontalAlignment) {
     def convertAsXlsx() = convertHorizontalAlignment(ha)
   }
 
+  implicit class XslxSheet(s: Sheet) {
+    def convertAsXlsx(workbook: XSSFWorkbook) = convertSheet(s, workbook)
+
+    def saveAsXlsx(fileName: String) {
+      Workbook(s).saveAsXlsx(fileName)
+    }
+  }
+
   implicit class XlsxVerticalAlignment(va: CellVerticalAlignment) {
     def convertAsXlsx() = convertVerticalAlignment(va)
+  }
+
+  implicit class XlsxWorkbook(workbook : Workbook) {
+    def convertAsXlsx() = convertWorkbook(workbook)
+
+    def saveAsXlsx(fileName : String) = {
+      val stream = new FileOutputStream(fileName)
+      try {
+        val workbook = convertAsXlsx()
+        workbook.write(stream)
+      } finally {
+        stream.flush()
+        stream.close()
+      }
+    }
   }
 
   private def convertBorderStyle(borderStyle: CellBorderStyle): BorderStyle = {
@@ -66,6 +102,22 @@ object Model2XlsxConversions {
   private def convertColor(color: Color): XSSFColor = new XSSFColor(
     Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
   )
+
+  def convertCell(c : Cell, row : XSSFRow): XSSFCell = {
+    val cellNumber = c.getIndex.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
+    val cell = row.createCell(cellNumber)
+    c.getStyle.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
+    c match {
+      case StringCell(value, _, _) => cell.setCellValue(value)
+      case FormulaCell(formula, _, _) => cell.setCellFormula(formula)
+      case ErrorValueCell(formulaError, _, _) => cell.setCellErrorValue(formulaError)
+      case NumericCell(value, _, _) => cell.setCellValue(value)
+      case BooleanCell(value, _, _) => cell.setCellValue(value)
+      case DateCell(value, _, _) => cell.setCellValue(value)
+      case CalendarCell(value, _, _) => cell.setCellValue(value)
+    }
+    cell
+  }
 
   private def convertCellBorders(borders: CellBorders, style: XSSFCellStyle) {
     borders.leftStyle.foreach(s => style.setBorderLeft(convertBorderStyle(s)))
@@ -112,19 +164,22 @@ object Model2XlsxConversions {
     }
   }
 
+  def convertCellRange(cr: CellRange): CellRangeAddress =
+    new org.apache.poi.ss.util.CellRangeAddress(cr.rowRange._1, cr.rowRange._2, cr.columnRange._1, cr.columnRange._2)
+
   private def convertCellStyle(cs: CellStyle, workbook: XSSFWorkbook): XSSFCellStyle =
     getCachedOrUpdate(cellStyleCache, cs, workbook) {
       val cellStyle = workbook.createCellStyle()
       cs.borders.foreach(b => convertCellBorders(b, cellStyle))
       cs.dataFormat.foreach(df => convertCellDataFormat(df, workbook, cellStyle))
-      cs.font.foreach(f => f.convert(workbook))
+      cs.font.foreach(f => convertFont(f, workbook))
 
       cs.fillPattern.foreach(fp => cellStyle.setFillPattern(convertCellFill(fp)))
       cs.fillBackgroundColor.foreach(c => cellStyle.setFillBackgroundColor(convertColor(c)))
       cs.fillForegroundColor.foreach(c => cellStyle.setFillForegroundColor(convertColor(c)))
 
-      cs.horizontalAlignment.foreach(ha => cellStyle.setAlignment(ha.convertAsXlsx()))
-      cs.verticalAlignment.foreach(va => cellStyle.setVerticalAlignment(va.convertAsXlsx()))
+      cs.horizontalAlignment.foreach(ha => cellStyle.setAlignment(convertHorizontalAlignment(ha)))
+      cs.verticalAlignment.foreach(va => cellStyle.setVerticalAlignment(convertVerticalAlignment(va)))
 
       cs.hidden.foreach(cellStyle.setHidden)
       cs.indention.foreach(cellStyle.setIndention)
@@ -133,6 +188,76 @@ object Model2XlsxConversions {
       cs.wrapText.foreach(cellStyle.setWrapText)
       cellStyle
     }
+
+
+  def convertColumn(c : Column, sheet: XSSFSheet) {
+    val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
+      "Something went terribly wrong as it should have been derived if not specified explicitly!"))
+
+    c.autoSized.foreach(as => sheet.autoSizeColumn(i))
+    c.break.foreach(b => sheet.setColumnBreak(i))
+    c.groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
+    c.hidden.foreach(h => sheet.setColumnHidden(i, h))
+    c.style.foreach(s => sheet.setDefaultColumnStyle(i, convertCellStyle(s, sheet.getWorkbook)))
+    c.width.foreach(w => sheet.setColumnWidth(i, w))
+  }
+
+  def convertColumnRange(cr: ColumnRange) = CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))
+
+  def convertFooter(f: Footer, sheet: XSSFSheet) {
+    f.left.foreach(sheet.getFooter.setLeft)
+    f.center.foreach(sheet.getFooter.setCenter)
+    f.right.foreach(sheet.getFooter.setRight)
+
+    f.firstLeft.foreach(sheet.getFirstFooter.setLeft)
+    f.firstCenter.foreach(sheet.getFirstFooter.setCenter)
+    f.firstRight.foreach(sheet.getFirstFooter.setRight)
+
+    f.oddLeft.foreach(sheet.getOddFooter.setLeft)
+    f.oddCenter.foreach(sheet.getOddFooter.setCenter)
+    f.oddRight.foreach(sheet.getOddFooter.setRight)
+
+    f.evenLeft.foreach(sheet.getEvenFooter.setLeft)
+    f.evenCenter.foreach(sheet.getEvenFooter.setCenter)
+    f.evenRight.foreach(sheet.getEvenFooter.setRight)
+  }
+
+  private def convertFont(f : Font, workbook : XSSFWorkbook) : XSSFFont =
+    getCachedOrUpdate(fontCache, f, workbook) {
+      val font = workbook.createFont()
+      f.bold.foreach(font.setBold)
+      f.charSet.foreach(font.setCharSet)
+      f.color.foreach(c => font.setColor(convertColor(c)))
+      f.family.foreach(font.setFamily)
+      f.height.foreach(font.setFontHeight)
+      f.heightInPoints.foreach(font.setFontHeightInPoints)
+      f.italic.foreach(font.setItalic)
+      f.scheme.foreach(font.setScheme)
+      f.fontName.foreach(font.setFontName)
+      f.strikeout.foreach(font.setStrikeout)
+      f.typeOffset.foreach(font.setTypeOffset)
+      f.underline.foreach(font.setUnderline)
+      font
+    }
+
+
+  def convertHeader(h: Header, sheet: XSSFSheet) {
+    h.left.foreach(sheet.getHeader.setLeft)
+    h.center.foreach(sheet.getHeader.setCenter)
+    h.right.foreach(sheet.getHeader.setRight)
+
+    h.firstLeft.foreach(sheet.getFirstHeader.setLeft)
+    h.firstCenter.foreach(sheet.getFirstHeader.setCenter)
+    h.firstRight.foreach(sheet.getFirstHeader.setRight)
+
+    h.oddLeft.foreach(sheet.getOddHeader.setLeft)
+    h.oddCenter.foreach(sheet.getOddHeader.setCenter)
+    h.oddRight.foreach(sheet.getOddHeader.setRight)
+
+    h.evenLeft.foreach(sheet.getEvenHeader.setLeft)
+    h.evenCenter.foreach(sheet.getEvenHeader.setCenter)
+    h.evenRight.foreach(sheet.getEvenHeader.setRight)
+  }
 
   private def convertHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment): HorizontalAlignment = {
     import CellHorizontalAlignment._
@@ -154,6 +279,137 @@ object Model2XlsxConversions {
     }
   }
 
+  def convertMargins(margins: Margins, sheet: XSSFSheet) {
+    margins.top.foreach(topMargin => sheet.setMargin(TopMargin, topMargin))
+    margins.bottom.foreach(bottomMargin => sheet.setMargin(BottomMargin, bottomMargin))
+    margins.right.foreach(rightMargin => sheet.setMargin(RightMargin, rightMargin))
+    margins.left.foreach(leftMargin => sheet.setMargin(LeftMargin, leftMargin))
+    margins.header.foreach(headerMargin => sheet.setMargin(HeaderMargin, headerMargin))
+    margins.footer.foreach(footerMargin => sheet.setMargin(FooterMargin, footerMargin))
+  }
+
+  def convertPane(pane: Pane): Int = pane match {
+    case Pane.LowerLeftPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_LEFT
+    case Pane.LowerRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_RIGHT
+    case Pane.UpperLeftPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_LEFT
+    case Pane.UpperRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_RIGHT
+  }
+
+  def convertPaneAction(paneAction: PaneAction, sheet: XSSFSheet) {
+    paneAction match {
+      case NoSplitOrFreeze() =>
+        sheet.createFreezePane(0, 0)
+      case FreezePane(columnSplit, rowSplit, leftMostColumn, topRow) =>
+        sheet.createFreezePane(columnSplit, rowSplit, leftMostColumn, topRow)
+      case SplitPane(xSplitPosition, ySplitPosition, leftMostColumn, topRow, activePane) =>
+        sheet.createSplitPane(xSplitPosition, ySplitPosition, leftMostColumn, topRow, convertPane(activePane))
+    }
+  }
+
+  def convertRow(r : com.norbitltd.spoiwo.model.Row, sheet: XSSFSheet): XSSFRow = {
+    val indexNumber = r.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
+    val row = sheet.createRow(indexNumber)
+
+    r.cells.foreach(cell => convertCell(cell, row))
+    r.height.foreach(row.setHeight)
+    r.heightInPoints.foreach(row.setHeightInPoints)
+    r.style.foreach(s => convertCellStyle(s, row.getSheet.getWorkbook))
+    r.zeroHeight.foreach(row.setZeroHeight)
+    row
+  }
+
+  def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
+    val sheetName = s.name.getOrElse("Sheet " + (workbook.getNumberOfSheets + 1))
+    val sheet = workbook.createSheet(sheetName)
+
+    updateColumnsWithIndexes(s).foreach(column => convertColumn(column, sheet))
+    s.rows.foreach(row => convertRow(row, sheet))
+    s.mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(convertCellRange(mergedRegion)))
+
+    s.printSetup.foreach(ps => convertPrintSetup(ps, sheet))
+    s.header.foreach(h => convertHeader(h, sheet))
+    s.footer.foreach(f => convertFooter(f, sheet))
+
+    s.properties.foreach(sp => convertSheetProperties(sp, sheet))
+    s.margins.foreach(m => convertMargins(m, sheet))
+    s.paneAction.foreach(pa => convertPaneAction(pa, sheet))
+    s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
+    s.repeatingColumns.foreach(rc => sheet.setRepeatingColumns(convertColumnRange(rc)))
+    sheet
+  }
+
+  private def updateColumnsWithIndexes(s: Sheet): List[Column] = {
+    val currentColumnIndexes = s.columns.map(_.index).flatten.toSet
+    if (currentColumnIndexes.isEmpty) {
+      s.columns.zipWithIndex.map {
+        case (column, index) => column.withIndex(index)
+      }
+    } else if (currentColumnIndexes.size == s.columns.size) {
+      s.columns
+    } else {
+      throw new IllegalArgumentException(
+        "When explicitly specifying column index you are required to provide it " +
+          "uniquely for all columns in this sheet definition!")
+    }
+  }
+
+  def convertSheetProperties(sp: SheetProperties, sheet: XSSFSheet) {
+    sp.autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(convertCellRange(autoFilterRange)))
+    sp.activeCell.foreach(sheet.setActiveCell)
+    sp.autoBreaks.foreach(sheet.setAutobreaks)
+    sp.defaultColumnWidth.foreach(sheet.setDefaultColumnWidth)
+    sp.defaultRowHeight.foreach(sheet.setDefaultRowHeight)
+    sp.displayFormulas.foreach(sheet.setDisplayFormulas)
+    sp.displayGridLines.foreach(sheet.setDisplayGridlines)
+    sp.displayGuts.foreach(sheet.setDisplayGuts)
+    sp.displayRowColHeadings.foreach(sheet.setDisplayRowColHeadings)
+    sp.displayZeros.foreach(sheet.setDisplayZeros)
+    sp.fitToPage.foreach(sheet.setFitToPage)
+    sp.forceFormulaRecalculation.foreach(sheet.setForceFormulaRecalculation)
+    sp.horizontallyCenter.foreach(sheet.setHorizontallyCenter)
+    sp.printArea.foreach {
+      case CellRange((startRow, endRow), (startColumn, endColumn)) => {
+        val workbook = sheet.getWorkbook
+        val sheetIndex = workbook.getNumberOfSheets - 1
+        workbook.setPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow)
+      }
+    }
+    sp.printGridLines.foreach(sheet.setPrintGridlines)
+    sp.rightToLeft.foreach(sheet.setRightToLeft)
+    sp.rowSumsBelow.foreach(sheet.setRowSumsBelow)
+    sp.rowSumsRight.foreach(sheet.setRowSumsRight)
+    sp.selected.foreach(sheet.setSelected)
+    sp.tabColor.foreach(sheet.setTabColor)
+    sp.virtuallyCenter.foreach(sheet.setVerticallyCenter)
+    sp.zoom.foreach(sheet.setZoom)
+  }
+
+  def convertPrintSetup(printSetup: PrintSetup, sheet: XSSFSheet) {
+    if (printSetup != PrintSetup.Default) {
+      val ps = sheet.getPrintSetup
+      printSetup.copies.foreach(ps.setCopies)
+      printSetup.draft.foreach(ps.setDraft)
+      printSetup.fitHeight.foreach(ps.setFitHeight)
+      printSetup.fitWidth.foreach(ps.setFitWidth)
+      printSetup.footerMargin.foreach(ps.setFooterMargin)
+      printSetup.headerMargin.foreach(ps.setHeaderMargin)
+      printSetup.hResolution.foreach(ps.setHResolution)
+      printSetup.landscape.foreach(ps.setLandscape)
+      printSetup.leftToRight.foreach(ps.setLeftToRight)
+      printSetup.noColor.foreach(ps.setNoColor)
+      printSetup.noOrientation.foreach(ps.setNoOrientation)
+      printSetup.pageOrder.foreach(ps.setPageOrder)
+      printSetup.pageStart.foreach(ps.setPageStart)
+      printSetup.paperSize.foreach(ps.setPaperSize)
+      printSetup.scale.foreach(ps.setScale)
+      printSetup.usePage.foreach(ps.setUsePage)
+      printSetup.validSettings.foreach(ps.setValidSettings)
+      printSetup.vResolution.foreach(ps.setVResolution)
+    }
+  }
+
+  def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
+
   private def convertVerticalAlignment(verticalAlignment: CellVerticalAlignment): VerticalAlignment = {
     import CellVerticalAlignment._
     import VerticalAlignment._
@@ -169,6 +425,20 @@ object Model2XlsxConversions {
       case CellVerticalAlignment(id) =>
         throw new RuntimeException("Unsupported option for XLSX conversion with id=%d".format(id))
     }
+  }
+
+  def convertWorkbook(wb : Workbook): XSSFWorkbook = {
+    val workbook = new XSSFWorkbook()
+    wb.sheets.foreach(sheet => convertSheet(sheet, workbook))
+
+    //Parameters
+    wb.activeSheet.foreach(workbook.setActiveSheet)
+    wb.firstVisibleTab.foreach(workbook.setFirstVisibleTab)
+    wb.forceFormulaRecalculation.foreach(workbook.setForceFormulaRecalculation)
+    wb.hidden.foreach(workbook.setHidden)
+    wb.missingCellPolicy.foreach(workbook.setMissingCellPolicy)
+    wb.selectedTab.foreach(workbook.setSelectedTab)
+    workbook
   }
 
   //================= Cache processing ====================

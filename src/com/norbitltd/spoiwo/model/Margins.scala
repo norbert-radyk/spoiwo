@@ -1,16 +1,13 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.ss.usermodel.Sheet._
-import org.apache.poi.xssf.usermodel.XSSFSheet
-
 object Margins extends Factory {
 
-  private lazy val defaultLeft = defaultPOISheet.getMargin(LeftMargin)
-  private lazy val defaultRight = defaultPOISheet.getMargin(RightMargin)
-  private lazy val defaultTop = defaultPOISheet.getMargin(TopMargin)
-  private lazy val defaultBottom = defaultPOISheet.getMargin(BottomMargin)
-  private lazy val defaultHeader = defaultPOISheet.getMargin(HeaderMargin)
-  private lazy val defaultFooter = defaultPOISheet.getMargin(FooterMargin)
+  private lazy val defaultLeft = 0.0
+  private lazy val defaultRight = 0.0
+  private lazy val defaultTop = 0.0
+  private lazy val defaultBottom = 0.0
+  private lazy val defaultHeader = 0.0
+  private lazy val defaultFooter = 0.0
 
   val Default = Margins()
 
@@ -56,12 +53,5 @@ case class Margins private(
   def withFooter(footer: Double) =
     copy(footer = Option(footer))
 
-  def applyTo(sheet : XSSFSheet) {
-    top.foreach(topMargin => sheet.setMargin(TopMargin, topMargin))
-    bottom.foreach(bottomMargin => sheet.setMargin(BottomMargin, bottomMargin))
-    right.foreach(rightMargin => sheet.setMargin(RightMargin, rightMargin))
-    left.foreach(leftMargin => sheet.setMargin(LeftMargin, leftMargin))
-    header.foreach(headerMargin => sheet.setMargin(HeaderMargin, headerMargin))
-    footer.foreach(footerMargin => sheet.setMargin(FooterMargin, footerMargin))
-  }
+
 }
