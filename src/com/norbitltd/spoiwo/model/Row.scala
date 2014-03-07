@@ -85,14 +85,26 @@ case class Row private(cells: Iterable[Cell],
   def withHeight(height: Short) =
     copy(height = Option(height))
 
+  def withoutHeight =
+    copy(height = None)
+
   def withHeightInPoints(heightInPoints: Float) =
     copy(heightInPoints = Option(heightInPoints))
+
+  def withoutHeightInPoints =
+    copy(heightInPoints = None)
 
   def withStyle(rowStyle: CellStyle) =
     copy(style = Option(rowStyle))
 
-  def withZeroHeight(zeroHeight: Boolean) =
-    copy(zeroHeight = Option(zeroHeight))
+  def withoutStyle =
+    copy(style = None)
+
+  def withZeroHeight =
+    copy(zeroHeight = Some(true))
+
+  def withoutZeroHeight =
+    copy(zeroHeight = Some(false))
 }
 
 

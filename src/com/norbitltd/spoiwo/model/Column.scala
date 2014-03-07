@@ -42,21 +42,42 @@ case class Column private[model](index: Option[Int],
   def withIndex(index: Int) =
     copy(index = Option(index))
 
+  def withoutIndex =
+    copy(index = None)
+
   def withAutoSized(autoSized: Boolean) =
-    copy(autoSized = Option(autoSized))
+    copy(autoSized = Some(true))
 
-  def withBreak() =
-    copy(break = Option(true))
+  def withoutAutoSized =
+    copy(autoSized = Some(false))
 
-  def withGroupCollapsed(groupCollapsed: Boolean) =
-    copy(groupCollapsed = Option(groupCollapsed))
+  def withBreak =
+    copy(break = Some(true))
 
-  def withHidden(hidden: Boolean) =
-    copy(hidden = Option(hidden))
+  def withoutBreak =
+    copy(break = Some(false))
+
+  def withGroupCollapsed =
+    copy(groupCollapsed = Some(true))
+
+  def withoutGroupCollapsed =
+    copy(groupCollapsed = Some(false))
+
+  def withHidden =
+    copy(hidden = Some(true))
+
+  def withoutHidden =
+    copy(hidden = Some(false))
 
   def withStyle(style: CellStyle) =
     copy(style = Option(style))
 
+  def withoutStyle =
+    copy(style = None)
+
   def withWidth(width: Int) =
     copy(width = Option(width))
+
+  def withoutWidth =
+    copy(width = None)
 }
