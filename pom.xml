@@ -3,20 +3,44 @@
     <groupId>com.norbitltd</groupId>
     <artifactId>spoiwo</artifactId>
     <packaging>jar</packaging>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <name>SPOIWO (Scala POI wrapping object)</name>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <description>The functional way of generating spreadsheets in Scala</description>
     <url>http://norbert-radyk.github.io/spoiwo/</url>
     <licenses>
         <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <name>MIT-License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/norbert-radyk/spoiwo</url>
-        <connection>https://github.com/norbert-radyk/spoiwo</connection>
+        <url>git@github.com:norbert-radyk/spoiwo.git</url>
+        <developerConnection>scm:git:git@github.com:norbert-radyk/spoiwo.git</developerConnection>
+        <connection>scm:git:git@github.com:norbert-radyk/spoiwo.git</connection>
     </scm>
     <developers>
         <developer>
