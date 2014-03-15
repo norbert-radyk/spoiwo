@@ -1,23 +1,20 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.commons.logging.LogFactory
 import com.norbitltd.spoiwo.natures.csv.Model2CsvConversions._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
-abstract class AbstractReportGenerator {
+abstract class SheetReportGenerator {
 
-  def log = LogFactory.getLog(this.getClass)
-
-  def getWorkbook : Workbook
+  def getSheet : Sheet
 
   def main(args : Array[String]) {
     try {
       val xlsxFileName = args.head
       val csvFileName = args.tail.head
       println("Generating test report for XLSX:" + xlsxFileName + " and CSV: " + csvFileName)
-      val workbook = getWorkbook
-      workbook.saveAsXlsx(xlsxFileName)
-      workbook.saveAsCsv(csvFileName)
+      val sheet = getSheet
+      sheet.saveAsXlsx(xlsxFileName)
+      sheet.saveAsCsv(csvFileName)
       println("Report generated successfully!")
     } catch {
       case e : Exception => {
@@ -27,5 +24,4 @@ abstract class AbstractReportGenerator {
     }
 
   }
-
 }

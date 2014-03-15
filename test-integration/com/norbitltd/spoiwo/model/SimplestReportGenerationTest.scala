@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-object SimplestReportGenerationTest extends AbstractReportGenerator {
+object SimplestReportGenerationTest extends WorkbookReportGenerator {
 
   override def getWorkbook = Workbook(
     Sheet("Test Sheet",

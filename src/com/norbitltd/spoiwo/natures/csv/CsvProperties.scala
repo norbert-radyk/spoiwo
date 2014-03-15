@@ -6,6 +6,4 @@ object CsvProperties {
 
 }
 
-case class CsvProperties(separator : String) {
-
-}
+case class CsvProperties(separator : String)

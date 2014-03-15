@@ -1,6 +1,8 @@
 package com.norbitltd.spoiwo.model
 
 import java.util.{Calendar, Date}
+import org.joda.time.{LocalDate, DateTime}
+
 //TODO Customized Formula Error
 import org.apache.poi.ss.usermodel.FormulaError
 
@@ -71,12 +73,30 @@ object Cell extends Factory {
 
   def apply(value: Date): Cell = apply(value, defaultIndex, defaultStyle)
 
+  def apply(value: DateTime) : Cell = apply(value.toDate)
+
+  def apply(value: LocalDate) : Cell = apply(value.toDate)
+
   def apply(value: Date, index: Int): Cell = apply(value, index, defaultStyle)
+
+  def apply(value: DateTime, index: Int) : Cell = apply(value.toDate, index)
+
+  def apply(value: LocalDate, index: Int) : Cell = apply(value.toDate, index)
 
   def apply(value: Date, style: CellStyle): Cell = apply(value, defaultIndex, style)
 
+  def apply(value: DateTime, style: CellStyle) : Cell = apply(value.toDate, style)
+
+  def apply(value: LocalDate, style: CellStyle) : Cell = apply(value.toDate, style)
+
   def apply(value: Date, index: Int, style: CellStyle): Cell =
     DateCell(value, wrap(index, defaultIndex), wrap(style, defaultStyle))
+
+  def apply(value: DateTime, index: Int, style: CellStyle): Cell =
+    apply(value.toDate, index, style)
+
+  def apply(value: LocalDate, index: Int, style: CellStyle): Cell =
+    apply(value.toDate, index, style)
 
   def apply(value: Calendar): Cell = apply(value, defaultIndex, defaultStyle)
 

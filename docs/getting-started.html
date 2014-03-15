@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Getting started with SPOIWO</title>
+</head>
+<body>
+    <h2>Getting started with SPOIWO</h2>
+
+    <h3>Adding SPOIWO library references to your project</h3>
+    <p>Since SPOIWO is intended to support conversions to multiple spreadsheet-like formats (at the moment supports: XLSX, CSV and basic HTML)
+        we made a decision to split the framework into a core model library and the number of independent nature libraries. This way users
+        who (let's say) wish to benefit from SPOIWO support for CSV are not obliged to import the Apache POI libraries into their project.</p>
+
+    <p>The downside of this decision is a necessity to explicitly specify all the number of libraries for all the spreadsheet natures in your
+        project. Therefore in order to set up the SPOIWO functionality for both HTML and XLSX support you'd need to import the following JARs:</p>
+    <ol>
+        <li>spoiwo-core.jar</li>
+        <li>spoiwo-nature-xlsx.jar</li>
+        <li>spoiwo-nature-html.jar</li>
+    </ol>
+
+
+
+    <h3>Creating your first Excel spreadsheet with SPOIWO</h3>
+    <p>In order to create a new spreadsheet using SPOIWO framework please follow the 3 simple steps:</p>
+    <ul>
+        <li>Define spreadsheet model</li>
+
+
+
+        <li>Add spreadsheet nature</li>
+        <li>Apply conversion method</li>
+    </ul>
+</body>
+</html>

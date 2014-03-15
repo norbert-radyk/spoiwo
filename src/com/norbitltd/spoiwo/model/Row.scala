@@ -1,6 +1,7 @@
 package com.norbitltd.spoiwo.model
 
 import java.util.{Calendar, Date}
+import org.joda.time.{DateTime, LocalDate}
 
 object Row extends Factory {
 
@@ -76,6 +77,8 @@ case class Row private(cells: Iterable[Cell],
       case longValue: Long => Cell(longValue.toDouble)
       case booleanValue: Boolean => Cell(booleanValue)
       case dateValue: Date => Cell(dateValue)
+      case dateValue: LocalDate => Cell(dateValue)
+      case dateValue: DateTime => Cell(dateValue)
       case calendarValue: Calendar => Cell(calendarValue)
       case value => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }
