@@ -33,6 +33,9 @@
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.3" level="project" />
     <orderEntry type="library" name="Maven: org.joda:joda-convert:1.6" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.10:2.1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-library:2.10.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-reflect:2.10.3" level="project" />
   </component>
 </module>
 

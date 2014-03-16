@@ -8,12 +8,11 @@ import org.apache.poi.ss.usermodel.FormulaError
 
 object Cell extends Factory {
 
-  //TODO Implementation for Hyperlink and Comment
   val defaultActive = false
   val defaultIndex = -1
   val defaultStyle = CellStyle.Default
 
-  val Empty = apply("")
+  lazy val Empty = apply("")
 
   def apply(value: String): Cell = apply(value, defaultIndex, defaultStyle)
 
@@ -117,7 +116,8 @@ sealed abstract class Cell(index: Option[Int], style: Option[CellStyle]) {
 }
 
 case class StringCell(value: String, index: Option[Int], style: Option[CellStyle])
-  extends Cell(index, style)
+  extends Cell(index, style)   {
+}
 
 case class FormulaCell(formula: String, index: Option[Int], style: Option[CellStyle])
   extends Cell(index, style)

@@ -65,6 +65,22 @@ case class CellStyle private(
                               rotation: Option[Short],
                               wrapText: Option[Boolean]) {
 
+  override def toString = "CellStyle(" + List(
+    borders.map("borders=" + _),
+    dataFormat.map("data format=" + _),
+    font.map("font=" + _),
+    fillPattern.map("fill pattern=" + _),
+    fillForegroundColor.map("fill foreground color=" + _),
+    fillBackgroundColor.map("fill background color=" + _),
+    horizontalAlignment.map("horizontal alignment=" + _),
+    verticalAlignment.map("vertical alignment=" + _),
+    hidden.map("hidden=" + _),
+    indention.map("indention=" + _),
+    locked.map("locked=" + _),
+    rotation.map("rotation=" + _),
+    wrapText.map("wrap text=" + _)
+  ).flatten.mkString(", ") + ")"
+
   def withBorders(borders: CellBorders) =
     copy(borders = Option(borders))
 
@@ -142,5 +158,7 @@ case class CellStyle private(
 
   def withoutWrapText =
     copy(wrapText = Some(false))
+
+
 
 }

@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import org.apache.poi.ss.usermodel.{FillPatternType, HorizontalAlignment, VerticalAlignment, BorderStyle}
+import org.apache.poi.ss.usermodel.{FillPatternType, HorizontalAlignment, VerticalAlignment}
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.xssf.usermodel._
 import org.apache.poi.ss.util.CellRangeAddress
@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet._
 import com.norbitltd.spoiwo.model.SplitPane
 import com.norbitltd.spoiwo.model.NoSplitOrFreeze
 import java.io.FileOutputStream
+import Model2XlsxEnumConversions._
 
 object Model2XlsxConversions {
 
@@ -52,6 +53,8 @@ object Model2XlsxConversions {
   implicit class XlsxSheet(s: Sheet) {
     def convertAsXlsx(workbook: XSSFWorkbook) = convertSheet(s, workbook)
 
+    def convertAsXlsx() = Workbook(s).convertAsXlsx()
+
     def saveAsXlsx(fileName: String) {
       Workbook(s).saveAsXlsx(fileName)
     }
@@ -76,28 +79,7 @@ object Model2XlsxConversions {
     }
   }
 
-  private def convertBorderStyle(borderStyle: CellBorderStyle): BorderStyle = {
-    import CellBorderStyle._
-    import BorderStyle._
 
-    borderStyle match {
-      case DashDot => DASH_DOT
-      case DashDotDot => DASH_DOT_DOT
-      case Dashed => DASHED
-      case Dotted => DOTTED
-      case Double => DOUBLE
-      case Hair => HAIR
-      case Medium => MEDIUM
-      case MediumDashDot => MEDIUM_DASH_DOT
-      case MediumDashDotDot => MEDIUM_DASH_DOT_DOTC
-      case None => NONE
-      case SlantedDashDot => SLANTED_DASH_DOT
-      case Thick => THICK
-      case Thin => THIN
-      case CellBorderStyle(id) =>
-        throw new Exception("Unsupported option for XLSX conversion with id=%d".format(id))
-    }
-  }
 
   private def convertColor(color: Color): XSSFColor = new XSSFColor(
     Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
@@ -222,21 +204,21 @@ object Model2XlsxConversions {
     f.evenRight.foreach(sheet.getEvenFooter.setRight)
   }
 
-  private def convertFont(f : Font, workbook : XSSFWorkbook) : XSSFFont =
+  private[xlsx] def convertFont(f : Font, workbook : XSSFWorkbook) : XSSFFont =
     getCachedOrUpdate(fontCache, f, workbook) {
       val font = workbook.createFont()
       f.bold.foreach(font.setBold)
-      f.charSet.foreach(font.setCharSet)
+      f.charSet.foreach(charSet => font.setCharSet(convertCharset(charSet)))
       f.color.foreach(c => font.setColor(convertColor(c)))
-      f.family.foreach(font.setFamily)
+      f.family.foreach(family => font.setFamily(convertFontFamily(family)))
       f.height.foreach(font.setFontHeight)
       f.heightInPoints.foreach(font.setFontHeightInPoints)
       f.italic.foreach(font.setItalic)
-      f.scheme.foreach(font.setScheme)
+      f.scheme.foreach(scheme => font.setScheme(convertFontScheme(scheme)))
       f.fontName.foreach(font.setFontName)
       f.strikeout.foreach(font.setStrikeout)
       f.typeOffset.foreach(font.setTypeOffset)
-      f.underline.foreach(font.setUnderline)
+      f.underline.foreach(underline => font.setUnderline(convertUnderline(underline)))
       font
     }
 

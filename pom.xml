@@ -75,5 +75,11 @@
             <artifactId>joda-convert</artifactId>
             <version>1.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.10</artifactId>
+            <version>2.1.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

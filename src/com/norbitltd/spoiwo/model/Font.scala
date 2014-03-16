@@ -1,7 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-//TODO Replace custom POI enums
-import org.apache.poi.ss.usermodel.{FontCharset, FontFamily, FontUnderline, FontScheme}
+import com.norbitltd.spoiwo.model.enums.{FontScheme, Underline, FontFamily, Charset}
 
 object Font extends Factory {
 
@@ -9,14 +8,14 @@ object Font extends Factory {
   private lazy val defaultHeightInPoints = -1.toShort
   private lazy val defaultBold = false
   private lazy val defaultItalic = defaultPOIFont.getItalic
-  private lazy val defaultCharSet = FontCharset.valueOf(defaultPOIFont.getCharSet)
+  private lazy val defaultCharSet = Charset.Undefined
   private lazy val defaultColor = Color.Undefined
-  private lazy val defaultFamily = FontFamily.valueOf(defaultPOIFont.getFamily)
-  private lazy val defaultScheme = defaultPOIFont.getScheme
+  private lazy val defaultFamily = FontFamily.Undefined
+  private lazy val defaultScheme = FontScheme.Undefined
   private lazy val defaultFontName = defaultPOIFont.getFontName
   private lazy val defaultStrikeout = defaultPOIFont.getStrikeout
   private lazy val defaultTypeOffset = defaultPOIFont.getTypeOffset
-  private lazy val defaultUnderline = FontUnderline.valueOf(defaultPOIFont.getUnderline)
+  private lazy val defaultUnderline = Underline.Undefined
 
   val Default = Font()
 
@@ -24,16 +23,16 @@ object Font extends Factory {
             heightInPoints: Short = defaultHeightInPoints,
             bold: Boolean = defaultBold,
             italic: Boolean = defaultItalic,
-            charSet: FontCharset = defaultCharSet,
+            charSet: Charset = defaultCharSet,
             color: Color = defaultColor,
             family: FontFamily = defaultFamily,
             scheme: FontScheme = defaultScheme,
             fontName: String = defaultFontName,
             strikeout: Boolean = defaultStrikeout,
             typeOffset: Short = defaultTypeOffset,
-            underline: FontUnderline = defaultUnderline) : Font = Font(
+            underline: Underline = defaultUnderline): Font = Font(
     height = wrap(height, defaultHeight),
-      heightInPoints = wrap(heightInPoints, defaultHeightInPoints),
+    heightInPoints = wrap(heightInPoints, defaultHeightInPoints),
     bold = wrap(bold, defaultBold),
     italic = wrap(italic, defaultItalic),
     charSet = wrap(charSet, defaultCharSet),
@@ -48,18 +47,18 @@ object Font extends Factory {
 }
 
 case class Font private[model](
-                 height: Option[Short],
-        heightInPoints: Option[Short],
-                 bold: Option[Boolean],
-                 italic: Option[Boolean],
-                 charSet: Option[FontCharset],
-                 color: Option[Color],
-                 family: Option[FontFamily],
-                 scheme: Option[FontScheme],
-                 fontName: Option[String],
-                 strikeout: Option[Boolean],
-                 typeOffset: Option[Short],
-                 underline: Option[FontUnderline]) {
+                                height: Option[Short],
+                                heightInPoints: Option[Short],
+                                bold: Option[Boolean],
+                                italic: Option[Boolean],
+                                charSet: Option[Charset],
+                                color: Option[Color],
+                                family: Option[FontFamily],
+                                scheme: Option[FontScheme],
+                                fontName: Option[String],
+                                strikeout: Option[Boolean],
+                                typeOffset: Option[Short],
+                                underline: Option[Underline]) {
 
   def withHeight(height: Short) =
     copy(height = Option(height))
@@ -85,7 +84,7 @@ case class Font private[model](
   def withoutItalic =
     copy(italic = Some(false))
 
-  def withCharSet(charSet: FontCharset) =
+  def withCharSet(charSet: Charset) =
     copy(charSet = Option(charSet))
 
   def withoutCharSet =
@@ -127,9 +126,24 @@ case class Font private[model](
   def withoutTypeOffset =
     copy(typeOffset = None)
 
-  def withUnderline(underline: FontUnderline) =
+  def withUnderline(underline: Underline) =
     copy(underline = Option(underline))
 
   def withoutUnderline =
     copy(underline = None)
+
+  override def toString = "Font[" + List(
+    height.map("height=" + _),
+    heightInPoints.map("height in points=" + _),
+    bold.map("bold=" + _),
+    italic.map("italic" + _),
+    charSet.map("charset=" + _),
+    color.map("color=" + _),
+    family.map("family=" + _),
+    scheme.map("scheme=" + _),
+    fontName.map("font name=" + _),
+    strikeout.map("strikeout=" + _),
+    typeOffset.map("type offset=" + _),
+    underline.map("underline=" + _)
+  ).flatten.mkString(", ") + "]"
 }
