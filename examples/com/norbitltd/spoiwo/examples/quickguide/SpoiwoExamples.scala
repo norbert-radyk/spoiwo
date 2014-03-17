@@ -89,7 +89,8 @@ class SpoiwoExamples {
 
 
   def workingWithFonts() {
-    val style = CellStyle(font = Font(heightInPoints = 24, fontName = "Courier New", italic = true, strikeout = true))
+    import Measure._
+    val style = CellStyle(font = Font(height = 24 points, fontName = "Courier New", italic = true, strikeout = true))
     Sheet(name = "new sheet",
       row = Row(index = 1, Cell("This is a test of fonts", 1, style))
     ).saveAsXlsx("workbook.xls")

@@ -4,8 +4,7 @@ import com.norbitltd.spoiwo.model.enums.{FontScheme, Underline, FontFamily, Char
 
 object Font extends Factory {
 
-  private lazy val defaultHeight = -1.toShort
-  private lazy val defaultHeightInPoints = -1.toShort
+  private lazy val defaultHeight = Measure.Undefined
   private lazy val defaultBold = false
   private lazy val defaultItalic = defaultPOIFont.getItalic
   private lazy val defaultCharSet = Charset.Undefined
@@ -19,8 +18,7 @@ object Font extends Factory {
 
   val Default = Font()
 
-  def apply(height: Short = defaultHeight,
-            heightInPoints: Short = defaultHeightInPoints,
+  def apply(height: Measure = defaultHeight,
             bold: Boolean = defaultBold,
             italic: Boolean = defaultItalic,
             charSet: Charset = defaultCharSet,
@@ -32,7 +30,6 @@ object Font extends Factory {
             typeOffset: Short = defaultTypeOffset,
             underline: Underline = defaultUnderline): Font = Font(
     height = wrap(height, defaultHeight),
-    heightInPoints = wrap(heightInPoints, defaultHeightInPoints),
     bold = wrap(bold, defaultBold),
     italic = wrap(italic, defaultItalic),
     charSet = wrap(charSet, defaultCharSet),
@@ -47,8 +44,7 @@ object Font extends Factory {
 }
 
 case class Font private[model](
-                                height: Option[Short],
-                                heightInPoints: Option[Short],
+                                height: Option[Measure],
                                 bold: Option[Boolean],
                                 italic: Option[Boolean],
                                 charSet: Option[Charset],
@@ -60,17 +56,11 @@ case class Font private[model](
                                 typeOffset: Option[Short],
                                 underline: Option[Underline]) {
 
-  def withHeight(height: Short) =
+  def withHeight(height: Measure) =
     copy(height = Option(height))
 
   def withoutHeight =
     copy(height = None)
-
-  def withHeightInPoints(heightInPoints: Short) =
-    copy(heightInPoints = Option(heightInPoints))
-
-  def withoutHeightInPaints =
-    copy(heightInPoints = None)
 
   def withBold =
     copy(bold = Some(true))
@@ -134,7 +124,6 @@ case class Font private[model](
 
   override def toString = "Font[" + List(
     height.map("height=" + _),
-    heightInPoints.map("height in points=" + _),
     bold.map("bold=" + _),
     italic.map("italic" + _),
     charSet.map("charset=" + _),
