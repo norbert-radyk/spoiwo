@@ -5,10 +5,10 @@ import org.scalatest.FlatSpec
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import com.norbitltd.spoiwo.model.{Measure, Color, Font}
 import Model2XlsxConversions._
-import org.apache.poi.ss.usermodel.FontCharset
+import org.apache.poi.ss.usermodel.{FontUnderline, FontCharset}
 import Measure._
 
-import com.norbitltd.spoiwo.model.enums.{TypeOffset, FontScheme, FontFamily, Charset}
+import com.norbitltd.spoiwo.model.enums._
 
 class Model2XlsxConversionsSpec_Font extends FlatSpec {
 
@@ -136,6 +136,24 @@ class Model2XlsxConversionsSpec_Font extends FlatSpec {
     assert(xssfWithFontName.getFontName == "Arial")
   }
 
+  it should "return not strikeout font by default" in {
+    val modelDefault = Font()
+    val xssfDefault = convertFont(modelDefault, workbook)
+    assert(!xssfDefault.getStrikeout)
+  }
+
+  it should "return not strikeout font when set explicitly to not strikeout" in {
+    val modelNotStrikeout = Font(strikeout = false)
+    val xssfNotStrikeout = convertFont(modelNotStrikeout, workbook)
+    assert(!xssfNotStrikeout.getStrikeout)
+  }
+
+  it should "return strikeout font when set explicitly to strikeout" in {
+    val modelStrikeout = Font(strikeout = true)
+    val xssfStrikeout = convertFont(modelStrikeout, workbook)
+    assert(xssfStrikeout.getStrikeout)
+  }
+
   it should "return no type offset by default" in {
     val modelDefault = Font()
     val xssfDefault = convertFont(modelDefault, workbook)
@@ -148,7 +166,15 @@ class Model2XlsxConversionsSpec_Font extends FlatSpec {
     assert(xssfWithTypeOffset.getTypeOffset == usermodel.Font.SS_SUB)
   }
 
+  it should "return no underline by default" in {
+    val modelDefault = Font()
+    val xssfDefault = convertFont(modelDefault, workbook)
+    assert(xssfDefault.getUnderline == FontUnderline.NONE.getByteValue)
+  }
 
-
-
+  it should "return double underline when set explicitly" in {
+    val modelWithUnderline = Font(underline = Underline.Double)
+    val xssfWithUnderline = convertFont(modelWithUnderline, workbook)
+    assert(xssfWithUnderline.getUnderline == FontUnderline.DOUBLE.getByteValue)
+  }
 }
