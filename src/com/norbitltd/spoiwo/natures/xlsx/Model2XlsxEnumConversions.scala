@@ -3,7 +3,7 @@ package com.norbitltd.spoiwo.natures.xlsx
 import org.apache.poi.ss.usermodel
 import com.norbitltd.spoiwo.model.CellBorderStyle
 import org.apache.poi.ss.usermodel.{FontCharset, BorderStyle}
-import com.norbitltd.spoiwo.model.enums.{Charset, FontFamily, Underline, FontScheme}
+import com.norbitltd.spoiwo.model.enums._
 
 object Model2XlsxEnumConversions {
 
@@ -86,6 +86,18 @@ object Model2XlsxEnumConversions {
       case Minor => MINOR
       case FontScheme(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert FontScheme=$value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertTypeOffset(typeOffset : TypeOffset): Short = {
+    import TypeOffset._
+
+    typeOffset match {
+      case None => usermodel.Font.SS_NONE
+      case Subscript => usermodel.Font.SS_SUB
+      case Superscript => usermodel.Font.SS_SUPER
+      case TypeOffset(value : String) =>
+          throw new IllegalArgumentException(s"Unable to convert Type Offset = $value to XLSX - unsupported enum!")
     }
   }
 

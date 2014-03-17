@@ -1,6 +1,7 @@
 package com.norbitltd.spoiwo.model
 
-import com.norbitltd.spoiwo.model.enums.{FontScheme, Underline, FontFamily, Charset}
+import com.norbitltd.spoiwo.model.enums._
+import scala.Some
 
 object Font extends Factory {
 
@@ -13,7 +14,7 @@ object Font extends Factory {
   private lazy val defaultScheme = FontScheme.Undefined
   private lazy val defaultFontName = defaultPOIFont.getFontName
   private lazy val defaultStrikeout = defaultPOIFont.getStrikeout
-  private lazy val defaultTypeOffset = defaultPOIFont.getTypeOffset
+  private lazy val defaultTypeOffset = TypeOffset.Undefined
   private lazy val defaultUnderline = Underline.Undefined
 
   val Default = Font()
@@ -27,7 +28,7 @@ object Font extends Factory {
             scheme: FontScheme = defaultScheme,
             fontName: String = defaultFontName,
             strikeout: Boolean = defaultStrikeout,
-            typeOffset: Short = defaultTypeOffset,
+            typeOffset: TypeOffset = defaultTypeOffset,
             underline: Underline = defaultUnderline): Font = Font(
     height = wrap(height, defaultHeight),
     bold = wrap(bold, defaultBold),
@@ -53,7 +54,7 @@ case class Font private[model](
                                 scheme: Option[FontScheme],
                                 fontName: Option[String],
                                 strikeout: Option[Boolean],
-                                typeOffset: Option[Short],
+                                typeOffset: Option[TypeOffset],
                                 underline: Option[Underline]) {
 
   def withHeight(height: Measure) =
@@ -110,7 +111,7 @@ case class Font private[model](
   def withoutStrikeout =
     copy(strikeout = Some(false))
 
-  def withTypeOffset(typeOffset: Short) =
+  def withTypeOffset(typeOffset: TypeOffset) =
     copy(typeOffset = Option(typeOffset))
 
   def withoutTypeOffset =

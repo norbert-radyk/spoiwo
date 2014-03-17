@@ -216,7 +216,7 @@ object Model2XlsxConversions {
       f.scheme.foreach(scheme => font.setScheme(convertFontScheme(scheme)))
       f.fontName.foreach(font.setFontName)
       f.strikeout.foreach(font.setStrikeout)
-      f.typeOffset.foreach(font.setTypeOffset)
+      f.typeOffset.foreach(offset => font.setTypeOffset(convertTypeOffset(offset)))
       f.underline.foreach(underline => font.setUnderline(convertUnderline(underline)))
       font
     }

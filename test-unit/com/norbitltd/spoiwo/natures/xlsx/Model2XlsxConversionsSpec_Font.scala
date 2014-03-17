@@ -8,7 +8,7 @@ import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.FontCharset
 import Measure._
 
-import com.norbitltd.spoiwo.model.enums.{FontFamily, Charset}
+import com.norbitltd.spoiwo.model.enums.{TypeOffset, FontScheme, FontFamily, Charset}
 
 class Model2XlsxConversionsSpec_Font extends FlatSpec {
 
@@ -93,6 +93,62 @@ class Model2XlsxConversionsSpec_Font extends FlatSpec {
     assert(8 == xssfWithFont.getFontHeightInPoints)
     assert(160 == xssfWithFont.getFontHeight)
   }
+
+  it should "return not italic font by default" in {
+    val modelDefault = Font()
+    val xssfDefault = convertFont(modelDefault, workbook)
+    assert(!xssfDefault.getItalic)
+  }
+
+  it should "return not italic font when set explicitly to not italic" in {
+    val modelNotItalic = Font(italic = false)
+    val xssfNotItalic = convertFont(modelNotItalic, workbook)
+    assert(!xssfNotItalic.getItalic)
+  }
+
+  it should "return italic font when set explicitly to italic" in {
+    val modelItalic = Font(italic = true)
+    val xssfItalic = convertFont(modelItalic, workbook)
+    assert(xssfItalic.getItalic)
+  }
+
+  it should "return no font scheme by default" in {
+    val modelDefault = Font()
+    val xssfDefault = convertFont(modelDefault, workbook)
+    assert(xssfDefault.getScheme == usermodel.FontScheme.NONE)
+  }
+
+  it should "return 'Major' font scheme when set explicitly" in {
+    val modelWithScheme = Font(scheme = FontScheme.Major)
+    val xssfWithScheme = convertFont(modelWithScheme, workbook)
+    assert(xssfWithScheme.getScheme == usermodel.FontScheme.MAJOR)
+  }
+
+  it should "return 'Calibri' font name by default" in {
+    val modelDefault = Font()
+    val xssfDefault = convertFont(modelDefault, workbook)
+    assert(xssfDefault.getFontName == "Calibri")
+  }
+
+  it should "return 'Arial' font name when set explicitly" in {
+    val modelWithFontName = Font(fontName = "Arial")
+    val xssfWithFontName = convertFont(modelWithFontName, workbook)
+    assert(xssfWithFontName.getFontName == "Arial")
+  }
+
+  it should "return no type offset by default" in {
+    val modelDefault = Font()
+    val xssfDefault = convertFont(modelDefault, workbook)
+    assert(xssfDefault.getTypeOffset == usermodel.Font.SS_NONE)
+  }
+
+  it should "return 'Subscript' type offset when set explicitly" in {
+    val modelWithTypeOffset = Font(typeOffset = TypeOffset.Subscript)
+    val xssfWithTypeOffset = convertFont(modelWithTypeOffset, workbook)
+    assert(xssfWithTypeOffset.getTypeOffset == usermodel.Font.SS_SUB)
+  }
+
+
 
 
 }
