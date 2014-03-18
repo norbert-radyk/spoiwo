@@ -10,7 +10,7 @@ import Measure._
 
 import com.norbitltd.spoiwo.model.enums._
 
-class Model2XlsxConversionsSpec_Font extends FlatSpec {
+class Model2XlsxConversionsForFontSpec extends FlatSpec {
 
   val workbook = new XSSFWorkbook()
 

@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import org.apache.poi.ss.usermodel.{FillPatternType, HorizontalAlignment, VerticalAlignment}
+import org.apache.poi.ss.usermodel.{HorizontalAlignment, VerticalAlignment}
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.xssf.usermodel._
 import org.apache.poi.ss.util.CellRangeAddress
@@ -9,6 +9,7 @@ import com.norbitltd.spoiwo.model.SplitPane
 import com.norbitltd.spoiwo.model.NoSplitOrFreeze
 import java.io.FileOutputStream
 import Model2XlsxEnumConversions._
+import com.norbitltd.spoiwo.model.enums.CellFill
 
 object Model2XlsxConversions {
 
@@ -79,8 +80,6 @@ object Model2XlsxConversions {
     }
   }
 
-
-
   private def convertColor(color: Color): XSSFColor = new XSSFColor(
     Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
   )
@@ -120,42 +119,15 @@ object Model2XlsxConversions {
     })
   }
 
-  private def convertCellFill(cf: CellFill): FillPatternType = {
-    import CellFill._
-
-    cf match {
-      case None => FillPatternType.NO_FILL
-      case Solid => FillPatternType.SOLID_FOREGROUND
-      case Pattern.AltBars => FillPatternType.ALT_BARS
-      case Pattern.BigSpots => FillPatternType.BIG_SPOTS
-      case Pattern.Bricks => FillPatternType.BRICKS
-      case Pattern.Diamonds => FillPatternType.DIAMONDS
-      case Pattern.Squares => FillPatternType.SQUARES
-      case Pattern.Dots.Fine => FillPatternType.FINE_DOTS
-      case Pattern.Dots.Least => FillPatternType.LEAST_DOTS
-      case Pattern.Dots.Less => FillPatternType.LESS_DOTS
-      case Pattern.Dots.Sparse => FillPatternType.SPARSE_DOTS
-      case Pattern.Diagonals.ThickBackward => FillPatternType.THICK_BACKWARD_DIAG
-      case Pattern.Diagonals.ThickForward => FillPatternType.THICK_FORWARD_DIAG
-      case Pattern.Diagonals.ThinBackward => FillPatternType.THIN_BACKWARD_DIAG
-      case Pattern.Diagonals.ThinForward => FillPatternType.THIN_FORWARD_DIAG
-      case Pattern.Bands.ThickHorizontal => FillPatternType.THICK_HORZ_BANDS
-      case Pattern.Bands.ThickVertical => FillPatternType.THICK_VERT_BANDS
-      case Pattern.Bands.ThinHorizontal => FillPatternType.THIN_HORZ_BANDS
-      case Pattern.Bands.ThinVertical => FillPatternType.THIN_VERT_BANDS
-    }
-  }
-
   private def convertCellRange(cr: CellRange): CellRangeAddress =
     new org.apache.poi.ss.util.CellRangeAddress(cr.rowRange._1, cr.rowRange._2, cr.columnRange._1, cr.columnRange._2)
 
-  private def convertCellStyle(cs: CellStyle, workbook: XSSFWorkbook): XSSFCellStyle =
+  private[xlsx] def convertCellStyle(cs: CellStyle, workbook: XSSFWorkbook): XSSFCellStyle =
     getCachedOrUpdate(cellStyleCache, cs, workbook) {
       val cellStyle = workbook.createCellStyle()
       cs.borders.foreach(b => convertCellBorders(b, cellStyle))
       cs.dataFormat.foreach(df => convertCellDataFormat(df, workbook, cellStyle))
-      cs.font.foreach(f => convertFont(f, workbook))
-
+      cs.font.foreach(f => cellStyle.setFont(convertFont(f, workbook)))
       cs.fillPattern.foreach(fp => cellStyle.setFillPattern(convertCellFill(fp)))
       cs.fillBackgroundColor.foreach(c => cellStyle.setFillBackgroundColor(convertColor(c)))
       cs.fillForegroundColor.foreach(c => cellStyle.setFillForegroundColor(convertColor(c)))

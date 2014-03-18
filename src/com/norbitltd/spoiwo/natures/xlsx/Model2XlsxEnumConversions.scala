@@ -2,7 +2,7 @@ package com.norbitltd.spoiwo.natures.xlsx
 
 import org.apache.poi.ss.usermodel
 import com.norbitltd.spoiwo.model.CellBorderStyle
-import org.apache.poi.ss.usermodel.{FontCharset, BorderStyle}
+import org.apache.poi.ss.usermodel.{FillPatternType, FontCharset, BorderStyle}
 import com.norbitltd.spoiwo.model.enums._
 
 object Model2XlsxEnumConversions {
@@ -27,6 +27,32 @@ object Model2XlsxEnumConversions {
       case Thin => THIN
       case CellBorderStyle(id) =>
         throw new Exception("Unsupported option for XLSX conversion with id=%d".format(id))
+    }
+  }
+
+  def convertCellFill(cf: CellFill): FillPatternType = {
+    import CellFill._
+
+    cf match {
+      case None => FillPatternType.NO_FILL
+      case Solid => FillPatternType.SOLID_FOREGROUND
+      case Pattern.AltBars => FillPatternType.ALT_BARS
+      case Pattern.BigSpots => FillPatternType.BIG_SPOTS
+      case Pattern.Bricks => FillPatternType.BRICKS
+      case Pattern.Diamonds => FillPatternType.DIAMONDS
+      case Pattern.Squares => FillPatternType.SQUARES
+      case Pattern.Dots.Fine => FillPatternType.FINE_DOTS
+      case Pattern.Dots.Least => FillPatternType.LEAST_DOTS
+      case Pattern.Dots.Less => FillPatternType.LESS_DOTS
+      case Pattern.Dots.Sparse => FillPatternType.SPARSE_DOTS
+      case Pattern.Diagonals.ThickBackward => FillPatternType.THICK_BACKWARD_DIAG
+      case Pattern.Diagonals.ThickForward => FillPatternType.THICK_FORWARD_DIAG
+      case Pattern.Diagonals.ThinBackward => FillPatternType.THIN_BACKWARD_DIAG
+      case Pattern.Diagonals.ThinForward => FillPatternType.THIN_FORWARD_DIAG
+      case Pattern.Bands.ThickHorizontal => FillPatternType.THICK_HORZ_BANDS
+      case Pattern.Bands.ThickVertical => FillPatternType.THICK_VERT_BANDS
+      case Pattern.Bands.ThinHorizontal => FillPatternType.THIN_HORZ_BANDS
+      case Pattern.Bands.ThinVertical => FillPatternType.THIN_VERT_BANDS
     }
   }
 

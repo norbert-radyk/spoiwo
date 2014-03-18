@@ -1,16 +1,18 @@
 package com.norbitltd.spoiwo.model
 
+import com.norbitltd.spoiwo.model.enums.CellFill
+
 object CellStyle extends Factory {
 
   private lazy val defaultDataFormat = CellDataFormat.Undefined
-  private lazy val defaultFillPattern = CellFill.None
+  private lazy val defaultFillPattern = CellFill.Undefined
   private lazy val defaultFillForegroundColor = Color.Undefined
   private lazy val defaultFillBackgroundColor = Color.Undefined
   private lazy val defaultHorizontalAlignment = CellHorizontalAlignment.Undefined
   private lazy val defaultVerticalAlignment = CellVerticalAlignment.Undefined
   private lazy val defaultHidden = false
   private lazy val defaultIndention = -1.toShort
-  private lazy val defaultLocked = false
+  private lazy val defaultLocked = true
   private lazy val defaultRotation = -1.toShort
   private lazy val defaultWrapText = false
 
@@ -36,7 +38,7 @@ object CellStyle extends Factory {
       wrap(borders, defaultBorders),
       wrap(dataFormat, defaultDataFormat),
       wrap(font, defaultFont),
-      wrap(fillPattern, fillPattern),
+      wrap(fillPattern, defaultFillPattern),
       wrap(fillForegroundColor, defaultFillForegroundColor),
       wrap(fillBackgroundColor, defaultFillBackgroundColor),
       wrap(horizontalAlignment, defaultHorizontalAlignment),

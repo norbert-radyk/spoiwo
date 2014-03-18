@@ -3,6 +3,7 @@ package com.norbitltd.spoiwo.examples.gettingstarted
 import com.norbitltd.spoiwo.model._
 import org.joda.time.LocalDate
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
+import com.norbitltd.spoiwo.model.enums.CellFill
 
 object GettingStartedExample {
 

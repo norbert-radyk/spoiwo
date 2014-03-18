@@ -7,6 +7,7 @@ import java.util.{Calendar, Date}
 
 import com.norbitltd.spoiwo.model.{CellHorizontalAlignment => HA}
 import com.norbitltd.spoiwo.model.{CellVerticalAlignment => VA}
+import com.norbitltd.spoiwo.model.enums.CellFill
 
 class SpoiwoExamples {
 
