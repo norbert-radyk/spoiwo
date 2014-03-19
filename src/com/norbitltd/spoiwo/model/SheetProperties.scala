@@ -3,16 +3,17 @@ package com.norbitltd.spoiwo.model
 object SheetProperties extends Factory {
 
   private lazy val defaultAutoFilter = CellRange.None
-  private lazy val defaultActiveCell = defaultPOISheet.getActiveCell
-  private lazy val defaultAutoBreaks = defaultPOISheet.getAutobreaks
-  private lazy val defaultDefaultColumnWidth = defaultPOISheet.getDefaultColumnWidth
-  private lazy val defaultDefaultRowHeight = defaultPOISheet.getDefaultRowHeight
-  private lazy val defaultDisplayFormulas = true
+  private lazy val defaultActiveCell = null
+  private lazy val defaultAutoBreaks = true
+  private lazy val defaultDefaultColumnWidth = -1
+  private lazy val defaultDefaultRowHeight = Measure.Undefined
 
+  private lazy val defaultDisplayFormulas = false
   private lazy val defaultDisplayGridLines = true
-  private lazy val defaultDisplayGuts = defaultPOISheet.getDisplayGuts
+  private lazy val defaultDisplayGuts = true
   private lazy val defaultDisplayRowColHeadings = true
   private lazy val defaultDisplayZeros = true
+
   private lazy val defaultFitToPage = defaultPOISheet.getFitToPage
   private lazy val defaultForceFormulaRecalculation = defaultPOISheet.getForceFormulaRecalculation
   private lazy val defaultHorizontallyCenter = defaultPOISheet.getHorizontallyCenter
@@ -32,7 +33,7 @@ object SheetProperties extends Factory {
             activeCell: String = defaultActiveCell,
             autoBreaks: Boolean = defaultAutoBreaks,
             defaultColumnWidth: Int = defaultDefaultColumnWidth,
-            defaultRowHeight: Short = defaultDefaultRowHeight,
+            defaultRowHeight: Measure = defaultDefaultRowHeight,
             displayFormulas: Boolean = defaultDisplayFormulas,
             displayGridLines: Boolean = defaultDisplayGridLines,
             displayGuts: Boolean = defaultDisplayGuts,
@@ -80,7 +81,7 @@ case class SheetProperties private[model](
                                            activeCell: Option[String],
                                            autoBreaks: Option[Boolean],
                                            defaultColumnWidth: Option[Int],
-                                           defaultRowHeight: Option[Short],
+                                           defaultRowHeight: Option[Measure],
                                            displayFormulas: Option[Boolean],
                                            displayGridLines: Option[Boolean],
                                            displayGuts: Option[Boolean],
@@ -123,7 +124,7 @@ case class SheetProperties private[model](
   def withoutDefaultColumnWidth(defaultColumnWidth: Int) =
     copy(defaultColumnWidth = None)
 
-  def withDefaultRowHeight(defaultRowHeight: Short) =
+  def withDefaultRowHeight(defaultRowHeight: Measure) =
     copy(defaultRowHeight = Option(defaultRowHeight))
 
   def withoutDefaultRowHeight(defaultRowHeight: Short) =

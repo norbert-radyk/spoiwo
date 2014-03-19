@@ -306,12 +306,12 @@ object Model2XlsxConversions {
     }
   }
 
-  private def convertSheetProperties(sp: SheetProperties, sheet: XSSFSheet) {
+  private[xlsx] def convertSheetProperties(sp: SheetProperties, sheet: XSSFSheet) {
     sp.autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(convertCellRange(autoFilterRange)))
     sp.activeCell.foreach(sheet.setActiveCell)
     sp.autoBreaks.foreach(sheet.setAutobreaks)
     sp.defaultColumnWidth.foreach(sheet.setDefaultColumnWidth)
-    sp.defaultRowHeight.foreach(sheet.setDefaultRowHeight)
+    sp.defaultRowHeight.foreach(height => sheet.setDefaultRowHeightInPoints(height.toPoints))
     sp.displayFormulas.foreach(sheet.setDisplayFormulas)
     sp.displayGridLines.foreach(sheet.setDisplayGridlines)
     sp.displayGuts.foreach(sheet.setDisplayGuts)
