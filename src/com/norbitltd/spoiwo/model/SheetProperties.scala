@@ -14,17 +14,17 @@ object SheetProperties extends Factory {
   private lazy val defaultDisplayRowColHeadings = true
   private lazy val defaultDisplayZeros = true
 
-  private lazy val defaultFitToPage = defaultPOISheet.getFitToPage
-  private lazy val defaultForceFormulaRecalculation = defaultPOISheet.getForceFormulaRecalculation
-  private lazy val defaultHorizontallyCenter = defaultPOISheet.getHorizontallyCenter
+  private lazy val defaultFitToPage = false
+  private lazy val defaultForceFormulaRecalculation = false
+  private lazy val defaultHorizontallyCenter = false
   private lazy val defaultPrintArea = CellRange.None
   private lazy val defaultPrintGridLines = false
   private lazy val defaultRightToLeft = false
-  private lazy val defaultRowSumsBelow = defaultPOISheet.getRowSumsBelow
-  private lazy val defaultRowSumsRight = defaultPOISheet.getRowSumsRight
+  private lazy val defaultRowSumsBelow = true
+  private lazy val defaultRowSumsRight = true
   private lazy val defaultSelected = false
   private lazy val defaultTabColor = -1
-  private lazy val defaultVirtuallyCenter = defaultPOISheet.getVerticallyCenter
+  private lazy val defaultVirtuallyCenter = false
   private lazy val defaultZoom = 100
 
   lazy val Default = SheetProperties()

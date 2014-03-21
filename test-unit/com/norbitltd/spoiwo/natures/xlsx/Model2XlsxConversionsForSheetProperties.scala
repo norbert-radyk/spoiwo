@@ -2,7 +2,7 @@ package com.norbitltd.spoiwo.natures.xlsx
 
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 import org.scalatest.FlatSpec
-import com.norbitltd.spoiwo.model.SheetProperties
+import com.norbitltd.spoiwo.model.{CellRange, SheetProperties}
 import Model2XlsxConversions.convertSheetProperties
 import com.norbitltd.spoiwo.model.Measure._
 
@@ -17,7 +17,7 @@ class Model2XlsxConversionsForSheetProperties extends FlatSpec {
   private val defaultSheet : XSSFSheet = apply(SheetProperties())
 
   "Sheet properties conversion" should "return no auto-filter by default" in {
-    //TODO Unable to test this one as auto-filter value can't be obtained
+    //FIXME Unable to test this one as auto-filter value can't be obtained
   }
 
   it should "return no active cell by default" in {
@@ -147,5 +147,178 @@ class Model2XlsxConversionsForSheetProperties extends FlatSpec {
     val xssf = apply(model)
     assert(xssf.isDisplayZeros)
   }
-  //TODO to be continued
+
+  it should "not fit sheet to page by default" in {
+    assert(!defaultSheet.getFitToPage)
+  }
+
+  it should "not fit sheet to page when set to false" in {
+    val model = SheetProperties(fitToPage = false)
+    val xssf = apply(model)
+    assert(!xssf.getFitToPage)
+  }
+
+  it should "fit sheet to page when set to true" in {
+    val model = SheetProperties(fitToPage = true)
+    val xssf = apply(model)
+    assert(xssf.getFitToPage)
+  }
+
+  it should "not force formula recalculation by default" in {
+    assert(!defaultSheet.getForceFormulaRecalculation)
+  }
+
+  it should "not force formula recalculation when set to false" in {
+    val model = SheetProperties(forceFormulaRecalculation = false)
+    val xssf = apply(model)
+    assert(!xssf.getForceFormulaRecalculation)
+  }
+
+  it should "force formula recalculation when set to true" in {
+    val model = SheetProperties(forceFormulaRecalculation = true)
+    val xssf = apply(model)
+    assert(xssf.getForceFormulaRecalculation)
+  }
+
+  it should "not get horizontally center by default" in {
+    assert(!defaultSheet.getHorizontallyCenter)
+  }
+
+  it should "not get horizontally center when set to false" in {
+    val model = SheetProperties(horizontallyCenter = false)
+    val xssf = apply(model)
+    assert(!xssf.getHorizontallyCenter)
+  }
+
+  it should "get horizontally center when set to true" in {
+    val model = SheetProperties(horizontallyCenter = true)
+    val xssf = apply(model)
+    assert(xssf.getHorizontallyCenter)
+  }
+
+  it should "not return the print area by default" in {
+    assert(defaultSheet.getWorkbook.getPrintArea(0) == null)
+  }
+
+  it should "return the print area  when set explicitly" in {
+    val model = SheetProperties(printArea = CellRange(2->7, 1 -> 4))
+    val xssf = apply(model)
+    assert(xssf.getWorkbook.getPrintArea(0) == "Sheet0!$B$3:$E$8")
+  }
+
+  it should "print grid lines by default" in {
+    assert(!defaultSheet.isPrintGridlines)
+  }
+
+  it should "not print grid lines when set to false" in {
+    val model = SheetProperties(printGridLines = false)
+    val xssf = apply(model)
+    assert(!xssf.isPrintGridlines)
+  }
+
+  it should "get print grid lines when set to true" in {
+    val model = SheetProperties(printGridLines = true)
+    val xssf = apply(model)
+    assert(xssf.isPrintGridlines)
+  }
+
+  it should "not be right to left by default" in {
+    assert(!defaultSheet.isRightToLeft)
+  }
+
+  it should "not be right to left when set to false" in {
+    val model = SheetProperties(rightToLeft = false)
+    val xssf = apply(model)
+    assert(!xssf.isRightToLeft)
+  }
+
+  it should "be right to left when set to true" in {
+    val model = SheetProperties(rightToLeft = true)
+    val xssf = apply(model)
+    assert(xssf.isRightToLeft)
+  }
+
+  it should "do row sums below by default" in {
+    assert(defaultSheet.getRowSumsBelow)
+  }
+
+  it should "not do row sums below when set to false" in {
+    val model = SheetProperties(rowSumsBelow = false)
+    val xssf = apply(model)
+    assert(!xssf.getRowSumsBelow)
+  }
+
+  it should "be do row sums below when set to true" in {
+    val model = SheetProperties(rowSumsBelow = true)
+    val xssf = apply(model)
+    assert(xssf.getRowSumsBelow)
+  }
+
+  it should "do row sums right by default" in {
+    assert(defaultSheet.getRowSumsRight)
+  }
+
+  it should "not do row sums right when set to false" in {
+    val model = SheetProperties(rowSumsRight = false)
+    val xssf = apply(model)
+    assert(!xssf.getRowSumsRight)
+  }
+
+  it should "be do row sums right when set to true" in {
+    val model = SheetProperties(rowSumsRight = true)
+    val xssf = apply(model)
+    assert(xssf.getRowSumsRight)
+  }
+
+  it should "not be selected by default" in {
+    assert(defaultSheet.isSelected)
+  }
+
+  it should "not be selected when set to false, but only one sheet" in {
+    val model = SheetProperties(selected = false)
+    val xssf = apply(model)
+    assert(xssf.isSelected)
+  }
+
+  it should "not be selected when set to false, but there are multiple sheets" in {
+    val workbook = new XSSFWorkbook()
+    val sheet1 = workbook.createSheet("S1")
+    val sheet2 = workbook.createSheet("S2")
+    val model = SheetProperties(selected = false)
+    convertSheetProperties(model, sheet1)
+    //FIXME Need to understand this a bit more
+    assert(!sheet1.isSelected)
+  }
+
+  it should "be selected when set to true" in {
+    val model = SheetProperties(selected = true)
+    val xssf = apply(model)
+    assert(xssf.isSelected)
+  }
+
+  it should "return blank tab color by default" in {
+    //FIXME Unable to test - no TabColor method
+  }
+
+  it should "not be virtually center by default" in {
+    assert(!defaultSheet.getVerticallyCenter)
+  }
+
+  it should "not be virtually center when set to false" in {
+    val model = SheetProperties(virtuallyCenter = false)
+    val xssf = apply(model)
+    assert(!xssf.getVerticallyCenter)
+  }
+
+  it should "be virtually center when set to true" in {
+    val model = SheetProperties(virtuallyCenter = true)
+    val xssf = apply(model)
+    assert(xssf.getVerticallyCenter)
+  }
+
+  it should "have 100% zoom by default" in {
+    //FIXME Unable to test - no getZoom method
+  }
+
+
 }
