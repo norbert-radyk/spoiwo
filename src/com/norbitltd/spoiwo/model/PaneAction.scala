@@ -1,5 +1,7 @@
 package com.norbitltd.spoiwo.model
 
+import com.norbitltd.spoiwo.model.enums.Pane
+
 sealed trait PaneAction
 
 case class NoSplitOrFreeze() extends PaneAction

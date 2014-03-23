@@ -7,7 +7,7 @@ import java.util.{Calendar, Date}
 
 import com.norbitltd.spoiwo.model.{CellHorizontalAlignment => HA}
 import com.norbitltd.spoiwo.model.{CellVerticalAlignment => VA}
-import com.norbitltd.spoiwo.model.enums.CellFill
+import com.norbitltd.spoiwo.model.enums.{Pane, CellFill}
 
 class SpoiwoExamples {
 
@@ -28,8 +28,8 @@ class SpoiwoExamples {
   def creatingDateCells() {
     val style = CellStyle(dataFormat = CellDataFormat("m/d/yy h:mm"))
     val simplestDateCell = Cell(new Date())
-    val formattedDateCell = Cell(new Date(), style)
-    val formattedCalendarCell = Cell(Calendar.getInstance(), style)
+    val formattedDateCell = Cell(new Date(), style = style)
+    val formattedCalendarCell = Cell(Calendar.getInstance(), style = style)
 
     Sheet(name = "new sheet",
       row = Row(simplestDateCell, formattedDateCell, formattedCalendarCell)
@@ -77,8 +77,8 @@ class SpoiwoExamples {
   def fillsAndColors() = Sheet(name = "new sheet",
     row = Row(index = 1,
       Cell.Empty,
-      Cell("X", CellStyle(fillBackgroundColor = Color.Aqua, fillPattern = CellFill.Pattern.BigSpots)),
-      Cell("X", CellStyle(fillForegroundColor = Color.Orange, fillPattern = CellFill.Solid))
+      Cell("X", style = CellStyle(fillBackgroundColor = Color.Aqua, fillPattern = CellFill.Pattern.BigSpots)),
+      Cell("X", style = CellStyle(fillForegroundColor = Color.Orange, fillPattern = CellFill.Solid))
     )
   ).saveAsXlsx("workbook.xls")
 
@@ -120,8 +120,8 @@ class SpoiwoExamples {
 
 
   def dataFormats() = Sheet(name = "format sheet",
-    Row(Cell(11111.25, CellStyle(dataFormat = CellDataFormat("0.0")))),
-    Row(Cell(11111.25, CellStyle(dataFormat = CellDataFormat("#,##0.0000"))))
+    Row(Cell(11111.25, style = CellStyle(dataFormat = CellDataFormat("0.0")))),
+    Row(Cell(11111.25, style = CellStyle(dataFormat = CellDataFormat("#,##0.0000"))))
   ).saveAsXlsx("workbook.xls")
 
 

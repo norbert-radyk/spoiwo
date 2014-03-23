@@ -1,5 +1,7 @@
 package com.norbitltd.spoiwo.model
 
+import com.norbitltd.spoiwo.model.enums.Pane
+
 object Test {
   def main(args: Array[String]) {
     /*println(Color.Undefined == Color(0, 0, 0))

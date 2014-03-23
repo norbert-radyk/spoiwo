@@ -58,6 +58,5 @@ object Model2CsvConversions {
     case x : DateCell => x.value.toString
     case x : CalendarCell => x.value.toString
     case x : FormulaCell => throw new IllegalArgumentException("Use of formulas not allowed when converting to CSV format!")
-    case x : ErrorValueCell => throw new IllegalArgumentException("Use of error value cells not allowed when converting to CSV format!")
   }
 }

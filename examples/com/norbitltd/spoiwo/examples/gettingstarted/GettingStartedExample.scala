@@ -14,13 +14,12 @@ object GettingStartedExample {
   val headerStyle =
     CellStyle(fillPattern = CellFill.Solid, fillForegroundColor = Color.AquaMarine, fillBackgroundColor = Color.AquaMarine, font = Font(bold = true))
 
-  val testSheet = Sheet(name = "Hello Sheet",
-      row = Row(cells = Cell("Name", style = CellStyle(font = Font(bold = true))))
-    )
-
   val sheet2 = Sheet(name = "Some serious stuff")
     .withColumns(
-      Column(index = 1, style = CellStyle(dataFormat = CellDataFormat("dd MMM yyyy")))
+      Column.Default,
+      Column(index = 1, style = CellStyle(dataFormat = CellDataFormat("dd MMM yyyy"))),
+      Column.Default,
+      Column.Default
     )
     .withRows(
       Row.Empty.withCellValues("NAME", "BIRTH DATE", "DIED AGED", "FEMALE").withStyle(headerStyle),
@@ -30,10 +29,8 @@ object GettingStartedExample {
     )
 
   def main(args: Array[String]) {
-    testSheet.saveAsXlsx("C:\\Reports\\test.xlsx")
-//    sheet1.saveAsXlsx("C:\\Reports\\hello_world.xlsx")
-
-  //  sheet2.saveAsXlsx("C:\\Reports\\getting_started.xlsx")
+    sheet1.saveAsXlsx("C:\\Reports\\hello_world.xlsx")
+    sheet2.saveAsXlsx("C:\\Reports\\getting_started.xlsx")
   }
 
 }

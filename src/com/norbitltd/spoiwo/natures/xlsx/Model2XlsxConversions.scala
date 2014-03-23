@@ -9,7 +9,7 @@ import com.norbitltd.spoiwo.model.SplitPane
 import com.norbitltd.spoiwo.model.NoSplitOrFreeze
 import java.io.FileOutputStream
 import Model2XlsxEnumConversions._
-import com.norbitltd.spoiwo.model.enums.CellFill
+import com.norbitltd.spoiwo.model.enums.{Pane, CellFill}
 
 object Model2XlsxConversions {
 
@@ -84,14 +84,13 @@ object Model2XlsxConversions {
     Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
   )
 
-  private def convertCell(c : Cell, row : XSSFRow): XSSFCell = {
-    val cellNumber = c.getIndex.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
+  private[xlsx] def convertCell(c : Cell, row : XSSFRow): XSSFCell = {
+    val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
-    c.getStyle.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
+    c.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
     c match {
       case StringCell(value, _, _) => cell.setCellValue(value)
       case FormulaCell(formula, _, _) => cell.setCellFormula(formula)
-      case ErrorValueCell(formulaError, _, _) => cell.setCellErrorValue(formulaError)
       case NumericCell(value, _, _) => cell.setCellValue(value)
       case BooleanCell(value, _, _) => cell.setCellValue(value)
       case DateCell(value, _, _) => cell.setCellValue(value)

@@ -8,7 +8,7 @@ import Model2XlsxConversions._
 class Model2XlsxConversionsSpec extends FlatSpec {
 
   "Sheet converter" should "set bold font in cell" in {
-    val sheetModel = Sheet(name = "TestSheet", row = Row().withCells(Cell("Test", CellStyle(font = Font(bold = true)))))
+    val sheetModel = Sheet(name = "TestSheet", row = Row().withCells(Cell("Test", style = CellStyle(font = Font(bold = true)))))
     val converted = sheetModel.convertAsXlsx()
 
     val convertedSheet = converted.getSheetAt(0)
