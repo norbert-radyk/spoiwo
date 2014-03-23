@@ -3,9 +3,6 @@ package com.norbitltd.spoiwo.model
 import java.util.{Calendar, Date}
 import org.joda.time.{LocalDate, DateTime}
 
-//TODO Customized Formula Error
-import org.apache.poi.ss.usermodel.FormulaError
-
 sealed class CellValueType[T]
 object CellValueType {
   implicit object StringWitness extends CellValueType[String]
@@ -16,7 +13,7 @@ object CellValueType {
   implicit object DateWitness extends CellValueType[Date]
   implicit object DateTimeWitness extends CellValueType[DateTime]
   implicit object LocalDateWitness extends CellValueType[LocalDate]
-  implicit object Calendar extends CellValueType[Calendar]
+  implicit object CalendarWitness extends CellValueType[Calendar]
 }
 
 object Cell extends Factory {
