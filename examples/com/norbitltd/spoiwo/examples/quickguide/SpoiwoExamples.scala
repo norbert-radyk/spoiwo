@@ -1,5 +1,6 @@
 package com.norbitltd.spoiwo.examples.quickguide
 
+import com.norbitltd.spoiwo.model.Measure._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.ss.util.WorkbookUtil
@@ -55,7 +56,7 @@ class SpoiwoExamples {
       HA.General -> VA.Center, HA.Justify -> VA.Justify, HA.Left -> VA.Top, HA.Right -> VA.Top)
 
     Sheet(
-      Row(index = 2, heightInPoints = 30).withCells(alignments.map((createCell _).tupled))
+      Row(index = 2, height = 30 points).withCells(alignments.map((createCell _).tupled))
     ).saveAsXlsx("xssf-align.xlsx")
   }
 
@@ -113,7 +114,7 @@ class SpoiwoExamples {
 
   def usingNewLinesInCells() = {
     val cell = Cell("Use \n with word wrap on to create a new line", index = 2)
-    val row = Row(index = 2, heightInPoints = 2 * Row.DefaultHeightInPoints, cells = List(cell))
+    val row = Row(index = 2, height = 15 points, cells = List(cell))
     val sheet = Sheet(row).withColumns(Column(2, autoSized = true))
     sheet.saveAsXlsx("ooxml-newlines.xlsx")
   }

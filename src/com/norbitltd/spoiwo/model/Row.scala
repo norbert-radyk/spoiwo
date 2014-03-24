@@ -6,26 +6,23 @@ import org.joda.time.{DateTime, LocalDate}
 object Row extends Factory {
 
   private lazy val defaultCells = Nil
-  private lazy val defaultHeight = defaultPOIRow.getHeight
-  lazy val DefaultHeightInPoints = defaultPOIRow.getHeightInPoints
+  private lazy val defaultHeight = Measure.Undefined
   private lazy val defaultIndex = -1
   private lazy val defaultStyle = CellStyle.Default
-  private lazy val defaultZeroHeight = false
+  private lazy val defaultHidden = false
 
   val Empty = apply()
 
   def apply(cells: Iterable[Cell] = defaultCells,
-            height: Short = defaultHeight,
-            heightInPoints: Float = DefaultHeightInPoints,
+            height: Measure = defaultHeight,
             index: Int = defaultIndex,
             style: CellStyle = defaultStyle,
-            zeroHeight: Boolean = defaultZeroHeight): Row =
+            hidden: Boolean = defaultHidden): Row =
     Row(cells = cells,
       height = wrap(height, defaultHeight),
-      heightInPoints = wrap(heightInPoints, DefaultHeightInPoints),
       index = wrap(index, defaultIndex),
       style = wrap(style, defaultStyle),
-      zeroHeight = wrap(zeroHeight, defaultZeroHeight)
+      hidden = wrap(hidden, defaultHidden)
     )
 
   def apply(cells: Cell*): Row =
@@ -43,11 +40,10 @@ object Row extends Factory {
 }
 
 case class Row private(cells: Iterable[Cell],
-                       height: Option[Short],
-                       heightInPoints: Option[Float],
+                       height:Option[Measure],
                        index: Option[Int],
                        style: Option[CellStyle],
-                       zeroHeight: Option[Boolean]) {
+                       hidden: Option[Boolean]) {
 
   def withCells(cells: Cell*) =
     copy(cells = cells)
@@ -85,17 +81,11 @@ case class Row private(cells: Iterable[Cell],
     copy(cells = cells.toVector)
   }
 
-  def withHeight(height: Short) =
+  def withHeight(height: Measure) =
     copy(height = Option(height))
 
   def withoutHeight =
     copy(height = None)
-
-  def withHeightInPoints(heightInPoints: Float) =
-    copy(heightInPoints = Option(heightInPoints))
-
-  def withoutHeightInPoints =
-    copy(heightInPoints = None)
 
   def withStyle(rowStyle: CellStyle) =
     copy(style = Option(rowStyle))
@@ -103,11 +93,11 @@ case class Row private(cells: Iterable[Cell],
   def withoutStyle =
     copy(style = None)
 
-  def withZeroHeight =
-    copy(zeroHeight = Some(true))
+  def withHidden =
+    copy(hidden = Some(true))
 
-  def withoutZeroHeight =
-    copy(zeroHeight = Some(false))
+  def withoutHidden =
+    copy(hidden = Some(false))
 }
 
 

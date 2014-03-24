@@ -258,15 +258,14 @@ object Model2XlsxConversions {
     }
   }
 
-  private def convertRow(r : com.norbitltd.spoiwo.model.Row, sheet: XSSFSheet): XSSFRow = {
+  private[xlsx] def convertRow(r : com.norbitltd.spoiwo.model.Row, sheet: XSSFSheet): XSSFRow = {
     val indexNumber = r.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = sheet.createRow(indexNumber)
 
     r.cells.foreach(cell => convertCell(cell, row))
-    r.height.foreach(row.setHeight)
-    r.heightInPoints.foreach(row.setHeightInPoints)
-    r.style.foreach(s => convertCellStyle(s, row.getSheet.getWorkbook))
-    r.zeroHeight.foreach(row.setZeroHeight)
+    r.height.foreach(h => row.setHeightInPoints(h.toPoints))
+    r.style.foreach(s => row.setRowStyle(convertCellStyle(s, row.getSheet.getWorkbook)))
+    r.hidden.foreach(row.setZeroHeight)
     row
   }
 
