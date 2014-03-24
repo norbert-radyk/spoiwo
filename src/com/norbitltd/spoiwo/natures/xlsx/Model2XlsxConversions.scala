@@ -259,6 +259,7 @@ object Model2XlsxConversions {
   }
 
   private[xlsx] def convertRow(r : com.norbitltd.spoiwo.model.Row, sheet: XSSFSheet): XSSFRow = {
+    validateCells(r)
     val indexNumber = r.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = sheet.createRow(indexNumber)
 
@@ -267,6 +268,18 @@ object Model2XlsxConversions {
     r.style.foreach(s => row.setRowStyle(convertCellStyle(s, row.getSheet.getWorkbook)))
     r.hidden.foreach(row.setZeroHeight)
     row
+  }
+
+  private def validateCells(r : Row) {
+    val indexedCells = r.cells.filter(_.index.isDefined)
+    val contextCells = r.cells.filter(_.index.isEmpty)
+
+    if(indexedCells.size > 0 && contextCells.size > 0)
+      throw new IllegalArgumentException("It is not allowed to mix cells with and without index within a single row!")
+
+    val distinctIndexes = indexedCells.map(_.index).toSet.flatten
+    if(indexedCells.size != distinctIndexes.size)
+      throw new IllegalArgumentException("It is not allowed to have cells with duplicate index within a single row!")
   }
 
   private def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
