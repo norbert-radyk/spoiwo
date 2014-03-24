@@ -115,6 +115,18 @@ object Model2XlsxEnumConversions {
     }
   }
 
+  def convertMissingCellPolicy(missingCellPolicy : MissingCellPolicy) : usermodel.Row.MissingCellPolicy = {
+    import MissingCellPolicy._
+
+    missingCellPolicy match {
+      case ReturnNullAndBlank => usermodel.Row.RETURN_NULL_AND_BLANK
+      case ReturnBlankAsNull => usermodel.Row.RETURN_BLANK_AS_NULL
+      case CreateNullAsBlank => usermodel.Row.CREATE_NULL_AS_BLANK
+      case MissingCellPolicy(value: String) =>
+        throw new IllegalArgumentException(s"Unable to convert MissingCellPolicy=$value to XLSX - unsupported enum!")
+    }
+  }
+
   def convertTypeOffset(typeOffset : TypeOffset): Short = {
     import TypeOffset._
 

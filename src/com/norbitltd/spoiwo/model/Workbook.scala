@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-import org.apache.poi.ss.usermodel.Row.MissingCellPolicy
+import com.norbitltd.spoiwo.model.enums.MissingCellPolicy
 
 object Workbook extends Factory {
 
@@ -11,7 +11,8 @@ object Workbook extends Factory {
   private lazy val defaultForceFormulaRecalculation =
     defaultPOIWorkbook.getForceFormulaRecalculation
   private lazy val defaultMissingCellPolicy =
-    defaultPOIWorkbook.getMissingCellPolicy
+    MissingCellPolicy.Undefined
+
 
   private lazy val defaultHidden = false
   private lazy val defaultSelectedTab = 0

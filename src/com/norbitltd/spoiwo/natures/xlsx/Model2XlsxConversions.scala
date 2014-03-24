@@ -143,7 +143,7 @@ object Model2XlsxConversions {
     }
 
 
-  private def convertColumn(c : Column, sheet: XSSFSheet) {
+  private[xlsx] def convertColumn(c : Column, sheet: XSSFSheet) {
     val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
       "Something went terribly wrong as it should have been derived if not specified explicitly!"))
 
@@ -400,7 +400,7 @@ object Model2XlsxConversions {
     wb.firstVisibleTab.foreach(workbook.setFirstVisibleTab)
     wb.forceFormulaRecalculation.foreach(workbook.setForceFormulaRecalculation)
     wb.hidden.foreach(workbook.setHidden)
-    wb.missingCellPolicy.foreach(workbook.setMissingCellPolicy)
+    wb.missingCellPolicy.foreach(mcp => workbook.setMissingCellPolicy(convertMissingCellPolicy(mcp)))
     wb.selectedTab.foreach(workbook.setSelectedTab)
     workbook
   }
