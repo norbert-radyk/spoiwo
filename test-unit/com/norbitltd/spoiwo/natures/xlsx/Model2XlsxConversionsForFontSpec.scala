@@ -3,10 +3,10 @@ package com.norbitltd.spoiwo.natures.xlsx
 import org.apache.poi.ss.usermodel
 import org.scalatest.FlatSpec
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import com.norbitltd.spoiwo.model.{Measure, Color, Font}
+import com.norbitltd.spoiwo.model.{Height, Color, Font}
 import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{FontUnderline, FontCharset}
-import Measure._
+import Height._
 
 import com.norbitltd.spoiwo.model.enums._
 
@@ -88,7 +88,7 @@ class Model2XlsxConversionsForFontSpec extends FlatSpec {
   }
 
   it should "return height of 160 units when set explicitly" in {
-    val modelWithFont = Font(height = 160 units)
+    val modelWithFont = Font(height = 160 unitsOfHeight)
     val xssfWithFont = convertFont(modelWithFont, workbook)
     assert(8 == xssfWithFont.getFontHeightInPoints)
     assert(160 == xssfWithFont.getFontHeight)

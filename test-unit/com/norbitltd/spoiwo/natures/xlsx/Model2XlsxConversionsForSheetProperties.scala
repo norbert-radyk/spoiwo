@@ -4,7 +4,7 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 import org.scalatest.FlatSpec
 import com.norbitltd.spoiwo.model.{CellRange, SheetProperties}
 import Model2XlsxConversions.convertSheetProperties
-import com.norbitltd.spoiwo.model.Measure._
+import com.norbitltd.spoiwo.model.Height._
 
 class Model2XlsxConversionsForSheetProperties extends FlatSpec {
 

@@ -152,7 +152,7 @@ object Model2XlsxConversions {
     c.groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
     c.hidden.foreach(h => sheet.setColumnHidden(i, h))
     c.style.foreach(s => sheet.setDefaultColumnStyle(i, convertCellStyle(s, sheet.getWorkbook)))
-    c.width.foreach(w => sheet.setColumnWidth(i, w))
+    c.width.foreach(w => sheet.setColumnWidth(i, w.toUnits))
   }
 
   private def convertColumnRange(cr: ColumnRange) = CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))

@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import com.norbitltd.spoiwo.model.Measure._
+import com.norbitltd.spoiwo.model.Height._
 import org.apache.poi.ss.usermodel
 import Model2XlsxConversions.convertCell
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}

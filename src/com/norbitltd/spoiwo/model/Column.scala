@@ -8,7 +8,7 @@ object Column extends Factory {
   private lazy val defaultGroupCollapsed = false
   private lazy val defaultHidden = false
   private lazy val defaultStyle = CellStyle.Default
-  private lazy val defaultWidth = defaultPOISheet.getDefaultColumnWidth
+  private lazy val defaultWidth = Width.Undefined
 
   val Default = Column()
 
@@ -19,7 +19,7 @@ object Column extends Factory {
              groupCollapsed: Boolean = defaultGroupCollapsed,
              hidden: Boolean = defaultHidden,
              style: CellStyle = defaultStyle,
-             width: Int = defaultWidth): Column =
+             width: Width = defaultWidth): Column =
     Column(
       index = wrap(index, defaultIndex),
       autoSized = wrap(autoSized, defaultAutoSized),
@@ -37,7 +37,7 @@ case class Column private[model](index: Option[Int],
                               groupCollapsed: Option[Boolean],
                               hidden: Option[Boolean],
                               style: Option[CellStyle],
-                              width: Option[Int]) {
+                              width: Option[Width]) {
 
   def withIndex(index: Int) =
     copy(index = Option(index))
@@ -75,7 +75,7 @@ case class Column private[model](index: Option[Int],
   def withoutStyle =
     copy(style = None)
 
-  def withWidth(width: Int) =
+  def withWidth(width: Width) =
     copy(width = Option(width))
 
   def withoutWidth =

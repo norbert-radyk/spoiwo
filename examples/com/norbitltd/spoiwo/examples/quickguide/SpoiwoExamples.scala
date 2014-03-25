@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.examples.quickguide
 
-import com.norbitltd.spoiwo.model.Measure._
+import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.ss.util.WorkbookUtil
@@ -91,7 +91,7 @@ class SpoiwoExamples {
 
 
   def workingWithFonts() {
-    import Measure._
+    import Height._
     val style = CellStyle(font = Font(height = 24 points, fontName = "Courier New", italic = true, strikeout = true))
     Sheet(name = "new sheet",
       row = Row(index = 1, Cell("This is a test of fonts", 1, style))

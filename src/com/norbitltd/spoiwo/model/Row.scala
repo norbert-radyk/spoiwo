@@ -6,7 +6,7 @@ import org.joda.time.{DateTime, LocalDate}
 object Row extends Factory {
 
   private lazy val defaultCells = Nil
-  private lazy val defaultHeight = Measure.Undefined
+  private lazy val defaultHeight = Height.Undefined
   private lazy val defaultIndex = -1
   private lazy val defaultStyle = CellStyle.Default
   private lazy val defaultHidden = false
@@ -14,7 +14,7 @@ object Row extends Factory {
   val Empty = apply()
 
   def apply(cells: Iterable[Cell] = defaultCells,
-            height: Measure = defaultHeight,
+            height: Height = defaultHeight,
             index: Int = defaultIndex,
             style: CellStyle = defaultStyle,
             hidden: Boolean = defaultHidden): Row =
@@ -40,7 +40,7 @@ object Row extends Factory {
 }
 
 case class Row private(cells: Iterable[Cell],
-                       height:Option[Measure],
+                       height:Option[Height],
                        index: Option[Int],
                        style: Option[CellStyle],
                        hidden: Option[Boolean]) {
@@ -81,7 +81,7 @@ case class Row private(cells: Iterable[Cell],
     copy(cells = cells.toVector)
   }
 
-  def withHeight(height: Measure) =
+  def withHeight(height: Height) =
     copy(height = Option(height))
 
   def withoutHeight =

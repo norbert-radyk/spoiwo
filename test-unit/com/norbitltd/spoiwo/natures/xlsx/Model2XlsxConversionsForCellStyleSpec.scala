@@ -5,7 +5,7 @@ import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFCellStyle, XSSFWorkbook}
 import com.norbitltd.spoiwo.model._
 import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{VerticalAlignment, HorizontalAlignment, FillPatternType, BorderStyle}
-import Measure._
+import Height._
 import com.norbitltd.spoiwo.model.enums.CellFill
 
 class Model2XlsxConversionsForCellStyleSpec extends FlatSpec {

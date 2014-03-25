@@ -5,7 +5,7 @@ import scala.Some
 
 object Font extends Factory {
 
-  private lazy val defaultHeight = Measure.Undefined
+  private lazy val defaultHeight = Height.Undefined
   private lazy val defaultBold = false
   private lazy val defaultItalic = defaultPOIFont.getItalic
   private lazy val defaultCharSet = Charset.Undefined
@@ -19,7 +19,7 @@ object Font extends Factory {
 
   val Default = Font()
 
-  def apply(height: Measure = defaultHeight,
+  def apply(height: Height = defaultHeight,
             bold: Boolean = defaultBold,
             italic: Boolean = defaultItalic,
             charSet: Charset = defaultCharSet,
@@ -45,7 +45,7 @@ object Font extends Factory {
 }
 
 case class Font private[model](
-                                height: Option[Measure],
+                                height: Option[Height],
                                 bold: Option[Boolean],
                                 italic: Option[Boolean],
                                 charSet: Option[Charset],
@@ -57,7 +57,7 @@ case class Font private[model](
                                 typeOffset: Option[TypeOffset],
                                 underline: Option[Underline]) {
 
-  def withHeight(height: Measure) =
+  def withHeight(height: Height) =
     copy(height = Option(height))
 
   def withoutHeight =

@@ -6,7 +6,7 @@ object SheetProperties extends Factory {
   private lazy val defaultActiveCell = null
   private lazy val defaultAutoBreaks = true
   private lazy val defaultDefaultColumnWidth = -1
-  private lazy val defaultDefaultRowHeight = Measure.Undefined
+  private lazy val defaultDefaultRowHeight = Height.Undefined
 
   private lazy val defaultDisplayFormulas = false
   private lazy val defaultDisplayGridLines = true
@@ -33,7 +33,7 @@ object SheetProperties extends Factory {
             activeCell: String = defaultActiveCell,
             autoBreaks: Boolean = defaultAutoBreaks,
             defaultColumnWidth: Int = defaultDefaultColumnWidth,
-            defaultRowHeight: Measure = defaultDefaultRowHeight,
+            defaultRowHeight: Height = defaultDefaultRowHeight,
             displayFormulas: Boolean = defaultDisplayFormulas,
             displayGridLines: Boolean = defaultDisplayGridLines,
             displayGuts: Boolean = defaultDisplayGuts,
@@ -81,7 +81,7 @@ case class SheetProperties private[model](
                                            activeCell: Option[String],
                                            autoBreaks: Option[Boolean],
                                            defaultColumnWidth: Option[Int],
-                                           defaultRowHeight: Option[Measure],
+                                           defaultRowHeight: Option[Height],
                                            displayFormulas: Option[Boolean],
                                            displayGridLines: Option[Boolean],
                                            displayGuts: Option[Boolean],
@@ -124,7 +124,7 @@ case class SheetProperties private[model](
   def withoutDefaultColumnWidth(defaultColumnWidth: Int) =
     copy(defaultColumnWidth = None)
 
-  def withDefaultRowHeight(defaultRowHeight: Measure) =
+  def withDefaultRowHeight(defaultRowHeight: Height) =
     copy(defaultRowHeight = Option(defaultRowHeight))
 
   def withoutDefaultRowHeight(defaultRowHeight: Short) =
