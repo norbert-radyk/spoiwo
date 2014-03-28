@@ -282,8 +282,8 @@ object Model2XlsxConversions {
       throw new IllegalArgumentException("It is not allowed to have cells with duplicate index within a single row!")
   }
 
-  private def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
-    val sheetName = s.name.getOrElse("Sheet " + (workbook.getNumberOfSheets + 1))
+  private[xlsx] def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
+    val sheetName = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
 
     updateColumnsWithIndexes(s).foreach(column => convertColumn(column, sheet))
