@@ -224,8 +224,6 @@ object Model2XlsxConversions {
       case Justify => JUSTIFY
       case Left => LEFT
       case Right => RIGHT
-      case Undefined =>
-        throw new RuntimeException("Internal SPOIWO framework error. Undefined value is not allowed for explicit transformation!")
       case CellHorizontalAlignment(id) =>
         throw new Exception("Unsupported option for XLSX conversion with id=%d".format(id))
     }
@@ -262,11 +260,10 @@ object Model2XlsxConversions {
     validateCells(r)
     val indexNumber = r.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = sheet.createRow(indexNumber)
-
-    r.cells.foreach(cell => convertCell(cell, row))
     r.height.foreach(h => row.setHeightInPoints(h.toPoints))
     r.style.foreach(s => row.setRowStyle(convertCellStyle(s, row.getSheet.getWorkbook)))
     r.hidden.foreach(row.setZeroHeight)
+    r.cells.foreach(cell => convertCell(cell, row))
     row
   }
 
@@ -283,11 +280,13 @@ object Model2XlsxConversions {
   }
 
   private[xlsx] def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
+    validateRows(s)
     val sheetName = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
+    s.rows.foreach(row => convertRow(row, sheet))
 
     updateColumnsWithIndexes(s).foreach(column => convertColumn(column, sheet))
-    s.rows.foreach(row => convertRow(row, sheet))
+
     s.mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(convertCellRange(mergedRegion)))
 
     s.printSetup.foreach(ps => convertPrintSetup(ps, sheet))
@@ -300,6 +299,19 @@ object Model2XlsxConversions {
     s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
     s.repeatingColumns.foreach(rc => sheet.setRepeatingColumns(convertColumnRange(rc)))
     sheet
+  }
+
+  private def validateRows(s : Sheet) {
+    val indexedRows = s.rows.filter(_.index.isDefined)
+    val contextRows = s.rows.filter(_.index.isEmpty)
+
+    if(indexedRows.size > 0 && contextRows.size > 0) {
+      throw new IllegalArgumentException("It is not allowed to mix rows with and without index within a single sheet!")
+    }
+
+    val distinctIndexes = indexedRows.map(_.index).toSet.flatten
+    if(indexedRows.size != distinctIndexes.size)
+      throw new IllegalArgumentException("It is not allowed to have rows with duplicate index within a single sheet!")
   }
 
   private def updateColumnsWithIndexes(s: Sheet): List[Column] = {
@@ -384,8 +396,6 @@ object Model2XlsxConversions {
       case Disturbed => DISTRIBUTED
       case Justify => JUSTIFY
       case Top => TOP
-      case Undefined =>
-        throw new RuntimeException("Internal SPOIWO framework error. Undefined value is not allowed for explicit transformation!")
       case CellVerticalAlignment(id) =>
         throw new RuntimeException("Unsupported option for XLSX conversion with id=%d".format(id))
     }

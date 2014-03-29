@@ -2,7 +2,6 @@ package com.norbitltd.spoiwo.model.enums
 
 object CellFill {
 
-  private[model] lazy val Undefined = CellFill("Undefined")
   lazy val None = CellFill("None")
   lazy val Solid = CellFill("Solid")
 

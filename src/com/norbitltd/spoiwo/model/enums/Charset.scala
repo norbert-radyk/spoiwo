@@ -2,7 +2,6 @@ package com.norbitltd.spoiwo.model.enums
 
 object Charset {
 
-  private[model] lazy val Undefined = Charset("Undefined")
   lazy val ANSI = Charset("ANSI")
   lazy val Arabic = Charset("Arabic")
   lazy val Baltic = Charset("Baltic")

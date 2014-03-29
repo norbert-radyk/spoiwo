@@ -2,7 +2,6 @@ package com.norbitltd.spoiwo.model.enums
 
 object FontFamily {
 
-  private[model] lazy val Undefined = FontFamily("Undefined")
   lazy val NotApplicable = FontFamily("NotApplicable")
   lazy val Roman = FontFamily("Roman")
   lazy val Swiss = FontFamily("Swiss")

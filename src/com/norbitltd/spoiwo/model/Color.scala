@@ -2,7 +2,6 @@ package com.norbitltd.spoiwo.model
 
 object Color {
 
-  private[model] val Undefined = Color(-1, 0, 0)
   lazy val Black = Color(0, 0, 0)
   lazy val White = Color(255, 255, 255)
   lazy val Red = Color(255, 0, 0)

@@ -3,13 +3,13 @@ package com.norbitltd.spoiwo.model
 object CellBorders extends Factory {
 
   private lazy val defaultLeftStyle = CellBorderStyle.None
-  private lazy val defaultLeftColor = Color.Undefined
+  private lazy val defaultLeftColor = null
   private lazy val defaultTopStyle = CellBorderStyle.None
-  private lazy val defaultTopColor = Color.Undefined
+  private lazy val defaultTopColor = null
   private lazy val defaultRightStyle = CellBorderStyle.None
-  private lazy val defaultRightColor = Color.Undefined
+  private lazy val defaultRightColor = null
   private lazy val defaultBottomStyle = CellBorderStyle.None
-  private lazy val defaultBottomColor = Color.Undefined
+  private lazy val defaultBottomColor = null
 
   val Default = CellBorders()
 

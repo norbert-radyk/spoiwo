@@ -16,10 +16,8 @@ object GettingStartedExample {
 
   val sheet2 = Sheet(name = "Some serious stuff")
     .withColumns(
-      Column.Default,
-      Column(index = 1, style = CellStyle(dataFormat = CellDataFormat("dd MMM yyyy"))),
-      Column.Default,
-      Column.Default
+      Column(index = 0, style = CellStyle(font = Font(bold = true))),
+      Column(index = 1, style = CellStyle(dataFormat = CellDataFormat("dd MMM yyyy")))
     )
     .withRows(
       Row.Empty.withCellValues("NAME", "BIRTH DATE", "DIED AGED", "FEMALE").withStyle(headerStyle),

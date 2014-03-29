@@ -1,20 +1,9 @@
 package com.norbitltd.spoiwo.model
 
 import com.norbitltd.spoiwo.model.enums.CellFill
+import com.norbitltd.spoiwo.utils.{ShortExt, BooleanExt}
 
 object CellStyle extends Factory {
-
-  private lazy val defaultDataFormat = CellDataFormat.Undefined
-  private lazy val defaultFillPattern = CellFill.Undefined
-  private lazy val defaultFillForegroundColor = Color.Undefined
-  private lazy val defaultFillBackgroundColor = Color.Undefined
-  private lazy val defaultHorizontalAlignment = CellHorizontalAlignment.Undefined
-  private lazy val defaultVerticalAlignment = CellVerticalAlignment.Undefined
-  private lazy val defaultHidden = false
-  private lazy val defaultIndention = -1.toShort
-  private lazy val defaultLocked = true
-  private lazy val defaultRotation = -1.toShort
-  private lazy val defaultWrapText = false
 
   private lazy val defaultBorders = CellBorders.Default
   private lazy val defaultFont = Font.Default
@@ -22,32 +11,32 @@ object CellStyle extends Factory {
   val Default = CellStyle()
 
   def apply(borders: CellBorders = defaultBorders,
-            dataFormat: CellDataFormat = defaultDataFormat,
+            dataFormat: CellDataFormat = null,
             font: Font = defaultFont,
-            fillPattern: CellFill = defaultFillPattern,
-            fillForegroundColor: Color = defaultFillForegroundColor,
-            fillBackgroundColor: Color = defaultFillBackgroundColor,
-            horizontalAlignment: CellHorizontalAlignment = defaultHorizontalAlignment,
-            verticalAlignment: CellVerticalAlignment = defaultVerticalAlignment,
-            hidden: Boolean = defaultHidden,
-            indention: Short = defaultIndention,
-            locked: Boolean = defaultLocked,
-            rotation: Short = defaultRotation,
-            wrapText: Boolean = defaultWrapText): CellStyle =
+            fillPattern: CellFill = null,
+            fillForegroundColor: Color = null,
+            fillBackgroundColor: Color = null,
+            horizontalAlignment: CellHorizontalAlignment = null,
+            verticalAlignment: CellVerticalAlignment = null,
+            hidden: BooleanExt = BooleanExt.Undefined,
+            indention: ShortExt = ShortExt.Undefined,
+            locked: BooleanExt = BooleanExt.Undefined,
+            rotation: ShortExt = ShortExt.Undefined,
+            wrapText: BooleanExt = BooleanExt.Undefined): CellStyle =
     CellStyle(
-      wrap(borders, defaultBorders),
-      wrap(dataFormat, defaultDataFormat),
-      wrap(font, defaultFont),
-      wrap(fillPattern, defaultFillPattern),
-      wrap(fillForegroundColor, defaultFillForegroundColor),
-      wrap(fillBackgroundColor, defaultFillBackgroundColor),
-      wrap(horizontalAlignment, defaultHorizontalAlignment),
-      wrap(verticalAlignment, defaultVerticalAlignment),
-      wrap(hidden, defaultHidden),
-      wrap(indention, defaultIndention),
-      wrap(locked, defaultLocked),
-      wrap(rotation, defaultRotation),
-      wrap(wrapText, defaultWrapText)
+      borders = wrap(borders, defaultBorders),
+      dataFormat = Option(dataFormat),
+      font = wrap(font, defaultFont),
+      fillPattern = Option(fillPattern),
+      fillForegroundColor = Option(fillForegroundColor),
+      fillBackgroundColor = Option(fillBackgroundColor),
+      horizontalAlignment = Option(horizontalAlignment),
+      verticalAlignment = Option(verticalAlignment),
+      hidden.toOption,
+      indention.toOption,
+      locked.toOption,
+      rotation.toOption,
+      wrapText.toOption
     )
 
 }
@@ -160,7 +149,6 @@ case class CellStyle private(
 
   def withoutWrapText =
     copy(wrapText = Some(false))
-
 
 
 }

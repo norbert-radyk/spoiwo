@@ -2,7 +2,6 @@ package com.norbitltd.spoiwo.model
 
 object CellHorizontalAlignment {
 
-  lazy val Undefined = CellHorizontalAlignment(0)
   lazy val Center = CellHorizontalAlignment(1)
   lazy val CenterSelection = CellHorizontalAlignment(2)
   lazy val Disturbed = CellHorizontalAlignment(3)

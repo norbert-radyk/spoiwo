@@ -2,7 +2,7 @@ package com.norbitltd.spoiwo.natures.xlsx
 
 import org.apache.poi.ss.usermodel
 import org.scalatest.FlatSpec
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
 import com.norbitltd.spoiwo.model.{Height, Color, Font}
 import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{FontUnderline, FontCharset}
@@ -12,7 +12,11 @@ import com.norbitltd.spoiwo.model.enums._
 
 class Model2XlsxConversionsForFontSpec extends FlatSpec {
 
-  val workbook = new XSSFWorkbook()
+  def workbook = new XSSFWorkbook()
+
+  def convert(f : Font) : XSSFFont = convertFont(f, workbook)
+
+  def defaultFont = convert(Font())
 
   "Font conversion" should "return not bold font by default" in {
     val modelDefault = Font()
@@ -176,5 +180,29 @@ class Model2XlsxConversionsForFontSpec extends FlatSpec {
     val modelWithUnderline = Font(underline = Underline.Double)
     val xssfWithUnderline = convertFont(modelWithUnderline, workbook)
     assert(xssfWithUnderline.getUnderline == FontUnderline.DOUBLE.getByteValue)
+  }
+
+  //Next 4 test cases will test enhanced boolean conversion
+  it should "return no bold, no italic by default" in {
+    assert(!defaultFont.getBold)
+    assert(!defaultFont.getItalic)
+  }
+
+  it should "return bold, but no italic when set" in {
+    val xssf = convert(Font(bold = true))
+    assert(xssf.getBold)
+    assert(!xssf.getItalic)
+  }
+
+  it should "return no bold, but italic when set" in {
+    val xssf = convert(Font(italic = true))
+    assert(!xssf.getBold)
+    assert(xssf.getItalic)
+  }
+
+  it should "return bold and italic when set" in {
+    val xssf = convert(Font(italic = true, bold = true))
+    assert(xssf.getBold)
+    assert(xssf.getItalic)
   }
 }
