@@ -1,43 +1,33 @@
 package com.norbitltd.spoiwo.model
 
-object Column extends Factory {
-
-  private lazy val defaultIndex = -1
-  private lazy val defaultAutoSized = false
-  private lazy val defaultBreak = false
-  private lazy val defaultGroupCollapsed = false
-  private lazy val defaultHidden = false
-  private lazy val defaultStyle = CellStyle.Default
-  private lazy val defaultWidth = Width.Undefined
-
-  val Default = Column()
+object Column {
 
   def apply(
-             index: Int = defaultIndex,
-             autoSized: Boolean = defaultAutoSized,
-             break: Boolean = defaultBreak,
-             groupCollapsed: Boolean = defaultGroupCollapsed,
-             hidden: Boolean = defaultHidden,
-             style: CellStyle = defaultStyle,
-             width: Width = defaultWidth): Column =
+             index: java.lang.Integer = null,
+             autoSized: java.lang.Boolean = null,
+             break: java.lang.Boolean = null,
+             groupCollapsed: java.lang.Boolean = null,
+             hidden: java.lang.Boolean = null,
+             style: CellStyle = null,
+             width: Width = null): Column =
     Column(
-      index = wrap(index, defaultIndex),
-      autoSized = wrap(autoSized, defaultAutoSized),
-      break = wrap(break, defaultBreak),
-      groupCollapsed = wrap(groupCollapsed, defaultGroupCollapsed),
-      hidden = wrap(hidden, defaultHidden),
-      style = wrap(style, defaultStyle),
-      width = wrap(width, defaultWidth)
+      index = Option(index).map(_.intValue),
+      autoSized = Option(autoSized).map(_.booleanValue),
+      break = Option(break).map(_.booleanValue),
+      groupCollapsed = Option(groupCollapsed).map(_.booleanValue),
+      hidden = Option(hidden).map(_.booleanValue),
+      style = Option(style),
+      width = Option(width)
     )
 }
 
 case class Column private[model](index: Option[Int],
-                              autoSized: Option[Boolean],
-                              break: Option[Boolean],
-                              groupCollapsed: Option[Boolean],
-                              hidden: Option[Boolean],
-                              style: Option[CellStyle],
-                              width: Option[Width]) {
+                                 autoSized: Option[Boolean],
+                                 break: Option[Boolean],
+                                 groupCollapsed: Option[Boolean],
+                                 hidden: Option[Boolean],
+                                 style: Option[CellStyle],
+                                 width: Option[Width]) {
 
   def withIndex(index: Int) =
     copy(index = Option(index))

@@ -1,29 +1,20 @@
 package com.norbitltd.spoiwo.model
 
-object Margins extends Factory {
+object Margins {
 
-  private lazy val defaultLeft = 0.0
-  private lazy val defaultRight = 0.0
-  private lazy val defaultTop = 0.0
-  private lazy val defaultBottom = 0.0
-  private lazy val defaultHeader = 0.0
-  private lazy val defaultFooter = 0.0
-
-  val Default = Margins()
-
-  def apply(top: Double = defaultTop,
-            bottom: Double = defaultBottom,
-            right: Double = defaultRight,
-            left: Double = defaultLeft,
-            header: Double = defaultHeader,
-            footer: Double = defaultFooter): Margins =
+  def apply(top: java.lang.Double = null,
+            bottom: java.lang.Double = null,
+            right: java.lang.Double = null,
+            left: java.lang.Double = null,
+            header: java.lang.Double = null,
+            footer: java.lang.Double = null): Margins =
     Margins(
-      wrap(top, defaultTop),
-      wrap(bottom, defaultBottom),
-      wrap(right, defaultRight),
-      wrap(left, defaultLeft),
-      wrap(header, defaultHeader),
-      wrap(footer, defaultFooter)
+      Option(top).map(_.doubleValue),
+      Option(bottom).map(_.doubleValue),
+      Option(right).map(_.doubleValue),
+      Option(left).map(_.doubleValue),
+      Option(header).map(_.doubleValue),
+      Option(footer).map(_.doubleValue)
     )
 }
 

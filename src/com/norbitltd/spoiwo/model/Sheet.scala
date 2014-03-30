@@ -1,47 +1,34 @@
 package com.norbitltd.spoiwo.model
 
-object Sheet extends Factory {
-
-  private lazy val defaultName = ""
-  private lazy val defaultColumns = Nil
-  private lazy val defaultRows = Nil
-  private lazy val defaultMergedRegions = Nil
-  private lazy val defaultPrintSetup = PrintSetup.Default
-  private lazy val defaultHeader = Header.Empty
-  private lazy val defaultFooter = Footer.Empty
-  private lazy val defaultProperties = SheetProperties.Default
-  private lazy val defaultMargins = Margins.Default
-  private lazy val defaultPaneAction = NoSplitOrFreeze()
-  private lazy val defaultRepeatingRows = RowRange.None
-  private lazy val defaultRepeatingColumns = ColumnRange.None
+object Sheet  {
 
   val Blank = Sheet()
 
-  def apply(name: String = defaultName,
-            columns: List[Column] = defaultColumns,
-            rows: List[Row] = defaultRows,
-            mergedRegions: List[CellRange] = defaultMergedRegions,
-            printSetup: PrintSetup = defaultPrintSetup,
-            header: Header = defaultHeader,
-            footer: Footer = defaultFooter,
-            properties: SheetProperties = defaultProperties,
-            margins: Margins = defaultMargins,
-            paneAction: PaneAction = defaultPaneAction,
-            repeatingRows: RowRange = defaultRepeatingRows,
-            repeatingColumns: ColumnRange = defaultRepeatingColumns): Sheet =
+  def apply(name: String = null,
+            columns: List[Column] = Nil,
+            rows: List[Row] = Nil,
+            mergedRegions: List[CellRange] = Nil,
+            printSetup: PrintSetup = null,
+            header: Header = null,
+            footer: Footer = null,
+            properties: SheetProperties = null,
+            margins: Margins = null,
+            paneAction: PaneAction = null,
+            repeatingRows: RowRange = null,
+            repeatingColumns: ColumnRange = null): Sheet =
     apply(
-      name = wrap(name, defaultName),
+      name = Option(name),
       columns = columns,
       rows = rows,
       mergedRegions = mergedRegions,
-      printSetup = wrap(printSetup, defaultPrintSetup),
-      header = wrap(header, defaultHeader),
-      footer = wrap(footer, defaultFooter),
-      properties = wrap(properties, defaultProperties),
-      margins = wrap(margins, defaultMargins),
-      paneAction = wrap(paneAction, defaultPaneAction),
-      repeatingRows = wrap(repeatingRows, defaultRepeatingRows),
-      repeatingColumns = wrap(repeatingColumns, defaultRepeatingColumns)
+      printSetup = Option(printSetup),
+      header = Option(header),
+      footer = Option(footer),
+      properties = Option(properties),
+      margins = Option(margins),
+      paneAction = Option(paneAction),
+      repeatingRows = Option(repeatingRows),
+      repeatingColumns = Option(repeatingColumns)
     )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)

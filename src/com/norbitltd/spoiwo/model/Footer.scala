@@ -1,56 +1,44 @@
 package com.norbitltd.spoiwo.model
 
-object Footer extends Factory {
-
-  private lazy val defaultLeft = defaultPOISheet.getFooter.getLeft
-  private lazy val defaultCenter = defaultPOISheet.getFooter.getCenter
-  private lazy val defaultRight = defaultPOISheet.getFooter.getRight
-  private lazy val defaultFirstLeft = defaultPOISheet.getFirstFooter.getLeft
-  private lazy val defaultFirstCenter = defaultPOISheet.getFirstFooter.getCenter
-  private lazy val defaultFirstRight = defaultPOISheet.getFirstFooter.getRight
-  private lazy val defaultOddLeft = defaultPOISheet.getOddFooter.getLeft
-  private lazy val defaultOddCenter = defaultPOISheet.getOddFooter.getCenter
-  private lazy val defaultOddRight = defaultPOISheet.getOddFooter.getRight
-  private lazy val defaultEvenLeft = defaultPOISheet.getEvenFooter.getLeft
-  private lazy val defaultEvenCenter = defaultPOISheet.getEvenFooter.getCenter
-  private lazy val defaultEvenRight = defaultPOISheet.getEvenFooter.getRight
+object Footer {
 
   val Empty = Standard()
 
-  def Standard(left: String = defaultLeft,
-            center: String = defaultCenter,
-            right: String = defaultRight,
-            firstLeft: String = defaultFirstLeft,
-            firstCenter: String = defaultFirstCenter,
-            firstRight: String = defaultFirstRight): Footer =
-    Footer(left = wrap(left, defaultLeft),
-      center = wrap(center, defaultCenter),
-      right = wrap(right, defaultRight),
-      firstLeft = wrap(firstLeft, defaultFirstLeft),
-      firstCenter = wrap(firstCenter, defaultFirstCenter),
-      firstRight = wrap(firstRight, defaultFirstRight),
+  def Standard(left: String = null,
+            center: String = null,
+            right: String = null,
+            firstLeft: String = null,
+            firstCenter: String = null,
+            firstRight: String = null): Footer =
+    Footer(
+      left = Option(left),
+      center = Option(center),
+      right = Option(right),
+      firstLeft = Option(firstLeft),
+      firstCenter = Option(firstCenter),
+      firstRight = Option(firstRight),
       oddLeft = None, oddCenter = None, oddRight = None,
       evenLeft = None, evenCenter = None, evenRight = None)
 
-  def EvenOdd(oddLeft : String = defaultOddLeft,
-    oddCenter : String = defaultOddCenter,
-    oddRight : String = defaultOddRight,
-    evenLeft : String = defaultEvenLeft,
-    evenCenter : String = defaultEvenCenter,
-    evenRight : String = defaultEvenRight,
-    firstLeft: String = defaultFirstLeft,
-    firstCenter: String = defaultFirstCenter,
-    firstRight: String = defaultFirstRight) : Footer =
+  def EvenOdd(oddLeft : String = null,
+    oddCenter : String = null,
+    oddRight : String = null,
+    evenLeft : String = null,
+    evenCenter : String = null,
+    evenRight : String = null,
+    firstLeft: String = null,
+    firstCenter: String = null,
+    firstRight: String = null) : Footer =
     Footer(
-      oddLeft = wrap(oddLeft, defaultOddLeft),
-      oddCenter = wrap(oddCenter, defaultOddCenter),
-      oddRight = wrap(oddRight, defaultOddRight),
-      evenLeft = wrap(evenLeft, defaultEvenLeft),
-      evenCenter = wrap(evenCenter, defaultEvenCenter),
-      evenRight = wrap(evenRight, defaultEvenRight),
-      firstLeft = wrap(firstLeft, defaultFirstLeft),
-      firstCenter = wrap(firstCenter, defaultFirstCenter),
-      firstRight = wrap(firstRight, defaultFirstRight),
+      oddLeft = Option(oddLeft),
+      oddCenter = Option(oddCenter),
+      oddRight = Option(oddRight),
+      evenLeft = Option(evenLeft),
+      evenCenter = Option(evenCenter),
+      evenRight = Option(evenRight),
+      firstLeft = Option(firstLeft),
+      firstCenter = Option(firstCenter),
+      firstRight = Option(firstRight),
       left = None, center = None, right = None
     )
 }

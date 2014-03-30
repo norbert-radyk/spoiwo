@@ -1,7 +1,6 @@
 package com.norbitltd.spoiwo.model
 
 import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment, CellHorizontalAlignment, CellFill}
-import com.norbitltd.spoiwo.model.types.{ShortExt, BooleanExt}
 
 object CellStyle {
 

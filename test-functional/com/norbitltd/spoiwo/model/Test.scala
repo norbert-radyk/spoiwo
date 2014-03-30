@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-import com.norbitltd.spoiwo.model.enums.Pane
+import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, Pane}
 
 object Test {
   def main(args: Array[String]) {

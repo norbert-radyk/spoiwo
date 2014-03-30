@@ -1,78 +1,53 @@
 package com.norbitltd.spoiwo.model
 
-object SheetProperties extends Factory {
-
-  private lazy val defaultAutoFilter = CellRange.None
-  private lazy val defaultActiveCell = null
-  private lazy val defaultAutoBreaks = true
-  private lazy val defaultDefaultColumnWidth = -1
-  private lazy val defaultDefaultRowHeight = Height.Undefined
-
-  private lazy val defaultDisplayFormulas = false
-  private lazy val defaultDisplayGridLines = true
-  private lazy val defaultDisplayGuts = true
-  private lazy val defaultDisplayRowColHeadings = true
-  private lazy val defaultDisplayZeros = true
-
-  private lazy val defaultFitToPage = false
-  private lazy val defaultForceFormulaRecalculation = false
-  private lazy val defaultHorizontallyCenter = false
-  private lazy val defaultPrintArea = CellRange.None
-  private lazy val defaultPrintGridLines = false
-  private lazy val defaultRightToLeft = false
-  private lazy val defaultRowSumsBelow = true
-  private lazy val defaultRowSumsRight = true
-  private lazy val defaultSelected = false
-  private lazy val defaultTabColor = -1
-  private lazy val defaultVirtuallyCenter = false
-  private lazy val defaultZoom = 100
+object SheetProperties {
 
   lazy val Default = SheetProperties()
 
-  def apply(autoFilter: CellRange = defaultAutoFilter,
-            activeCell: String = defaultActiveCell,
-            autoBreaks: Boolean = defaultAutoBreaks,
-            defaultColumnWidth: Int = defaultDefaultColumnWidth,
-            defaultRowHeight: Height = defaultDefaultRowHeight,
-            displayFormulas: Boolean = defaultDisplayFormulas,
-            displayGridLines: Boolean = defaultDisplayGridLines,
-            displayGuts: Boolean = defaultDisplayGuts,
-            displayRowColHeadings: Boolean = defaultDisplayRowColHeadings,
-            displayZeros: Boolean = defaultDisplayZeros,
-            fitToPage: Boolean = defaultFitToPage,
-            forceFormulaRecalculation: Boolean = defaultForceFormulaRecalculation,
-            horizontallyCenter: Boolean = defaultHorizontallyCenter,
-            printArea: CellRange = defaultPrintArea,
-            printGridLines: Boolean = defaultPrintGridLines,
-            rightToLeft: Boolean = defaultRightToLeft,
-            rowSumsBelow: Boolean = defaultRowSumsBelow,
-            rowSumsRight: Boolean = defaultRowSumsRight,
-            selected: Boolean = defaultSelected,
-            tabColor: Int = defaultTabColor,
-            virtuallyCenter: Boolean = defaultVirtuallyCenter,
-            zoom: Int = defaultZoom): SheetProperties = SheetProperties(
-    wrap(autoFilter, autoFilter),
-    wrap(activeCell, defaultActiveCell),
-    wrap(autoBreaks, defaultAutoBreaks),
-    wrap(defaultColumnWidth, defaultDefaultColumnWidth),
-    wrap(defaultRowHeight, defaultDefaultRowHeight),
-    wrap(displayFormulas, defaultDisplayFormulas),
-    wrap(displayGridLines, defaultDisplayGridLines),
-    wrap(displayGuts, defaultDisplayGuts),
-    wrap(displayRowColHeadings, defaultDisplayRowColHeadings),
-    wrap(displayZeros, defaultDisplayZeros),
-    wrap(fitToPage, defaultFitToPage),
-    wrap(forceFormulaRecalculation, defaultForceFormulaRecalculation),
-    wrap(horizontallyCenter, defaultHorizontallyCenter),
-    wrap(printArea, defaultPrintArea),
-    wrap(printGridLines, defaultPrintGridLines),
-    wrap(rightToLeft, defaultRightToLeft),
-    wrap(rowSumsBelow, defaultRowSumsBelow),
-    wrap(rowSumsRight, defaultRowSumsRight),
-    wrap(selected, defaultSelected),
-    wrap(tabColor, defaultTabColor),
-    wrap(virtuallyCenter, defaultVirtuallyCenter),
-    wrap(zoom, defaultZoom)
+  def apply(autoFilter: CellRange = null,
+            activeCell: String = null,
+            autoBreaks: java.lang.Boolean = null,
+            defaultColumnWidth: java.lang.Integer = null,
+            defaultRowHeight: Height = null,
+            displayFormulas: java.lang.Boolean = null,
+            displayGridLines: java.lang.Boolean = null,
+            displayGuts: java.lang.Boolean = null,
+            displayRowColHeadings: java.lang.Boolean = null,
+            displayZeros: java.lang.Boolean = null,
+            fitToPage: java.lang.Boolean = null,
+            forceFormulaRecalculation: java.lang.Boolean = null,
+            horizontallyCenter: java.lang.Boolean = null,
+            printArea: CellRange = null,
+            printGridLines: java.lang.Boolean = null,
+            rightToLeft: java.lang.Boolean = null,
+            rowSumsBelow: java.lang.Boolean = null,
+            rowSumsRight: java.lang.Boolean = null,
+            selected: java.lang.Boolean = null,
+            tabColor: java.lang.Integer = null,
+            virtuallyCenter: java.lang.Boolean = null,
+            zoom: java.lang.Integer = null): SheetProperties = SheetProperties(
+    Option(autoFilter),
+    Option(activeCell),
+    Option(autoBreaks).map(_.booleanValue),
+    Option(defaultColumnWidth).map(_.intValue),
+    Option(defaultRowHeight),
+    Option(displayFormulas).map(_.booleanValue),
+    Option(displayGridLines).map(_.booleanValue),
+    Option(displayGuts).map(_.booleanValue),
+    Option(displayRowColHeadings).map(_.booleanValue),
+    Option(displayZeros).map(_.booleanValue),
+    Option(fitToPage).map(_.booleanValue),
+    Option(forceFormulaRecalculation).map(_.booleanValue),
+    Option(horizontallyCenter).map(_.booleanValue),
+    Option(printArea),
+    Option(printGridLines).map(_.booleanValue),
+    Option(rightToLeft).map(_.booleanValue),
+    Option(rowSumsBelow).map(_.booleanValue),
+    Option(rowSumsRight).map(_.booleanValue),
+    Option(selected).map(_.booleanValue),
+    Option(tabColor).map(_.intValue),
+    Option(virtuallyCenter).map(_.booleanValue),
+    Option(zoom).map(_.intValue)
   )
 }
 

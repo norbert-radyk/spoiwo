@@ -4,8 +4,6 @@ import com.norbitltd.spoiwo.model.enums._
 
 object Font {
 
-  val Default = Font()
-
   def apply(height: Height = null,
             bold: java.lang.Boolean = null,
             italic: java.lang.Boolean = null,

@@ -1,15 +1,20 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import org.apache.poi.ss.usermodel.{HorizontalAlignment, VerticalAlignment}
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.xssf.usermodel._
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.ss.usermodel.Sheet._
-import com.norbitltd.spoiwo.model.SplitPane
-import com.norbitltd.spoiwo.model.NoSplitOrFreeze
 import java.io.FileOutputStream
 import Model2XlsxEnumConversions._
-import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment, CellHorizontalAlignment, Pane, CellFill}
+import com.norbitltd.spoiwo.model.enums._
+import com.norbitltd.spoiwo.model.SplitPane
+import com.norbitltd.spoiwo.model.NoSplitOrFreeze
+import com.norbitltd.spoiwo.model.CalendarCell
+import com.norbitltd.spoiwo.model.StringCell
+import com.norbitltd.spoiwo.model.FormulaCell
+import com.norbitltd.spoiwo.model.DateCell
+import com.norbitltd.spoiwo.model.NumericCell
+import com.norbitltd.spoiwo.model.BooleanCell
 
 object Model2XlsxConversions {
 
@@ -211,23 +216,7 @@ object Model2XlsxConversions {
     h.evenRight.foreach(sheet.getEvenHeader.setRight)
   }
 
-  private def convertHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment): HorizontalAlignment = {
-    import CellHorizontalAlignment._
-    import HorizontalAlignment._
 
-    horizontalAlignment match {
-      case Center => CENTER
-      case CenterSelection => CENTER_SELECTION
-      case Disturbed => DISTRIBUTED
-      case Fill => FILL
-      case General => GENERAL
-      case Justify => JUSTIFY
-      case Left => LEFT
-      case Right => RIGHT
-      case CellHorizontalAlignment(id) =>
-        throw new Exception("Unsupported option for XLSX conversion with id=%d".format(id))
-    }
-  }
 
   private def convertMargins(margins: Margins, sheet: XSSFSheet) {
     margins.top.foreach(topMargin => sheet.setMargin(TopMargin, topMargin))
@@ -385,21 +374,6 @@ object Model2XlsxConversions {
   }
 
   private def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
-
-  private def convertVerticalAlignment(verticalAlignment: CellVerticalAlignment): VerticalAlignment = {
-    import CellVerticalAlignment._
-    import VerticalAlignment._
-
-    verticalAlignment match {
-      case Bottom => BOTTOM
-      case Center => CENTER
-      case Disturbed => DISTRIBUTED
-      case Justify => JUSTIFY
-      case Top => TOP
-      case CellVerticalAlignment(id) =>
-        throw new RuntimeException("Unsupported option for XLSX conversion with id=%d".format(id))
-    }
-  }
 
   private def convertWorkbook(wb : Workbook): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()

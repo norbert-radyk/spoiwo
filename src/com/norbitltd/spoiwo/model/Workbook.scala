@@ -2,37 +2,24 @@ package com.norbitltd.spoiwo.model
 
 import com.norbitltd.spoiwo.model.enums.MissingCellPolicy
 
-object Workbook extends Factory {
-
-  private lazy val defaultActiveSheet =
-    defaultPOIWorkbook.getActiveSheetIndex
-  private lazy val defaultFirstVisibleTab =
-    defaultPOIWorkbook.getFirstVisibleTab
-  private lazy val defaultForceFormulaRecalculation =
-    defaultPOIWorkbook.getForceFormulaRecalculation
-  private lazy val defaultMissingCellPolicy =
-    MissingCellPolicy.Undefined
-
-
-  private lazy val defaultHidden = false
-  private lazy val defaultSelectedTab = 0
+object Workbook {
 
   val Empty = apply()
 
-  def apply(activeSheet: Int = defaultActiveSheet,
-            firstVisibleTab: Int = defaultFirstVisibleTab,
-            forceFormulaRecalculation: Boolean = defaultForceFormulaRecalculation,
-            hidden: Boolean = defaultHidden,
-            missingCellPolicy: MissingCellPolicy = defaultMissingCellPolicy,
-            selectedTab: Int = defaultSelectedTab,
+  def apply(activeSheet: java.lang.Integer = null,
+            firstVisibleTab: java.lang.Integer = null,
+            forceFormulaRecalculation: java.lang.Boolean = null,
+            hidden: java.lang.Boolean = null,
+            missingCellPolicy: MissingCellPolicy = null,
+            selectedTab: java.lang.Integer = null,
             sheets: Iterable[Sheet] = Nil): Workbook =
     Workbook(
-      wrap(activeSheet, defaultActiveSheet),
-      wrap(firstVisibleTab, defaultFirstVisibleTab),
-      wrap(forceFormulaRecalculation, defaultForceFormulaRecalculation),
-      wrap(hidden, defaultHidden),
-      wrap(missingCellPolicy, defaultMissingCellPolicy),
-      wrap(selectedTab, defaultSelectedTab),
+      Option(activeSheet).map(_.intValue),
+      Option(firstVisibleTab).map(_.intValue),
+      Option(forceFormulaRecalculation).map(_.booleanValue),
+      Option(hidden).map(_.booleanValue),
+      Option(missingCellPolicy),
+      Option(selectedTab).map(_.intValue),
       sheets
     )
 

@@ -16,16 +16,13 @@ object CellValueType {
   implicit object CalendarWitness extends CellValueType[Calendar]
 }
 
-object Cell extends Factory {
+object Cell {
 
   lazy val Empty = apply("")
 
-  val defaultIndex = -1
-  val defaultStyle = CellStyle.Default
-
-  def apply[T : CellValueType](value : T, index : Int = defaultIndex, style : CellStyle = defaultStyle) : Cell = {
-    val indexOption = wrap(index, defaultIndex)
-    val styleOption = wrap(style, defaultStyle)
+  def apply[T : CellValueType](value : T, index : java.lang.Integer = null, style : CellStyle = null) : Cell = {
+    val indexOption = Option(index).map(_.intValue)
+    val styleOption = Option(style)
     value match {
       case v : String => if (v.startsWith("=")) {
         FormulaCell(v.drop(1), indexOption, styleOption)

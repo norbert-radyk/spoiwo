@@ -3,26 +3,20 @@ package com.norbitltd.spoiwo.model
 import java.util.{Calendar, Date}
 import org.joda.time.{DateTime, LocalDate}
 
-object Row extends Factory {
-
-  private lazy val defaultCells = Nil
-  private lazy val defaultHeight = Height.Undefined
-  private lazy val defaultIndex = -1
-  private lazy val defaultStyle = CellStyle.Default
-  private lazy val defaultHidden = false
+object Row {
 
   val Empty = apply()
 
-  def apply(cells: Iterable[Cell] = defaultCells,
-            height: Height = defaultHeight,
-            index: Int = defaultIndex,
-            style: CellStyle = defaultStyle,
-            hidden: Boolean = defaultHidden): Row =
+  def apply(cells: Iterable[Cell] = Nil,
+            height: Height = null,
+            index: java.lang.Integer = null,
+            style: CellStyle = null,
+            hidden: java.lang.Boolean = null): Row =
     Row(cells = cells,
-      height = wrap(height, defaultHeight),
-      index = wrap(index, defaultIndex),
-      style = wrap(style, defaultStyle),
-      hidden = wrap(hidden, defaultHidden)
+      height = Option(height),
+      index = Option(index).map(_.intValue),
+      style = Option(style),
+      hidden = Option(hidden).map(_.booleanValue)
     )
 
   def apply(cells: Cell*): Row =
@@ -40,7 +34,7 @@ object Row extends Factory {
 }
 
 case class Row private(cells: Iterable[Cell],
-                       height:Option[Height],
+                       height: Option[Height],
                        index: Option[Int],
                        style: Option[CellStyle],
                        hidden: Option[Boolean]) {

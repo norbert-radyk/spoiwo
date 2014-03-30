@@ -15,7 +15,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
 
   private def convert(cell: Cell): XSSFCell = convertCell(cell, row)
 
-  private val defaultCell = convert(Cell.Empty)
+  private val defaultCell : XSSFCell = convert(Cell.Empty)
 
   "Cell conversion" should "return string cell type with empty string by default" in {
     assert(defaultCell.getCellType == usermodel.Cell.CELL_TYPE_STRING)

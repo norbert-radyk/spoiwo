@@ -3,66 +3,47 @@ package com.norbitltd.spoiwo.model
 //TODO Enums for the following
 import org.apache.poi.ss.usermodel.{PaperSize, PageOrder}
 
-object PrintSetup extends Factory {
+object PrintSetup {
 
-  private lazy val defaultCopies = defaultPOIPrintSetup.getCopies
-  private lazy val defaultDraft = defaultPOIPrintSetup.getDraft
-  private lazy val defaultFitHeight = defaultPOIPrintSetup.getFitHeight
-  private lazy val defaultFitWidth = defaultPOIPrintSetup.getFitWidth
-  private lazy val defaultFooterMargin = defaultPOIPrintSetup.getFooterMargin
-  private lazy val defaultHeaderMargin = defaultPOIPrintSetup.getHeaderMargin
-  private lazy val defaultHResolution = defaultPOIPrintSetup.getHResolution
-  private lazy val defaultLandscape = defaultPOIPrintSetup.getLandscape
-  private lazy val defaultLeftToRight = defaultPOIPrintSetup.getLeftToRight
-  private lazy val defaultNoColor = defaultPOIPrintSetup.getNoColor
-  private lazy val defaultNoOrientation = defaultPOIPrintSetup.getNoOrientation
-  private lazy val defaultPageOrder = defaultPOIPrintSetup.getPageOrder
-  private lazy val defaultPageStart = defaultPOIPrintSetup.getPageStart
-  private lazy val defaultPaperSize = defaultPOIPrintSetup.getPaperSizeEnum
-  private lazy val defaultScale = defaultPOIPrintSetup.getScale
-  private lazy val defaultUsePage = defaultPOIPrintSetup.getUsePage
-  private lazy val defaultValidSettings = defaultPOIPrintSetup.getValidSettings
-  private lazy val defaultVResolution = defaultPOIPrintSetup.getVResolution
+  val Default = PrintSetup()
 
-  val Default = apply()
-
-  def apply(copies: Short = defaultCopies,
-            draft: Boolean = defaultDraft,
-            fitHeight: Short = defaultFitHeight,
-            fitWidth: Short = defaultFitWidth,
-            footerMargin: Double = defaultFooterMargin,
-            headerMargin: Double = defaultHeaderMargin,
-            hResolution: Short = defaultHResolution,
-            landscape: Boolean = defaultLandscape,
-            leftToRight: Boolean = defaultLeftToRight,
-            noColor: Boolean = defaultNoColor,
-            noOrientation: Boolean = defaultNoOrientation,
-            pageOrder: PageOrder = defaultPageOrder,
-            pageStart: Short = defaultPageStart,
-            paperSize: PaperSize = defaultPaperSize,
-            scale: Short = defaultScale,
-            usePage: Boolean = defaultUsePage,
-            validSettings: Boolean = defaultValidSettings,
-            vResolution: Short = defaultVResolution): PrintSetup =
-    PrintSetup(
-      copies = wrap(copies, defaultCopies),
-      draft = wrap(draft, defaultDraft),
-      fitHeight = wrap(fitHeight, defaultFitHeight),
-      fitWidth = wrap(fitWidth, defaultFitWidth),
-      footerMargin = wrap(footerMargin, defaultFooterMargin),
-      headerMargin = wrap(headerMargin, defaultHeaderMargin),
-      hResolution = wrap(hResolution, defaultHResolution),
-      landscape = wrap(landscape, defaultLandscape),
-      leftToRight = wrap(leftToRight, defaultLeftToRight),
-      noColor = wrap(noColor, defaultNoColor),
-      noOrientation = wrap(noOrientation, defaultNoOrientation),
-      pageOrder = wrap(pageOrder, defaultPageOrder),
-      pageStart = wrap(pageStart, defaultPageStart),
-      paperSize = wrap(paperSize, defaultPaperSize),
-      scale = wrap(scale, defaultScale),
-      usePage = wrap(usePage, defaultUsePage),
-      validSettings = wrap(validSettings, defaultValidSettings),
-      vResolution = wrap(vResolution, defaultVResolution)
+  def apply(copies: java.lang.Integer = null,
+            draft: java.lang.Boolean = null,
+            fitHeight: java.lang.Integer = null,
+            fitWidth: java.lang.Integer = null,
+            footerMargin: java.lang.Double = null,
+            headerMargin: java.lang.Double = null,
+            hResolution: java.lang.Integer = null,
+            landscape: java.lang.Boolean = null,
+            leftToRight: java.lang.Boolean = null,
+            noColor: java.lang.Boolean = null,
+            noOrientation: java.lang.Boolean = null,
+            pageOrder: PageOrder = null,
+            pageStart: java.lang.Integer = null,
+            paperSize: PaperSize = null,
+            scale: java.lang.Integer = null,
+            usePage: java.lang.Boolean = null,
+            validSettings: java.lang.Boolean = null,
+            vResolution: java.lang.Integer = null): PrintSetup =
+    new PrintSetup(
+      copies = Option(copies).map(_.shortValue),
+      draft = Option(draft).map(_.booleanValue),
+      fitHeight = Option(fitHeight).map(_.shortValue),
+      fitWidth = Option(fitWidth).map(_.shortValue),
+      footerMargin = Option(footerMargin).map(_.shortValue),
+      headerMargin = Option(headerMargin).map(_.shortValue),
+      hResolution = Option(hResolution).map(_.shortValue),
+      landscape = Option(landscape).map(_.booleanValue),
+      leftToRight = Option(leftToRight).map(_.booleanValue),
+      noColor = Option(noColor).map(_.booleanValue),
+      noOrientation = Option(noOrientation).map(_.booleanValue),
+      pageOrder = Option(pageOrder),
+      pageStart = Option(pageStart).map(_.shortValue),
+      paperSize = Option(paperSize),
+      scale = Option(scale).map(_.shortValue),
+      usePage = Option(usePage).map(_.booleanValue),
+      validSettings = Option(validSettings).map(_.booleanValue),
+      vResolution = Option(vResolution).map(_.shortValue)
     )
 
 }

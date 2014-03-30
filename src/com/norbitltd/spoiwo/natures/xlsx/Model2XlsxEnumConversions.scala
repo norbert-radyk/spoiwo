@@ -1,9 +1,10 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
 import org.apache.poi.ss.usermodel
-import com.norbitltd.spoiwo.model.CellBorderStyle
-import org.apache.poi.ss.usermodel.{FillPatternType, FontCharset, BorderStyle}
+import org.apache.poi.ss.usermodel._
 import com.norbitltd.spoiwo.model.enums._
+import com.norbitltd.spoiwo.model.enums.FontFamily
+import com.norbitltd.spoiwo.model.enums.FontScheme
 
 object Model2XlsxEnumConversions {
 
@@ -25,8 +26,8 @@ object Model2XlsxEnumConversions {
       case SlantedDashDot => SLANTED_DASH_DOT
       case Thick => THICK
       case Thin => THIN
-      case CellBorderStyle(id) =>
-        throw new Exception("Unsupported option for XLSX conversion with id=%d".format(id))
+      case CellBorderStyle(value) =>
+        throw new IllegalArgumentException(s"Unable to convert BorderStyle=$value to XLSX - unsupported enum!")
     }
   }
 
@@ -56,7 +57,7 @@ object Model2XlsxEnumConversions {
     }
   }
 
-  def convertCharset(charset : Charset): usermodel.FontCharset = {
+  def convertCharset(charset: Charset): usermodel.FontCharset = {
     import Charset._
     import usermodel.FontCharset._
 
@@ -115,7 +116,25 @@ object Model2XlsxEnumConversions {
     }
   }
 
-  def convertMissingCellPolicy(missingCellPolicy : MissingCellPolicy) : usermodel.Row.MissingCellPolicy = {
+  def convertHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment): HorizontalAlignment = {
+    import CellHorizontalAlignment._
+    import HorizontalAlignment._
+
+    horizontalAlignment match {
+      case Center => CENTER
+      case CenterSelection => CENTER_SELECTION
+      case Disturbed => DISTRIBUTED
+      case Fill => FILL
+      case General => GENERAL
+      case Justify => JUSTIFY
+      case Left => LEFT
+      case Right => RIGHT
+      case CellHorizontalAlignment(value) =>
+        throw new IllegalArgumentException(s"Unable to convert HorizontalAlignment=$value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertMissingCellPolicy(missingCellPolicy: MissingCellPolicy): usermodel.Row.MissingCellPolicy = {
     import MissingCellPolicy._
 
     missingCellPolicy match {
@@ -127,15 +146,15 @@ object Model2XlsxEnumConversions {
     }
   }
 
-  def convertTypeOffset(typeOffset : TypeOffset): Short = {
+  def convertTypeOffset(typeOffset: TypeOffset): Short = {
     import TypeOffset._
 
     typeOffset match {
       case None => usermodel.Font.SS_NONE
       case Subscript => usermodel.Font.SS_SUB
       case Superscript => usermodel.Font.SS_SUPER
-      case TypeOffset(value : String) =>
-          throw new IllegalArgumentException(s"Unable to convert Type Offset = $value to XLSX - unsupported enum!")
+      case TypeOffset(value: String) =>
+        throw new IllegalArgumentException(s"Unable to convert Type Offset = $value to XLSX - unsupported enum!")
     }
   }
 
@@ -151,6 +170,21 @@ object Model2XlsxEnumConversions {
       case SingleAccounting => SINGLE_ACCOUNTING
       case Underline(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Underline=$value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertVerticalAlignment(verticalAlignment: CellVerticalAlignment): VerticalAlignment = {
+    import CellVerticalAlignment._
+    import VerticalAlignment._
+
+    verticalAlignment match {
+      case Bottom => BOTTOM
+      case Center => CENTER
+      case Disturbed => DISTRIBUTED
+      case Justify => JUSTIFY
+      case Top => TOP
+      case CellVerticalAlignment(value) =>
+        throw new IllegalArgumentException(s"Unable to convert VerticalAlignment=$value to XLSX - unsupported enum!")
     }
   }
 }

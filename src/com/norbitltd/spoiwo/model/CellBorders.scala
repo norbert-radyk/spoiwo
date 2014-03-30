@@ -1,33 +1,26 @@
 package com.norbitltd.spoiwo.model
 
-object CellBorders extends Factory {
+import com.norbitltd.spoiwo.model.enums.CellBorderStyle
 
-  private lazy val defaultLeftStyle = CellBorderStyle.None
-  private lazy val defaultLeftColor = null
-  private lazy val defaultTopStyle = CellBorderStyle.None
-  private lazy val defaultTopColor = null
-  private lazy val defaultRightStyle = CellBorderStyle.None
-  private lazy val defaultRightColor = null
-  private lazy val defaultBottomStyle = CellBorderStyle.None
-  private lazy val defaultBottomColor = null
+object CellBorders {
 
-  val Default = CellBorders()
+  def apply(leftStyle: CellBorderStyle = null, leftColor: Color = null,
+            topStyle: CellBorderStyle = null, topColor: Color = null,
+            rightStyle: CellBorderStyle = null, rightColor: Color = null,
+            bottomStyle: CellBorderStyle = null, bottomColor: Color = null): CellBorders =
+    CellBorders(
+      Option(leftStyle), Option(leftColor),
+      Option(topStyle), Option(topColor),
+      Option(rightStyle), Option(rightColor),
+      Option(bottomStyle), Option(bottomColor)
+    )
 
-  def apply(leftStyle: CellBorderStyle = defaultLeftStyle, leftColor: Color = defaultLeftColor,
-            topStyle: CellBorderStyle = defaultTopStyle, topColor: Color = defaultTopColor,
-            rightStyle: CellBorderStyle = defaultRightStyle, rightColor: Color = defaultRightColor,
-            bottomStyle: CellBorderStyle = defaultBottomStyle, bottomColor: Color = defaultBottomColor): CellBorders = CellBorders(
-    wrap(leftStyle, defaultLeftStyle), wrap(leftColor, defaultLeftColor),
-    wrap(topStyle, defaultTopStyle), wrap(topColor, defaultTopColor),
-    wrap(rightStyle, defaultRightStyle), wrap(rightColor, defaultRightColor),
-    wrap(bottomStyle, defaultBottomStyle), wrap(bottomColor, defaultBottomColor)
-  )
 }
 
 case class CellBorders(leftStyle: Option[CellBorderStyle], leftColor: Option[Color],
-                      topStyle: Option[CellBorderStyle], topColor: Option[Color],
-                      rightStyle: Option[CellBorderStyle], rightColor: Option[Color],
-                      bottomStyle: Option[CellBorderStyle], bottomColor: Option[Color]) {
+                       topStyle: Option[CellBorderStyle], topColor: Option[Color],
+                       rightStyle: Option[CellBorderStyle], rightColor: Option[Color],
+                       bottomStyle: Option[CellBorderStyle], bottomColor: Option[Color]) {
 
   def withLeftStyle(leftStyle: CellBorderStyle) =
     copy(leftStyle = Option(leftStyle))
