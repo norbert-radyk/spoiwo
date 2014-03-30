@@ -9,7 +9,7 @@ import com.norbitltd.spoiwo.model.SplitPane
 import com.norbitltd.spoiwo.model.NoSplitOrFreeze
 import java.io.FileOutputStream
 import Model2XlsxEnumConversions._
-import com.norbitltd.spoiwo.model.enums.{Pane, CellFill}
+import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment, CellHorizontalAlignment, Pane, CellFill}
 
 object Model2XlsxConversions {
 

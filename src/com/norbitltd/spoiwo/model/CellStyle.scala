@@ -1,44 +1,40 @@
 package com.norbitltd.spoiwo.model
 
-import com.norbitltd.spoiwo.model.enums.CellFill
-import com.norbitltd.spoiwo.utils.{ShortExt, BooleanExt}
+import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment, CellHorizontalAlignment, CellFill}
+import com.norbitltd.spoiwo.model.types.{ShortExt, BooleanExt}
 
-object CellStyle extends Factory {
-
-  private lazy val defaultBorders = CellBorders.Default
-  private lazy val defaultFont = Font.Default
+object CellStyle {
 
   val Default = CellStyle()
 
-  def apply(borders: CellBorders = defaultBorders,
+  def apply(borders: CellBorders = null,
             dataFormat: CellDataFormat = null,
-            font: Font = defaultFont,
+            font: Font = null,
             fillPattern: CellFill = null,
             fillForegroundColor: Color = null,
             fillBackgroundColor: Color = null,
             horizontalAlignment: CellHorizontalAlignment = null,
             verticalAlignment: CellVerticalAlignment = null,
-            hidden: BooleanExt = BooleanExt.Undefined,
-            indention: ShortExt = ShortExt.Undefined,
-            locked: BooleanExt = BooleanExt.Undefined,
-            rotation: ShortExt = ShortExt.Undefined,
-            wrapText: BooleanExt = BooleanExt.Undefined): CellStyle =
+            hidden: java.lang.Boolean = null,
+            indention: java.lang.Integer = null,
+            locked: java.lang.Boolean = null,
+            rotation: java.lang.Integer = null,
+            wrapText: java.lang.Boolean = null): CellStyle =
     CellStyle(
-      borders = wrap(borders, defaultBorders),
+      borders = Option(borders),
       dataFormat = Option(dataFormat),
-      font = wrap(font, defaultFont),
+      font = Option(font),
       fillPattern = Option(fillPattern),
       fillForegroundColor = Option(fillForegroundColor),
       fillBackgroundColor = Option(fillBackgroundColor),
       horizontalAlignment = Option(horizontalAlignment),
       verticalAlignment = Option(verticalAlignment),
-      hidden.toOption,
-      indention.toOption,
-      locked.toOption,
-      rotation.toOption,
-      wrapText.toOption
+      hidden = Option(hidden).map(_.booleanValue),
+      indention = Option(indention).map(_.shortValue),
+      locked = Option(locked).map(_.booleanValue),
+      rotation = Option(rotation).map(_.shortValue),
+      wrapText = Option(wrapText).map(_.booleanValue)
     )
-
 }
 
 case class CellStyle private(

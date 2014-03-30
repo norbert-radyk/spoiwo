@@ -6,8 +6,7 @@ import com.norbitltd.spoiwo.model._
 import org.apache.poi.ss.util.WorkbookUtil
 import java.util.{Calendar, Date}
 
-import com.norbitltd.spoiwo.model.{CellHorizontalAlignment => HA}
-import com.norbitltd.spoiwo.model.{CellVerticalAlignment => VA}
+import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment => VA, CellHorizontalAlignment => HA}
 import com.norbitltd.spoiwo.model.enums.{Pane, CellFill}
 
 class SpoiwoExamples {

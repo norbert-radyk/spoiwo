@@ -1,26 +1,32 @@
 package com.norbitltd.spoiwo.model
 
 import com.norbitltd.spoiwo.model.enums._
-import com.norbitltd.spoiwo.utils.BooleanExt
 
-object Font extends Factory {
+object Font {
 
   val Default = Font()
 
-  def apply(height: Height = null, bold: BooleanExt = BooleanExt.Undefined, italic: BooleanExt = BooleanExt.Undefined,
-            charSet: Charset = null, color: Color = null, family: FontFamily = null, scheme: FontScheme = null,
-            fontName: String = null, strikeout: BooleanExt = BooleanExt.Undefined, typeOffset: TypeOffset = null,
+  def apply(height: Height = null,
+            bold: java.lang.Boolean = null,
+            italic: java.lang.Boolean = null,
+            charSet: Charset = null,
+            color: Color = null,
+            family: FontFamily = null,
+            scheme: FontScheme = null,
+            fontName: String = null,
+            strikeout: java.lang.Boolean = null,
+            typeOffset: TypeOffset = null,
             underline: Underline = null): Font =
     Font(
       height = Option(height),
-      bold = bold.toOption,
-      italic = italic.toOption,
+      bold = Option(bold).map(_.booleanValue),
+      italic = Option(italic).map(_.booleanValue),
       charSet = Option(charSet),
       color = Option(color),
       family = Option(family),
       scheme = Option(scheme),
       fontName = Option(fontName),
-      strikeout = strikeout.toOption,
+      strikeout = Option(strikeout).map(_.booleanValue),
       typeOffset = Option(typeOffset),
       underline = Option(underline)
     )
@@ -39,70 +45,70 @@ case class Font private[model](
                                 typeOffset: Option[TypeOffset],
                                 underline: Option[Underline]) {
 
-  def withHeight(height: Height) =
+  def withHeight(height: Height) : Font =
     copy(height = Option(height))
 
-  def withoutHeight =
+  def withoutHeight : Font =
     copy(height = None)
 
-  def withBold =
+  def withBold : Font =
     copy(bold = Some(true))
 
-  def withoutBold =
+  def withoutBold : Font =
     copy(bold = Some(false))
 
-  def withItalic =
+  def withItalic : Font =
     copy(italic = Some(true))
 
-  def withoutItalic =
+  def withoutItalic : Font =
     copy(italic = Some(false))
 
-  def withCharSet(charSet: Charset) =
+  def withCharSet(charSet: Charset) : Font =
     copy(charSet = Option(charSet))
 
-  def withoutCharSet =
+  def withoutCharSet : Font =
     copy(charSet = None)
 
-  def withColor(color: Color) =
+  def withColor(color: Color) : Font =
     copy(color = Option(color))
 
-  def withoutColor =
+  def withoutColor : Font =
     copy(color = None)
 
-  def withFamily(family: FontFamily) =
+  def withFamily(family: FontFamily) : Font =
     copy(family = Option(family))
 
-  def withoutFamily =
+  def withoutFamily : Font =
     copy(family = None)
 
-  def withScheme(scheme: FontScheme) =
+  def withScheme(scheme: FontScheme) : Font =
     copy(scheme = Option(scheme))
 
-  def withoutScheme =
+  def withoutScheme : Font =
     copy(scheme = None)
 
-  def withFontName(fontName: String) =
+  def withFontName(fontName: String) : Font =
     copy(fontName = Option(fontName))
 
-  def withoutFontName =
+  def withoutFontName : Font =
     copy(fontName = None)
 
-  def withStrikeout =
+  def withStrikeout : Font =
     copy(strikeout = Some(true))
 
-  def withoutStrikeout =
+  def withoutStrikeout : Font =
     copy(strikeout = Some(false))
 
-  def withTypeOffset(typeOffset: TypeOffset) =
+  def withTypeOffset(typeOffset: TypeOffset) : Font =
     copy(typeOffset = Option(typeOffset))
 
-  def withoutTypeOffset =
+  def withoutTypeOffset : Font =
     copy(typeOffset = None)
 
-  def withUnderline(underline: Underline) =
+  def withUnderline(underline: Underline) : Font =
     copy(underline = Option(underline))
 
-  def withoutUnderline =
+  def withoutUnderline : Font =
     copy(underline = None)
 
   def withDefault(default : Font) : Font = Font(

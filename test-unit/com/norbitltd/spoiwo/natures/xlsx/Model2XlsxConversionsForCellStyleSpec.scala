@@ -6,7 +6,7 @@ import com.norbitltd.spoiwo.model._
 import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{VerticalAlignment, HorizontalAlignment, FillPatternType, BorderStyle}
 import Height._
-import com.norbitltd.spoiwo.model.enums.CellFill
+import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment, CellHorizontalAlignment, CellFill}
 
 class Model2XlsxConversionsForCellStyleSpec extends FlatSpec {
 
