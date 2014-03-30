@@ -7,7 +7,7 @@ import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.model.Height._
 import scala.util.Try
 
-class Model2XlsxConversionsFoSheetSpec extends FlatSpec {
+class Model2XlsxConversionsForSheetSpec extends FlatSpec {
 
   private def workbook : XSSFWorkbook = new XSSFWorkbook()
 

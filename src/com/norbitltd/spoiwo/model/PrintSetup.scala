@@ -1,7 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-//TODO Enums for the following
-import org.apache.poi.ss.usermodel.{PaperSize, PageOrder}
+import com.norbitltd.spoiwo.model.enums.{PaperSize, PageOrder}
 
 object PrintSetup {
 

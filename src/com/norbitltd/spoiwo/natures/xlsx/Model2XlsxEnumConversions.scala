@@ -5,6 +5,8 @@ import org.apache.poi.ss.usermodel._
 import com.norbitltd.spoiwo.model.enums._
 import com.norbitltd.spoiwo.model.enums.FontFamily
 import com.norbitltd.spoiwo.model.enums.FontScheme
+import com.norbitltd.spoiwo.model.enums.PageOrder
+import com.norbitltd.spoiwo.model.enums.PaperSize
 
 object Model2XlsxEnumConversions {
 
@@ -143,6 +145,43 @@ object Model2XlsxEnumConversions {
       case CreateNullAsBlank => usermodel.Row.CREATE_NULL_AS_BLANK
       case MissingCellPolicy(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert MissingCellPolicy=$value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertPageOrder(po: PageOrder): usermodel.PageOrder = {
+    import PageOrder._
+
+    po match {
+      case DownThenOver => usermodel.PageOrder.DOWN_THEN_OVER
+      case OverThenDown => usermodel.PageOrder.OVER_THEN_DOWN
+      case PageOrder(value: String) =>
+        throw new IllegalArgumentException(s"Unable to convert PageOrder=$value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertPaperSize(ps: PaperSize): usermodel.PaperSize = {
+    import PaperSize._
+
+    ps match {
+      case Letter => usermodel.PaperSize.LETTER_PAPER
+      case LetterSmall => usermodel.PaperSize.LETTER_SMALL_PAPER
+      case Tabloid => usermodel.PaperSize.TABLOID_PAPER
+      case Ledger => usermodel.PaperSize.LEDGER_PAPER
+      case Legal => usermodel.PaperSize.LEGAL_PAPER
+      case Statement => usermodel.PaperSize.STATEMENT_PAPER
+      case Executive => usermodel.PaperSize.EXECUTIVE_PAPER
+      case A3 => usermodel.PaperSize.A3_PAPER
+      case A4 => usermodel.PaperSize.A4_PAPER
+      case A4Small => usermodel.PaperSize.A4_SMALL_PAPER
+      case A5 => usermodel.PaperSize.A5_PAPER
+      case B4 => usermodel.PaperSize.B4_PAPER
+      case B5 => usermodel.PaperSize.B5_PAPER
+      case Folio => usermodel.PaperSize.FOLIO_PAPER
+      case Quarto => usermodel.PaperSize.QUARTO_PAPER
+      case Standard10x14 => usermodel.PaperSize.STANDARD_PAPER_10_14
+      case Standard11x17 => usermodel.PaperSize.STANDARD_PAPER_11_17
+      case PaperSize(value) =>
+        throw new IllegalArgumentException(s"Unable to convert PaperSize=$value to XLSX - unsupported enum!")
     }
   }
 
