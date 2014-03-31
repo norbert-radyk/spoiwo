@@ -2,6 +2,7 @@ package com.norbitltd.spoiwo.natures.csv
 
 import com.norbitltd.spoiwo.utils.FileUtils
 import com.norbitltd.spoiwo.model._
+import org.joda.time.LocalDate
 
 object Model2CsvConversions {
 
@@ -31,7 +32,7 @@ object Model2CsvConversions {
   implicit class CsvSheet(s : Sheet) {
 
     def convertAsCsv(properties : CsvProperties = CsvProperties.Default) : String =
-      convertSheetToCsv(s, properties)._1
+      convertSheetToCsv(s, properties)._2
 
     def saveAsCsv(fileName : String, properties : CsvProperties = CsvProperties.Default) {
       Workbook(s).saveAsCsv(fileName, properties)
@@ -54,9 +55,9 @@ object Model2CsvConversions {
   private def convertCellToCsv(c : Cell, properties : CsvProperties) : String = c match {
     case x : StringCell => x.value
     case x : NumericCell => x.value.toString
-    case x : BooleanCell => x.value.toString
-    case x : DateCell => x.value.toString
-    case x : CalendarCell => x.value.toString
+    case x : BooleanCell => if(x.value) properties.defaultBooleanTrueString else properties.defaultBooleanFalseString
+    case x : DateCell => LocalDate.fromDateFields(x.value).toString(properties.defaultDateFormat)
+    case x : CalendarCell => LocalDate.fromCalendarFields(x.value).toString(properties.defaultDateFormat)
     case x : FormulaCell => throw new IllegalArgumentException("Use of formulas not allowed when converting to CSV format!")
   }
 }

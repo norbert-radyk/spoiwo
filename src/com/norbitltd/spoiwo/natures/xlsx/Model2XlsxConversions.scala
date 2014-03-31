@@ -104,7 +104,7 @@ object Model2XlsxConversions {
     cell
   }
 
-  private def convertCellBorders(borders: CellBorders, style: XSSFCellStyle) {
+  private[xlsx] def convertCellBorders(borders: CellBorders, style: XSSFCellStyle) {
     borders.leftStyle.foreach(s => style.setBorderLeft(convertBorderStyle(s)))
     borders.leftColor.foreach(c => style.setLeftBorderColor(convertColor(c)))
     borders.bottomStyle.foreach(s => style.setBorderBottom(convertBorderStyle(s)))
