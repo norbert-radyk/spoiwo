@@ -109,19 +109,22 @@ case class Font private[model](
   def withoutUnderline : Font =
     copy(underline = None)
 
-  def withDefault(default : Font) : Font = Font(
-    height = setWithDefault(height, default.height),
-    bold = setWithDefault(bold, default.bold),
-    italic = setWithDefault(italic, default.italic),
-    charSet = setWithDefault(charSet, default.charSet),
-    color = setWithDefault(color, default.color),
-    family = setWithDefault(family, default.family),
-    scheme = setWithDefault(scheme, default.scheme),
-    fontName = setWithDefault(fontName, default.fontName),
-    strikeout = setWithDefault(strikeout, default.strikeout),
-    typeOffset = setWithDefault(typeOffset, default.typeOffset),
-    underline = setWithDefault(underline, default.underline)
+  def defaultWith(defaultFont : Font) : Font = Font(
+    height = dw(height, defaultFont.height),
+    bold = dw(bold, defaultFont.bold),
+    italic = dw(italic, defaultFont.italic),
+    charSet = dw(charSet, defaultFont.charSet),
+    color = dw(color, defaultFont.color),
+    family = dw(family, defaultFont.family),
+    scheme = dw(scheme, defaultFont.scheme),
+    fontName = dw(fontName, defaultFont.fontName),
+    strikeout = dw(strikeout, defaultFont.strikeout),
+    typeOffset = dw(typeOffset, defaultFont.typeOffset),
+    underline = dw(underline, defaultFont.underline)
   )
+
+  private def dw[T](current : Option[T], default: Option[T]) : Option[T] =
+    if( current.isDefined ) current else default
 
   override def toString = "Font[" + List(
     height.map("height=" + _),
@@ -137,6 +140,4 @@ case class Font private[model](
     underline.map("underline=" + _)
   ).flatten.mkString(", ") + "]"
 
-  private def setWithDefault[T](value: Option[T], defaultValue: Option[T]): Option[T] =
-    if (value.isDefined) value else defaultValue
 }

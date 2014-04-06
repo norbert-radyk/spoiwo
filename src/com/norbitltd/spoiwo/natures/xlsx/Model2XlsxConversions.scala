@@ -3,7 +3,7 @@ package com.norbitltd.spoiwo.natures.xlsx
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.xssf.usermodel._
 import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.ss.usermodel.Sheet._
+import org.apache.poi.ss.usermodel
 import java.io.FileOutputStream
 import Model2XlsxEnumConversions._
 import com.norbitltd.spoiwo.model.enums._
@@ -15,6 +15,7 @@ import com.norbitltd.spoiwo.model.FormulaCell
 import com.norbitltd.spoiwo.model.DateCell
 import com.norbitltd.spoiwo.model.NumericCell
 import com.norbitltd.spoiwo.model.BooleanCell
+import org.joda.time.{LocalDateTime}
 
 object Model2XlsxConversions {
 
@@ -40,15 +41,21 @@ object Model2XlsxConversions {
 
   implicit class XlsxCellStyle(cs: CellStyle) {
     def convertAsXlsx(cell: XSSFCell): XSSFCellStyle = convertAsXlsx(cell.getRow)
+
     def convertAsXlsx(row: XSSFRow): XSSFCellStyle = convertAsXlsx(row.getSheet)
+
     def convertAsXlsx(sheet: XSSFSheet): XSSFCellStyle = convertAsXlsx(sheet.getWorkbook)
+
     def convertAsXlsx(workbook: XSSFWorkbook): XSSFCellStyle = convertCellStyle(cs, workbook)
   }
 
   implicit class XlsxFont(f: Font) {
     def convertAsXlsx(cell: XSSFCell): XSSFFont = convertAsXlsx(cell.getRow)
+
     def convertAsXlsx(row: XSSFRow): XSSFFont = convertAsXlsx(row.getSheet)
+
     def convertAsXlsx(sheet: XSSFSheet): XSSFFont = convertAsXlsx(sheet.getWorkbook)
+
     def convertAsXlsx(workbook: XSSFWorkbook): XSSFFont = convertFont(f, workbook)
   }
 
@@ -70,10 +77,10 @@ object Model2XlsxConversions {
     def convertAsXlsx() = convertVerticalAlignment(va)
   }
 
-  implicit class XlsxWorkbook(workbook : Workbook) {
+  implicit class XlsxWorkbook(workbook: Workbook) {
     def convertAsXlsx() = convertWorkbook(workbook)
 
-    def saveAsXlsx(fileName : String) = {
+    def saveAsXlsx(fileName: String) = {
       val stream = new FileOutputStream(fileName)
       try {
         val workbook = convertAsXlsx()
@@ -89,17 +96,40 @@ object Model2XlsxConversions {
     Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
   )
 
-  private[xlsx] def convertCell(c : Cell, row : XSSFRow): XSSFCell = {
+  private def mergeStyle(cell: Cell,
+                         rowStyle: Option[CellStyle],
+                         columnStyle: Option[CellStyle]): Cell = {
+    cell.styleInheritance match {
+      case CellStyleInheritance.CellOnly => cell
+      case CellStyleInheritance.CellThenColumn => cell.withDefaultStyle(columnStyle)
+      case CellStyleInheritance.CellThenRow => cell.withDefaultStyle(rowStyle)
+      case CellStyleInheritance.CellThenColumnThenRow => cell.withDefaultStyle(columnStyle).withDefaultStyle(rowStyle)
+      case CellStyleInheritance.CellThenRowThenColumn => cell.withDefaultStyle(rowStyle).withDefaultStyle(columnStyle)
+    }
+  }
+
+  private[xlsx] def convertCell(modelColumns: Map[Int, Column], modelRow: Row, c: Cell, row: XSSFRow): XSSFCell = {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
-    c.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
+
+    val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).map(_.style).flatten)
+    cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
+
     c match {
-      case StringCell(value, _, _) => cell.setCellValue(value)
-      case FormulaCell(formula, _, _) => cell.setCellFormula(formula)
-      case NumericCell(value, _, _) => cell.setCellValue(value)
-      case BooleanCell(value, _, _) => cell.setCellValue(value)
-      case DateCell(value, _, _) => cell.setCellValue(value)
-      case CalendarCell(value, _, _) => cell.setCellValue(value)
+      case StringCell(value, _, _, _) => cell.setCellValue(value)
+      case FormulaCell(formula, _, _, _) => cell.setCellFormula(formula)
+      case NumericCell(value, _, _, _) => cell.setCellValue(value)
+      case BooleanCell(value, _, _, _) => cell.setCellValue(value)
+      case DateCell(value, _, _, _) => {
+        val dateStyle = c.format.getOrElse("yyyy-MM-dd")
+        val dateTime = LocalDateTime.fromDateFields(value)
+        cell.setCellValue(dateTime.toString(dateStyle))
+      }
+      case CalendarCell(value, _, _, _) => {
+        val dateStyle = c.format.getOrElse("yyyy-MM-dd")
+        val dateTime = LocalDateTime.fromCalendarFields(value)
+        cell.setCellValue(dateTime.toString(dateStyle))
+      }
     }
     cell
   }
@@ -148,7 +178,7 @@ object Model2XlsxConversions {
     }
 
 
-  private[xlsx] def convertColumn(c : Column, sheet: XSSFSheet) {
+  private[xlsx] def convertColumn(c: Column, sheet: XSSFSheet) {
     val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
       "Something went terribly wrong as it should have been derived if not specified explicitly!"))
 
@@ -156,7 +186,7 @@ object Model2XlsxConversions {
     c.break.foreach(b => sheet.setColumnBreak(i))
     c.groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
     c.hidden.foreach(h => sheet.setColumnHidden(i, h))
-    c.style.foreach(s => sheet.setDefaultColumnStyle(i, convertCellStyle(s, sheet.getWorkbook)))
+    //c.style.foreach(s => sheet.setDefaultColumnStyle(i, convertCellStyle(s, sheet.getWorkbook)))
     c.width.foreach(w => sheet.setColumnWidth(i, w.toUnits))
   }
 
@@ -180,7 +210,7 @@ object Model2XlsxConversions {
     f.evenRight.foreach(sheet.getEvenFooter.setRight)
   }
 
-  private[xlsx] def convertFont(f : Font, workbook : XSSFWorkbook) : XSSFFont =
+  private[xlsx] def convertFont(f: Font, workbook: XSSFWorkbook): XSSFFont =
     getCachedOrUpdate(fontCache, f, workbook) {
       val font = workbook.createFont()
       f.bold.foreach(font.setBold)
@@ -217,14 +247,13 @@ object Model2XlsxConversions {
   }
 
 
-
   private def convertMargins(margins: Margins, sheet: XSSFSheet) {
-    margins.top.foreach(topMargin => sheet.setMargin(TopMargin, topMargin))
-    margins.bottom.foreach(bottomMargin => sheet.setMargin(BottomMargin, bottomMargin))
-    margins.right.foreach(rightMargin => sheet.setMargin(RightMargin, rightMargin))
-    margins.left.foreach(leftMargin => sheet.setMargin(LeftMargin, leftMargin))
-    margins.header.foreach(headerMargin => sheet.setMargin(HeaderMargin, headerMargin))
-    margins.footer.foreach(footerMargin => sheet.setMargin(FooterMargin, footerMargin))
+    margins.top.foreach(topMargin => sheet.setMargin(usermodel.Sheet.TopMargin, topMargin))
+    margins.bottom.foreach(bottomMargin => sheet.setMargin(usermodel.Sheet.BottomMargin, bottomMargin))
+    margins.right.foreach(rightMargin => sheet.setMargin(usermodel.Sheet.RightMargin, rightMargin))
+    margins.left.foreach(leftMargin => sheet.setMargin(usermodel.Sheet.LeftMargin, leftMargin))
+    margins.header.foreach(headerMargin => sheet.setMargin(usermodel.Sheet.HeaderMargin, headerMargin))
+    margins.footer.foreach(footerMargin => sheet.setMargin(usermodel.Sheet.FooterMargin, footerMargin))
   }
 
   private def convertPane(pane: Pane): Int = pane match {
@@ -245,26 +274,26 @@ object Model2XlsxConversions {
     }
   }
 
-  private[xlsx] def convertRow(r : com.norbitltd.spoiwo.model.Row, sheet: XSSFSheet): XSSFRow = {
-    validateCells(r)
-    val indexNumber = r.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
+  private[xlsx] def convertRow(modelColumns: Map[Int, Column], modelRow: Row, sheet: XSSFSheet): XSSFRow = {
+    validateCells(modelRow)
+    val indexNumber = modelRow.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = sheet.createRow(indexNumber)
-    r.height.foreach(h => row.setHeightInPoints(h.toPoints))
-    r.style.foreach(s => row.setRowStyle(convertCellStyle(s, row.getSheet.getWorkbook)))
-    r.hidden.foreach(row.setZeroHeight)
-    r.cells.foreach(cell => convertCell(cell, row))
+    modelRow.height.foreach(h => row.setHeightInPoints(h.toPoints))
+    modelRow.style.foreach(s => row.setRowStyle(convertCellStyle(s, row.getSheet.getWorkbook)))
+    modelRow.hidden.foreach(row.setZeroHeight)
+    modelRow.cells.foreach(cell => convertCell(modelColumns, modelRow, cell, row))
     row
   }
 
-  private def validateCells(r : Row) {
+  private def validateCells(r: Row) {
     val indexedCells = r.cells.filter(_.index.isDefined)
     val contextCells = r.cells.filter(_.index.isEmpty)
 
-    if(indexedCells.size > 0 && contextCells.size > 0)
+    if (indexedCells.size > 0 && contextCells.size > 0)
       throw new IllegalArgumentException("It is not allowed to mix cells with and without index within a single row!")
 
     val distinctIndexes = indexedCells.map(_.index).toSet.flatten
-    if(indexedCells.size != distinctIndexes.size)
+    if (indexedCells.size != distinctIndexes.size)
       throw new IllegalArgumentException("It is not allowed to have cells with duplicate index within a single row!")
   }
 
@@ -272,10 +301,11 @@ object Model2XlsxConversions {
     validateRows(s)
     val sheetName = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
-    s.rows.foreach(row => convertRow(row, sheet))
+    val columns = updateColumnsWithIndexes(s)
+    val columnsMap = columns.map(c => c.index.get -> c).toMap
 
-    updateColumnsWithIndexes(s).foreach(column => convertColumn(column, sheet))
-
+    s.rows.foreach(row => convertRow(columnsMap, row, sheet))
+    columns.foreach(c => convertColumn(c, sheet))
     s.mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(convertCellRange(mergedRegion)))
 
     s.printSetup.foreach(ps => convertPrintSetup(ps, sheet))
@@ -290,16 +320,16 @@ object Model2XlsxConversions {
     sheet
   }
 
-  private def validateRows(s : Sheet) {
+  private def validateRows(s: Sheet) {
     val indexedRows = s.rows.filter(_.index.isDefined)
     val contextRows = s.rows.filter(_.index.isEmpty)
 
-    if(indexedRows.size > 0 && contextRows.size > 0) {
+    if (indexedRows.size > 0 && contextRows.size > 0) {
       throw new IllegalArgumentException("It is not allowed to mix rows with and without index within a single sheet!")
     }
 
     val distinctIndexes = indexedRows.map(_.index).toSet.flatten
-    if(indexedRows.size != distinctIndexes.size)
+    if (indexedRows.size != distinctIndexes.size)
       throw new IllegalArgumentException("It is not allowed to have rows with duplicate index within a single sheet!")
   }
 
@@ -375,7 +405,7 @@ object Model2XlsxConversions {
 
   private def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
 
-  private def convertWorkbook(wb : Workbook): XSSFWorkbook = {
+  private def convertWorkbook(wb: Workbook): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()
     wb.sheets.foreach(sheet => convertSheet(sheet, workbook))
 

@@ -15,15 +15,14 @@ object GettingStartedExample {
     CellStyle(fillPattern = CellFill.Solid, fillForegroundColor = Color.AquaMarine, fillBackgroundColor = Color.AquaMarine, font = Font(bold = true))
 
   val sheet2 = Sheet(name = "Some serious stuff")
-    .withColumns(
-      Column(index = 0, style = CellStyle(font = Font(bold = true))),
-      Column(index = 1, style = CellStyle(dataFormat = CellDataFormat("dd MMM yyyy")))
-    )
     .withRows(
-      Row.Empty.withCellValues("NAME", "BIRTH DATE", "DIED AGED", "FEMALE").withStyle(headerStyle),
+      Row(style = headerStyle).withCellValues(headerStyle, "NAME", "BIRTH DATE", "DIED AGED", "FEMALE"),
       Row.Empty.withCellValues("Marie Curie", new LocalDate(1867, 11, 7), 66, true),
       Row.Empty.withCellValues("Albert Einstein", new LocalDate(1879, 3, 14), 76, false),
       Row.Empty.withCellValues("Erwin Shrodinger", new LocalDate(1887, 8, 12), 73, false)
+    )
+    .withColumns(
+      Column(index = 0, style = CellStyle(font = Font(bold = true)), autoSized = true)
     )
 
   def main(args: Array[String]) {

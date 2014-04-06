@@ -4,7 +4,7 @@ import com.norbitltd.spoiwo.model.Height._
 import org.apache.poi.ss.usermodel
 import Model2XlsxConversions.convertCell
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
-import com.norbitltd.spoiwo.model.{Font, CellStyle, Cell}
+import com.norbitltd.spoiwo.model.{Row, Font, CellStyle, Cell}
 import org.scalatest.FlatSpec
 import org.joda.time.LocalDate
 import java.util.Calendar
@@ -13,7 +13,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
 
   private def row = new XSSFWorkbook().createSheet().createRow(0)
 
-  private def convert(cell: Cell): XSSFCell = convertCell(cell, row)
+  private def convert(cell: Cell): XSSFCell = convertCell(Map(), Row(), cell,  row)
 
   private val defaultCell : XSSFCell = convert(Cell.Empty)
 
@@ -53,7 +53,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     row.createCell(1)
 
     val model = Cell.Empty
-    val xlsx = convertCell(model, row)
+    val xlsx = convertCell(Map(), Row(), model, row)
     assert(xlsx.getColumnIndex == 2)
   }
 

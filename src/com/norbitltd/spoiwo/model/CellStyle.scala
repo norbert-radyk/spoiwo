@@ -145,5 +145,32 @@ case class CellStyle private(
   def withoutWrapText =
     copy(wrapText = Some(false))
 
+  private def dw[T](current : Option[T], default: Option[T]) : Option[T] =
+    if( current.isDefined ) current else default
+
+  private def defaultFont(defaultCellStyle : CellStyle) : Option[Font] =
+    if(defaultCellStyle.font.isEmpty) {
+      font
+    } else if(font.isEmpty) {
+      defaultCellStyle.font
+    } else {
+      Option(font.get.defaultWith(defaultCellStyle.font.get))
+    }
+
+  def defaultWith(defaultCellStyle : CellStyle) : CellStyle = CellStyle(
+    borders = dw(borders, defaultCellStyle.borders),
+    dataFormat = dw(dataFormat, defaultCellStyle.dataFormat),
+    font = defaultFont(defaultCellStyle),
+    fillPattern = dw(fillPattern, defaultCellStyle.fillPattern),
+    fillForegroundColor = dw(fillForegroundColor, defaultCellStyle.fillForegroundColor),
+    fillBackgroundColor = dw(fillBackgroundColor, defaultCellStyle.fillBackgroundColor),
+    horizontalAlignment = dw(horizontalAlignment, defaultCellStyle.horizontalAlignment),
+    verticalAlignment = dw(verticalAlignment, defaultCellStyle.verticalAlignment),
+    hidden = dw(hidden, defaultCellStyle.hidden),
+    indention = dw(indention, defaultCellStyle.indention),
+    locked = dw(locked, defaultCellStyle.locked),
+    rotation = dw(rotation, defaultCellStyle.rotation),
+    wrapText = dw(wrapText, defaultCellStyle.wrapText)
+  )
 
 }

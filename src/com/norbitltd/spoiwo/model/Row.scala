@@ -39,6 +39,15 @@ case class Row private(cells: Iterable[Cell],
                        style: Option[CellStyle],
                        hidden: Option[Boolean]) {
 
+  override def toString = "Row(" + List(
+    if (cells.isEmpty) None else Option("cells=" + cells.map(_.toString).mkString(", ")),
+    height.map("height=" + _),
+    index.map("index=" + _),
+    style.map("style=" + _),
+    hidden.map("hidden=" + _)
+  ).flatten.mkString(", ") + ")"
+
+
   def withCells(cells: Cell*) =
     copy(cells = cells)
 
@@ -72,6 +81,22 @@ case class Row private(cells: Iterable[Cell],
       case calendarValue: Calendar => Cell(calendarValue)
       case value => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }
+    copy(cells = cells.toVector)
+  }
+
+  def withCellValues(cellStyle: CellStyle, cellValues: Any*): Row = {
+    val cells = cellValues.map {
+      case stringValue: String => Cell(stringValue)
+      case doubleValue: Double => Cell(doubleValue)
+      case intValue: Int => Cell(intValue.toDouble)
+      case longValue: Long => Cell(longValue.toDouble)
+      case booleanValue: Boolean => Cell(booleanValue)
+      case dateValue: Date => Cell(dateValue)
+      case dateValue: LocalDate => Cell(dateValue)
+      case dateValue: DateTime => Cell(dateValue)
+      case calendarValue: Calendar => Cell(calendarValue)
+      case value => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
+    }.map(_.withStyle(cellStyle))
     copy(cells = cells.toVector)
   }
 

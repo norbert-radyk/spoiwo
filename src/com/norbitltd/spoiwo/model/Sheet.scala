@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-object Sheet  {
+object Sheet {
 
   val Blank = Sheet()
 
@@ -50,6 +50,21 @@ case class Sheet private(
                           paneAction: Option[PaneAction],
                           repeatingRows: Option[RowRange],
                           repeatingColumns: Option[ColumnRange]) {
+
+  override def toString = "Sheet(" + List(
+    name.map("name=" + _),
+    if (columns.isEmpty) None else Option("columns=\n\t" + columns.map(_.toString).mkString("\n\t")),
+    if (rows.isEmpty) None else Option("rows=\n\t" + rows.map(_.toString).mkString("\n\t")),
+    if (mergedRegions.isEmpty) None else Option("merged regions=\n\t" + mergedRegions.map(_.toString).mkString("\n\t")),
+    printSetup.map("print setup=" + _),
+    header.map("header=" + _),
+    footer.map("footer=" + _),
+    properties.map("properties=" + _),
+    margins.map("margins=" + _),
+    paneAction.map("pane action=" + _),
+    repeatingRows.map("repeating rows=" + _),
+    repeatingColumns.map("repeating columns=" + _)
+  ).flatten.mkString(",\n") + ")"
 
   def withSheetName(name: String) =
     copy(name = Option(name))

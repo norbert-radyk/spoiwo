@@ -56,4 +56,15 @@ case class CellBorders(leftStyle: Option[CellBorderStyle], leftColor: Option[Col
     copy(leftColor = colorOption, topColor = colorOption, rightColor = colorOption, bottomColor = colorOption)
   }
 
+  override def toString = "Cell Borders[" + List(
+    leftStyle.map("left style" + _),
+    leftColor.map("left color" + _),
+    topStyle.map("top style" + _),
+    topColor.map("top color" + _),
+    rightStyle.map("right style" + _),
+    rightColor.map("right color" + _),
+    bottomStyle.map("bottom style" + _),
+    bottomColor.map("bottom color" + _)
+  )
+
 }

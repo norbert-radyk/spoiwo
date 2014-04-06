@@ -8,7 +8,7 @@ object Column {
              break: java.lang.Boolean = null,
              groupCollapsed: java.lang.Boolean = null,
              hidden: java.lang.Boolean = null,
-             style: CellStyle = null,
+             style : CellStyle = null,
              width: Width = null): Column =
     Column(
       index = Option(index).map(_.intValue),
@@ -28,6 +28,16 @@ case class Column private[model](index: Option[Int],
                                  hidden: Option[Boolean],
                                  style: Option[CellStyle],
                                  width: Option[Width]) {
+
+  override def toString = "Column(" + List(
+    index.map("index=" + _),
+    autoSized.map("auto sized=" + _),
+    break.map("break=" + _),
+    groupCollapsed.map("group collapsed=" + _),
+    hidden.map("hidden=" + _),
+    //style.map("style = " + _),
+    width.map("width=" + _)
+  ).flatten.mkString(", ") + ")"
 
   def withIndex(index: Int) =
     copy(index = Option(index))
