@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.norbitltd</groupId>
     <artifactId>spoiwo</artifactId>
@@ -13,6 +14,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -27,7 +29,7 @@
     </build>
 
     <name>SPOIWO (Scala POI wrapping object)</name>
-    <version>1.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <description>The functional way of generating spreadsheets in Scala</description>
     <url>http://norbert-radyk.github.io/spoiwo/</url>
     <licenses>
@@ -38,9 +40,9 @@
         </license>
     </licenses>
     <scm>
-        <url>git@github.com:norbert-radyk/spoiwo.git</url>
-        <developerConnection>scm:git:git@github.com:norbert-radyk/spoiwo.git</developerConnection>
-        <connection>scm:git:git@github.com:norbert-radyk/spoiwo.git</connection>
+        <url>https://github.com/norbert-radyk/spoiwo</url>
+        <developerConnection>scm:git:ssh://git@github.com/norbert-radyk/spoiwo.git</developerConnection>
+        <connection>scm:git:ssh://github.com/norbert-radyk/spoiwo.git</connection>
     </scm>
     <developers>
         <developer>
