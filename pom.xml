@@ -69,7 +69,7 @@
     </build>
 
     <name>SPOIWO (Scala POI wrapping object)</name>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <description>The functional way of generating spreadsheets in Scala</description>
     <url>http://norbert-radyk.github.io/spoiwo/</url>
     <licenses>
