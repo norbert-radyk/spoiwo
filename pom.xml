@@ -82,8 +82,8 @@
     </licenses>
     <scm>
         <url>https://github.com/norbert-radyk/spoiwo</url>
-        <developerConnection>scm:git:ssh://git@github.com/norbert-radyk/spoiwo.git</developerConnection>
-        <connection>scm:git:ssh://github.com/norbert-radyk/spoiwo.git</connection>
+        <developerConnection>scm:git:git@github.com:norbert-radyk/spoiwo.git</developerConnection>
+        <connection>scm:git:git@github.com:norbert-radyk/spoiwo.git</connection>
     </scm>
     <developers>
         <developer>
