@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.norbitltd</groupId>
     <artifactId>spoiwo</artifactId>
@@ -70,7 +69,7 @@
     </build>
 
     <name>SPOIWO (Scala POI wrapping object)</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <description>The functional way of generating spreadsheets in Scala</description>
     <url>http://norbert-radyk.github.io/spoiwo/</url>
     <licenses>
