@@ -5,6 +5,12 @@
       <configuration>
         <option name="compilerLibraryLevel" value="Project" />
         <option name="compilerLibraryName" value="Maven: org.scala-lang:scala-compiler-bundle:2.10.3" />
+        <option name="compilerOptions" value="-P:genjavadoc:out=C:\Users\Norbert\IdeaProjects\spoiwo\target/genjavadoc" />
+        <option name="pluginPaths">
+          <array>
+            <option value="C:\Users\Norbert\.m2\repository\com\typesafe\genjavadoc\genjavadoc-plugin_2.10.3\0.4\genjavadoc-plugin_2.10.3-0.4.jar" />
+          </array>
+        </option>
         <option name="vmOptions" value="" />
       </configuration>
     </facet>
