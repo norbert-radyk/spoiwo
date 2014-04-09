@@ -8,7 +8,7 @@
         <option name="compilerOptions" value="-P:genjavadoc:out=C:\Users\Norbert\IdeaProjects\spoiwo\target/genjavadoc" />
         <option name="pluginPaths">
           <array>
-            <option value="C:\Users\Norbert\.m2\repository\com\typesafe\genjavadoc\genjavadoc-plugin_2.10.3\0.4\genjavadoc-plugin_2.10.3-0.4.jar" />
+            <option value="C:\Users\Norbert\.m2\repository\com\typesafe\genjavadoc\genjavadoc-plugin_2.10.3\0.5\genjavadoc-plugin_2.10.3-0.5.jar" />
           </array>
         </option>
         <option name="vmOptions" value="" />
@@ -23,6 +23,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test-functional" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test-integration" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test-unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/target/genjavadoc" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/scala" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/scala" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
