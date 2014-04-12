@@ -62,20 +62,6 @@ case class Row private(cells: Iterable[Cell],
       case longValue: Long => Cell(longValue.toDouble)
       case booleanValue: Boolean => Cell(booleanValue)
       case dateValue: Date => Cell(dateValue)
-      case calendarValue: Calendar => Cell(calendarValue)
-      case value => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
-    }
-    copy(cells = cells.toVector)
-  }
-
-  def withCellValues(cellValues: Any*): Row = {
-    val cells = cellValues.map {
-      case stringValue: String => Cell(stringValue)
-      case doubleValue: Double => Cell(doubleValue)
-      case intValue: Int => Cell(intValue.toDouble)
-      case longValue: Long => Cell(longValue.toDouble)
-      case booleanValue: Boolean => Cell(booleanValue)
-      case dateValue: Date => Cell(dateValue)
       case dateValue: LocalDate => Cell(dateValue)
       case dateValue: DateTime => Cell(dateValue)
       case calendarValue: Calendar => Cell(calendarValue)
@@ -84,21 +70,20 @@ case class Row private(cells: Iterable[Cell],
     copy(cells = cells.toVector)
   }
 
-  def withCellValues(cellStyle: CellStyle, cellValues: Any*): Row = {
-    val cells = cellValues.map {
-      case stringValue: String => Cell(stringValue)
-      case doubleValue: Double => Cell(doubleValue)
-      case intValue: Int => Cell(intValue.toDouble)
-      case longValue: Long => Cell(longValue.toDouble)
-      case booleanValue: Boolean => Cell(booleanValue)
-      case dateValue: Date => Cell(dateValue)
-      case dateValue: LocalDate => Cell(dateValue)
-      case dateValue: DateTime => Cell(dateValue)
-      case calendarValue: Calendar => Cell(calendarValue)
-      case value => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
-    }.map(_.withStyle(cellStyle))
-    copy(cells = cells.toVector)
-  }
+  def withCellValues(cellValues: Any*): Row =
+    withCellValues(cellValues.toList)
+
+  def addCell(cell : Cell) =
+    copy(cells = cells ++ List(cell))
+
+  def addCells(additionalCells : Iterable[Cell]) =
+    copy(cells = cells ++ additionalCells)
+
+  def removeCell(cell : Cell) =
+    copy(cells = cells.filter(_ != cell))
+
+  def removeCells(whereCondition : Cell => Boolean) =
+    copy(cells = cells.filter(whereCondition))
 
   def withHeight(height: Height) =
     copy(height = Option(height))

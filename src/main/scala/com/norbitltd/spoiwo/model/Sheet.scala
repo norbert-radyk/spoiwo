@@ -75,17 +75,53 @@ case class Sheet private(
   def withColumns(columns: Column*): Sheet =
     withColumns(columns.toList)
 
+  def addColumn(column : Column) =
+    copy(columns = columns ++ List(column))
+
+  def addColumns(additionalColumns : Iterable[Column]) =
+    copy(columns = columns ++ additionalColumns)
+
+  def removeColumn(column : Column) =
+    copy(columns = columns.filter(_ != column))
+
+  def removeColumns(whereCondition : Column => Boolean) =
+    copy(columns = columns.filter(whereCondition))
+
   def withRows(rows: Iterable[Row]): Sheet =
     copy(rows = rows.toList)
 
   def withRows(rows: Row*): Sheet =
     withRows(rows)
 
+  def addRow(row : Row) =
+    copy(rows = rows ++ List(row))
+
+  def addRows(additionalRows : Iterable[Row]) =
+    copy(rows = rows ++ additionalRows)
+
+  def removeRow(row : Row) =
+    copy(rows = rows.filter(_ != row))
+
+  def removeRows(whereCondition : Row => Boolean) =
+    copy(rows = rows.filter(whereCondition))
+
   def withMergedRegions(mergedRegions: Iterable[CellRange]): Sheet =
     copy(mergedRegions = mergedRegions.toList)
 
   def withMergedRegions(mergedRegions: CellRange*): Sheet =
     withMergedRegions(mergedRegions)
+  
+  def addMergedRegion(mergedRegion : CellRange) =
+    copy(mergedRegions = mergedRegions ++ List(mergedRegion))
+
+  def addMergedRegions(additionalMergedRegions : Iterable[CellRange]) =
+    copy(mergedRegions = mergedRegions ++ additionalMergedRegions)
+
+  def removeMergedRegion(mergedRegion : CellRange) =
+    copy(mergedRegions = mergedRegions.filter(_ != mergedRegion))
+
+  def removeMergedRegions(whereCondition : CellRange => Boolean) =
+    copy(mergedRegions = mergedRegions.filter(whereCondition))
 
   def withPrintSetup(printSetup: PrintSetup) =
     copy(printSetup = Option(printSetup))
