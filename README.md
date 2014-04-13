@@ -10,7 +10,11 @@ Moreover it presents a slightly different approach to the report generation (vs 
 The library is still in the development phase, but hopefully at some point in the near future it will become a nice solution to the issues raised here:
 http://stackoverflow.com/questions/5032101/is-there-a-scala-wrapper-for-apache-poi
 
-## Copyright and license
+### Questions or need help
+
+Please check out our [get in touch](https://github.com/norbert-radyk/spoiwo/wiki/GetInTouch) page for a different ways of contacting spoiwo team.
+
+### Copyright and license
 
 Spoiwo is copyright 2014 NorbIT Ltd.
 
