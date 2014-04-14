@@ -12,7 +12,8 @@ http://stackoverflow.com/questions/5032101/is-there-a-scala-wrapper-for-apache-p
 
 ### Questions or need help
 
-Please check out our [get in touch](https://github.com/norbert-radyk/spoiwo/wiki/GetInTouch) page for a different ways of contacting spoiwo team.
+
+Please check out our [get in touch](https://github.com/norbert-radyk/spoiwo/wiki/Get-In-Touch) page for a different ways of contacting spoiwo team.
 
 ### Copyright and license
 
