@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SPOIWO Technical Design</title>
+    <title>SPOIWO Development Guide</title>
 </head>
 <body>
+    <h3>Directory structure</h3>
+
+    In the com.norbitltd.spoiwo package you will find 3 sub-packages:
+
+    - model - contains an abstracted (not coupled with any existing spreadsheet framework), immutable core spreadsheet model ,
+    written in the functional manner.
+    - natures - contains as number of supported conversions from between model and known spreadsheet formats.
+       Currently the supported conversions include
+        * Model to XLSX format
+        * Model to CSV format
+    This list will be extended in the next Spoiwo releases.
+    - utils - contains some utility classes with the convenience functionality for SPOIWO core engine.
 
 </body>
 </html>

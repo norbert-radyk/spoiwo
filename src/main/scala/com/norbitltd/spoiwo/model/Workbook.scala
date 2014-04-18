@@ -61,16 +61,16 @@ case class Workbook private[model](
   def withSheets(sheets: Sheet*) =
     copy(sheets = sheets)
 
-  def addSheet(row : Sheet) =
-    copy(rows = rows ++ List(row))
+  def addSheet(sheet : Sheet) =
+    copy(sheets = sheets ++ List(sheet))
 
   def addSheets(additionalSheets : Iterable[Sheet]) =
-    copy(rows = rows ++ additionalSheets)
+    copy(sheets = sheets ++ additionalSheets)
 
-  def removeSheet(row : Sheet) =
-    copy(rows = rows.filter(_ != row))
+  def removeSheet(sheet : Sheet) =
+    copy(sheets = sheets.filter(_ != sheet))
 
   def removeSheets(whereCondition : Sheet => Boolean) =
-    copy(rows = rows.filter(whereCondition))
+    copy(sheets = sheets.filter(whereCondition))
 
 }

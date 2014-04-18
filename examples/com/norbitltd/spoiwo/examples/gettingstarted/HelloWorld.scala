@@ -1,0 +1,15 @@
+package com.norbitltd.spoiwo.examples.gettingstarted
+
+import com.norbitltd.spoiwo.model.{Row, Sheet}
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
+
+object HelloWorld {
+
+  def main(args: Array[String]) {
+    val helloWorldSheet = Sheet(name = "Hello Sheet",
+      row = Row().withCellValues("Hello World!")
+    )
+
+    helloWorldSheet.saveAsXlsx("C:\\Reports\\hello_world.xlsx")
+  }
+}
