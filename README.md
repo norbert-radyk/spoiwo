@@ -1,14 +1,21 @@
 SPOIWO (Scala POI Wrapping Objects)
 ==============
+Spoiwo is an open-source library for functional-style spreadsheet generation in Scala. It was started as a wrapper over Apache POI and while the XLSX generation is still at its core, the library has been rectified to support number of other spreadsheet representations (including CSV and HTML).
 
-Spoiwo library is a wrapper over Apache POI library dedicated for Scala users and supporting functional-style generation of the Excel spreadsheets (only XLSX format).
+The library tries to address the issues Scala developers face when using spreadsheet libraries for Java and which are representing a highly non-functional way in which the spreadsheets need to be generated (mutable state, enforced indexes, execution order dependency). To address this issues SPOIWO introduces its own spreadsheet model with the number of wrapping classes and caches enabling an efficient report generation. 
 
-The aim of the library is to address the ugliness and issues coming from highly non-functional way in which the Excel spreadsheets have to be generated using Apache POI. To address this issue SPOIWO introduces the number of wrapping classes and caches enabling an efficient report generation. 
+This documentation is intended for Spoiwo users and developers to give both an overview and in-depth information of the offered functionality and what problems Spoiwo is intended to solve.
 
-Moreover it presents a slightly different approach to the report generation (vs POI) by hiding the row/column indexes from the user (as in most situations it really nakes sense to specify empty rows/columns explicitly).
+### Download
 
-The library is still in the development phase, but hopefully at some point in the near future it will become a nice solution to the issues raised here:
-http://stackoverflow.com/questions/5032101/is-there-a-scala-wrapper-for-apache-poi
+Spoiwo is available in [[The Central Repository|https://search.maven.org/#search%7Cga%7C1%7Cspoiwo]]. The current latest production version is: **spoiwo/1.0.3**
+
+### Quick links
+
+| [[About Spoiwo|https://github.com/norbert-radyk/spoiwo/wiki/Spoiwo-overview]] | [[Quick Start Guide|https://github.com/norbert-radyk/spoiwo/wiki/Quick-start-guide]] | [[Technical Documentation|https://github.com/norbert-radyk/spoiwo/wiki/Technical-documentation]] | [[Release Notes and Schedule|https://github.com/norbert-radyk/spoiwo/wiki/Release-notes-and-schedule]] |
+|----------------------------|---------------------------------|-------------------------------|---------------------------|
+| Introduces the reasons behind creating Spoiwo and presents overview of the core functionality | A step-by-step guide to setting up Spoiwo and creating first few simple spreadsheets | Detailed technical documentation on Spoiwo intended for advanced users and project contributors | Overview of the past and coming Spoiwo releases | 
+
 
 ### Questions or need help
 
