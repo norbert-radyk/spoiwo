@@ -12,9 +12,10 @@ Spoiwo is available in [[The Central Repository|https://search.maven.org/#search
 
 ### Quick links
 
-| [[About Spoiwo|https://github.com/norbert-radyk/spoiwo/wiki/Spoiwo-overview]] | [[Quick Start Guide|https://github.com/norbert-radyk/spoiwo/wiki/Quick-start-guide]] | [[Technical Documentation|https://github.com/norbert-radyk/spoiwo/wiki/Technical-documentation]] | [[Release Notes and Schedule|https://github.com/norbert-radyk/spoiwo/wiki/Release-notes-and-schedule]] |
-|----------------------------|---------------------------------|-------------------------------|---------------------------|
-| Introduces the reasons behind creating Spoiwo and presents overview of the core functionality | A step-by-step guide to setting up Spoiwo and creating first few simple spreadsheets | Detailed technical documentation on Spoiwo intended for advanced users and project contributors | Overview of the past and coming Spoiwo releases | 
+* **[About Spoiwo](https://github.com/norbert-radyk/spoiwo/wiki/Spoiwo-overview)** - Introduces the reasons behind creating Spoiwo and presents overview of the core functionality
+* **[Quick Start Guide](https://github.com/norbert-radyk/spoiwo/wiki/Quick-start-guide)** - A step-by-step guide to setting up Spoiwo and creating first few simple spreadsheets
+* **[Technical Documentation](https://github.com/norbert-radyk/spoiwo/wiki/Technical-documentation)** - Detailed technical documentation on Spoiwo intended for advanced users and project contributors
+* **[Release Notes and Schedule](https://github.com/norbert-radyk/spoiwo/wiki/Release-notes-and-schedule)** - Overview of the past and coming Spoiwo releases
 
 
 ### Questions or need help
