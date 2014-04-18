@@ -8,7 +8,7 @@ This documentation is intended for Spoiwo users and developers to give both an o
 
 ### Download
 
-Spoiwo is available in [[The Central Repository|https://search.maven.org/#search%7Cga%7C1%7Cspoiwo]]. The current latest production version is: **spoiwo/1.0.3**
+Spoiwo is available in [The Central Repository](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo). The current latest production version is: **spoiwo/1.0.3**
 
 ### Quick links
 
