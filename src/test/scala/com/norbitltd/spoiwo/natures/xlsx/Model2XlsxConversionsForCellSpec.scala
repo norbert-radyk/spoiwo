@@ -13,9 +13,9 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
 
   private def row = new XSSFWorkbook().createSheet().createRow(0)
 
-  private def convert(cell: Cell): XSSFCell = convertCell(Map(), Row(), cell,  row)
+  private def convert(cell: Cell): XSSFCell = convertCell(Map(), Row(), cell, row)
 
-  private val defaultCell : XSSFCell = convert(Cell.Empty)
+  private val defaultCell: XSSFCell = convert(Cell.Empty)
 
   "Cell conversion" should "return string cell type with empty string by default" in {
     assert(defaultCell.getCellType == usermodel.Cell.CELL_TYPE_STRING)
@@ -103,23 +103,20 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val model = Cell(new LocalDate(2011, 11, 13).toDate)
     val xlsx = convert(model)
 
-
-    //FIXME Working with dates
-    /*val date = new LocalDate(xlsx.getDateCellValue)
+    val date = new LocalDate(xlsx.getDateCellValue)
     assert(date.getYear == 2011)
     assert(date.getMonthOfYear == 11)
-    assert(date.getDayOfMonth == 13) */
+    assert(date.getDayOfMonth == 13)
   }
 
   it should "return numeric cell when set up with org.joda.time.LocalDate value" in {
     val model = Cell(new LocalDate(2011, 11, 13))
     val xlsx = convert(model)
 
-    //FIXME Working with dates
-    /*val date = new LocalDate(xlsx.getDateCellValue)
+    val date = new LocalDate(xlsx.getDateCellValue)
     assert(date.getYear == 2011)
     assert(date.getMonthOfYear == 11)
-    assert(date.getDayOfMonth == 13)*/
+    assert(date.getDayOfMonth == 13)
   }
 
   it should "return numeric cell when set up with java.util.Calendar value" in {
@@ -128,11 +125,16 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val model = Cell(calendar)
     val xlsx = convert(model)
 
-    //FIXME Working with dates
-    /*val date = new LocalDate(xlsx.getDateCellValue)
+    val date = new LocalDate(xlsx.getDateCellValue)
     assert(date.getYear == 2011)
     assert(date.getMonthOfYear == 12)
-    assert(date.getDayOfMonth == 13)*/
+    assert(date.getDayOfMonth == 13)
+  }
+
+  it should "return string cell with the date formatted yyyy-MM-dd if date before 1904" in {
+    val model = Cell(new LocalDate(1856, 11, 03).toDate)
+    val xlsx = convert(model)
+    assert("1856-11-03" === xlsx.getStringCellValue)
   }
 
 }

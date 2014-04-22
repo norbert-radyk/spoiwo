@@ -15,7 +15,8 @@ import com.norbitltd.spoiwo.model.FormulaCell
 import com.norbitltd.spoiwo.model.DateCell
 import com.norbitltd.spoiwo.model.NumericCell
 import com.norbitltd.spoiwo.model.BooleanCell
-import org.joda.time.{LocalDateTime}
+import org.joda.time.{LocalDate, LocalDateTime}
+import java.util.{Calendar, Date}
 
 object Model2XlsxConversions {
 
@@ -26,6 +27,9 @@ object Model2XlsxConversions {
   private lazy val cellStyleCache = Cache[CellStyle, XSSFCellStyle]()
   private lazy val dataFormatCache = collection.mutable.Map[XSSFWorkbook, XSSFDataFormat]()
   private lazy val fontCache = Cache[Font, XSSFFont]()
+
+  private val FirstSupportedDate = new LocalDate(1904, 01, 01)
+  private val LastSupportedDate = new LocalDate(9999, 12, 31)
 
   implicit class XlsxBorderStyle(bs: CellBorderStyle) {
     def convertAsXlsx() = convertBorderStyle(bs)
@@ -120,18 +124,32 @@ object Model2XlsxConversions {
       case FormulaCell(formula, _, _, _) => cell.setCellFormula(formula)
       case NumericCell(value, _, _, _) => cell.setCellValue(value)
       case BooleanCell(value, _, _, _) => cell.setCellValue(value)
-      case DateCell(value, _, _, _) => {
-        val dateStyle = c.format.getOrElse("yyyy-MM-dd")
-        val dateTime = LocalDateTime.fromDateFields(value)
-        cell.setCellValue(dateTime.toString(dateStyle))
-      }
-      case CalendarCell(value, _, _, _) => {
-        val dateStyle = c.format.getOrElse("yyyy-MM-dd")
-        val dateTime = LocalDateTime.fromCalendarFields(value)
-        cell.setCellValue(dateTime.toString(dateStyle))
-      }
+      case DateCell(value, _, _, _) => setDateCell(c, cell, value)
+      case CalendarCell(value, _, _, _) => setCalendarCell(c, cell, value)
     }
     cell
+  }
+
+  private def setDateCell(c : Cell, cell : XSSFCell, value : Date) {
+    val dateStyle = c.format.getOrElse("yyyy-MM-dd")
+    val dateTime = LocalDateTime.fromDateFields(value)
+    val date = dateTime.toLocalDate
+    if (date.isBefore(FirstSupportedDate) || date.isAfter(LastSupportedDate)) {
+      cell.setCellValue(dateTime.toString(dateStyle))
+    } else {
+      cell.setCellValue(value)
+    }
+  }
+
+  private def setCalendarCell(c: Cell, cell : XSSFCell, value : Calendar) {
+    val dateStyle = c.format.getOrElse("yyyy-MM-dd")
+    val dateTime = LocalDateTime.fromCalendarFields(value)
+    val date = dateTime.toLocalDate
+    if (date.isBefore(FirstSupportedDate) || date.isAfter(LastSupportedDate)) {
+      cell.setCellValue(dateTime.toString(dateStyle))
+    } else {
+      cell.setCellValue(value)
+    }
   }
 
   private[xlsx] def convertCellBorders(borders: CellBorders, style: XSSFCellStyle) {
