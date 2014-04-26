@@ -3,8 +3,10 @@ package com.norbitltd.spoiwo.natures.xlsx
 import com.norbitltd.spoiwo.model.Height._
 import org.apache.poi.ss.usermodel
 import Model2XlsxConversions.convertCell
+import Model2XlsxConversions._
+
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
-import com.norbitltd.spoiwo.model.{Row, Font, CellStyle, Cell}
+import com.norbitltd.spoiwo.model._
 import org.scalatest.FlatSpec
 import org.joda.time.LocalDate
 import java.util.Calendar
@@ -137,4 +139,13 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     assert("1856-11-03" === xlsx.getStringCellValue)
   }
 
+  it should "apply 14pt Arial cell style for column when set explicitly" in {
+    val column = Column(index = 0, style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
+    val sheet = Sheet(Row(Cell("Test"))).withColumns(column)
+    val xlsx = sheet.convertAsXlsx()
+
+    val cellStyle = xlsx.getSheetAt(0).getRow(0).getCell(0).getCellStyle
+    assert(cellStyle.getFont.getFontName == "Arial")
+    assert(cellStyle.getFont.getFontHeightInPoints == 14)
+  }
 }

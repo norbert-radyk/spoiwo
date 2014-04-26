@@ -5,13 +5,14 @@ import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFSheet, XSSFWorkbook}
 import Model2XlsxConversions.convertSheet
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.model.Height._
+import com.norbitltd.spoiwo.model.Width._
 import scala.util.Try
 
 class Model2XlsxConversionsForSheetSpec extends FlatSpec {
 
-  private def workbook : XSSFWorkbook = new XSSFWorkbook()
+  private def workbook: XSSFWorkbook = new XSSFWorkbook()
 
-  private def convert(s : Sheet) : XSSFSheet = convertSheet(s, workbook)
+  private def convert(s: Sheet): XSSFSheet = convertSheet(s, workbook)
 
   private def defaultSheet = convert(Sheet())
 
@@ -20,10 +21,10 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec {
   }
 
   it should "set sheet name to 'Sheet 3'in a workbook with already 2 sheets defined" in {
-    val w : XSSFWorkbook = workbook
+    val w: XSSFWorkbook = workbook
     w.createSheet("Test1")
     w.createSheet("Test2")
-    val sheet3 : XSSFSheet = convertSheet(Sheet(), w)
+    val sheet3: XSSFSheet = convertSheet(Sheet(), w)
     assert(sheet3.getSheetName == "Sheet3")
   }
 
@@ -39,66 +40,44 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec {
     assert(xssfFont.getFontHeightInPoints == 11)
   }
 
-  /* FIXME
-  it should "have 1st column style when set with column without index" in {
-    val style = CellStyle(font = Font(fontName = "Arial", height = 14 points))
-    val model = Sheet(columns = Column(style = style) :: Nil)
-
+  it should "have 1st column width when set with column without index" in {
+    val model = Sheet(columns = Column(width = 200 unitsOfWidth) :: Nil)
     val xssf = convert(model)
-    val xssfFont = xssf.getColumnStyle(0).asInstanceOf[XSSFCellStyle].getFont
-    assert(xssfFont.getFontName == "Arial")
-    assert(xssfFont.getFontHeightInPoints == 14)
+    assert(xssf.getColumnWidth(0) == 200)
   }
 
   it should "have correct 1st and 2nd column style when set with column without index" in {
-    val column1 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
-    val column2 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 16 points)))
+    val column1 = Column(width = 200 unitsOfWidth)
+    val column2 = Column(width = 300 unitsOfWidth)
     val model = Sheet(columns = column1 :: column2 :: Nil)
     val xssf = convert(model)
 
-    val xssfFont1 = xssf.getColumnStyle(0).asInstanceOf[XSSFCellStyle].getFont
-    assert(xssfFont1.getFontName == "Arial")
-    assert(xssfFont1.getFontHeightInPoints == 14)
-
-    val xssfFont2 = xssf.getColumnStyle(1).asInstanceOf[XSSFCellStyle].getFont
-    assert(xssfFont2.getFontName == "Arial")
-    assert(xssfFont2.getFontHeightInPoints == 16)
+    assert(xssf.getColumnWidth(0) == 200)
+    assert(xssf.getColumnWidth(1) == 300)
   }
 
   it should "have 3rd column style when set with column with index" in {
-    val style = CellStyle(font = Font(fontName = "Arial", height = 14 points))
-    val model = Sheet(columns = Column(style = style, index = 2) :: Nil)
-
+    val model = Sheet(columns = Column(width = 300 unitsOfWidth, index = 2) :: Nil)
     val xssf = convert(model)
-    val xssfFont = xssf.getColumnStyle(2).asInstanceOf[XSSFCellStyle].getFont
-    assert(xssfFont.getFontName == "Arial")
-    assert(xssfFont.getFontHeightInPoints == 14)
+    assert(xssf.getColumnWidth(2) == 300)
   }
 
   it should "have correct 4th and 6th column style when set with column without index" in {
-    val column1 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 14 points)), index = 3)
-    val column2 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 16 points)), index = 5)
+    val column1 = Column(width = 200 unitsOfWidth, index = 3)
+    val column2 = Column(width = 300 unitsOfWidth, index = 5)
     val model = Sheet(columns = column1 :: column2 :: Nil)
     val xssf = convert(model)
 
-    val xssfFont1 = xssf.getColumnStyle(3).asInstanceOf[XSSFCellStyle].getFont
-    assert(xssfFont1.getFontName == "Arial")
-    assert(xssfFont1.getFontHeightInPoints == 14)
-
-    val xssfFont2 = xssf.getColumnStyle(4).asInstanceOf[XSSFCellStyle].getFont
-    assert(xssfFont2.getFontName == "Calibri")
-    assert(xssfFont2.getFontHeightInPoints == 11)
-
-    val xssfFont3 = xssf.getColumnStyle(5).asInstanceOf[XSSFCellStyle].getFont
-    assert(xssfFont3.getFontName == "Arial")
-    assert(xssfFont3.getFontHeightInPoints == 16)
+    assert(xssf.getColumnWidth(3) == 200)
+    assert(xssf.getColumnWidth(4) == (8 characters).toUnits)
+    assert(xssf.getColumnWidth(5) == 300)
   }
 
   it should "not allow mixing columns with and without index" in {
     val column1 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
     val column2 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 16 points)), index = 5)
     val model = Sheet(columns = column1 :: column2 :: Nil)
-    val xlsx = Try( convert(model) )
+    val xlsx = Try(convert(model))
     assert(xlsx.isFailure)
   }
 
@@ -107,9 +86,9 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec {
     val column2 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 16 points)), index = 5)
     val column3 = Column(style = CellStyle(font = Font(fontName = "Arial", height = 16 points)), index = 3)
     val model = Sheet(columns = column1 :: column2 :: column3 :: Nil)
-    val xlsx = Try( convert(model) )
+    val xlsx = Try(convert(model))
     assert(xlsx.isFailure)
-  }       */
+  }
 
   it should "have no rows by default" in {
     assert(!defaultSheet.rowIterator().hasNext)
@@ -178,6 +157,5 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec {
     val xlsx = Try(convert(model))
     assert(xlsx.isFailure)
   }
-
 
 }

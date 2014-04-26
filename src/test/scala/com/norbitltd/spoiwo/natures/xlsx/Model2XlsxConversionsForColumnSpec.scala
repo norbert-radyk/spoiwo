@@ -40,16 +40,6 @@ class Model2XlsxConversionsForColumnSpec extends FlatSpec {
     assert(cellStyle.getFont.getFontHeightInPoints == 11)
   }
 
-  //FIXME Doesn't work correctly
-  /*it should "have 14pt Arial cell style for column when set explicitly" in {
-    val model = Column(index = 0, style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
-    val xlsx = apply(model)
-
-    val cellStyle = xlsx.getColumnStyle(0).asInstanceOf[XSSFCellStyle]
-    assert(cellStyle.getFont.getFontName == "Arial")
-    assert(cellStyle.getFont.getFontHeightInPoints == 14)
-  } */
-
   it should "not be hidden by default" in {
     assert(!defaultSheet.isColumnHidden(0))
   }
@@ -73,8 +63,7 @@ class Model2XlsxConversionsForColumnSpec extends FlatSpec {
   it should "not be a break when set to false" in {
     val model = Column(index = 2, break = false)
     val xlsx = apply(model)
-    //FIXME: Error - needs more analysis
-    //assert(xlsx.getColumnBreaks.isEmpty)
+    assert(xlsx.getColumnBreaks.isEmpty)
   }
 
   it should "be a break when set to true" in {
@@ -83,6 +72,18 @@ class Model2XlsxConversionsForColumnSpec extends FlatSpec {
     assert(xlsx.getColumnBreaks.toSet == Set(2))
   }
 
-  //TODO For auto-sized and group collapsed check change in column width
+  it should "remain in default width when auto-sized set to false" in {
+    val model = Column(index = 0, autoSized = false)
+    val xlsx = apply(model)
+    assert(xlsx.getColumnWidth(0) == (8 characters).toUnits)
+  }
+
+  it should "resize column width to the content when auto-sized set to true" in {
+    val model = Column(index = 0, autoSized = true)
+    val xlsx = apply(model)
+    assert(xlsx.getColumnWidth(0) == 2129)
+  }
+
+  //TODO Implement testing for group collapsed
 
 }

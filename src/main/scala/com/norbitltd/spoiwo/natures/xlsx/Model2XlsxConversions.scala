@@ -200,11 +200,10 @@ object Model2XlsxConversions {
     val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
       "Something went terribly wrong as it should have been derived if not specified explicitly!"))
 
-    c.autoSized.foreach(as => sheet.autoSizeColumn(i))
-    c.break.foreach(b => sheet.setColumnBreak(i))
+    c.autoSized.foreach(as => if(as) sheet.autoSizeColumn(i))
+    c.break.foreach(b => if(b) sheet.setColumnBreak(i))
     c.groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
     c.hidden.foreach(h => sheet.setColumnHidden(i, h))
-    //c.style.foreach(s => sheet.setDefaultColumnStyle(i, convertCellStyle(s, sheet.getWorkbook)))
     c.width.foreach(w => sheet.setColumnWidth(i, w.toUnits))
   }
 

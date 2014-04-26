@@ -270,25 +270,26 @@ class Model2XlsxConversionsForSheetProperties extends FlatSpec {
     assert(xssf.getRowSumsRight)
   }
 
-  it should "not be selected by default" in {
+  it should "be selected by default when only 1 sheet" in {
     assert(defaultSheet.isSelected)
   }
 
   it should "not be selected when set to false, but only one sheet" in {
     val model = SheetProperties(selected = false)
     val xssf = apply(model)
-    //FIXME Needs more analysis
-    //assert(xssf.isSelected)
+    assert(!xssf.isSelected)
   }
 
   it should "not be selected when set to false, but there are multiple sheets" in {
     val workbook = new XSSFWorkbook()
     val sheet1 = workbook.createSheet("S1")
     val sheet2 = workbook.createSheet("S2")
-    val model = SheetProperties(selected = false)
-    convertSheetProperties(model, sheet1)
-    //FIXME Need to understand this a bit more
+    val model1 = SheetProperties(selected = false)
+    val model2 = SheetProperties(selected = true)
+    convertSheetProperties(model1, sheet1)
+    convertSheetProperties(model2, sheet2)
     assert(!sheet1.isSelected)
+    assert(sheet2.isSelected)
   }
 
   it should "be selected when set to true" in {
