@@ -15,8 +15,9 @@ object Sheet {
             margins: Margins = null,
             paneAction: PaneAction = null,
             repeatingRows: RowRange = null,
-            repeatingColumns: ColumnRange = null): Sheet =
-    apply(
+            repeatingColumns: ColumnRange = null,
+            style: CellStyle = null): Sheet =
+    Sheet(
       name = Option(name),
       columns = columns,
       rows = rows,
@@ -28,7 +29,8 @@ object Sheet {
       margins = Option(margins),
       paneAction = Option(paneAction),
       repeatingRows = Option(repeatingRows),
-      repeatingColumns = Option(repeatingColumns)
+      repeatingColumns = Option(repeatingColumns),
+      style = Option(style)
     )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
@@ -49,7 +51,8 @@ case class Sheet private(
                           margins: Option[Margins],
                           paneAction: Option[PaneAction],
                           repeatingRows: Option[RowRange],
-                          repeatingColumns: Option[ColumnRange]) {
+                          repeatingColumns: Option[ColumnRange],
+                          style : Option[CellStyle]) {
 
   override def toString = "Sheet(" + List(
     name.map("name=" + _),
@@ -63,7 +66,8 @@ case class Sheet private(
     margins.map("margins=" + _),
     paneAction.map("pane action=" + _),
     repeatingRows.map("repeating rows=" + _),
-    repeatingColumns.map("repeating columns=" + _)
+    repeatingColumns.map("repeating columns=" + _),
+    style.map("style=" + _)
   ).flatten.mkString(",\n") + ")"
 
   def withSheetName(name: String) =
@@ -167,4 +171,10 @@ case class Sheet private(
 
   def withoutRepeatingColumns =
     copy(repeatingColumns = None)
+
+  def withStyle(style : CellStyle) =
+    copy(style = Option(style))
+
+  def withoutStyle =
+    copy(style = None)
 }

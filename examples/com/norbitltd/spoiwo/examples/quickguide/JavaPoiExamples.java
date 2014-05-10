@@ -235,7 +235,7 @@ public class JavaPoiExamples {
         fileOut.close();
     }
 
-    private static void workingWithMultipleFonts() throws IOException {
+    private static void workingWithMultipleFonts() {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("new sheet");
 

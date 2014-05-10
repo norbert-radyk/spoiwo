@@ -15,7 +15,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
 
   private def row = new XSSFWorkbook().createSheet().createRow(0)
 
-  private def convert(cell: Cell): XSSFCell = convertCell(Map(), Row(), cell, row)
+  private def convert(cell: Cell): XSSFCell = convertCell(Sheet(), Map(), Row(), cell, row)
 
   private val defaultCell: XSSFCell = convert(Cell.Empty)
 
@@ -55,7 +55,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     row.createCell(1)
 
     val model = Cell.Empty
-    val xlsx = convertCell(Map(), Row(), model, row)
+    val xlsx = convertCell(Sheet(), Map(), Row(), model, row)
     assert(xlsx.getColumnIndex == 2)
   }
 
@@ -64,6 +64,13 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val xlsx = convert(model)
     assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_STRING)
     assert(xlsx.getStringCellValue == "TEST_STRING")
+  }
+
+  it should "return string cell when set up with String with newline value" in {
+    val model = Cell("TEST_STRING\nAnd a 2nd line")
+    val xlsx = convert(model)
+    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_STRING)
+    assert(xlsx.getStringCellValue == "TEST_STRING\nAnd a 2nd line")
   }
 
   it should "return formula cell when set up with string starting with '=' sign" in {

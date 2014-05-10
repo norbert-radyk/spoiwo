@@ -28,7 +28,7 @@ object Cell {
       case v : String => if (v.startsWith("=")) {
         FormulaCell(v.drop(1), indexOption, styleOption, styleInheritance)
       } else if (v.contains("\n")) {
-        StringCell(v, indexOption, Option(style.withWrapText), styleInheritance)
+        StringCell(v, indexOption, styleOption.map(_.withWrapText), styleInheritance)
       } else {
         StringCell(v, indexOption, styleOption, styleInheritance)
       }
@@ -56,7 +56,7 @@ sealed trait Cell {
 
   protected def valueToString() : String
 
-  override def toString() = {
+  override def toString = {
     val attributes = List(index.map("index=" + _), style.map("style=" + _)).flatten
     val attributesString = if(attributes.isEmpty) "" else " (" + attributes.mkString(", ") + ")"
     valueToString() + attributesString

@@ -1,7 +1,7 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
 import com.norbitltd.spoiwo.model.Height._
-import com.norbitltd.spoiwo.model.{Cell, Font, CellStyle, Row}
+import com.norbitltd.spoiwo.model._
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFFont, XSSFRow, XSSFWorkbook}
 import Model2XlsxConversions.convertRow
 import org.scalatest.FlatSpec
@@ -11,7 +11,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec {
 
   private def sheet : XSSFSheet = new XSSFWorkbook().createSheet()
 
-  private def convert(row : Row) : XSSFRow = convertRow(Map(), row, sheet)
+  private def convert(row : Row) : XSSFRow = convertRow(Map(), row, Sheet(), sheet)
 
   private val defaultRow : XSSFRow = convert(Row.Empty)
 
@@ -65,7 +65,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec {
     sheetWithRows.createRow(0)
     sheetWithRows.createRow(1)
 
-    val xlsx : XSSFRow = convertRow(Map(), Row(), sheetWithRows)
+    val xlsx : XSSFRow = convertRow(Map(), Row(), Sheet(), sheetWithRows)
     assert(xlsx.getRowNum == 2)
   }
 
@@ -73,7 +73,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec {
     val sheetWithRows = sheet
     sheetWithRows.createRow(4)
 
-    val xlsx : XSSFRow = convertRow(Map(), Row(), sheetWithRows)
+    val xlsx : XSSFRow = convertRow(Map(), Row(), Sheet(), sheetWithRows)
     assert(xlsx.getRowNum == 5)
   }
 

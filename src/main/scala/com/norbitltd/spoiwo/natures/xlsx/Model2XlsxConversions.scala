@@ -102,21 +102,37 @@ object Model2XlsxConversions {
 
   private def mergeStyle(cell: Cell,
                          rowStyle: Option[CellStyle],
-                         columnStyle: Option[CellStyle]): Cell = {
+                         columnStyle: Option[CellStyle],
+                         sheetStyle: Option[CellStyle]): Cell = {
     cell.styleInheritance match {
-      case CellStyleInheritance.CellOnly => cell
-      case CellStyleInheritance.CellThenColumn => cell.withDefaultStyle(columnStyle)
-      case CellStyleInheritance.CellThenRow => cell.withDefaultStyle(rowStyle)
-      case CellStyleInheritance.CellThenColumnThenRow => cell.withDefaultStyle(columnStyle).withDefaultStyle(rowStyle)
-      case CellStyleInheritance.CellThenRowThenColumn => cell.withDefaultStyle(rowStyle).withDefaultStyle(columnStyle)
+      case CellStyleInheritance.CellOnly =>
+        cell
+      case CellStyleInheritance.CellThenRow =>
+        cell.withDefaultStyle(rowStyle)
+      case CellStyleInheritance.CellThenColumn =>
+        cell.withDefaultStyle(columnStyle)
+      case CellStyleInheritance.CellThenSheet =>
+        cell.withDefaultStyle(sheetStyle)
+      case CellStyleInheritance.CellThenColumnThenRow =>
+        cell.withDefaultStyle(columnStyle).withDefaultStyle(rowStyle)
+      case CellStyleInheritance.CellThenRowThenColumn =>
+        cell.withDefaultStyle(rowStyle).withDefaultStyle(columnStyle)
+      case CellStyleInheritance.CellThenRowThenSheet =>
+        cell.withDefaultStyle(rowStyle).withDefaultStyle(sheetStyle)
+      case CellStyleInheritance.CellThenColumnThenSheet =>
+        cell.withDefaultStyle(columnStyle).withDefaultStyle(sheetStyle)
+      case CellStyleInheritance.CellThenColumnThenRowThenSheet =>
+        cell.withDefaultStyle(columnStyle).withDefaultStyle(rowStyle).withDefaultStyle(sheetStyle)
+      case CellStyleInheritance.CellThenRowThenColumnThenSheet =>
+        cell.withDefaultStyle(rowStyle).withDefaultStyle(columnStyle).withDefaultStyle(sheetStyle)
     }
   }
 
-  private[xlsx] def convertCell(modelColumns: Map[Int, Column], modelRow: Row, c: Cell, row: XSSFRow): XSSFCell = {
+  private[xlsx] def convertCell(modelSheet : Sheet, modelColumns: Map[Int, Column], modelRow: Row, c: Cell, row: XSSFRow): XSSFCell = {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
 
-    val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).map(_.style).flatten)
+    val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).map(_.style).flatten, modelSheet.style)
     cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
 
     c match {
@@ -130,7 +146,7 @@ object Model2XlsxConversions {
     cell
   }
 
-  private def setDateCell(c : Cell, cell : XSSFCell, value : Date) {
+  private def setDateCell(c: Cell, cell: XSSFCell, value: Date) {
     val dateStyle = c.format.getOrElse("yyyy-MM-dd")
     val dateTime = LocalDateTime.fromDateFields(value)
     val date = dateTime.toLocalDate
@@ -141,7 +157,7 @@ object Model2XlsxConversions {
     }
   }
 
-  private def setCalendarCell(c: Cell, cell : XSSFCell, value : Calendar) {
+  private def setCalendarCell(c: Cell, cell: XSSFCell, value: Calendar) {
     val dateStyle = c.format.getOrElse("yyyy-MM-dd")
     val dateTime = LocalDateTime.fromCalendarFields(value)
     val date = dateTime.toLocalDate
@@ -200,8 +216,8 @@ object Model2XlsxConversions {
     val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
       "Something went terribly wrong as it should have been derived if not specified explicitly!"))
 
-    c.autoSized.foreach(as => if(as) sheet.autoSizeColumn(i))
-    c.break.foreach(b => if(b) sheet.setColumnBreak(i))
+    c.autoSized.foreach(as => if (as) sheet.autoSizeColumn(i))
+    c.break.foreach(b => if (b) sheet.setColumnBreak(i))
     c.groupCollapsed.foreach(gc => sheet.setColumnGroupCollapsed(i, gc))
     c.hidden.foreach(h => sheet.setColumnHidden(i, h))
     c.width.foreach(w => sheet.setColumnWidth(i, w.toUnits))
@@ -291,14 +307,14 @@ object Model2XlsxConversions {
     }
   }
 
-  private[xlsx] def convertRow(modelColumns: Map[Int, Column], modelRow: Row, sheet: XSSFSheet): XSSFRow = {
+  private[xlsx] def convertRow(modelColumns: Map[Int, Column], modelRow: Row, modelSheet: Sheet, sheet: XSSFSheet): XSSFRow = {
     validateCells(modelRow)
     val indexNumber = modelRow.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = sheet.createRow(indexNumber)
     modelRow.height.foreach(h => row.setHeightInPoints(h.toPoints))
     modelRow.style.foreach(s => row.setRowStyle(convertCellStyle(s, row.getSheet.getWorkbook)))
     modelRow.hidden.foreach(row.setZeroHeight)
-    modelRow.cells.foreach(cell => convertCell(modelColumns, modelRow, cell, row))
+    modelRow.cells.foreach(cell => convertCell(modelSheet, modelColumns, modelRow, cell, row))
     row
   }
 
@@ -321,7 +337,7 @@ object Model2XlsxConversions {
     val columns = updateColumnsWithIndexes(s)
     val columnsMap = columns.map(c => c.index.get -> c).toMap
 
-    s.rows.foreach(row => convertRow(columnsMap, row, sheet))
+    s.rows.foreach(row => convertRow(columnsMap, row, s, sheet))
     columns.foreach(c => convertColumn(c, sheet))
     s.mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(convertCellRange(mergedRegion)))
 
