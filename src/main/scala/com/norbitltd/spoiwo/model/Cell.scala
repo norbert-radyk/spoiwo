@@ -21,7 +21,7 @@ object Cell {
 
   lazy val Empty = apply("")
 
-  def apply[T : CellValueType](value : T, index : java.lang.Integer = null, style : CellStyle = null, styleInheritance : CellStyleInheritance = CellStyleInheritance.CellThenRowThenColumn) : Cell = {
+  def apply[T : CellValueType](value : T, index : java.lang.Integer = null, style : CellStyle = null, styleInheritance : CellStyleInheritance = CellStyleInheritance.CellThenRowThenColumnThenSheet) : Cell = {
     val indexOption = Option(index).map(_.intValue)
     val styleOption = Option(style)
     value match {
