@@ -78,13 +78,13 @@ case class SheetProperties private[model](
   def withAutoFilter(autoFilterRange: CellRange) =
     copy(autoFilter = Option(autoFilterRange))
 
-  def withoutAutoFilter(autoFilterRange: CellRange) =
+  def withoutAutoFilter =
     copy(autoFilter = None)
 
   def withActiveCell(activeCell: String) =
     copy(activeCell = Option(activeCell))
 
-  def withoutActiveCell(activeCell: String) =
+  def withoutActiveCell =
     copy(activeCell = None)
 
   def withAutoBreaks =
@@ -96,13 +96,13 @@ case class SheetProperties private[model](
   def withDefaultColumnWidth(defaultColumnWidth: Int) =
     copy(defaultColumnWidth = Option(defaultColumnWidth))
 
-  def withoutDefaultColumnWidth(defaultColumnWidth: Int) =
+  def withoutDefaultColumnWidth =
     copy(defaultColumnWidth = None)
 
   def withDefaultRowHeight(defaultRowHeight: Height) =
     copy(defaultRowHeight = Option(defaultRowHeight))
 
-  def withoutDefaultRowHeight(defaultRowHeight: Short) =
+  def withoutDefaultRowHeight =
     copy(defaultRowHeight = None)
 
   def withDisplayFormulas =

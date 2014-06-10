@@ -24,10 +24,35 @@ object Model2XlsxEnumConversions {
       case Medium => MEDIUM
       case MediumDashDot => MEDIUM_DASH_DOT
       case MediumDashDotDot => MEDIUM_DASH_DOT_DOTC
-      case None => NONE
+      case MediumDashed => MEDIUM_DASHED
+      case CellBorderStyle.None => NONE
       case SlantedDashDot => SLANTED_DASH_DOT
       case Thick => THICK
       case Thin => THIN
+      case CellBorderStyle(value) =>
+        throw new IllegalArgumentException(s"Unable to convert BorderStyle=$value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertBorderStyleFormatting(borderStyle: CellBorderStyle): Short = {
+    import CellBorderStyle._
+    import BorderFormatting._
+
+    borderStyle match {
+      case DashDot => BORDER_DASH_DOT
+      case DashDotDot => BORDER_DASH_DOT_DOT
+      case Dashed => BORDER_DASHED
+      case Dotted => BORDER_DOTTED
+      case Double => BORDER_DOUBLE
+      case Hair => BORDER_HAIR
+      case Medium => BORDER_MEDIUM
+      case MediumDashDot => BORDER_MEDIUM_DASH_DOT
+      case MediumDashDotDot => BORDER_MEDIUM_DASH_DOT_DOT
+      case MediumDashed => BORDER_MEDIUM_DASHED
+      case CellBorderStyle.None => BORDER_NONE
+      case SlantedDashDot => BORDER_SLANTED_DASH_DOT
+      case Thick => BORDER_THICK
+      case Thin => BORDER_THIN
       case CellBorderStyle(value) =>
         throw new IllegalArgumentException(s"Unable to convert BorderStyle=$value to XLSX - unsupported enum!")
     }
@@ -37,7 +62,7 @@ object Model2XlsxEnumConversions {
     import CellFill._
 
     cf match {
-      case None => FillPatternType.NO_FILL
+      case CellFill.None => FillPatternType.NO_FILL
       case Solid => FillPatternType.SOLID_FOREGROUND
       case Pattern.AltBars => FillPatternType.ALT_BARS
       case Pattern.BigSpots => FillPatternType.BIG_SPOTS
@@ -110,7 +135,7 @@ object Model2XlsxEnumConversions {
     import usermodel.FontScheme._
 
     fontScheme match {
-      case None => NONE
+      case FontScheme.None => NONE
       case Major => MAJOR
       case Minor => MINOR
       case FontScheme(value: String) =>
@@ -189,9 +214,21 @@ object Model2XlsxEnumConversions {
     import TypeOffset._
 
     typeOffset match {
-      case None => usermodel.Font.SS_NONE
+      case TypeOffset.None => usermodel.Font.SS_NONE
       case Subscript => usermodel.Font.SS_SUB
       case Superscript => usermodel.Font.SS_SUPER
+      case TypeOffset(value: String) =>
+        throw new IllegalArgumentException(s"Unable to convert Type Offset = $value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertEscapementType(typeOffset: TypeOffset): Short = {
+    import TypeOffset._
+
+    typeOffset match {
+      case TypeOffset.None => FontFormatting.SS_NONE
+      case Subscript => FontFormatting.SS_SUB
+      case Superscript => FontFormatting.SS_SUPER
       case TypeOffset(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Type Offset = $value to XLSX - unsupported enum!")
     }
@@ -204,9 +241,24 @@ object Model2XlsxEnumConversions {
     underline match {
       case Double => DOUBLE
       case DoubleAccounting => DOUBLE_ACCOUNTING
-      case None => NONE
+      case Underline.None => NONE
       case Single => SINGLE
       case SingleAccounting => SINGLE_ACCOUNTING
+      case Underline(value: String) =>
+        throw new IllegalArgumentException(s"Unable to convert Underline=$value to XLSX - unsupported enum!")
+    }
+  }
+
+  def convertUnderlineFormatting(underline: Underline): Byte = {
+    import Underline._
+    import FontFormatting._
+
+    underline match {
+      case Double => U_DOUBLE
+      case DoubleAccounting => U_DOUBLE_ACCOUNTING
+      case Underline.None => U_NONE
+      case Single => U_SINGLE
+      case SingleAccounting => U_SINGLE_ACCOUNTING
       case Underline(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Underline=$value to XLSX - unsupported enum!")
     }
