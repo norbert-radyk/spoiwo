@@ -449,7 +449,14 @@ object Model2XlsxConversions {
     wb.hidden.foreach(workbook.setHidden)
     wb.missingCellPolicy.foreach(mcp => workbook.setMissingCellPolicy(convertMissingCellPolicy(mcp)))
     wb.selectedTab.foreach(workbook.setSelectedTab)
+    evictFromCache(workbook)
     workbook
+  }
+
+  private def evictFromCache(wb:XSSFWorkbook): Unit ={
+      cellStyleCache.remove(wb)
+      dataFormatCache.remove(wb)
+      fontCache.remove(wb)
   }
 
   //================= Cache processing ====================
