@@ -62,7 +62,6 @@ sealed trait Cell {
     valueToString() + attributesString
   }
 
-
   def withIndex(index : Int) =
     copyCell(index = Option(index))
 

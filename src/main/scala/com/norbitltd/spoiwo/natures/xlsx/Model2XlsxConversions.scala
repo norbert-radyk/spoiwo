@@ -128,7 +128,7 @@ object Model2XlsxConversions {
     }
   }
 
-  private[xlsx] def convertCell(modelSheet : Sheet, modelColumns: Map[Int, Column], modelRow: Row, c: Cell, row: XSSFRow): XSSFCell = {
+  private[xlsx] def convertCell(modelSheet: Sheet, modelColumns: Map[Int, Column], modelRow: Row, c: Cell, row: XSSFRow): XSSFCell = {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
 
@@ -438,7 +438,7 @@ object Model2XlsxConversions {
 
   private def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
 
-  private def convertWorkbook(wb: Workbook): XSSFWorkbook = {
+  private[xlsx] def convertWorkbook(wb: Workbook): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()
     wb.sheets.foreach(sheet => convertSheet(sheet, workbook))
 
@@ -453,10 +453,10 @@ object Model2XlsxConversions {
     workbook
   }
 
-  private def evictFromCache(wb:XSSFWorkbook): Unit ={
-      cellStyleCache.remove(wb)
-      dataFormatCache.remove(wb)
-      fontCache.remove(wb)
+  private def evictFromCache(wb: XSSFWorkbook) {
+    cellStyleCache.remove(wb)
+    dataFormatCache.remove(wb)
+    fontCache.remove(wb)
   }
 
   //================= Cache processing ====================
