@@ -8,6 +8,8 @@ import com.norbitltd.spoiwo.model.Width._
 
 class Model2XlsxConversionsForColumnSpec extends FlatSpec {
 
+  private val DefaultWidth = (8 characters).toUnits
+  
   private def sheet: XSSFSheet = {
     val s = new XSSFWorkbook().createSheet()
     val r = s.createRow(0)
@@ -25,7 +27,7 @@ class Model2XlsxConversionsForColumnSpec extends FlatSpec {
   private def defaultSheet = apply(Column(index = 0))
 
   "Column conversions" should "have the column width of 8 characters by default" in {
-    assert(defaultSheet.getColumnWidth(0) == (8 characters).toUnits)
+    assert(defaultSheet.getColumnWidth(0) == DefaultWidth)
   }
 
   it should "have the column width characters of 12 when explicitly specified" in {
@@ -75,13 +77,13 @@ class Model2XlsxConversionsForColumnSpec extends FlatSpec {
   it should "remain in default width when auto-sized set to false" in {
     val model = Column(index = 0, autoSized = false)
     val xlsx = apply(model)
-    assert(xlsx.getColumnWidth(0) == (8 characters).toUnits)
+    assert(xlsx.getColumnWidth(0) == DefaultWidth)
   }
 
   it should "resize column width to the content when auto-sized set to true" in {
     val model = Column(index = 0, autoSized = true)
     val xlsx = apply(model)
-    assert(xlsx.getColumnWidth(0) == 2129)
+    assert(xlsx.getColumnWidth(0) != DefaultWidth)
   }
 
   //TODO Implement testing for group collapsed
