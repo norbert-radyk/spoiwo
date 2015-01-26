@@ -10,6 +10,6 @@ object HelloWorld {
       row = Row().withCellValues("Hello World!")
     )
 
-    helloWorldSheet.saveAsXlsx("C:\\Reports\\hello_world.xlsx")
+    helloWorldSheet.saveAsXlsx(utils.returnOrAskForSaveLocation(args))
   }
 }
