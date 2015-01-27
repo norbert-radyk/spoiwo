@@ -22,6 +22,6 @@ object GettingStartedExample {
     )
 
   def main(args: Array[String]) {
-    gettingStartedSheet.saveAsXlsx(utils.returnOrAskForSaveLocation(args))
+    gettingStartedSheet.saveAsXlsx(Utils.returnOrAskForSaveLocation(args))
   }
 }

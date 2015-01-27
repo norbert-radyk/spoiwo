@@ -3,7 +3,7 @@ package com.norbitltd.spoiwo.examples.gettingstarted
 import java.io.File
 import scala.swing.FileChooser
 
-package object utils {
+object Utils {
   
   def returnOrAskForSaveLocation(args:Array[String]):String = 
     if(args.length >= 1) {
