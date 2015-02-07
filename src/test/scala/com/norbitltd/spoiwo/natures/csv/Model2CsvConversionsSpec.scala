@@ -53,22 +53,22 @@ class Model2CsvConversionsSpec extends FlatSpec {
 
   it should "correctly format date value to yyyy-MM-dd by default" in {
       val sheet = Sheet(name = "CSV conversion").withRows(
-        Row().withCellValues("Albert Einstein", new LocalDate(1879, 03, 14)),
-        Row().withCellValues("Thomas Edison", new LocalDate(1847, 02, 11))
+        Row().withCellValues("Albert Einstein", new LocalDate(1879, 3, 14)),
+        Row().withCellValues("Thomas Edison", new LocalDate(1847, 2, 11))
       )
 
     val csvText = "Albert Einstein,1879-03-14\nThomas Edison,1847-02-11"
     assert(csvText === sheet.convertAsCsv())
   }
 
-  it should "correctly format date value to yyyy/MMM/dd by default" in {
+  it should "correctly format date value to yyyy/MM/dd by default" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
-      Row().withCellValues("Albert Einstein", new LocalDate(1879, 03, 14)),
-      Row().withCellValues("Thomas Edison", new LocalDate(1847, 02, 11))
+      Row().withCellValues("Albert Einstein", new LocalDate(1879, 3, 14)),
+      Row().withCellValues("Thomas Edison", new LocalDate(1847, 2, 11))
     )
-    val properties = CsvProperties(defaultDateFormat = "yyyy/MMM/dd")
+    val properties = CsvProperties(defaultDateFormat = "yyyy/MM/dd")
 
-    val csvText = "Albert Einstein,1879/Mar/14\nThomas Edison,1847/Feb/11"
+    val csvText = "Albert Einstein,1879/03/14\nThomas Edison,1847/02/11"
     assert(csvText === sheet.convertAsCsv(properties))
   }
 

@@ -396,11 +396,10 @@ object Model2XlsxConversions {
     sp.forceFormulaRecalculation.foreach(sheet.setForceFormulaRecalculation)
     sp.horizontallyCenter.foreach(sheet.setHorizontallyCenter)
     sp.printArea.foreach {
-      case CellRange((startRow, endRow), (startColumn, endColumn)) => {
+      case CellRange((startRow, endRow), (startColumn, endColumn)) =>
         val workbook = sheet.getWorkbook
         val sheetIndex = workbook.getNumberOfSheets - 1
         workbook.setPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow)
-      }
     }
     sp.printGridLines.foreach(sheet.setPrintGridlines)
     sp.rightToLeft.foreach(sheet.setRightToLeft)
