@@ -1,23 +1,22 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import com.norbitltd.spoiwo.model.Height._
-import org.apache.poi.ss.usermodel
-import Model2XlsxConversions.convertCell
-import Model2XlsxConversions._
-
-import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
-import com.norbitltd.spoiwo.model._
-import org.scalatest.FlatSpec
-import org.joda.time.LocalDate
 import java.util.Calendar
+
+import com.norbitltd.spoiwo.model.Height._
+import com.norbitltd.spoiwo.model._
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertCell, _}
+import org.apache.poi.ss.usermodel
+import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
+import org.joda.time.LocalDate
+import org.scalatest.FlatSpec
 
 class Model2XlsxConversionsForCellSpec extends FlatSpec {
 
-  private def row = new XSSFWorkbook().createSheet().createRow(0)
+  private val defaultCell: XSSFCell = convert(Cell.Empty)
 
   private def convert(cell: Cell): XSSFCell = convertCell(Sheet(), Map(), Row(), cell, row)
 
-  private val defaultCell: XSSFCell = convert(Cell.Empty)
+  private def row = new XSSFWorkbook().createSheet().createRow(0)
 
   "Cell conversion" should "return string cell type with empty string by default" in {
     assert(defaultCell.getCellType == usermodel.Cell.CELL_TYPE_STRING)
@@ -141,7 +140,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
   }
 
   it should "return string cell with the date formatted yyyy-MM-dd if date before 1904" in {
-    val model = Cell(new LocalDate(1856, 11, 03).toDate)
+    val model = Cell(new LocalDate(1856, 11, 3).toDate)
     val xlsx = convert(model)
     assert("1856-11-03" === xlsx.getStringCellValue)
   }

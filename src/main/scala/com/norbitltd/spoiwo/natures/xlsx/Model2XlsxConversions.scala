@@ -1,100 +1,26 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import com.norbitltd.spoiwo.model._
-import org.apache.poi.xssf.usermodel._
-import org.apache.poi.ss.util.CellRangeAddress
-import org.apache.poi.ss.usermodel
 import java.io.FileOutputStream
-import Model2XlsxEnumConversions._
-import com.norbitltd.spoiwo.model.enums._
-import com.norbitltd.spoiwo.model.SplitPane
-import com.norbitltd.spoiwo.model.NoSplitOrFreeze
-import com.norbitltd.spoiwo.model.CalendarCell
-import com.norbitltd.spoiwo.model.StringCell
-import com.norbitltd.spoiwo.model.FormulaCell
-import com.norbitltd.spoiwo.model.DateCell
-import com.norbitltd.spoiwo.model.NumericCell
-import com.norbitltd.spoiwo.model.BooleanCell
-import org.joda.time.{LocalDate, LocalDateTime}
 import java.util.{Calendar, Date}
+
+import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NoSplitOrFreeze, NumericCell, SplitPane, StringCell, _}
+import com.norbitltd.spoiwo.model.enums._
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
+import org.apache.poi.ss.usermodel
+import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.xssf.usermodel._
+import org.joda.time.{LocalDate, LocalDateTime}
 
 object Model2XlsxConversions {
 
   private type Cache[K, V] = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[K, V]]
-
-  private def Cache[K, V]() = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[K, V]]()
-
   private lazy val cellStyleCache = Cache[CellStyle, XSSFCellStyle]()
   private lazy val dataFormatCache = collection.mutable.Map[XSSFWorkbook, XSSFDataFormat]()
   private lazy val fontCache = Cache[Font, XSSFFont]()
-
-  private val FirstSupportedDate = new LocalDate(1904, 01, 01)
+  private val FirstSupportedDate = new LocalDate(1904, 1, 1)
   private val LastSupportedDate = new LocalDate(9999, 12, 31)
 
-  implicit class XlsxBorderStyle(bs: CellBorderStyle) {
-    def convertAsXlsx() = convertBorderStyle(bs)
-  }
-
-  implicit class XlsxColor(c: Color) {
-    def convertAsXlsx() = convertColor(c)
-  }
-
-  implicit class XlsxCellFill(cf: CellFill) {
-    def convertAsXlsx() = convertCellFill(cf)
-  }
-
-  implicit class XlsxCellStyle(cs: CellStyle) {
-    def convertAsXlsx(cell: XSSFCell): XSSFCellStyle = convertAsXlsx(cell.getRow)
-
-    def convertAsXlsx(row: XSSFRow): XSSFCellStyle = convertAsXlsx(row.getSheet)
-
-    def convertAsXlsx(sheet: XSSFSheet): XSSFCellStyle = convertAsXlsx(sheet.getWorkbook)
-
-    def convertAsXlsx(workbook: XSSFWorkbook): XSSFCellStyle = convertCellStyle(cs, workbook)
-  }
-
-  implicit class XlsxFont(f: Font) {
-    def convertAsXlsx(cell: XSSFCell): XSSFFont = convertAsXlsx(cell.getRow)
-
-    def convertAsXlsx(row: XSSFRow): XSSFFont = convertAsXlsx(row.getSheet)
-
-    def convertAsXlsx(sheet: XSSFSheet): XSSFFont = convertAsXlsx(sheet.getWorkbook)
-
-    def convertAsXlsx(workbook: XSSFWorkbook): XSSFFont = convertFont(f, workbook)
-  }
-
-  implicit class XlsxHorizontalAlignment(ha: CellHorizontalAlignment) {
-    def convertAsXlsx() = convertHorizontalAlignment(ha)
-  }
-
-  implicit class XlsxSheet(s: Sheet) {
-    def convertAsXlsx(workbook: XSSFWorkbook) = convertSheet(s, workbook)
-
-    def convertAsXlsx() = Workbook(s).convertAsXlsx()
-
-    def saveAsXlsx(fileName: String) {
-      Workbook(s).saveAsXlsx(fileName)
-    }
-  }
-
-  implicit class XlsxVerticalAlignment(va: CellVerticalAlignment) {
-    def convertAsXlsx() = convertVerticalAlignment(va)
-  }
-
-  implicit class XlsxWorkbook(workbook: Workbook) {
-    def convertAsXlsx() = convertWorkbook(workbook)
-
-    def saveAsXlsx(fileName: String) = {
-      val stream = new FileOutputStream(fileName)
-      try {
-        val workbook = convertAsXlsx()
-        workbook.write(stream)
-      } finally {
-        stream.flush()
-        stream.close()
-      }
-    }
-  }
+  private def Cache[K, V]() = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[K, V]]()
 
   private def convertColor(color: Color): XSSFColor = new XSSFColor(
     Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
@@ -211,7 +137,6 @@ object Model2XlsxConversions {
       cellStyle
     }
 
-
   private[xlsx] def convertColumn(c: Column, sheet: XSSFSheet) {
     val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
       "Something went terribly wrong as it should have been derived if not specified explicitly!"))
@@ -260,7 +185,6 @@ object Model2XlsxConversions {
       font
     }
 
-
   private def convertHeader(h: Header, sheet: XSSFSheet) {
     h.left.foreach(sheet.getHeader.setLeft)
     h.center.foreach(sheet.getHeader.setCenter)
@@ -278,7 +202,6 @@ object Model2XlsxConversions {
     h.evenCenter.foreach(sheet.getEvenHeader.setCenter)
     h.evenRight.foreach(sheet.getEvenHeader.setRight)
   }
-
 
   private def convertMargins(margins: Margins, sheet: XSSFSheet) {
     margins.top.foreach(topMargin => sheet.setMargin(usermodel.Sheet.TopMargin, topMargin))
@@ -462,6 +385,71 @@ object Model2XlsxConversions {
   private def getCachedOrUpdate[K, V](cache: Cache[K, V], value: K, workbook: XSSFWorkbook)(newValue: => V): V = {
     val workbookCache = cache.getOrElseUpdate(workbook, collection.mutable.Map[K, V]())
     workbookCache.getOrElseUpdate(value, newValue)
+  }
+
+  implicit class XlsxBorderStyle(bs: CellBorderStyle) {
+    def convertAsXlsx() = convertBorderStyle(bs)
+  }
+
+  implicit class XlsxColor(c: Color) {
+    def convertAsXlsx() = convertColor(c)
+  }
+
+  implicit class XlsxCellFill(cf: CellFill) {
+    def convertAsXlsx() = convertCellFill(cf)
+  }
+
+  implicit class XlsxCellStyle(cs: CellStyle) {
+    def convertAsXlsx(cell: XSSFCell): XSSFCellStyle = convertAsXlsx(cell.getRow)
+
+    def convertAsXlsx(row: XSSFRow): XSSFCellStyle = convertAsXlsx(row.getSheet)
+
+    def convertAsXlsx(sheet: XSSFSheet): XSSFCellStyle = convertAsXlsx(sheet.getWorkbook)
+
+    def convertAsXlsx(workbook: XSSFWorkbook): XSSFCellStyle = convertCellStyle(cs, workbook)
+  }
+
+  implicit class XlsxFont(f: Font) {
+    def convertAsXlsx(cell: XSSFCell): XSSFFont = convertAsXlsx(cell.getRow)
+
+    def convertAsXlsx(row: XSSFRow): XSSFFont = convertAsXlsx(row.getSheet)
+
+    def convertAsXlsx(sheet: XSSFSheet): XSSFFont = convertAsXlsx(sheet.getWorkbook)
+
+    def convertAsXlsx(workbook: XSSFWorkbook): XSSFFont = convertFont(f, workbook)
+  }
+
+  implicit class XlsxHorizontalAlignment(ha: CellHorizontalAlignment) {
+    def convertAsXlsx() = convertHorizontalAlignment(ha)
+  }
+
+  implicit class XlsxSheet(s: Sheet) {
+    def convertAsXlsx(workbook: XSSFWorkbook) = convertSheet(s, workbook)
+
+    def convertAsXlsx() = Workbook(s).convertAsXlsx()
+
+    def saveAsXlsx(fileName: String) {
+      Workbook(s).saveAsXlsx(fileName)
+    }
+  }
+
+  implicit class XlsxVerticalAlignment(va: CellVerticalAlignment) {
+    def convertAsXlsx() = convertVerticalAlignment(va)
+  }
+
+  implicit class XlsxWorkbook(workbook: Workbook) {
+    def saveAsXlsx(fileName: String) = {
+      val stream = new FileOutputStream(fileName)
+      try {
+        val workbook = convertAsXlsx()
+        workbook.write(stream)
+      } finally {
+        stream.flush()
+        stream.close()
+      }
+    }
+
+    def convertAsXlsx() = convertWorkbook(workbook)
   }
 
 }
