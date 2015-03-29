@@ -7,6 +7,7 @@ import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model.Width._
 import scala.util.Try
+import scala.language.postfixOps
 
 class Model2XlsxConversionsForSheetSpec extends FlatSpec {
 

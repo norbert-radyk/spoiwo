@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFFont, XSSFRow, XSSFWorkbook
 import Model2XlsxConversions.convertRow
 import org.scalatest.FlatSpec
 import scala.util.Try
+import scala.language.postfixOps
 
 class Model2XlsxConversionsForRowSpec extends FlatSpec {
 

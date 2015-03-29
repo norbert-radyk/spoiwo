@@ -5,6 +5,7 @@ import org.scalatest.FlatSpec
 import com.norbitltd.spoiwo.model.{CellRange, SheetProperties}
 import Model2XlsxConversions.convertSheetProperties
 import com.norbitltd.spoiwo.model.Height._
+import scala.language.postfixOps
 
 class Model2XlsxConversionsForSheetProperties extends FlatSpec {
 

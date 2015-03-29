@@ -7,7 +7,7 @@ import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.scalatest.FlatSpec
-
+import scala.language.postfixOps
 
 class Model2XlsxConversionsForWorkbookCacheSpec extends FlatSpec {
 

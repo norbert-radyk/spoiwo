@@ -7,6 +7,8 @@ import com.norbitltd.spoiwo.model.{Height, Color, Font}
 import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{FontUnderline, FontCharset}
 import Height._
+import scala.language.postfixOps
+
 
 import com.norbitltd.spoiwo.model.enums._
 

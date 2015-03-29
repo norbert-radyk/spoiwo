@@ -9,6 +9,8 @@ import org.apache.poi.ss.usermodel
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
 import org.joda.time.LocalDate
 import org.scalatest.FlatSpec
+import scala.language.postfixOps
+
 
 class Model2XlsxConversionsForCellSpec extends FlatSpec {
 

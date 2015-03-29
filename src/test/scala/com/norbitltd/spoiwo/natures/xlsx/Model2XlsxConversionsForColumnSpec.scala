@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFWorkbook, XSSFSheet}
 import com.norbitltd.spoiwo.model.Column
 import Model2XlsxConversions.convertColumn
 import com.norbitltd.spoiwo.model.Width._
+import scala.language.postfixOps
 
 class Model2XlsxConversionsForColumnSpec extends FlatSpec {
 

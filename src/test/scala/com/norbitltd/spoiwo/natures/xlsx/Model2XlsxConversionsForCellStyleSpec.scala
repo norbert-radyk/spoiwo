@@ -7,6 +7,7 @@ import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{VerticalAlignment, HorizontalAlignment, FillPatternType, BorderStyle}
 import Height._
 import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellVerticalAlignment, CellHorizontalAlignment, CellFill}
+import scala.language.postfixOps
 
 class Model2XlsxConversionsForCellStyleSpec extends FlatSpec {
 
