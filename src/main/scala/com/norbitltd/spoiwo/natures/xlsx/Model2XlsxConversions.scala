@@ -273,6 +273,7 @@ object Model2XlsxConversions {
     s.paneAction.foreach(pa => convertPaneAction(pa, sheet))
     s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
     s.repeatingColumns.foreach(rc => sheet.setRepeatingColumns(convertColumnRange(rc)))
+    s.password.foreach(ps => sheet.protectSheet(ps))
     sheet
   }
 

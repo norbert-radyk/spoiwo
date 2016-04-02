@@ -16,7 +16,8 @@ object Sheet {
             paneAction: PaneAction = null,
             repeatingRows: RowRange = null,
             repeatingColumns: ColumnRange = null,
-            style: CellStyle = null): Sheet =
+            style: CellStyle = null,
+            password: String = null): Sheet =
     Sheet(
       name = Option(name),
       columns = columns,
@@ -30,7 +31,8 @@ object Sheet {
       paneAction = Option(paneAction),
       repeatingRows = Option(repeatingRows),
       repeatingColumns = Option(repeatingColumns),
-      style = Option(style)
+      style = Option(style),
+      password = Option(password)
     )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
@@ -52,7 +54,8 @@ case class Sheet private(
                           paneAction: Option[PaneAction],
                           repeatingRows: Option[RowRange],
                           repeatingColumns: Option[ColumnRange],
-                          style : Option[CellStyle]) {
+                          style : Option[CellStyle],
+                          password:Option[String]) {
 
   override def toString = "Sheet(" + List(
     name.map("name=" + _),
@@ -67,7 +70,8 @@ case class Sheet private(
     paneAction.map("pane action=" + _),
     repeatingRows.map("repeating rows=" + _),
     repeatingColumns.map("repeating columns=" + _),
-    style.map("style=" + _)
+    style.map("style=" + _),
+    password.map("password=" + _)
   ).flatten.mkString(",\n") + ")"
 
   def withSheetName(name: String) =
@@ -114,7 +118,7 @@ case class Sheet private(
 
   def withMergedRegions(mergedRegions: CellRange*): Sheet =
     withMergedRegions(mergedRegions)
-  
+
   def addMergedRegion(mergedRegion : CellRange) =
     copy(mergedRegions = mergedRegions ++ List(mergedRegion))
 
@@ -138,6 +142,13 @@ case class Sheet private(
 
   def withoutHeader =
     copy(header = None)
+
+  def withPassword(password: String) =
+    copy(password= Option(password))
+
+  def withoutPassword =
+    copy(password= None)
+
 
   def withFooter(footer: Footer) =
     copy(footer = Option(footer))
