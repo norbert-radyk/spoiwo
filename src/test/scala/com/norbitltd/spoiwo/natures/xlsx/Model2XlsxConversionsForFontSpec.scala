@@ -53,7 +53,7 @@ class Model2XlsxConversionsForFontSpec extends FlatSpec {
   it should "return 'Lime' color when set explicitly" in {
     val model : Font = Font(color = Color.Lime)
     val xssf : XSSFFont = convert(model)
-    val rgbArray = xssf.getXSSFColor.getRgb
+    val rgbArray = xssf.getXSSFColor.getRGB
     assert(rgbArray(0) == 0)
     assert(rgbArray(1) == 255.toByte)
     assert(rgbArray(2) == 0)

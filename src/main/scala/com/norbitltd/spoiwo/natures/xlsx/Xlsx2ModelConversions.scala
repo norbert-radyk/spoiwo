@@ -11,7 +11,7 @@ object Xlsx2ModelConversions {
 
   def convertXSSFColor(color: XSSFColor) : Color = {
     require(color != null, "Can't convert NULL color value!")
-    Color(color.getRgb)
+    Color(color.getRGB)
   }
 
 

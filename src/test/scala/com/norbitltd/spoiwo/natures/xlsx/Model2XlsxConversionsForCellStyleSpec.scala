@@ -38,9 +38,9 @@ class Model2XlsxConversionsForCellStyleSpec extends FlatSpec {
     assert(xssfWithBorders.getBorderLeftEnum == BorderStyle.DOUBLE)
     assert(xssfWithBorders.getBorderRightEnum == BorderStyle.THICK)
 
-    val leftColorRGB = xssfWithBorders.getLeftBorderXSSFColor.getRgb
+    val leftColorRGB = xssfWithBorders.getLeftBorderXSSFColor.getRGB
     assert(leftColorRGB.toList == List(0, 0, 255.toByte))
-    val rightColorRGB = xssfWithBorders.getRightBorderXSSFColor.getRgb
+    val rightColorRGB = xssfWithBorders.getRightBorderXSSFColor.getRGB
     assert(rightColorRGB.toList == List(255.toByte, 0, 0))
   }
 
@@ -94,8 +94,8 @@ class Model2XlsxConversionsForCellStyleSpec extends FlatSpec {
   it should "return red background and blue foreground color when explicitly set" in {
     val modelWithFillColors : CellStyle = CellStyle(fillBackgroundColor = Color.Red, fillForegroundColor = Color.Blue)
     val xssfDefault : XSSFCellStyle = convertCellStyle(modelWithFillColors, workbook)
-    assert(xssfDefault.getFillBackgroundXSSFColor.getRgb.toList == List(255.toByte, 0, 0))
-    assert(xssfDefault.getFillForegroundXSSFColor.getRgb.toList == List(0, 0, 255.toByte))
+    assert(xssfDefault.getFillBackgroundXSSFColor.getRGB.toList == List(255.toByte, 0, 0))
+    assert(xssfDefault.getFillForegroundXSSFColor.getRGB.toList == List(0, 0, 255.toByte))
   }
 
   it should "return 'General' horizontal alignment by default" in {

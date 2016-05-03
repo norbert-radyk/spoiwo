@@ -21,7 +21,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.10.5",
+  scalaVersion := "2.11.8",
   publishMavenStyle := true,
   publishArtifact in Test := false,
   publishTo := {
@@ -33,12 +33,13 @@ lazy val commonSettings = Seq(
   },
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.apache.poi" % "poi" % "3.11",
-    "org.apache.poi" % "poi-ooxml" % "3.11",
-    "commons-logging" % "commons-logging" % "1.2",
-    "joda-time" % "joda-time" % "2.7",
-    "org.joda" % "joda-convert" % "1.7",
-    "org.scalatest" % "scalatest_2.10" % "2.2.4"
+    "org.scala-lang.modules" %% "scala-xml"         % "1.0.3",
+    "org.apache.poi"         %  "poi"               % "3.14",
+    "org.apache.poi"         %  "poi-ooxml"         % "3.14",
+    "commons-logging"        %  "commons-logging"   % "1.2",
+    "joda-time"              %  "joda-time"         % "2.7",
+    "org.joda"               %  "joda-convert"      % "1.7",
+    "org.scalatest"          %% "scalatest"         % "2.2.4"
   )
 )
 
@@ -46,7 +47,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.0.7"
+    version := "1.0.7-SNAPSHOT"
   )
 
 lazy val examples = (project in file("examples"))

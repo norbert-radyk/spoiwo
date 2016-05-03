@@ -36,7 +36,7 @@ class Model2XlsxConversionsForCellBordersSpec extends FlatSpec{
     val xlsx = convert(model)
 
     assert(xlsx.getBorderBottomEnum == usermodel.BorderStyle.DASHED)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM).getRgb.toList ==
+    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM).getRGB.toList ==
       Array[Byte](0, 0, 255.toByte).toList)
   }
 
@@ -45,7 +45,7 @@ class Model2XlsxConversionsForCellBordersSpec extends FlatSpec{
     val xlsx = convert(model)
 
     assert(xlsx.getBorderTopEnum == usermodel.BorderStyle.MEDIUM_DASH_DOT_DOTC)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.TOP).getRgb.toList ==
+    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.TOP).getRGB.toList ==
       Array[Byte](128.toByte, 128.toByte, 0.toByte).toList)
   }
 
@@ -54,7 +54,7 @@ class Model2XlsxConversionsForCellBordersSpec extends FlatSpec{
     val xlsx = convert(model)
 
     assert(xlsx.getBorderLeftEnum == usermodel.BorderStyle.DOTTED)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.LEFT).getRgb.toList ==
+    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.LEFT).getRGB.toList ==
       Array[Byte](0, 0, 255.toByte).toList)
   }
 
@@ -63,7 +63,7 @@ class Model2XlsxConversionsForCellBordersSpec extends FlatSpec{
     val xlsx = convert(model)
 
     assert(xlsx.getBorderRightEnum == usermodel.BorderStyle.HAIR)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.RIGHT).getRgb.toList ==
+    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.RIGHT).getRGB.toList ==
       Array[Byte](0, 0, 255.toByte).toList)
   }
 
