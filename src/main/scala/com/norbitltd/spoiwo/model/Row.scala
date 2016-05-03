@@ -1,6 +1,7 @@
 package com.norbitltd.spoiwo.model
 
 import java.util.{Calendar, Date}
+import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
 import org.joda.time.{DateTime, LocalDate}
 
 object Row {
@@ -56,16 +57,20 @@ case class Row private(cells: Iterable[Cell],
 
   def withCellValues(cellValues: List[Any]): Row = {
     val cells = cellValues.map {
-      case stringValue: String => Cell(stringValue)
-      case doubleValue: Double => Cell(doubleValue)
-      case intValue: Int => Cell(intValue.toDouble)
-      case longValue: Long => Cell(longValue.toDouble)
-      case booleanValue: Boolean => Cell(booleanValue)
-      case dateValue: Date => Cell(dateValue)
-      case dateValue: LocalDate => Cell(dateValue)
-      case dateValue: DateTime => Cell(dateValue)
-      case calendarValue: Calendar => Cell(calendarValue)
-      case value => throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
+      case stringValue: String           => Cell(stringValue)
+      case doubleValue: Double           => Cell(doubleValue)
+      case decimalValue: BigDecimal      => Cell(decimalValue)
+      case intValue: Int                 => Cell(intValue)
+      case longValue: Long               => Cell(longValue)
+      case booleanValue: Boolean         => Cell(booleanValue)
+      case dateValue: Date               => Cell(dateValue)
+      case dateValue: LocalDate          => Cell(dateValue)
+      case dateValue: DateTime           => Cell(dateValue)
+      case dateValue: JLocalDate         => Cell(dateValue)
+      case dateTimeValue: JLocalDateTime => Cell(dateTimeValue)
+      case calendarValue: Calendar       => Cell(calendarValue)
+      case value                         =>
+        throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }
     copy(cells = cells.toVector)
   }
