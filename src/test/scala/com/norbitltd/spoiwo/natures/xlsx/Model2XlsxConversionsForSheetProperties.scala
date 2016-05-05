@@ -1,6 +1,7 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
+import org.apache.poi.ss.util.CellAddress
 import org.scalatest.FlatSpec
 import com.norbitltd.spoiwo.model.{CellRange, SheetProperties}
 import Model2XlsxConversions.convertSheetProperties
@@ -28,7 +29,7 @@ class Model2XlsxConversionsForSheetProperties extends FlatSpec {
   it should "return B3 as active cell if explicitly specified" in {
     val model = SheetProperties(activeCell = "B3")
     val xssf = apply(model)
-    assert(xssf.getActiveCell == "B3")
+    assert(xssf.getActiveCell == new CellAddress("B3"))
   }
 
   it should "return no auto-breaks by default" in {
