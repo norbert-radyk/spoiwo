@@ -33,13 +33,12 @@ lazy val commonSettings = Seq(
   },
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml"         % "1.0.3",
+    "org.scala-lang.modules" %% "scala-xml"         % "1.0.5",
     "org.apache.poi"         %  "poi"               % "3.14",
     "org.apache.poi"         %  "poi-ooxml"         % "3.14",
-    "commons-logging"        %  "commons-logging"   % "1.2",
-    "joda-time"              %  "joda-time"         % "2.7",
-    "org.joda"               %  "joda-convert"      % "1.7",
-    "org.scalatest"          %% "scalatest"         % "2.2.4"
+    "joda-time"              %  "joda-time"         % "2.9",
+    "org.joda"               %  "joda-convert"      % "1.8.1",
+    "org.scalatest"          %% "scalatest"         % "2.2.6"   % "test"
   )
 )
 
@@ -47,7 +46,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.0.7-SNAPSHOT"
+    version := "1.1.0-SNAPSHOT"
   )
 
 lazy val examples = (project in file("examples"))
@@ -55,5 +54,5 @@ lazy val examples = (project in file("examples"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.0.0"
+    version := "1.0.1"
   )
