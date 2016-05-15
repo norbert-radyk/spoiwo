@@ -58,7 +58,7 @@ sealed trait Cell {
   val index : Option[Int]
   val style : Option[CellStyle]
   val styleInheritance : CellStyleInheritance
-  val format : Option[String] = style.map(_.dataFormat.map(_.formatString)).flatten.flatten
+  val format : Option[String] = style.flatMap(_.dataFormat.flatMap(_.formatString))
 
   protected def copyCell(value : Any = value, index : Option[Int] = index, style : Option[CellStyle] = style) : Cell
 

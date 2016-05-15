@@ -144,7 +144,7 @@ object Color {
   lazy val WhiteSmoke = Color(245,245,245)
 
   def apply(rgbArray : Array[Byte]) : Color = {
-    require(rgbArray.size == 3, "Only 3 values are allowed in RGB array!")
+    require(rgbArray.length == 3, "Only 3 values are allowed in RGB array!")
     Color(rgbArray(0), rgbArray(1), rgbArray(2))
   }
 }

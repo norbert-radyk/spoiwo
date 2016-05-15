@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-public class JavaPoiExamples {
+class JavaPoiExamples {
 
     public static void newWorkbook() throws IOException {
         Workbook wb = new XSSFWorkbook();
@@ -370,7 +370,7 @@ public class JavaPoiExamples {
     private static void setZoomMagnification() {
         Workbook wb = new HSSFWorkbook();
         Sheet sheet1 = wb.createSheet("new sheet");
-        sheet1.setZoom(3,4);   // 75 percent magnification
+        sheet1.setZoom(75);
     }
 
     private static void splitAndFreezePanes() throws IOException {

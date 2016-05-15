@@ -7,7 +7,7 @@ import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaC
 import com.norbitltd.spoiwo.model.enums._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
-import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
 import org.apache.poi.xssf.usermodel._
 import org.joda.time.{LocalDate, LocalDateTime}
 
@@ -58,7 +58,7 @@ object Model2XlsxConversions {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
 
-    val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).map(_.style).flatten, modelSheet.style)
+    val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).flatMap(_.style), modelSheet.style)
     cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
 
     c match {
@@ -245,7 +245,7 @@ object Model2XlsxConversions {
     val indexedCells = r.cells.filter(_.index.isDefined)
     val contextCells = r.cells.filter(_.index.isEmpty)
 
-    if (indexedCells.size > 0 && contextCells.size > 0)
+    if (indexedCells.nonEmpty && contextCells.nonEmpty)
       throw new IllegalArgumentException("It is not allowed to mix cells with and without index within a single row!")
 
     val distinctIndexes = indexedCells.map(_.index).toSet.flatten
@@ -281,17 +281,17 @@ object Model2XlsxConversions {
     val indexedRows = s.rows.filter(_.index.isDefined)
     val contextRows = s.rows.filter(_.index.isEmpty)
 
-    if (indexedRows.size > 0 && contextRows.size > 0) {
+    if (indexedRows.nonEmpty && contextRows.nonEmpty) {
       throw new IllegalArgumentException("It is not allowed to mix rows with and without index within a single sheet!")
     }
 
-    val distinctIndexes = indexedRows.map(_.index).toSet.flatten
+    val distinctIndexes = indexedRows.flatMap(_.index).toSet
     if (indexedRows.size != distinctIndexes.size)
       throw new IllegalArgumentException("It is not allowed to have rows with duplicate index within a single sheet!")
   }
 
   private def updateColumnsWithIndexes(s: Sheet): List[Column] = {
-    val currentColumnIndexes = s.columns.map(_.index).flatten.toSet
+    val currentColumnIndexes = s.columns.flatMap(_.index).toSet
     if (currentColumnIndexes.isEmpty) {
       s.columns.zipWithIndex.map {
         case (column, index) => column.withIndex(index)
@@ -307,7 +307,7 @@ object Model2XlsxConversions {
 
   private[xlsx] def convertSheetProperties(sp: SheetProperties, sheet: XSSFSheet) {
     sp.autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(convertCellRange(autoFilterRange)))
-    sp.activeCell.foreach(sheet.setActiveCell)
+    sp.activeCell.foreach(stringReference => sheet.setActiveCell(new CellAddress(stringReference)))
     sp.autoBreaks.foreach(sheet.setAutobreaks)
     sp.defaultColumnWidth.foreach(sheet.setDefaultColumnWidth)
     sp.defaultRowHeight.foreach(height => sheet.setDefaultRowHeightInPoints(height.toPoints))

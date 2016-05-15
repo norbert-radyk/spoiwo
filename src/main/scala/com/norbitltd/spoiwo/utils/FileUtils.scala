@@ -1,17 +1,18 @@
 package com.norbitltd.spoiwo.utils
 
-import java.io.File
+import java.io.{File, PrintWriter}
 
 object FileUtils {
 
-  private def printToFile(f: java.io.File)(op: java.io.PrintWriter => Unit) {
-    val p = new java.io.PrintWriter(f)
-    try { op(p) } finally { p.flush(); p.close() }
-  }
+  def write(fileName: String, content: String): Unit = {
+    val file = new File(fileName)
+    val writer = new PrintWriter(file)
 
-  def write(fileName : String, content : String) {
-    printToFile(new File(fileName)) {
-      p => p.write(content)
+    try {
+      writer.write(content)
+      writer.flush()
+    } finally {
+      writer.close()
     }
   }
 
