@@ -1,13 +1,13 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
 import java.util.Calendar
-
+import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertCell, _}
 import org.apache.poi.ss.usermodel
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
-import org.joda.time.LocalDate
+import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.FlatSpec
 import scala.language.postfixOps
 
@@ -88,6 +88,13 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     assert(xlsx.getNumericCellValue == 90.45)
   }
 
+  it should "return numeric cell when set up with big decimal value" in {
+    val model = Cell(BigDecimal(90.45))
+    val xlsx = convert(model)
+    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_NUMERIC)
+    assert(xlsx.getNumericCellValue == 90.45)
+  }
+
   it should "return numeric cell when set up with int value" in {
     val model = Cell(90)
     val xlsx = convert(model)
@@ -139,6 +146,42 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     assert(date.getYear == 2011)
     assert(date.getMonthOfYear == 12)
     assert(date.getDayOfMonth == 13)
+  }
+
+  it should "return numeric cell when set up with java.time.LocalDate value" in {
+    test(JLocalDate.of(2011, 6, 13))
+    test(JLocalDate.of(2011, 11, 13))
+
+    def test(ld: JLocalDate): Unit = {
+      val model = Cell(ld)
+      val xlsx = convert(model)
+
+      val date = new DateTime(xlsx.getDateCellValue)
+      assert(date.getYear           == ld.getYear)
+      assert(date.getMonthOfYear    == ld.getMonthValue)
+      assert(date.getDayOfMonth     == ld.getDayOfMonth)
+      assert(date.getHourOfDay      == 0)
+      assert(date.getMinuteOfHour   == 0)
+      assert(date.getSecondOfMinute == 0)
+    }
+  }
+
+  it should "return numeric cell when set up with java.time.LocalDateTime value" in {
+    test(JLocalDateTime.of(2011,  6, 13, 15, 30, 10))
+    test(JLocalDateTime.of(2011, 11, 13, 15, 30, 10))
+
+    def test(ldt: JLocalDateTime): Unit = {
+      val model = Cell(ldt)
+      val xlsx = convert(model)
+
+      val date = new DateTime(xlsx.getDateCellValue)
+      assert(date.getYear           == ldt.getYear)
+      assert(date.getMonthOfYear    == ldt.getMonthValue)
+      assert(date.getDayOfMonth     == ldt.getDayOfMonth)
+      assert(date.getHourOfDay      == ldt.getHour)
+      assert(date.getMinuteOfHour   == ldt.getMinute)
+      assert(date.getSecondOfMinute == ldt.getSecond)
+    }
   }
 
   it should "return string cell with the date formatted yyyy-MM-dd if date before 1904" in {

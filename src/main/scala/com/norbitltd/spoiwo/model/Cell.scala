@@ -1,20 +1,25 @@
 package com.norbitltd.spoiwo.model
 
 import java.util.{Calendar, Date}
+import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
 import org.joda.time.{LocalDate, DateTime}
 import com.norbitltd.spoiwo.model.enums.CellStyleInheritance
+import com.norbitltd.spoiwo.utils.JavaTimeApiConversions._
 
 sealed class CellValueType[T]
 object CellValueType {
-  implicit object StringWitness extends CellValueType[String]
-  implicit object DoubleWitness extends CellValueType[Double]
-  implicit object IntWitness extends CellValueType[Int]
-  implicit object LongWitness extends CellValueType[Long]
-  implicit object BooleanWitness extends CellValueType[Boolean]
-  implicit object DateWitness extends CellValueType[Date]
-  implicit object DateTimeWitness extends CellValueType[DateTime]
-  implicit object LocalDateWitness extends CellValueType[LocalDate]
-  implicit object CalendarWitness extends CellValueType[Calendar]
+  implicit object StringWitness         extends CellValueType[String]
+  implicit object DoubleWitness         extends CellValueType[Double]
+  implicit object BigDecimalWitness     extends CellValueType[BigDecimal]
+  implicit object IntWitness            extends CellValueType[Int]
+  implicit object LongWitness           extends CellValueType[Long]
+  implicit object BooleanWitness        extends CellValueType[Boolean]
+  implicit object DateWitness           extends CellValueType[Date]
+  implicit object DateTimeWitness       extends CellValueType[DateTime]
+  implicit object LocalDateWitness      extends CellValueType[LocalDate]
+  implicit object CalendarWitness       extends CellValueType[Calendar]
+  implicit object JLocalDateWitness     extends CellValueType[JLocalDate]
+  implicit object JLocalDateTimeWitness extends CellValueType[JLocalDateTime]
 }
 
 object Cell {
@@ -32,14 +37,17 @@ object Cell {
       } else {
         StringCell(v, indexOption, styleOption, styleInheritance)
       }
-      case v : Double => NumericCell(v, indexOption, styleOption, styleInheritance)
-      case v : Int => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
-      case v : Long => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
-      case v : Boolean => BooleanCell(v, indexOption, styleOption, styleInheritance)
-      case v : Date => DateCell(v, indexOption, styleOption, styleInheritance)
-      case v : DateTime => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
-      case v : LocalDate => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
-      case v : Calendar => CalendarCell(v, indexOption, styleOption, styleInheritance)
+      case v : Double         => NumericCell(v, indexOption, styleOption, styleInheritance)
+      case v : BigDecimal     => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
+      case v : Int            => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
+      case v : Long           => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
+      case v : Boolean        => BooleanCell(v, indexOption, styleOption, styleInheritance)
+      case v : Date           => DateCell(v, indexOption, styleOption, styleInheritance)
+      case v : DateTime       => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
+      case v : LocalDate      => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
+      case v : JLocalDate     => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
+      case v : JLocalDateTime => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
+      case v : Calendar       => CalendarCell(v, indexOption, styleOption, styleInheritance)
     }
   }
 }
