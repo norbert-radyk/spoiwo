@@ -9,6 +9,7 @@ import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel._
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
 import org.joda.time.{LocalDate, LocalDateTime}
 
 object Model2XlsxConversions {
@@ -255,6 +256,7 @@ object Model2XlsxConversions {
 
   private[xlsx] def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
     validateRows(s)
+    validateTables(s)
     val sheetName = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
     val columns = updateColumnsWithIndexes(s)
@@ -274,6 +276,8 @@ object Model2XlsxConversions {
     s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
     s.repeatingColumns.foreach(rc => sheet.setRepeatingColumns(convertColumnRange(rc)))
     s.password.foreach(ps => sheet.protectSheet(ps))
+    val tables = updateTablesWithIds(s)
+    tables.foreach(tbl ⇒ convertTable(tbl, sheet))
     sheet
   }
 
@@ -360,6 +364,96 @@ object Model2XlsxConversions {
   }
 
   private def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
+
+  private[xlsx] def validateTables(modelSheet: Sheet): Unit = {
+    val ids = modelSheet.tables.flatMap(_.id)
+    if (ids.size != ids.toSet.size)
+      throw new IllegalArgumentException("Specified table ids need to be unique.")
+  }
+
+  private[xlsx] def updateTablesWithIds(modelSheet: Sheet): List[Table] = {
+    modelSheet.tables.zipWithIndex.map {
+      case (table, index) ⇒ if (table.id.isDefined) table else table.withId(index + 1)
+    }
+  }
+
+  private[xlsx] def convertTable(modelTable: Table, sheet: XSSFSheet): XSSFTable = {
+    validateTableColumns(modelTable)
+
+    val tableId = modelTable.id.getOrElse {
+      throw new IllegalArgumentException("Undefined table id! " +
+        "Something went terribly wrong as it should have been derived if not specified explicitly!")
+    }
+
+    val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
+    val name        = modelTable.name.getOrElse(s"ct_table_$tableId")
+
+    val table = sheet.createTable()
+    table.setDisplayName(displayName)
+    val ctTable = table.getCTTable
+    ctTable.setId(tableId)
+    ctTable.setName(name)
+    setTableReference(modelTable, ctTable)
+    convertTableColumns(modelTable, ctTable)
+    modelTable.style.foreach(convertTableStyle(_, ctTable))
+    modelTable.enableAutoFilter.foreach(af ⇒ if (af) ctTable.addNewAutoFilter())
+    table
+  }
+
+  private[xlsx] def validateTableColumns(modelTable: Table): Unit = {
+
+    def insufficientColumnsDefined = {
+      val (sCol, eCol)   = modelTable.cellRange.columnRange
+      val neededColumns  = (eCol-sCol) + 1
+      val definedColumns = modelTable.columns.size
+      neededColumns != definedColumns
+    }
+
+    if (modelTable.columns.nonEmpty && insufficientColumnsDefined) {
+      throw new IllegalArgumentException(
+        "When explicitly specifying table columns you are required to provide as many " +
+          "columns as in the cell range."
+      )
+    }
+  }
+
+  private[xlsx] def convertTableColumns(modelTable: Table, ctTable: CTTable): CTTableColumns = {
+
+    def generateColumns = {
+      val (sCol, eCol)   = modelTable.cellRange.columnRange
+      val neededColumns  = (eCol-sCol) + 1
+      (0 until neededColumns) map { index ⇒
+        val columnId = index + 1
+        TableColumn(
+          name = s"TableColumn$columnId",
+          id   = columnId.toLong
+        )
+      }
+    }
+
+    val modelColumns = if(modelTable.columns.nonEmpty) modelTable.columns else generateColumns
+    val columns = ctTable.addNewTableColumns()
+    columns.setCount(modelColumns.size)
+    modelColumns.foreach { mc ⇒
+      val column = columns.addNewTableColumn()
+      column.setName(mc.name)
+      column.setId(mc.id)
+    }
+    columns
+  }
+
+  private[xlsx] def convertTableStyle(modelTableStyle: TableStyle, ctTable: CTTable): CTTableStyleInfo = {
+    val style = ctTable.addNewTableStyleInfo()
+    style.setName(modelTableStyle.name.value)
+    modelTableStyle.showColumnStripes.foreach(style.setShowColumnStripes)
+    modelTableStyle.showRowStripes.foreach(style.setShowRowStripes)
+    style
+  }
+
+  private[xlsx] def setTableReference(modelTable: Table, ctTable: CTTable): Unit = {
+    val cellRangeAddress = convertCellRange(modelTable.cellRange)
+    ctTable.setRef(cellRangeAddress.formatAsString())
+  }
 
   private[xlsx] def convertWorkbook(wb: Workbook): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()
