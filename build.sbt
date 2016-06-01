@@ -15,7 +15,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
     <developer>
       <id>norbert-radyk</id>
       <name>Norbert Radyk</name>
-      <email>norbert.radyk@norbitltd.com</email>
+      <email>norbert.radyk@gmail.com</email>
     </developer>
   </developers>
 
@@ -24,6 +24,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.11.8",
   publishMavenStyle := true,
   publishArtifact in Test := false,
+  useGpg := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -46,7 +47,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.1.0-SNAPSHOT"
+    version := "1.1.0"
   )
 
 lazy val examples = (project in file("examples"))
@@ -54,5 +55,5 @@ lazy val examples = (project in file("examples"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.0.1"
+    version := "1.1.0"
   )
