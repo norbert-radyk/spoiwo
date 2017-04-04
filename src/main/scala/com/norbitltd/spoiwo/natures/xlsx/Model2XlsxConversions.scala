@@ -69,6 +69,7 @@ object Model2XlsxConversions {
       case BooleanCell(value, _, _, _) => cell.setCellValue(value)
       case DateCell(value, _, _, _) => setDateCell(c, cell, value)
       case CalendarCell(value, _, _, _) => setCalendarCell(c, cell, value)
+      case HyperLinkUrlCell(value, _, _, _) => setHyperLinkUrlCell(c, cell, value, row)
     }
     cell
   }
@@ -94,7 +95,15 @@ object Model2XlsxConversions {
       cell.setCellValue(value)
     }
   }
+  private def setHyperLinkUrlCell(c: Cell, cell: XSSFCell, value: HyperLinkUrl, row: XSSFRow) {
+    import org.apache.poi.common.usermodel.Hyperlink
 
+    val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(Hyperlink.LINK_URL)
+    link.setAddress(value.address)
+    cell.setCellValue(value.text)
+    cell.setHyperlink(link)
+
+  }
   private[xlsx] def convertCellBorders(borders: CellBorders, style: XSSFCellStyle) {
     borders.leftStyle.foreach(s => style.setBorderLeft(convertBorderStyle(s)))
     borders.leftColor.foreach(c => style.setLeftBorderColor(convertColor(c)))
