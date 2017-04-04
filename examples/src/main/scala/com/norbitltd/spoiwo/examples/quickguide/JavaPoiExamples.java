@@ -21,7 +21,15 @@ public class JavaPoiExamples {
         wb.write(fileOut);
         fileOut.close();
     }
+    public static void newWorkbook() throws IOException {
+        Workbook wb = new XSSFWorkbook();
 
+        wb.getCreationHelper();
+
+        FileOutputStream fileOut = new FileOutputStream("workbook.xlsx");
+        wb.write(fileOut);
+        fileOut.close();
+    }
     public static void newSheet() throws IOException {
         Workbook wb = new XSSFWorkbook();  // or new XSSFWorkbook();
         Sheet sheet1 = wb.createSheet("new sheet");

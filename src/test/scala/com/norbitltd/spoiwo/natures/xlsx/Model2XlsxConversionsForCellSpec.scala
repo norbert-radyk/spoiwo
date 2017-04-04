@@ -199,4 +199,11 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     assert(cellStyle.getFont.getFontName == "Arial")
     assert(cellStyle.getFont.getFontHeightInPoints == 14)
   }
+
+  it should "return a string cell with hyperlink when setup with HyperLinkUrl value" in {
+    val model = Cell(HyperLinkUrl("View Item", "https://www.google.com"))
+    val xlsx = convert(model)
+    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_STRING)
+    assert(xlsx.getHyperlink().getAddress() == "https://www.google.com")
+  }
 }
