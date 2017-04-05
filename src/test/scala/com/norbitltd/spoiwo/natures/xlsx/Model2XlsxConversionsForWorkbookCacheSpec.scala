@@ -18,7 +18,7 @@ class Model2XlsxConversionsForWorkbookCacheSpec extends FlatSpec {
     val cellStyleCacheField: Field = conversions.getClass.getDeclaredField("cellStyleCache")
     cellStyleCacheField.setAccessible(true)
 
-    val dataFormatCacheField: Field = conversions.getClass.getDeclaredField("com$norbitltd$spoiwo$natures$xlsx$Model2XlsxConversions$$dataFormatCache")
+    val dataFormatCacheField: Field = conversions.getClass.getDeclaredField("dataFormatCache")
     dataFormatCacheField.setAccessible(true)
 
     val fontCacheField: Field = conversions.getClass.getDeclaredField("fontCache")

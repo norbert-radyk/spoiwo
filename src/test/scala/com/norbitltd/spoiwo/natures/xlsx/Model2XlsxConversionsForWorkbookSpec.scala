@@ -20,11 +20,6 @@ class Model2XlsxConversionsForWorkbookSpec extends FlatSpec {
     assert(default.getSheetAt(0).getSheetName == "Sheet 1")
   }
 
-  it should "fail when workbook provided with no sheets" in {
-    val model = Workbook()
-    an[Exception] should be thrownBy convertWorkbook(model)
-  }
-
   it should "convert all the sheets provided in order" in {
     val model = Workbook(
       Sheet(name = "Jeden"),
