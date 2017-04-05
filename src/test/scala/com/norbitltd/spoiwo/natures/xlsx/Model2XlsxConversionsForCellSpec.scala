@@ -204,6 +204,6 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val model = Cell(HyperLinkUrl("View Item", "https://www.google.com"))
     val xlsx = convert(model)
     assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_STRING)
-    assert(xlsx.getHyperlink.getAddress == "https://www.google.com")
+    assert(xlsx.getHyperlink().getAddress() == "https://www.google.com")
   }
 }
