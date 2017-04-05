@@ -8,6 +8,6 @@ object TypeOffset {
 }
 case class TypeOffset private(value : String) {
 
-  override def toString = value
+  override def toString: String = value
 
 }

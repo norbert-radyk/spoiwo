@@ -26,40 +26,40 @@ case class Margins private(
                             header: Option[Double],
                             footer: Option[Double]) {
 
-  def withTop(top: Double) =
+  def withTop(top: Double): Margins =
     copy(top = Option(top))
 
-  def withoutTop =
+  def withoutTop: Margins =
     copy(top = None)
 
-  def withBottom(bottom: Double) =
+  def withBottom(bottom: Double): Margins =
     copy(bottom = Option(bottom))
 
-  def withoutBottom =
+  def withoutBottom: Margins =
     copy(bottom = None)
 
-  def withRight(right: Double) =
+  def withRight(right: Double): Margins =
     copy(right = Option(right))
 
-  def withoutRight =
+  def withoutRight: Margins =
     copy(right = None)
 
-  def withLeft(left: Double) =
+  def withLeft(left: Double): Margins =
     copy(left = Option(left))
 
-  def withoutLeft =
+  def withoutLeft: Margins =
     copy(left = None)
 
-  def withHeader(header: Double) =
+  def withHeader(header: Double): Margins =
     copy(header = Option(header))
 
-  def withoutHeader =
+  def withoutHeader: Margins =
     copy(header = None)
 
-  def withFooter(footer: Double) =
+  def withFooter(footer: Double): Margins =
     copy(footer = Option(footer))
 
-  def withoutFooter =
+  def withoutFooter: Margins =
     copy(footer = None)
 
 

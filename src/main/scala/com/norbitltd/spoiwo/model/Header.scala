@@ -57,13 +57,13 @@ case class Header private(
                            evenCenter: Option[String],
                            evenRight: Option[String]) {
 
-  def withFirstPageLeft(firstLeft: String) =
+  def withFirstPageLeft(firstLeft: String): Header =
     copy(firstLeft = Option(firstLeft))
 
-  def withFirstPageCenter(firstCenter: String) =
+  def withFirstPageCenter(firstCenter: String): Header =
     copy(firstCenter = Option(firstCenter))
 
-  def withFirstPageRight(firstRight: String) =
+  def withFirstPageRight(firstRight: String): Header =
     copy(firstLeft = Option(firstRight))
 
 }

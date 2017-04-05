@@ -10,7 +10,7 @@ object GettingStartedExample {
   val headerStyle =
     CellStyle(fillPattern = CellFill.Solid, fillForegroundColor = Color.AquaMarine, fillBackgroundColor = Color.AquaMarine, font = Font(bold = true))
 
-  val gettingStartedSheet = Sheet(name = "Some serious stuff")
+  val gettingStartedSheet: Sheet = Sheet(name = "Some serious stuff")
     .withRows(
       Row(style = headerStyle).withCellValues("NAME", "BIRTH DATE", "DIED AGED", "FEMALE"),
       Row().withCellValues("Marie Curie", new LocalDate(1867, 11, 7), 66, true),

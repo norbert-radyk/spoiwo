@@ -13,6 +13,6 @@ object FontFamily {
 
 case class FontFamily private(value : String) {
 
-  override def toString = value
+  override def toString: String = value
 
 }

@@ -8,6 +8,6 @@ object FontScheme {
 
 case class FontScheme private(value: String) {
 
-  override def toString = value
+  override def toString: String = value
 
 }

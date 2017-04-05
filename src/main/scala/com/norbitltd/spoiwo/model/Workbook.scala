@@ -4,7 +4,7 @@ import com.norbitltd.spoiwo.model.enums.MissingCellPolicy
 
 object Workbook {
 
-  val Empty = apply()
+  val Empty: Workbook = apply()
 
   def apply(activeSheet: java.lang.Integer = null,
             firstVisibleTab: java.lang.Integer = null,
@@ -37,40 +37,40 @@ case class Workbook private[model](
                                     sheets: Iterable[Sheet]) {
 
 
-  def withActiveSheet(activeSheet: Int) =
+  def withActiveSheet(activeSheet: Int): Workbook =
     copy(activeSheet = Option(activeSheet))
 
-  def withFirstVisibleTab(firstVisibleTab: Int) =
+  def withFirstVisibleTab(firstVisibleTab: Int): Workbook =
     copy(firstVisibleTab = Option(firstVisibleTab))
 
-  def withForceFormulaRecalculation(forceFormulaRecalculation: Boolean) =
+  def withForceFormulaRecalculation(forceFormulaRecalculation: Boolean): Workbook =
     copy(forceFormulaRecalculation = Option(forceFormulaRecalculation))
 
-  def withHidden(hidden: Boolean) =
+  def withHidden(hidden: Boolean): Workbook =
     copy(hidden = Option(hidden))
 
-  def withMissingCellPolicy(missingCellPolicy: MissingCellPolicy) =
+  def withMissingCellPolicy(missingCellPolicy: MissingCellPolicy): Workbook =
     copy(missingCellPolicy = Option(missingCellPolicy))
 
-  def withSelectedTab(selectedTab: Int) =
+  def withSelectedTab(selectedTab: Int): Workbook =
     copy(selectedTab = Option(selectedTab))
 
-  def withSheets(sheets: Iterable[Sheet]) =
+  def withSheets(sheets: Iterable[Sheet]): Workbook =
     copy(sheets = sheets)
 
-  def withSheets(sheets: Sheet*) =
+  def withSheets(sheets: Sheet*): Workbook =
     copy(sheets = sheets)
 
-  def addSheet(sheet : Sheet) =
+  def addSheet(sheet : Sheet): Workbook =
     copy(sheets = sheets ++ List(sheet))
 
-  def addSheets(additionalSheets : Iterable[Sheet]) =
+  def addSheets(additionalSheets : Iterable[Sheet]): Workbook =
     copy(sheets = sheets ++ additionalSheets)
 
-  def removeSheet(sheet : Sheet) =
+  def removeSheet(sheet : Sheet): Workbook =
     copy(sheets = sheets.filter(_ != sheet))
 
-  def removeSheets(whereCondition : Sheet => Boolean) =
+  def removeSheets(whereCondition : Sheet => Boolean): Workbook =
     copy(sheets = sheets.filter(whereCondition))
 
 }

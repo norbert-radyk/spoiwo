@@ -75,136 +75,136 @@ case class SheetProperties private[model](
                                            virtuallyCenter: Option[Boolean],
                                            zoom: Option[Int]) {
 
-  def withAutoFilter(autoFilterRange: CellRange) =
+  def withAutoFilter(autoFilterRange: CellRange): SheetProperties =
     copy(autoFilter = Option(autoFilterRange))
 
-  def withoutAutoFilter =
+  def withoutAutoFilter: SheetProperties =
     copy(autoFilter = None)
 
-  def withActiveCell(activeCell: String) =
+  def withActiveCell(activeCell: String): SheetProperties =
     copy(activeCell = Option(activeCell))
 
-  def withoutActiveCell =
+  def withoutActiveCell: SheetProperties =
     copy(activeCell = None)
 
-  def withAutoBreaks =
+  def withAutoBreaks: SheetProperties =
     copy(autoBreaks = Some(true))
 
-  def withoutAutoBreaks =
+  def withoutAutoBreaks: SheetProperties =
     copy(autoBreaks = Some(false))
 
-  def withDefaultColumnWidth(defaultColumnWidth: Int) =
+  def withDefaultColumnWidth(defaultColumnWidth: Int): SheetProperties =
     copy(defaultColumnWidth = Option(defaultColumnWidth))
 
-  def withoutDefaultColumnWidth =
+  def withoutDefaultColumnWidth: SheetProperties =
     copy(defaultColumnWidth = None)
 
-  def withDefaultRowHeight(defaultRowHeight: Height) =
+  def withDefaultRowHeight(defaultRowHeight: Height): SheetProperties =
     copy(defaultRowHeight = Option(defaultRowHeight))
 
-  def withoutDefaultRowHeight =
+  def withoutDefaultRowHeight: SheetProperties =
     copy(defaultRowHeight = None)
 
-  def withDisplayFormulas =
+  def withDisplayFormulas: SheetProperties =
     copy(displayFormulas = Some(true))
 
-  def withoutDisplayFormulas =
+  def withoutDisplayFormulas: SheetProperties =
     copy(displayFormulas = Some(false))
 
-  def withDisplayGridLines =
+  def withDisplayGridLines: SheetProperties =
     copy(displayGridLines = Some(true))
 
-  def withoutDisplayGridLines =
+  def withoutDisplayGridLines: SheetProperties =
     copy(displayGridLines = Some(false))
 
-  def withDisplayGuts =
+  def withDisplayGuts: SheetProperties =
     copy(displayGuts = Some(true))
 
-  def withoutDisplayGuts =
+  def withoutDisplayGuts: SheetProperties =
     copy(displayGuts = Some(false))
 
-  def withDisplayRowColHeadings =
+  def withDisplayRowColHeadings: SheetProperties =
     copy(displayRowColHeadings = Some(true))
 
-  def withoutDisplayRowColHeadings =
+  def withoutDisplayRowColHeadings: SheetProperties =
     copy(displayRowColHeadings = Some(false))
 
-  def withDisplayZeros =
+  def withDisplayZeros: SheetProperties =
     copy(displayZeros = Some(true))
 
-  def withoutDisplayZeros =
+  def withoutDisplayZeros: SheetProperties =
     copy(displayZeros = Some(false))
 
-  def withFitToPage =
+  def withFitToPage: SheetProperties =
     copy(fitToPage = Some(true))
 
-  def withoutFitToPage =
+  def withoutFitToPage: SheetProperties =
     copy(fitToPage = Some(false))
 
-  def withForceFormulaRecalculation =
+  def withForceFormulaRecalculation: SheetProperties =
     copy(forceFormulaRecalculation = Some(true))
 
-  def withoutForceFormulaRecalculation =
+  def withoutForceFormulaRecalculation: SheetProperties =
     copy(forceFormulaRecalculation = Some(false))
 
-  def withHorizontallyCenter =
+  def withHorizontallyCenter: SheetProperties =
     copy(horizontallyCenter = Some(true))
 
-  def withoutHorizontallyCenter =
+  def withoutHorizontallyCenter: SheetProperties =
     copy(horizontallyCenter = Some(false))
 
-  def withPrintArea(printArea: CellRange) =
+  def withPrintArea(printArea: CellRange): SheetProperties =
     copy(printArea = Option(printArea))
 
-  def withoutPrintArea(printArea: CellRange) =
+  def withoutPrintArea(printArea: CellRange): SheetProperties =
     copy(printArea = None)
 
-  def withPrintGridLines =
+  def withPrintGridLines: SheetProperties =
     copy(printGridLines = Some(true))
 
-  def withoutPrintGridLines =
+  def withoutPrintGridLines: SheetProperties =
     copy(printGridLines = Some(false))
 
-  def withRightToLeft =
+  def withRightToLeft: SheetProperties =
     copy(rightToLeft = Some(true))
 
-  def withoutRightToLeft =
+  def withoutRightToLeft: SheetProperties =
     copy(rightToLeft = Some(false))
 
-  def withRowSumsBelow =
+  def withRowSumsBelow: SheetProperties =
     copy(rowSumsBelow = Some(true))
 
-  def withoutRowSumsBelow =
+  def withoutRowSumsBelow: SheetProperties =
     copy(rowSumsBelow = Some(false))
 
-  def withRowSumsRight =
+  def withRowSumsRight: SheetProperties =
     copy(rowSumsRight = Some(true))
 
-  def withoutRowSumsRight =
+  def withoutRowSumsRight: SheetProperties =
     copy(rowSumsRight = Some(false))
 
-  def withSelected =
+  def withSelected: SheetProperties =
     copy(selected = Some(true))
 
-  def withoutSelected =
+  def withoutSelected: SheetProperties =
     copy(selected = Some(false))
 
-  def withTabColor(tabColor: Int) =
+  def withTabColor(tabColor: Int): SheetProperties =
     copy(tabColor = Option(tabColor))
 
-  def withoutTabColor =
+  def withoutTabColor: SheetProperties =
     copy(tabColor = None)
 
-  def withVirtuallyCenter =
+  def withVirtuallyCenter: SheetProperties =
     copy(virtuallyCenter = Option(true))
 
-  def withoutVirtuallyCenter =
+  def withoutVirtuallyCenter: SheetProperties =
     copy(virtuallyCenter = Option(false))
 
-  def withZoom(zoom: Int) =
+  def withZoom(zoom: Int): SheetProperties =
     copy(zoom = Option(zoom))
 
-  def withoutZoom =
+  def withoutZoom: SheetProperties =
     copy(zoom = None)
 
 }

@@ -13,15 +13,18 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+@SuppressWarnings("unused")
 class JavaPoiExamples {
 
     public static void newWorkbook() throws IOException {
         Workbook wb = new XSSFWorkbook();
+
+        wb.getCreationHelper();
+
         FileOutputStream fileOut = new FileOutputStream("workbook.xlsx");
         wb.write(fileOut);
         fileOut.close();
     }
-
     public static void newSheet() throws IOException {
         Workbook wb = new XSSFWorkbook();  // or new XSSFWorkbook();
         Sheet sheet1 = wb.createSheet("new sheet");
@@ -304,7 +307,7 @@ class JavaPoiExamples {
         style.setDataFormat(format.getFormat("0.0"));
         cell.setCellStyle(style);
 
-        row = sheet.createRow(rowNum++);
+        row = sheet.createRow(rowNum);
         cell = row.createCell(colNum);
         cell.setCellValue(11111.25);
         style = wb.createCellStyle();

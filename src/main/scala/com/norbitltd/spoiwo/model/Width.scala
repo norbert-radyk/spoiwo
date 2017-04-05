@@ -6,7 +6,7 @@ object WidthUnit {
 }
 
 case class WidthUnit private(value: String) {
-  override def toString = value
+  override def toString: String = value
 }
 
 object Width {
@@ -31,6 +31,6 @@ class Width(measureValue : Int, measureUnit : WidthUnit) {
 
   def toUnits : Int = widthInUnits
 
-  def toCharacters = (widthInUnits / 256).toShort
+  def toCharacters: Short = (widthInUnits / 256).toShort
 
 }

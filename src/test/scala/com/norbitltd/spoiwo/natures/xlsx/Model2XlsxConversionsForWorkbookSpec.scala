@@ -2,7 +2,9 @@ package com.norbitltd.spoiwo.natures.xlsx
 
 import Model2XlsxConversions.convertWorkbook
 import com.norbitltd.spoiwo.model.{Sheet, Workbook}
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.scalatest.FlatSpec
+import org.scalatest.Matchers._
 
 class Model2XlsxConversionsForWorkbookSpec extends FlatSpec {
 
@@ -11,7 +13,7 @@ class Model2XlsxConversionsForWorkbookSpec extends FlatSpec {
     Sheet(name = "Sheet 2")
   )
 
-  val default = convertWorkbook(defaultWorkbook)
+  val default: XSSFWorkbook = convertWorkbook(defaultWorkbook)
 
   "Workbook conversion" should "return a workbook with 1 sheet when default converted" in {
     assert(default.getNumberOfSheets == 2)
@@ -20,12 +22,7 @@ class Model2XlsxConversionsForWorkbookSpec extends FlatSpec {
 
   it should "fail when workbook provided with no sheets" in {
     val model = Workbook()
-    try {
-      val xlsx = convertWorkbook(model)
-      fail("Conversion should fail if workbook provided with no sheets")
-    } catch {
-      case e : Exception => //Expected
-    }
+    an[Exception] should be thrownBy convertWorkbook(model)
   }
 
   it should "convert all the sheets provided in order" in {

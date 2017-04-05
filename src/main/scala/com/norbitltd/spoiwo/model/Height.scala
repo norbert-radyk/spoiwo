@@ -6,7 +6,7 @@ object HeightUnit {
 }
 
 case class HeightUnit private(value: String) {
-  override def toString = value
+  override def toString: String = value
 }
 
 object Height {
@@ -28,7 +28,7 @@ class Height(measureValue: Int, measureUnit: HeightUnit) {
       s"Unable to convert Height Unit = $measureUnit to XLSX - unsupported enum!")
   }
 
-  def toUnits = heightInUnits
+  def toUnits: Int = heightInUnits
 
   def toPoints : Short = (heightInUnits / 20).toShort
 

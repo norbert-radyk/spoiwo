@@ -126,7 +126,7 @@ case class Font private[model](
   private def dw[T](current : Option[T], default: Option[T]) : Option[T] =
     if( current.isDefined ) current else default
 
-  override def toString = "Font[" + List(
+  override def toString: String = "Font[" + List(
     height.map("height=" + _),
     bold.map("bold=" + _),
     italic.map("italic" + _),

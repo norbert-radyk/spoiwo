@@ -18,7 +18,7 @@ class Model2XlsxConversionsForCellBordersSpec extends FlatSpec{
     style
   }
 
-  val default = convert(CellBorders())
+  val default: XSSFCellStyle = convert(CellBorders())
 
   "Cell borders conversion" should "return no borders by default" in {
     assert(default.getBorderBottomEnum == usermodel.BorderStyle.NONE)

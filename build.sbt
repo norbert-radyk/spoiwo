@@ -15,15 +15,17 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
     <developer>
       <id>norbert-radyk</id>
       <name>Norbert Radyk</name>
-      <email>norbert.radyk@norbitltd.com</email>
+      <email>norbert.radyk@gmail.com</email>
     </developer>
   </developers>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
+  crossScalaVersions := Seq("2.12.1", "2.11.8"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
+  useGpg := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -33,12 +35,12 @@ lazy val commonSettings = Seq(
   },
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml"         % "1.0.5",
+    "org.scala-lang.modules" %% "scala-xml"         % "1.0.6",
     "org.apache.poi"         %  "poi"               % "3.14",
     "org.apache.poi"         %  "poi-ooxml"         % "3.14",
     "joda-time"              %  "joda-time"         % "2.9",
     "org.joda"               %  "joda-convert"      % "1.8.1",
-    "org.scalatest"          %% "scalatest"         % "2.2.6"   % "test"
+    "org.scalatest"          %% "scalatest"         % "3.0.1"   % "test"
   )
 )
 
@@ -46,7 +48,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.1.0-SNAPSHOT"
+    version := "1.2.0"
   )
 
 lazy val examples = (project in file("examples"))
@@ -54,5 +56,5 @@ lazy val examples = (project in file("examples"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.0.1"
+    version := "1.2.0"
   )

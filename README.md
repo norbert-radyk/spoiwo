@@ -2,13 +2,13 @@ SPOIWO (Scala POI Wrapping Objects)
 ==============
 Spoiwo is an open-source library for functional-style spreadsheet generation in Scala. It was started as a wrapper over Apache POI and while the XLSX generation is still at its core, the library has been rectified to support number of other spreadsheet representations (including CSV and HTML).
 
-The library tries to address the issues Scala developers face when using spreadsheet libraries for Java and which are representing a highly non-functional way in which the spreadsheets need to be generated (mutable state, enforced indexes, execution order dependency). To address this issues SPOIWO introduces its own spreadsheet model with the number of wrapping classes and caches enabling an efficient report generation. 
+The library addresses the issues Scala developers face when using spreadsheet libraries for Java and which are representing a highly non-functional way in which the spreadsheets need to be generated (mutable state, enforced indexes, execution order dependency). To address this issues SPOIWO introduces its own spreadsheet model with the number of wrapping classes and caches enabling an efficient report generation. 
 
 This documentation is intended for Spoiwo users and developers to give both an overview and in-depth information of the offered functionality and what problems Spoiwo is intended to solve.
 
 ### Download
 
-Spoiwo is available in [The Central Repository](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo). The current latest production version is: **spoiwo/1.0.6**
+Spoiwo is available in [The Central Repository](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo). The current latest production version is: **spoiwo/1.1.0**
 
 ### Quick links
 
@@ -25,7 +25,7 @@ Please check out our [get in touch](https://github.com/norbert-radyk/spoiwo/wiki
 
 ### Copyright and license
 
-Spoiwo is copyright 2014 NorbIT Ltd.
+Spoiwo is copyright 2017 by Norbert Radyk.
 
 Licensed under [MIT License](http://opensource.org/licenses/MIT) you may not use this software except in compliance with the License.
 

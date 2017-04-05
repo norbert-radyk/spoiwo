@@ -66,40 +66,40 @@ case class PrintSetup private(copies: Option[Short],
                       validSettings: Option[Boolean],
                       vResolution: Option[Short]) {
 
-  def withCopies(copies: Short) = copy(copies = Option(copies))
+  def withCopies(copies: Short): PrintSetup = copy(copies = Option(copies))
 
-  def withDraft(draft: Boolean) = copy(draft = Option(draft))
+  def withDraft(draft: Boolean): PrintSetup = copy(draft = Option(draft))
 
-  def withFitHeight(fitHeight: Short) = copy(fitHeight = Option(fitHeight))
+  def withFitHeight(fitHeight: Short): PrintSetup = copy(fitHeight = Option(fitHeight))
 
-  def withFitWidth(fitWidth: Short) = copy(fitWidth = Option(fitWidth))
+  def withFitWidth(fitWidth: Short): PrintSetup = copy(fitWidth = Option(fitWidth))
 
-  def withFooterMargin(footerMargin: Double) = copy(footerMargin = Option(footerMargin))
+  def withFooterMargin(footerMargin: Double): PrintSetup = copy(footerMargin = Option(footerMargin))
 
-  def withHeaderMargin(headerMargin: Double) = copy(headerMargin = Option(headerMargin))
+  def withHeaderMargin(headerMargin: Double): PrintSetup = copy(headerMargin = Option(headerMargin))
 
-  def withHResolution(hResolution: Short) = copy(hResolution = Option(hResolution))
+  def withHResolution(hResolution: Short): PrintSetup = copy(hResolution = Option(hResolution))
 
-  def withLandscape(landscape: Boolean) = copy(landscape = Option(landscape))
+  def withLandscape(landscape: Boolean): PrintSetup = copy(landscape = Option(landscape))
 
-  def withLeftToRight(leftToRight: Boolean) = copy(leftToRight = Option(leftToRight))
+  def withLeftToRight(leftToRight: Boolean): PrintSetup = copy(leftToRight = Option(leftToRight))
 
-  def withNoColor(noColor: Boolean) = copy(noColor = Option(noColor))
+  def withNoColor(noColor: Boolean): PrintSetup = copy(noColor = Option(noColor))
 
-  def withNoOrientation(noOrientation: Boolean) = copy(noOrientation = Option(noOrientation))
+  def withNoOrientation(noOrientation: Boolean): PrintSetup = copy(noOrientation = Option(noOrientation))
 
-  def withPageOrder(pageOrder: PageOrder) = copy(pageOrder = Option(pageOrder))
+  def withPageOrder(pageOrder: PageOrder): PrintSetup = copy(pageOrder = Option(pageOrder))
 
-  def withPageStart(pageStart: Short) = copy(pageStart = Option(pageStart))
+  def withPageStart(pageStart: Short): PrintSetup = copy(pageStart = Option(pageStart))
 
-  def withPaperSize(paperSize: PaperSize) = copy(paperSize = Option(paperSize))
+  def withPaperSize(paperSize: PaperSize): PrintSetup = copy(paperSize = Option(paperSize))
 
-  def withScale(scale: Short) = copy(scale = Option(scale))
+  def withScale(scale: Short): PrintSetup = copy(scale = Option(scale))
 
-  def withUsePage(usePage: Boolean) = copy(usePage = Option(usePage))
+  def withUsePage(usePage: Boolean): PrintSetup = copy(usePage = Option(usePage))
 
-  def withValidSettings(validSettings: Boolean) = copy(validSettings = Option(validSettings))
+  def withValidSettings(validSettings: Boolean): PrintSetup = copy(validSettings = Option(validSettings))
 
-  def withVResolution(vResolution: Short) = copy(vResolution = Option(vResolution))
+  def withVResolution(vResolution: Short): PrintSetup = copy(vResolution = Option(vResolution))
 
 }

@@ -7,8 +7,10 @@ import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaC
 import com.norbitltd.spoiwo.model.enums._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
+import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, HorizontalAlignment, VerticalAlignment}
 import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
 import org.apache.poi.xssf.usermodel._
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
 import org.joda.time.{LocalDate, LocalDateTime}
 
 object Model2XlsxConversions {
@@ -68,6 +70,7 @@ object Model2XlsxConversions {
       case BooleanCell(value, _, _, _) => cell.setCellValue(value)
       case DateCell(value, _, _, _) => setDateCell(c, cell, value)
       case CalendarCell(value, _, _, _) => setCalendarCell(c, cell, value)
+      case HyperLinkUrlCell(value, _, _, _) => setHyperLinkUrlCell(c, cell, value, row)
     }
     cell
   }
@@ -93,7 +96,15 @@ object Model2XlsxConversions {
       cell.setCellValue(value)
     }
   }
+  private def setHyperLinkUrlCell(c: Cell, cell: XSSFCell, value: HyperLinkUrl, row: XSSFRow) {
+    import org.apache.poi.common.usermodel.Hyperlink
 
+    val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(Hyperlink.LINK_URL)
+    link.setAddress(value.address)
+    cell.setCellValue(value.text)
+    cell.setHyperlink(link)
+
+  }
   private[xlsx] def convertCellBorders(borders: CellBorders, style: XSSFCellStyle) {
     borders.leftStyle.foreach(s => style.setBorderLeft(convertBorderStyle(s)))
     borders.leftColor.foreach(c => style.setLeftBorderColor(convertColor(c)))
@@ -255,6 +266,7 @@ object Model2XlsxConversions {
 
   private[xlsx] def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
     validateRows(s)
+    validateTables(s)
     val sheetName = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
     val sheet = workbook.createSheet(sheetName)
     val columns = updateColumnsWithIndexes(s)
@@ -274,6 +286,8 @@ object Model2XlsxConversions {
     s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
     s.repeatingColumns.foreach(rc => sheet.setRepeatingColumns(convertColumnRange(rc)))
     s.password.foreach(ps => sheet.protectSheet(ps))
+    val tables = updateTablesWithIds(s)
+    tables.foreach(tbl ⇒ convertTable(tbl, sheet))
     sheet
   }
 
@@ -361,6 +375,96 @@ object Model2XlsxConversions {
 
   private def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
 
+  private[xlsx] def validateTables(modelSheet: Sheet): Unit = {
+    val ids = modelSheet.tables.flatMap(_.id)
+    if (ids.size != ids.toSet.size)
+      throw new IllegalArgumentException("Specified table ids need to be unique.")
+  }
+
+  private[xlsx] def updateTablesWithIds(modelSheet: Sheet): List[Table] = {
+    modelSheet.tables.zipWithIndex.map {
+      case (table, index) ⇒ if (table.id.isDefined) table else table.withId(index + 1)
+    }
+  }
+
+  private[xlsx] def convertTable(modelTable: Table, sheet: XSSFSheet): XSSFTable = {
+    validateTableColumns(modelTable)
+
+    val tableId = modelTable.id.getOrElse {
+      throw new IllegalArgumentException("Undefined table id! " +
+        "Something went terribly wrong as it should have been derived if not specified explicitly!")
+    }
+
+    val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
+    val name        = modelTable.name.getOrElse(s"ct_table_$tableId")
+
+    val table = sheet.createTable()
+    table.setDisplayName(displayName)
+    val ctTable = table.getCTTable
+    ctTable.setId(tableId)
+    ctTable.setName(name)
+    setTableReference(modelTable, ctTable)
+    convertTableColumns(modelTable, ctTable)
+    modelTable.style.foreach(convertTableStyle(_, ctTable))
+    modelTable.enableAutoFilter.foreach(af ⇒ if (af) ctTable.addNewAutoFilter())
+    table
+  }
+
+  private[xlsx] def validateTableColumns(modelTable: Table): Unit = {
+
+    def insufficientColumnsDefined = {
+      val (sCol, eCol)   = modelTable.cellRange.columnRange
+      val neededColumns  = (eCol-sCol) + 1
+      val definedColumns = modelTable.columns.size
+      neededColumns != definedColumns
+    }
+
+    if (modelTable.columns.nonEmpty && insufficientColumnsDefined) {
+      throw new IllegalArgumentException(
+        "When explicitly specifying table columns you are required to provide as many " +
+          "columns as in the cell range."
+      )
+    }
+  }
+
+  private[xlsx] def convertTableColumns(modelTable: Table, ctTable: CTTable): CTTableColumns = {
+
+    def generateColumns = {
+      val (sCol, eCol)   = modelTable.cellRange.columnRange
+      val neededColumns  = (eCol-sCol) + 1
+      (0 until neededColumns) map { index ⇒
+        val columnId = index + 1
+        TableColumn(
+          name = s"TableColumn$columnId",
+          id   = columnId.toLong
+        )
+      }
+    }
+
+    val modelColumns = if(modelTable.columns.nonEmpty) modelTable.columns else generateColumns
+    val columns = ctTable.addNewTableColumns()
+    columns.setCount(modelColumns.size)
+    modelColumns.foreach { mc ⇒
+      val column = columns.addNewTableColumn()
+      column.setName(mc.name)
+      column.setId(mc.id)
+    }
+    columns
+  }
+
+  private[xlsx] def convertTableStyle(modelTableStyle: TableStyle, ctTable: CTTable): CTTableStyleInfo = {
+    val style = ctTable.addNewTableStyleInfo()
+    style.setName(modelTableStyle.name.value)
+    modelTableStyle.showColumnStripes.foreach(style.setShowColumnStripes)
+    modelTableStyle.showRowStripes.foreach(style.setShowRowStripes)
+    style
+  }
+
+  private[xlsx] def setTableReference(modelTable: Table, ctTable: CTTable): Unit = {
+    val cellRangeAddress = convertCellRange(modelTable.cellRange)
+    ctTable.setRef(cellRangeAddress.formatAsString())
+  }
+
   private[xlsx] def convertWorkbook(wb: Workbook): XSSFWorkbook = {
     val workbook = new XSSFWorkbook()
     wb.sheets.foreach(sheet => convertSheet(sheet, workbook))
@@ -389,15 +493,15 @@ object Model2XlsxConversions {
   }
 
   implicit class XlsxBorderStyle(bs: CellBorderStyle) {
-    def convertAsXlsx() = convertBorderStyle(bs)
+    def convertAsXlsx(): BorderStyle = convertBorderStyle(bs)
   }
 
   implicit class XlsxColor(c: Color) {
-    def convertAsXlsx() = convertColor(c)
+    def convertAsXlsx(): XSSFColor = convertColor(c)
   }
 
   implicit class XlsxCellFill(cf: CellFill) {
-    def convertAsXlsx() = convertCellFill(cf)
+    def convertAsXlsx(): FillPatternType = convertCellFill(cf)
   }
 
   implicit class XlsxCellStyle(cs: CellStyle) {
@@ -421,13 +525,13 @@ object Model2XlsxConversions {
   }
 
   implicit class XlsxHorizontalAlignment(ha: CellHorizontalAlignment) {
-    def convertAsXlsx() = convertHorizontalAlignment(ha)
+    def convertAsXlsx(): HorizontalAlignment = convertHorizontalAlignment(ha)
   }
 
   implicit class XlsxSheet(s: Sheet) {
-    def convertAsXlsx(workbook: XSSFWorkbook) = convertSheet(s, workbook)
+    def convertAsXlsx(workbook: XSSFWorkbook): XSSFSheet = convertSheet(s, workbook)
 
-    def convertAsXlsx() = Workbook(s).convertAsXlsx()
+    def convertAsXlsx(): XSSFWorkbook = Workbook(s).convertAsXlsx()
 
     def saveAsXlsx(fileName: String) {
       Workbook(s).saveAsXlsx(fileName)
@@ -435,11 +539,11 @@ object Model2XlsxConversions {
   }
 
   implicit class XlsxVerticalAlignment(va: CellVerticalAlignment) {
-    def convertAsXlsx() = convertVerticalAlignment(va)
+    def convertAsXlsx(): VerticalAlignment = convertVerticalAlignment(va)
   }
 
   implicit class XlsxWorkbook(workbook: Workbook) {
-    def saveAsXlsx(fileName: String) = {
+    def saveAsXlsx(fileName: String): Unit = {
       val stream = new FileOutputStream(fileName)
       try {
         val workbook = convertAsXlsx()
@@ -450,7 +554,7 @@ object Model2XlsxConversions {
       }
     }
 
-    def convertAsXlsx() = convertWorkbook(workbook)
+    def convertAsXlsx(): XSSFWorkbook = convertWorkbook(workbook)
   }
 
 }

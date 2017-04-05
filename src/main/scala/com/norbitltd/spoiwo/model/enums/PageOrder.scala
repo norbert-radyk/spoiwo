@@ -8,6 +8,6 @@ object PageOrder {
 
 case class PageOrder(value : String) {
 
-  override def toString = value
+  override def toString: String = value
 
 }

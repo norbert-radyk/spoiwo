@@ -6,7 +6,7 @@ import org.joda.time.{DateTime, LocalDate}
 
 object Row {
 
-  val Empty = apply()
+  val Empty: Row = apply()
 
   def apply(cells: Iterable[Cell] = Nil,
             height: Height = null,
@@ -40,7 +40,7 @@ case class Row private(cells: Iterable[Cell],
                        style: Option[CellStyle],
                        hidden: Option[Boolean]) {
 
-  override def toString = "Row(" + List(
+  override def toString: String = "Row(" + List(
     if (cells.isEmpty) None else Option("cells=" + cells.map(_.toString).mkString(", ")),
     height.map("height=" + _),
     index.map("index=" + _),
@@ -49,10 +49,10 @@ case class Row private(cells: Iterable[Cell],
   ).flatten.mkString(", ") + ")"
 
 
-  def withCells(cells: Cell*) =
+  def withCells(cells: Cell*): Row =
     copy(cells = cells)
 
-  def withCells(cells: Iterable[Cell]) =
+  def withCells(cells: Iterable[Cell]): Row =
     copy(cells = cells)
 
   def withCellValues(cellValues: List[Any]): Row = {
@@ -78,34 +78,34 @@ case class Row private(cells: Iterable[Cell],
   def withCellValues(cellValues: Any*): Row =
     withCellValues(cellValues.toList)
 
-  def addCell(cell : Cell) =
+  def addCell(cell : Cell): Row =
     copy(cells = cells ++ List(cell))
 
-  def addCells(additionalCells : Iterable[Cell]) =
+  def addCells(additionalCells : Iterable[Cell]): Row =
     copy(cells = cells ++ additionalCells)
 
-  def removeCell(cell : Cell) =
+  def removeCell(cell : Cell): Row =
     copy(cells = cells.filter(_ != cell))
 
-  def removeCells(whereCondition : Cell => Boolean) =
+  def removeCells(whereCondition : Cell => Boolean): Row =
     copy(cells = cells.filter(whereCondition))
 
-  def withHeight(height: Height) =
+  def withHeight(height: Height): Row =
     copy(height = Option(height))
 
-  def withoutHeight =
+  def withoutHeight: Row =
     copy(height = None)
 
-  def withStyle(rowStyle: CellStyle) =
+  def withStyle(rowStyle: CellStyle): Row =
     copy(style = Option(rowStyle))
 
-  def withoutStyle =
+  def withoutStyle: Row =
     copy(style = None)
 
-  def withHidden =
+  def withHidden: Row =
     copy(hidden = Some(true))
 
-  def withoutHidden =
+  def withoutHidden: Row =
     copy(hidden = Some(false))
 }
 

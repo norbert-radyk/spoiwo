@@ -26,6 +26,6 @@ object Charset {
 
 case class Charset private(value : String) {
 
-  override def toString = value
+  override def toString: String = value
 
 }

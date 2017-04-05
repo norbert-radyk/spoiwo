@@ -7,5 +7,5 @@ object MissingCellPolicy {
 }
 
 case class MissingCellPolicy private(value : String) {
-  override def toString = value
+  override def toString: String = value
 }

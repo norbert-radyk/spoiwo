@@ -17,7 +17,8 @@ object Sheet {
             repeatingRows: RowRange = null,
             repeatingColumns: ColumnRange = null,
             style: CellStyle = null,
-            password: String = null): Sheet =
+            password: String = null,
+            tables: List[Table] = Nil): Sheet =
     Sheet(
       name = Option(name),
       columns = columns,
@@ -32,7 +33,8 @@ object Sheet {
       repeatingRows = Option(repeatingRows),
       repeatingColumns = Option(repeatingColumns),
       style = Option(style),
-      password = Option(password)
+      password = Option(password),
+      tables = tables
     )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
@@ -54,10 +56,11 @@ case class Sheet private(
                           paneAction: Option[PaneAction],
                           repeatingRows: Option[RowRange],
                           repeatingColumns: Option[ColumnRange],
-                          style : Option[CellStyle],
-                          password:Option[String]) {
+                          style: Option[CellStyle],
+                          password: Option[String],
+                          tables: List[Table]) {
 
-  override def toString = "Sheet(" + List(
+  override def toString: String = "Sheet(" + List(
     name.map("name=" + _),
     if (columns.isEmpty) None else Option("columns=\n\t" + columns.map(_.toString).mkString("\n\t")),
     if (rows.isEmpty) None else Option("rows=\n\t" + rows.map(_.toString).mkString("\n\t")),
@@ -74,7 +77,7 @@ case class Sheet private(
     password.map("password=" + _)
   ).flatten.mkString(",\n") + ")"
 
-  def withSheetName(name: String) =
+  def withSheetName(name: String): Sheet =
     copy(name = Option(name))
 
   def withColumns(columns: List[Column]): Sheet =
@@ -83,16 +86,16 @@ case class Sheet private(
   def withColumns(columns: Column*): Sheet =
     withColumns(columns.toList)
 
-  def addColumn(column : Column) =
+  def addColumn(column : Column): Sheet =
     copy(columns = columns ++ List(column))
 
-  def addColumns(additionalColumns : Iterable[Column]) =
+  def addColumns(additionalColumns : Iterable[Column]): Sheet =
     copy(columns = columns ++ additionalColumns)
 
-  def removeColumn(column : Column) =
+  def removeColumn(column : Column): Sheet =
     copy(columns = columns.filter(_ != column))
 
-  def removeColumns(whereCondition : Column => Boolean) =
+  def removeColumns(whereCondition : Column => Boolean): Sheet =
     copy(columns = columns.filter(whereCondition))
 
   def withRows(rows: Iterable[Row]): Sheet =
@@ -101,16 +104,16 @@ case class Sheet private(
   def withRows(rows: Row*): Sheet =
     withRows(rows)
 
-  def addRow(row : Row) =
+  def addRow(row : Row): Sheet =
     copy(rows = rows ++ List(row))
 
-  def addRows(additionalRows : Iterable[Row]) =
+  def addRows(additionalRows : Iterable[Row]): Sheet =
     copy(rows = rows ++ additionalRows)
 
-  def removeRow(row : Row) =
+  def removeRow(row : Row): Sheet =
     copy(rows = rows.filter(_ != row))
 
-  def removeRows(whereCondition : Row => Boolean) =
+  def removeRows(whereCondition : Row => Boolean): Sheet =
     copy(rows = rows.filter(whereCondition))
 
   def withMergedRegions(mergedRegions: Iterable[CellRange]): Sheet =
@@ -119,73 +122,76 @@ case class Sheet private(
   def withMergedRegions(mergedRegions: CellRange*): Sheet =
     withMergedRegions(mergedRegions)
 
-  def addMergedRegion(mergedRegion : CellRange) =
+  def addMergedRegion(mergedRegion : CellRange): Sheet =
     copy(mergedRegions = mergedRegions ++ List(mergedRegion))
 
-  def addMergedRegions(additionalMergedRegions : Iterable[CellRange]) =
+  def addMergedRegions(additionalMergedRegions : Iterable[CellRange]): Sheet =
     copy(mergedRegions = mergedRegions ++ additionalMergedRegions)
 
-  def removeMergedRegion(mergedRegion : CellRange) =
+  def removeMergedRegion(mergedRegion : CellRange): Sheet =
     copy(mergedRegions = mergedRegions.filter(_ != mergedRegion))
 
-  def removeMergedRegions(whereCondition : CellRange => Boolean) =
+  def removeMergedRegions(whereCondition : CellRange => Boolean): Sheet =
     copy(mergedRegions = mergedRegions.filter(whereCondition))
 
-  def withPrintSetup(printSetup: PrintSetup) =
+  def withPrintSetup(printSetup: PrintSetup): Sheet =
     copy(printSetup = Option(printSetup))
 
-  def withoutPrintSetup =
+  def withoutPrintSetup: Sheet =
     copy(printSetup = None)
 
-  def withHeader(header: Header) =
+  def withHeader(header: Header): Sheet =
     copy(header = Option(header))
 
-  def withoutHeader =
+  def withoutHeader: Sheet =
     copy(header = None)
 
-  def withPassword(password: String) =
+  def withPassword(password: String): Sheet =
     copy(password= Option(password))
 
-  def withoutPassword =
+  def withoutPassword: Sheet =
     copy(password= None)
 
 
-  def withFooter(footer: Footer) =
+  def withFooter(footer: Footer): Sheet =
     copy(footer = Option(footer))
 
-  def withoutFooter =
+  def withoutFooter: Sheet =
     copy(footer = None)
 
-  def withMargins(margins: Margins) =
+  def withMargins(margins: Margins): Sheet =
     copy(margins = Option(margins))
 
-  def withoutMargins =
+  def withoutMargins: Sheet =
     copy(margins = None)
 
-  def withSplitPane(splitPane: SplitPane) =
+  def withSplitPane(splitPane: SplitPane): Sheet =
     copy(paneAction = Option(splitPane))
 
-  def withFreezePane(freezePane: FreezePane) =
+  def withFreezePane(freezePane: FreezePane): Sheet =
     copy(paneAction = Option(freezePane))
 
-  def withoutSplitOrFreezePane =
+  def withoutSplitOrFreezePane: Sheet =
     copy(paneAction = Some(NoSplitOrFreeze()))
 
-  def withRepeatingRows(repeatingRows: RowRange) =
+  def withRepeatingRows(repeatingRows: RowRange): Sheet =
     copy(repeatingRows = Option(repeatingRows))
 
-  def withoutRepeatingRows =
+  def withoutRepeatingRows: Sheet =
     copy(repeatingRows = None)
 
-  def withRepeatingColumns(repeatingColumns: ColumnRange) =
+  def withRepeatingColumns(repeatingColumns: ColumnRange): Sheet =
     copy(repeatingColumns = Option(repeatingColumns))
 
-  def withoutRepeatingColumns =
+  def withoutRepeatingColumns: Sheet =
     copy(repeatingColumns = None)
 
-  def withStyle(style : CellStyle) =
+  def withStyle(style : CellStyle): Sheet =
     copy(style = Option(style))
 
-  def withoutStyle =
+  def withTables(tables: Table*): Sheet =
+    copy(tables = tables.toList)
+
+  def withoutStyle: Sheet =
     copy(style = None)
 }

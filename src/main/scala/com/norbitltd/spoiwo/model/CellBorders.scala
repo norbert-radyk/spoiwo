@@ -22,41 +22,41 @@ case class CellBorders(leftStyle: Option[CellBorderStyle], leftColor: Option[Col
                        rightStyle: Option[CellBorderStyle], rightColor: Option[Color],
                        bottomStyle: Option[CellBorderStyle], bottomColor: Option[Color]) {
 
-  def withLeftStyle(leftStyle: CellBorderStyle) =
+  def withLeftStyle(leftStyle: CellBorderStyle): CellBorders =
     copy(leftStyle = Option(leftStyle))
 
-  def withLeftColor(leftColor: Color) =
+  def withLeftColor(leftColor: Color): CellBorders =
     copy(leftColor = Option(leftColor))
 
-  def withTopStyle(topStyle: CellBorderStyle) =
+  def withTopStyle(topStyle: CellBorderStyle): CellBorders =
     copy(topStyle = Option(topStyle))
 
-  def withTopColor(topColor: Color) =
+  def withTopColor(topColor: Color): CellBorders =
     copy(topColor = Option(topColor))
 
-  def withRightStyle(rightStyle: CellBorderStyle) =
+  def withRightStyle(rightStyle: CellBorderStyle): CellBorders =
     copy(rightStyle = Option(rightStyle))
 
-  def withRightColor(rightColor: Color) =
+  def withRightColor(rightColor: Color): CellBorders =
     copy(rightColor = Option(rightColor))
 
-  def withBottomStyle(bottomStyle: CellBorderStyle) =
+  def withBottomStyle(bottomStyle: CellBorderStyle): CellBorders =
     copy(bottomStyle = Option(bottomStyle))
 
-  def withBottomColor(bottomColor: Color) =
+  def withBottomColor(bottomColor: Color): CellBorders =
     copy(bottomColor = Option(bottomColor))
 
-  def withStyle(style: CellBorderStyle) = {
+  def withStyle(style: CellBorderStyle): CellBorders = {
     val styleOption = Option(style)
     copy(leftStyle = styleOption, topStyle = styleOption, rightStyle = styleOption, bottomStyle = styleOption)
   }
 
-  def withColor(color: Color) = {
+  def withColor(color: Color): CellBorders = {
     val colorOption = Option(color)
     copy(leftColor = colorOption, topColor = colorOption, rightColor = colorOption, bottomColor = colorOption)
   }
 
-  override def toString = "Cell Borders[" + List(
+  override def toString: String = "Cell Borders[" + List(
     leftStyle.map("left style" + _),
     leftColor.map("left color" + _),
     topStyle.map("top style" + _),

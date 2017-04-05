@@ -51,7 +51,7 @@ case class CellStyle private(
                               rotation: Option[Short],
                               wrapText: Option[Boolean]) {
 
-  override def toString = "CellStyle(" + List(
+  override def toString: String = "CellStyle(" + List(
     borders.map("borders=" + _),
     dataFormat.map("data format=" + _),
     font.map("font=" + _),
@@ -67,82 +67,82 @@ case class CellStyle private(
     wrapText.map("wrap text=" + _)
   ).flatten.mkString(", ") + ")"
 
-  def withBorders(borders: CellBorders) =
+  def withBorders(borders: CellBorders): CellStyle =
     copy(borders = Option(borders))
 
-  def withoutBorders =
+  def withoutBorders: CellStyle =
     copy(borders = None)
 
-  def withDataFormat(dataFormat: CellDataFormat) =
+  def withDataFormat(dataFormat: CellDataFormat): CellStyle =
     copy(dataFormat = Option(dataFormat))
 
-  def withoutDataFormat =
+  def withoutDataFormat: CellStyle =
     copy(dataFormat = None)
 
-  def withFont(font: Font) =
+  def withFont(font: Font): CellStyle =
     copy(font = Option(font))
 
-  def withoutFont =
+  def withoutFont: CellStyle =
     copy(font = None)
 
-  def withFillPattern(fillPattern: CellFill) =
+  def withFillPattern(fillPattern: CellFill): CellStyle =
     copy(fillPattern = Option(fillPattern))
 
-  def withoutFillPattern =
+  def withoutFillPattern: CellStyle =
     copy(fillPattern = None)
 
-  def withFillForegroundColor(fillForegroundColor: Color) =
+  def withFillForegroundColor(fillForegroundColor: Color): CellStyle =
     copy(fillForegroundColor = Option(fillForegroundColor))
 
-  def withoutFillForegroundColor =
+  def withoutFillForegroundColor: CellStyle =
     copy(fillForegroundColor = None)
 
-  def withFillBackgroundColor(fillBackgroundColor: Color) =
+  def withFillBackgroundColor(fillBackgroundColor: Color): CellStyle =
     copy(fillBackgroundColor = Option(fillBackgroundColor))
 
-  def withoutFillBackgroundColor =
+  def withoutFillBackgroundColor: CellStyle =
     copy(fillBackgroundColor = None)
 
-  def withHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment) =
+  def withHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment): CellStyle =
     copy(horizontalAlignment = Option(horizontalAlignment))
 
-  def withoutHorizontalAlignment =
+  def withoutHorizontalAlignment: CellStyle =
     copy(horizontalAlignment = None)
 
-  def withVerticalAlignment(verticalAlignment: CellVerticalAlignment) =
+  def withVerticalAlignment(verticalAlignment: CellVerticalAlignment): CellStyle =
     copy(verticalAlignment = Option(verticalAlignment))
 
-  def withoutVerticalAlignment =
+  def withoutVerticalAlignment: CellStyle =
     copy(verticalAlignment = None)
 
-  def withHidden =
+  def withHidden: CellStyle =
     copy(hidden = Some(true))
 
-  def withoutHidden =
+  def withoutHidden: CellStyle =
     copy(hidden = Some(false))
 
-  def withIndention(indention: Short) =
+  def withIndention(indention: Short): CellStyle =
     copy(indention = Option(indention))
 
-  def withoutIndention =
+  def withoutIndention: CellStyle =
     copy(indention = None)
 
-  def withLocked =
+  def withLocked: CellStyle =
     copy(locked = Some(true))
 
-  def withoutLocked =
+  def withoutLocked: CellStyle =
     copy(locked = Some(false))
 
-  def withRotation(rotation: Short) =
+  def withRotation(rotation: Short): CellStyle =
     copy(rotation = Option(rotation))
 
-  def withoutRotation =
+  def withoutRotation: CellStyle =
     copy(rotation = None)
 
-  def withWrapText =
+  def withWrapText: CellStyle =
     copy(wrapText = Some(true))
 
-  def withoutWrapText =
+  def withoutWrapText: CellStyle =
     copy(wrapText = Some(false))
 
   private def dw[T](current : Option[T], default: Option[T]) : Option[T] =

@@ -54,7 +54,7 @@ class SpoiwoExamples {
       HA.General -> VA.Center, HA.Justify -> VA.Justify, HA.Left -> VA.Top, HA.Right -> VA.Top)
 
     Sheet(
-      Row(index = 2, height = 30 points).withCells(alignments.map((createCell _).tupled))
+      Row(index = 2, height = 30.points).withCells(alignments.map((createCell _).tupled))
     ).saveAsXlsx("xssf-align.xlsx")
   }
 
@@ -90,7 +90,7 @@ class SpoiwoExamples {
 
   def workingWithFonts() {
     import Height._
-    val style = CellStyle(font = Font(height = 24 points, fontName = "Courier New", italic = true, strikeout = true))
+    val style = CellStyle(font = Font(height = 24.points, fontName = "Courier New", italic = true, strikeout = true))
     Sheet(name = "new sheet",
       row = Row(index = 1, Cell("This is a test of fonts", 1, style))
     ).saveAsXlsx("workbook.xls")
@@ -100,7 +100,7 @@ class SpoiwoExamples {
   def workingWithMultipleFonts() {
     val cell = Cell(value = 0, style = CellStyle(font = Font(bold = true)))
     Sheet(name = "new sheet",
-      rows = (0 to 10000).map(i => Row(cell)).toList
+      rows = (0 to 10000).map(_ => Row(cell)).toList
     ).saveAsXlsx("workbook.xls")
   }
 
@@ -112,7 +112,7 @@ class SpoiwoExamples {
 
   def usingNewLinesInCells() = {
     val cell = Cell("Use \n with word wrap on to create a new line", index = 2)
-    val row = Row(index = 2, height = 15 points, cells = List(cell))
+    val row = Row(index = 2, height = 15.points, cells = List(cell))
     val sheet = Sheet(row).withColumns(Column(2, autoSized = true))
     sheet.saveAsXlsx("ooxml-newlines.xlsx")
   }

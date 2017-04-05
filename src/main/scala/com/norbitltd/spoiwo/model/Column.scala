@@ -29,55 +29,54 @@ case class Column private[model](index: Option[Int],
                                  style: Option[CellStyle],
                                  width: Option[Width]) {
 
-  override def toString = "Column(" + List(
+  override def toString: String = "Column(" + List(
     index.map("index=" + _),
     autoSized.map("auto sized=" + _),
     break.map("break=" + _),
     groupCollapsed.map("group collapsed=" + _),
     hidden.map("hidden=" + _),
-    //style.map("style = " + _),
     width.map("width=" + _)
   ).flatten.mkString(", ") + ")"
 
-  def withIndex(index: Int) =
+  def withIndex(index: Int): Column =
     copy(index = Option(index))
 
-  def withoutIndex =
+  def withoutIndex: Column =
     copy(index = None)
 
-  def withAutoSized(autoSized: Boolean) =
+  def withAutoSized(autoSized: Boolean): Column =
     copy(autoSized = Some(true))
 
-  def withoutAutoSized =
+  def withoutAutoSized: Column =
     copy(autoSized = Some(false))
 
-  def withBreak =
+  def withBreak: Column =
     copy(break = Some(true))
 
-  def withoutBreak =
+  def withoutBreak: Column =
     copy(break = Some(false))
 
-  def withGroupCollapsed =
+  def withGroupCollapsed: Column =
     copy(groupCollapsed = Some(true))
 
-  def withoutGroupCollapsed =
+  def withoutGroupCollapsed: Column =
     copy(groupCollapsed = Some(false))
 
-  def withHidden =
+  def withHidden: Column =
     copy(hidden = Some(true))
 
-  def withoutHidden =
+  def withoutHidden: Column =
     copy(hidden = Some(false))
 
-  def withStyle(style: CellStyle) =
+  def withStyle(style: CellStyle): Column =
     copy(style = Option(style))
 
-  def withoutStyle =
+  def withoutStyle: Column =
     copy(style = None)
 
-  def withWidth(width: Width) =
+  def withWidth(width: Width): Column =
     copy(width = Option(width))
 
-  def withoutWidth =
+  def withoutWidth: Column =
     copy(width = None)
 }

@@ -15,13 +15,13 @@ class Model2XlsxConversionsForWorkbookCacheSpec extends FlatSpec {
     val style = CellStyle(font = Font(height = 24 points, fontName = "Courier New", italic = true, strikeout = true), dataFormat = CellDataFormat("0.0"))
     private val victim = Workbook(Sheet(name = "Test Cheet", rows = List(Row(Seq(Cell("1", style = style), Cell("2", style = style))))))
     val conversions = Model2XlsxConversions
-    val cellStyleCacheField = conversions.getClass.getDeclaredField("cellStyleCache")
+    val cellStyleCacheField: Field = conversions.getClass.getDeclaredField("cellStyleCache")
     cellStyleCacheField.setAccessible(true)
 
-    val dataFormatCacheField = conversions.getClass.getDeclaredField("com$norbitltd$spoiwo$natures$xlsx$Model2XlsxConversions$$dataFormatCache")
+    val dataFormatCacheField: Field = conversions.getClass.getDeclaredField("com$norbitltd$spoiwo$natures$xlsx$Model2XlsxConversions$$dataFormatCache")
     dataFormatCacheField.setAccessible(true)
 
-    val fontCacheField = conversions.getClass.getDeclaredField("fontCache")
+    val fontCacheField: Field = conversions.getClass.getDeclaredField("fontCache")
     fontCacheField.setAccessible(true)
 
 

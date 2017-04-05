@@ -57,13 +57,13 @@ case class Footer private(
                    evenCenter: Option[String],
                    evenRight: Option[String]) {
 
-  def withFirstPageLeft(firstLeft : String) =
+  def withFirstPageLeft(firstLeft : String): Footer =
     copy(firstLeft = Option(firstLeft))
 
-  def withFirstPageCenter(firstCenter : String) =
+  def withFirstPageCenter(firstCenter : String): Footer =
     copy(firstCenter = Option(firstCenter))
 
-  def withFirstPageRight(firstRight : String) =
+  def withFirstPageRight(firstRight : String): Footer =
     copy(firstLeft = Option(firstRight))
 
 }

@@ -20,6 +20,6 @@ object CellBorderStyle {
 }
 
 case class CellBorderStyle private(value : String) {
-  override def toString = value
+  override def toString: String = value
 }
 
