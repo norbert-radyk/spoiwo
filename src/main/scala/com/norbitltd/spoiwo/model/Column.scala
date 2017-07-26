@@ -44,7 +44,7 @@ case class Column private[model](index: Option[Int],
   def withoutIndex: Column =
     copy(index = None)
 
-  def withAutoSized(autoSized: Boolean): Column =
+  def withAutoSized: Column =
     copy(autoSized = Some(true))
 
   def withoutAutoSized: Column =

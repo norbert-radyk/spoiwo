@@ -156,7 +156,7 @@ case class SheetProperties private[model](
   def withPrintArea(printArea: CellRange): SheetProperties =
     copy(printArea = Option(printArea))
 
-  def withoutPrintArea(printArea: CellRange): SheetProperties =
+  def withoutPrintArea: SheetProperties =
     copy(printArea = None)
 
   def withPrintGridLines: SheetProperties =

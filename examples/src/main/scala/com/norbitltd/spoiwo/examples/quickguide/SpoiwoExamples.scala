@@ -8,6 +8,7 @@ import java.util.{Calendar, Date}
 import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment => VA, CellHorizontalAlignment => HA, CellBorderStyle, Pane, CellFill}
 import org.apache.poi.ss.util.WorkbookUtil
 
+//noinspection TypeAnnotation
 class SpoiwoExamples {
 
   def newWorkbook() = Workbook().saveAsXlsx("workbook.xlsx")

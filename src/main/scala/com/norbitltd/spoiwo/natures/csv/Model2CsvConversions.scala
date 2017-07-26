@@ -39,17 +39,17 @@ object Model2CsvConversions {
     }
   }
 
-  private def convertWorkbookToCsv(wb : Workbook, properties : CsvProperties = CsvProperties.Default) : Map[String, String] = {
+  private def convertWorkbookToCsv(wb : Workbook, properties : CsvProperties) : Map[String, String] = {
     require(wb.sheets.size <= 1 || wb.sheets.forall(_.name.isDefined),
       "When converting workbook with multiple sheets to CSV format it is required to specify the unique name for each of them!")
     wb.sheets.map(s => convertSheetToCsv(s, properties)).toMap
   }
 
-  private def convertSheetToCsv(s : Sheet, properties : CsvProperties = CsvProperties.Default) : (String, String) = {
+  private def convertSheetToCsv(s : Sheet, properties : CsvProperties) : (String, String) = {
     s.name.getOrElse("") -> s.rows.map(r => convertRowToCsv(r, properties)).mkString("\n")
   }
 
-  private def convertRowToCsv(r : Row, properties : CsvProperties = CsvProperties.Default) : String =
+  private def convertRowToCsv(r : Row, properties : CsvProperties) : String =
     r.cells.map(c => convertCellToCsv(c, properties)).mkString(properties.separator)
 
   private def convertCellToCsv(c : Cell, properties : CsvProperties) : String = c match {

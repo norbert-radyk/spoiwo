@@ -63,7 +63,7 @@ object Model2XlsxEnumConversions {
 
     cf match {
       case CellFill.None => FillPatternType.NO_FILL
-      case Solid => FillPatternType.SOLID_FOREGROUND
+      case CellFill.Solid => FillPatternType.SOLID_FOREGROUND
       case Pattern.AltBars => FillPatternType.ALT_BARS
       case Pattern.BigSpots => FillPatternType.BIG_SPOTS
       case Pattern.Bricks => FillPatternType.BRICKS
@@ -81,6 +81,8 @@ object Model2XlsxEnumConversions {
       case Pattern.Bands.ThickVertical => FillPatternType.THICK_VERT_BANDS
       case Pattern.Bands.ThinHorizontal => FillPatternType.THIN_HORZ_BANDS
       case Pattern.Bands.ThinVertical => FillPatternType.THIN_VERT_BANDS
+      case unexpected =>
+        throw new IllegalArgumentException(s"Unable to convert CellFill=$unexpected to XLSX - unsupported enum!")
     }
   }
 

@@ -53,6 +53,8 @@ object Model2XlsxConversions {
         cell.withDefaultStyle(columnStyle).withDefaultStyle(rowStyle).withDefaultStyle(sheetStyle)
       case CellStyleInheritance.CellThenRowThenColumnThenSheet =>
         cell.withDefaultStyle(rowStyle).withDefaultStyle(columnStyle).withDefaultStyle(sheetStyle)
+      case unexpected =>
+        throw new IllegalArgumentException(s"Unable to convert CellStyleInheritance=$unexpected to XLSX - unsupported enum!")
     }
   }
 
@@ -228,6 +230,8 @@ object Model2XlsxConversions {
     case Pane.LowerRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_RIGHT
     case Pane.UpperLeftPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_LEFT
     case Pane.UpperRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_RIGHT
+    case unexpected =>
+      throw new IllegalArgumentException(s"Unable to convert Pane=$unexpected to XLSX - unsupported enum!")
   }
 
   private def convertPaneAction(paneAction: PaneAction, sheet: XSSFSheet) {
