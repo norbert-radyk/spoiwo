@@ -1,6 +1,5 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import scala.language.postfixOps
 import scala.collection.JavaConverters._
 import org.scalatest.FlatSpec
 import org.apache.poi.xssf.usermodel.XSSFWorkbook

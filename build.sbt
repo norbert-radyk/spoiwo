@@ -21,9 +21,12 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.12.2",
-  scalacOptions ++= Seq("-Ywarn-unused", "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.12.2", "2.11.8"),
+  scalaVersion := "2.12.3",
+  scalacOptions ++= Seq(
+    "-Ywarn-dead-code",
+    "-Ywarn-unused",
+    "-Ywarn-unused-import"),
+  crossScalaVersions := Seq("2.12.3", "2.11.8"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,

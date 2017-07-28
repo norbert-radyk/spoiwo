@@ -72,7 +72,7 @@ object Model2XlsxConversions {
       case BooleanCell(value, _, _, _) => cell.setCellValue(value)
       case DateCell(value, _, _, _) => setDateCell(c, cell, value)
       case CalendarCell(value, _, _, _) => setCalendarCell(c, cell, value)
-      case HyperLinkUrlCell(value, _, _, _) => setHyperLinkUrlCell(c, cell, value, row)
+      case HyperLinkUrlCell(value, _, _, _) => setHyperLinkUrlCell(cell, value, row)
     }
     cell
   }
@@ -98,7 +98,7 @@ object Model2XlsxConversions {
       cell.setCellValue(value)
     }
   }
-  private def setHyperLinkUrlCell(c: Cell, cell: XSSFCell, value: HyperLinkUrl, row: XSSFRow) {
+  private def setHyperLinkUrlCell(cell: XSSFCell, value: HyperLinkUrl, row: XSSFRow) {
     import org.apache.poi.common.usermodel.Hyperlink
 
     val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(Hyperlink.LINK_URL)
