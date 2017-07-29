@@ -23,6 +23,8 @@ lazy val commonSettings = Seq(
   organization := "com.norbitltd",
   scalaVersion := "2.12.3",
   scalacOptions ++= Seq(
+    "-deprecation",
+    "-feature",
     "-Ywarn-dead-code",
     "-Ywarn-unused",
     "-Ywarn-unused-import"),

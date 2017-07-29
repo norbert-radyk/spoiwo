@@ -1,14 +1,14 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import org.scalatest.FlatSpec
+import org.scalatest.{FlatSpec, Matchers}
 import Model2XlsxConversions.convertCellBorders
 import org.apache.poi.ss.usermodel
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFWorkbook}
-import com.norbitltd.spoiwo.model.{Color, CellBorders}
+import com.norbitltd.spoiwo.model.{CellBorders, Color}
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder
 import com.norbitltd.spoiwo.model.enums.CellBorderStyle
 
-class Model2XlsxConversionsForCellBordersSpec extends FlatSpec{
+class Model2XlsxConversionsForCellBordersSpec extends FlatSpec with Matchers{
 
   val cellStyle : XSSFCellStyle = new XSSFWorkbook().createCellStyle()
 
@@ -21,50 +21,50 @@ class Model2XlsxConversionsForCellBordersSpec extends FlatSpec{
   val default: XSSFCellStyle = convert(CellBorders())
 
   "Cell borders conversion" should "return no borders by default" in {
-    assert(default.getBorderBottomEnum == usermodel.BorderStyle.NONE)
-    assert(default.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM) == null)
-    assert(default.getBorderTopEnum == usermodel.BorderStyle.NONE)
-    assert(default.getBorderColor(XSSFCellBorder.BorderSide.TOP) == null)
-    assert(default.getBorderLeftEnum == usermodel.BorderStyle.NONE)
-    assert(default.getBorderColor(XSSFCellBorder.BorderSide.LEFT) == null)
-    assert(default.getBorderRightEnum == usermodel.BorderStyle.NONE)
-    assert(default.getBorderColor(XSSFCellBorder.BorderSide.RIGHT) == null)
+    default.getBorderBottomEnum shouldBe usermodel.BorderStyle.NONE
+    default.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM) shouldBe null
+    default.getBorderTopEnum shouldBe usermodel.BorderStyle.NONE
+    default.getBorderColor(XSSFCellBorder.BorderSide.TOP) shouldBe null
+    default.getBorderLeftEnum shouldBe usermodel.BorderStyle.NONE
+    default.getBorderColor(XSSFCellBorder.BorderSide.LEFT) shouldBe null
+    default.getBorderRightEnum shouldBe usermodel.BorderStyle.NONE
+    default.getBorderColor(XSSFCellBorder.BorderSide.RIGHT) shouldBe null
   }
 
   it should "return user defined bottom border" in {
     val model = CellBorders(bottomStyle = CellBorderStyle.Dashed, bottomColor = Color.Blue)
     val xlsx = convert(model)
 
-    assert(xlsx.getBorderBottomEnum == usermodel.BorderStyle.DASHED)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM).getRGB.toList ==
-      Array[Byte](0, 0, 255.toByte).toList)
+    xlsx.getBorderBottomEnum shouldBe usermodel.BorderStyle.DASHED
+    xlsx.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM).getRGB.toList shouldBe
+      Array[Byte](0, 0, 255.toByte).toList
   }
 
   it should "return user defined top border" in {
     val model = CellBorders(topStyle = CellBorderStyle.MediumDashDotDot, topColor = Color.Olive)
     val xlsx = convert(model)
 
-    assert(xlsx.getBorderTopEnum == usermodel.BorderStyle.MEDIUM_DASH_DOT_DOTC)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.TOP).getRGB.toList ==
-      Array[Byte](128.toByte, 128.toByte, 0.toByte).toList)
+    xlsx.getBorderTopEnum shouldBe usermodel.BorderStyle.MEDIUM_DASH_DOT_DOTC
+    xlsx.getBorderColor(XSSFCellBorder.BorderSide.TOP).getRGB.toList shouldBe
+      Array[Byte](128.toByte, 128.toByte, 0.toByte).toList
   }
 
   it should "return user defined left border" in {
     val model = CellBorders(leftStyle = CellBorderStyle.Dotted, leftColor = Color.Blue)
     val xlsx = convert(model)
 
-    assert(xlsx.getBorderLeftEnum == usermodel.BorderStyle.DOTTED)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.LEFT).getRGB.toList ==
-      Array[Byte](0, 0, 255.toByte).toList)
+    xlsx.getBorderLeftEnum shouldBe usermodel.BorderStyle.DOTTED
+    xlsx.getBorderColor(XSSFCellBorder.BorderSide.LEFT).getRGB.toList shouldBe
+      Array[Byte](0, 0, 255.toByte).toList
   }
 
   it should "return user defined right border" in {
     val model = CellBorders(rightStyle = CellBorderStyle.Hair, rightColor = Color.Blue)
     val xlsx = convert(model)
 
-    assert(xlsx.getBorderRightEnum == usermodel.BorderStyle.HAIR)
-    assert(xlsx.getBorderColor(XSSFCellBorder.BorderSide.RIGHT).getRGB.toList ==
-      Array[Byte](0, 0, 255.toByte).toList)
+    xlsx.getBorderRightEnum shouldBe usermodel.BorderStyle.HAIR
+    xlsx.getBorderColor(XSSFCellBorder.BorderSide.RIGHT).getRGB.toList shouldBe
+      Array[Byte](0, 0, 255.toByte).toList
   }
 
 }

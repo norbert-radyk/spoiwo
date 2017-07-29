@@ -1,11 +1,11 @@
 package com.norbitltd.spoiwo.natures.csv
 
-import org.scalatest.FlatSpec
+import org.scalatest.{FlatSpec, Matchers}
 import com.norbitltd.spoiwo.model.{Row, Sheet}
 import Model2CsvConversions._
 import org.joda.time.LocalDate
 
-class Model2CsvConversionsSpec extends FlatSpec {
+class Model2CsvConversionsSpec extends FlatSpec with Matchers {
 
   "Model to CSV conversion" should "correctly convert the single text-only sheet" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
@@ -14,7 +14,7 @@ class Model2CsvConversionsSpec extends FlatSpec {
       Row().withCellValues("ASIA", "China", "Tianjin"))
 
     val csvText = "EUROPE,Poland,Wroclaw\nEUROPE,United Kingdom,London\nASIA,China,Tianjin"
-    assert(csvText === sheet.convertAsCsv())
+    csvText shouldBe sheet.convertAsCsv()
   }
 
   it should "correctly convert the single text-only sheet with '|' separator" in {
@@ -25,7 +25,7 @@ class Model2CsvConversionsSpec extends FlatSpec {
     val properties = CsvProperties(separator = "|")
 
     val csvText = "EUROPE|Poland|Wroclaw\nEUROPE|United Kingdom|London\nASIA|China|Tianjin"
-    assert(csvText === sheet.convertAsCsv(properties))
+    csvText shouldBe sheet.convertAsCsv(properties)
   }
 
   it should "correctly format boolean value with default 'true' and 'false'" in {
@@ -36,7 +36,7 @@ class Model2CsvConversionsSpec extends FlatSpec {
     )
 
     val csvText = "City,Is Capital\nLondon,true\nWroclaw,false"
-    assert(csvText === sheet.convertAsCsv())
+    csvText shouldBe sheet.convertAsCsv()
   }
 
   it should "correctly format boolean value with 'Y' and 'N'" in {
@@ -48,7 +48,7 @@ class Model2CsvConversionsSpec extends FlatSpec {
     val properties = CsvProperties(defaultBooleanTrueString = "Y", defaultBooleanFalseString = "N")
 
     val csvText = "City,Is Capital\nLondon,Y\nWroclaw,N"
-    assert(csvText === sheet.convertAsCsv(properties))
+    csvText shouldBe sheet.convertAsCsv(properties)
   }
 
   it should "correctly format date value to yyyy-MM-dd by default" in {
@@ -58,7 +58,7 @@ class Model2CsvConversionsSpec extends FlatSpec {
       )
 
     val csvText = "Albert Einstein,1879-03-14\nThomas Edison,1847-02-11"
-    assert(csvText === sheet.convertAsCsv())
+    csvText shouldBe sheet.convertAsCsv()
   }
 
   it should "correctly format date value to yyyy/MM/dd by default" in {
@@ -69,7 +69,7 @@ class Model2CsvConversionsSpec extends FlatSpec {
     val properties = CsvProperties(defaultDateFormat = "yyyy/MM/dd")
 
     val csvText = "Albert Einstein,1879/03/14\nThomas Edison,1847/02/11"
-    assert(csvText === sheet.convertAsCsv(properties))
+    csvText shouldBe sheet.convertAsCsv(properties)
   }
 
 }

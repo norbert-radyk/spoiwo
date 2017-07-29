@@ -2,17 +2,19 @@ package com.norbitltd.spoiwo.natures.xlsx
 
 import java.util.Calendar
 import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
+
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertCell, _}
 import org.apache.poi.ss.usermodel
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
 import org.joda.time.{DateTime, LocalDate}
-import org.scalatest.FlatSpec
+import org.scalatest.{FlatSpec, Matchers}
+
 import scala.language.postfixOps
 
 
-class Model2XlsxConversionsForCellSpec extends FlatSpec {
+class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
 
   private val defaultCell: XSSFCell = convert(Cell.Empty)
 
@@ -21,17 +23,17 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
   private def row = new XSSFWorkbook().createSheet().createRow(0)
 
   "Cell conversion" should "return string cell type with empty string by default" in {
-    assert(defaultCell.getCellType == usermodel.Cell.CELL_TYPE_STRING)
-    assert(defaultCell.getStringCellValue == "")
+    defaultCell.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    defaultCell.getStringCellValue shouldBe ""
   }
 
   it should "return a 0 column index by default if no other cells specified in the row" in {
-    assert(defaultCell.getColumnIndex == 0)
+    defaultCell.getColumnIndex shouldBe 0
   }
 
   it should "return cell style with 11pt Calibri by default" in {
-    assert(defaultCell.getCellStyle.getFont.getFontHeightInPoints === 11)
-    assert(defaultCell.getCellStyle.getFont.getFontName === "Calibri")
+    defaultCell.getCellStyle.getFont.getFontHeightInPoints  shouldBe  11
+    defaultCell.getCellStyle.getFont.getFontName  shouldBe  "Calibri"
   }
 
   it should "return cell style with 14pt Arial when explicitly specified" in {
@@ -39,15 +41,15 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val model = Cell.Empty.withStyle(cellStyle)
     val xlsx = convert(model)
 
-    assert(xlsx.getCellStyle.getFont.getFontHeightInPoints == 14)
-    assert(xlsx.getCellStyle.getFont.getFontName == "Arial")
+    xlsx.getCellStyle.getFont.getFontHeightInPoints shouldBe 14
+    xlsx.getCellStyle.getFont.getFontName shouldBe "Arial"
   }
 
   it should "return index of 3 when explicitly specified" in {
     val model = Cell.Empty.withIndex(3)
     val xlsx = convert(model)
 
-    assert(xlsx.getColumnIndex == 3)
+    xlsx.getColumnIndex shouldBe 3
   }
 
   it should "return index of 2 when row has already 2 other cells" in {
@@ -57,63 +59,63 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
 
     val model = Cell.Empty
     val xlsx = convertCell(Sheet(), Map(), Row(), model, row)
-    assert(xlsx.getColumnIndex == 2)
+    xlsx.getColumnIndex shouldBe 2
   }
 
   it should "return string cell when set up with 'String'" in {
     val model = Cell("TEST_STRING")
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_STRING)
-    assert(xlsx.getStringCellValue == "TEST_STRING")
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    xlsx.getStringCellValue shouldBe "TEST_STRING"
   }
 
   it should "return string cell when set up with String with newline value" in {
     val model = Cell("TEST_STRING\nAnd a 2nd line")
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_STRING)
-    assert(xlsx.getStringCellValue == "TEST_STRING\nAnd a 2nd line")
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    xlsx.getStringCellValue shouldBe "TEST_STRING\nAnd a 2nd line"
   }
 
   it should "return formula cell when set up with string starting with '=' sign" in {
     val model = Cell("=1000/3+7")
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_FORMULA)
-    assert(xlsx.getCellFormula == "1000/3+7")
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_FORMULA
+    xlsx.getCellFormula shouldBe "1000/3+7"
   }
 
   it should "return numeric cell when set up with double value" in {
     val model = Cell(90.45)
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_NUMERIC)
-    assert(xlsx.getNumericCellValue == 90.45)
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getNumericCellValue shouldBe 90.45
   }
 
   it should "return numeric cell when set up with big decimal value" in {
     val model = Cell(BigDecimal(90.45))
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_NUMERIC)
-    assert(xlsx.getNumericCellValue == 90.45)
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getNumericCellValue shouldBe 90.45
   }
 
   it should "return numeric cell when set up with int value" in {
     val model = Cell(90)
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_NUMERIC)
-    assert(xlsx.getNumericCellValue == 90)
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getNumericCellValue shouldBe 90
   }
 
   it should "return numeric cell when set up with long value" in {
     val model = Cell(10000000000000l)
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_NUMERIC)
-    assert(xlsx.getNumericCellValue == 10000000000000l)
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getNumericCellValue shouldBe 10000000000000l
   }
 
   it should "return boolean cell when set up with boolean value" in {
     val model = Cell(true)
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_BOOLEAN)
-    assert(xlsx.getBooleanCellValue)
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_BOOLEAN
+    xlsx.getBooleanCellValue shouldBe true
   }
 
   it should "return numeric cell when set up with java.util.Date value" in {
@@ -121,9 +123,9 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val xlsx = convert(model)
 
     val date = new LocalDate(xlsx.getDateCellValue)
-    assert(date.getYear == 2011)
-    assert(date.getMonthOfYear == 11)
-    assert(date.getDayOfMonth == 13)
+    date.getYear shouldBe 2011
+    date.getMonthOfYear shouldBe 11
+    date.getDayOfMonth shouldBe 13
   }
 
   it should "return numeric cell when set up with org.joda.time.LocalDate value" in {
@@ -131,9 +133,9 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val xlsx = convert(model)
 
     val date = new LocalDate(xlsx.getDateCellValue)
-    assert(date.getYear == 2011)
-    assert(date.getMonthOfYear == 11)
-    assert(date.getDayOfMonth == 13)
+    date.getYear shouldBe 2011
+    date.getMonthOfYear shouldBe 11
+    date.getDayOfMonth shouldBe 13
   }
 
   it should "return numeric cell when set up with java.util.Calendar value" in {
@@ -143,9 +145,9 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val xlsx = convert(model)
 
     val date = new LocalDate(xlsx.getDateCellValue)
-    assert(date.getYear == 2011)
-    assert(date.getMonthOfYear == 12)
-    assert(date.getDayOfMonth == 13)
+    date.getYear shouldBe 2011
+    date.getMonthOfYear shouldBe 12
+    date.getDayOfMonth shouldBe 13
   }
 
   it should "return numeric cell when set up with java.time.LocalDate value" in {
@@ -157,12 +159,12 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
       val xlsx = convert(model)
 
       val date = new DateTime(xlsx.getDateCellValue)
-      assert(date.getYear           == ld.getYear)
-      assert(date.getMonthOfYear    == ld.getMonthValue)
-      assert(date.getDayOfMonth     == ld.getDayOfMonth)
-      assert(date.getHourOfDay      == 0)
-      assert(date.getMinuteOfHour   == 0)
-      assert(date.getSecondOfMinute == 0)
+      date.getYear           shouldBe ld.getYear
+      date.getMonthOfYear    shouldBe ld.getMonthValue
+      date.getDayOfMonth     shouldBe ld.getDayOfMonth
+      date.getHourOfDay      shouldBe 0
+      date.getMinuteOfHour   shouldBe 0
+      date.getSecondOfMinute shouldBe 0
     }
   }
 
@@ -175,19 +177,19 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
       val xlsx = convert(model)
 
       val date = new DateTime(xlsx.getDateCellValue)
-      assert(date.getYear           == ldt.getYear)
-      assert(date.getMonthOfYear    == ldt.getMonthValue)
-      assert(date.getDayOfMonth     == ldt.getDayOfMonth)
-      assert(date.getHourOfDay      == ldt.getHour)
-      assert(date.getMinuteOfHour   == ldt.getMinute)
-      assert(date.getSecondOfMinute == ldt.getSecond)
+      date.getYear           shouldBe ldt.getYear
+      date.getMonthOfYear    shouldBe ldt.getMonthValue
+      date.getDayOfMonth     shouldBe ldt.getDayOfMonth
+      date.getHourOfDay      shouldBe ldt.getHour
+      date.getMinuteOfHour   shouldBe ldt.getMinute
+      date.getSecondOfMinute shouldBe ldt.getSecond
     }
   }
 
   it should "return string cell with the date formatted yyyy-MM-dd if date before 1904" in {
     val model = Cell(new LocalDate(1856, 11, 3).toDate)
     val xlsx = convert(model)
-    assert("1856-11-03" === xlsx.getStringCellValue)
+    "1856-11-03"  shouldBe  xlsx.getStringCellValue
   }
 
   it should "apply 14pt Arial cell style for column when set explicitly" in {
@@ -196,14 +198,14 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec {
     val xlsx = sheet.convertAsXlsx()
 
     val cellStyle = xlsx.getSheetAt(0).getRow(0).getCell(0).getCellStyle
-    assert(cellStyle.getFont.getFontName == "Arial")
-    assert(cellStyle.getFont.getFontHeightInPoints == 14)
+    cellStyle.getFont.getFontName shouldBe "Arial"
+    cellStyle.getFont.getFontHeightInPoints shouldBe 14
   }
 
   it should "return a string cell with hyperlink when setup with HyperLinkUrl value" in {
     val model = Cell(HyperLinkUrl("View Item", "https://www.google.com"))
     val xlsx = convert(model)
-    assert(xlsx.getCellType == usermodel.Cell.CELL_TYPE_STRING)
-    assert(xlsx.getHyperlink.getAddress == "https://www.google.com")
+    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    xlsx.getHyperlink.getAddress shouldBe "https://www.google.com"
   }
 }
