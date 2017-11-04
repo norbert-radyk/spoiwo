@@ -10,7 +10,6 @@ object CellBorderStyle {
   lazy val Hair = CellBorderStyle("Hair")
   lazy val Medium = CellBorderStyle("Medium")
   lazy val MediumDashDot = CellBorderStyle("MediumDashDot")
-  lazy val MediumDashDotDot = CellBorderStyle("MediumDashDotDot")
   lazy val MediumDashed = CellBorderStyle("MediumDashed")
   lazy val None = CellBorderStyle("None")
   lazy val SlantedDashDot = CellBorderStyle("SlantedDashDot")

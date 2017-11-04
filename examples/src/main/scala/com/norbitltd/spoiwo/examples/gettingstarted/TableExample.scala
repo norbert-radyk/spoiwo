@@ -22,6 +22,6 @@ object TableExample {
       )
     )
 
-    sheetWithTable.saveAsXlsx(Utils.returnOrAskForSaveLocation(args))
+    sheetWithTable.saveAsXlsx(args(0))
   }
 }

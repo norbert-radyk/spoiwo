@@ -92,7 +92,7 @@ class JavaPoiExamples {
         row.createCell(2).setCellValue(Calendar.getInstance());
         row.createCell(3).setCellValue("a string");
         row.createCell(4).setCellValue(true);
-        row.createCell(5).setCellType(Cell.CELL_TYPE_ERROR);
+        row.createCell(5).setCellType(CellType.ERROR);
 
         // Write the output to a file
         FileOutputStream fileOut = new FileOutputStream("workbook.xls");
@@ -107,13 +107,13 @@ class JavaPoiExamples {
         Row row = sheet.createRow((short) 2);
         row.setHeightInPoints(30);
 
-        createCell(wb, row, (short) 0, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_BOTTOM);
-        createCell(wb, row, (short) 1, CellStyle.ALIGN_CENTER_SELECTION, CellStyle.VERTICAL_BOTTOM);
-        createCell(wb, row, (short) 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER);
-        createCell(wb, row, (short) 3, CellStyle.ALIGN_GENERAL, CellStyle.VERTICAL_CENTER);
-        createCell(wb, row, (short) 4, CellStyle.ALIGN_JUSTIFY, CellStyle.VERTICAL_JUSTIFY);
-        createCell(wb, row, (short) 5, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_TOP);
-        createCell(wb, row, (short) 6, CellStyle.ALIGN_RIGHT, CellStyle.VERTICAL_TOP);
+        createCell(wb, row, (short) 0, HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
+        createCell(wb, row, (short) 1, HorizontalAlignment.CENTER_SELECTION, VerticalAlignment.BOTTOM);
+        createCell(wb, row, (short) 2, HorizontalAlignment.FILL, VerticalAlignment.CENTER);
+        createCell(wb, row, (short) 3, HorizontalAlignment.GENERAL, VerticalAlignment.CENTER);
+        createCell(wb, row, (short) 4, HorizontalAlignment.JUSTIFY, VerticalAlignment.JUSTIFY);
+        createCell(wb, row, (short) 5, HorizontalAlignment.LEFT, VerticalAlignment.TOP);
+        createCell(wb, row, (short) 6, HorizontalAlignment.RIGHT, VerticalAlignment.TOP);
 
         // Write the output to a file
         FileOutputStream fileOut = new FileOutputStream("xssf-align.xlsx");
@@ -121,7 +121,7 @@ class JavaPoiExamples {
         fileOut.close();
     }
 
-    private static void createCell(Workbook wb, Row row, short column, short halign, short valign) {
+    private static void createCell(Workbook wb, Row row, short column, HorizontalAlignment halign, VerticalAlignment valign) {
         Cell cell = row.createCell(column);
         cell.setCellValue("Align It");
         CellStyle cellStyle = wb.createCellStyle();
@@ -143,13 +143,13 @@ class JavaPoiExamples {
 
         // Style the cell with borders all around.
         CellStyle style = wb.createCellStyle();
-        style.setBorderBottom(CellStyle.BORDER_THIN);
+        style.setBorderBottom(BorderStyle.THIN);
         style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBorderLeft(CellStyle.BORDER_THIN);
+        style.setBorderLeft(BorderStyle.THIN);
         style.setLeftBorderColor(IndexedColors.GREEN.getIndex());
-        style.setBorderRight(CellStyle.BORDER_THIN);
+        style.setBorderRight(BorderStyle.THIN);
         style.setRightBorderColor(IndexedColors.BLUE.getIndex());
-        style.setBorderTop(CellStyle.BORDER_MEDIUM_DASHED);
+        style.setBorderTop(BorderStyle.MEDIUM_DASHED);
         style.setTopBorderColor(IndexedColors.BLACK.getIndex());
         cell.setCellStyle(style);
 
@@ -169,7 +169,7 @@ class JavaPoiExamples {
         // Aqua background
         CellStyle style = wb.createCellStyle();
         style.setFillBackgroundColor(IndexedColors.AQUA.getIndex());
-        style.setFillPattern(CellStyle.BIG_SPOTS);
+        style.setFillPattern(FillPatternType.BIG_SPOTS);
         Cell cell = row.createCell((short) 1);
         cell.setCellValue("X");
         cell.setCellStyle(style);
@@ -177,7 +177,7 @@ class JavaPoiExamples {
         // Orange "foreground", foreground being the fill foreground not the font color.
         style = wb.createCellStyle();
         style.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
-        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cell = row.createCell((short) 2);
         cell.setCellValue("X");
         cell.setCellStyle(style);
@@ -244,7 +244,6 @@ class JavaPoiExamples {
 
         CellStyle style = workbook.createCellStyle();
         Font font = workbook.createFont();
-        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
         style.setFont(font);
         for (int i = 0; i < 10000; i++) {
             Row row = sheet.createRow(i);
@@ -262,7 +261,7 @@ class JavaPoiExamples {
 
         XSSFCellStyle style1 = wb.createCellStyle();
         style1.setFillForegroundColor(new XSSFColor(new java.awt.Color(128, 0, 128)));
-        style1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cell.setCellStyle(style1);
     }
 

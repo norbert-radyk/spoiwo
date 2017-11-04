@@ -41,10 +41,10 @@ class Model2XlsxConversionsForCellBordersSpec extends FlatSpec with Matchers{
   }
 
   it should "return user defined top border" in {
-    val model = CellBorders(topStyle = CellBorderStyle.MediumDashDotDot, topColor = Color.Olive)
+    val model = CellBorders(topStyle = CellBorderStyle.DashDot, topColor = Color.Olive)
     val xlsx = convert(model)
 
-    xlsx.getBorderTopEnum shouldBe usermodel.BorderStyle.MEDIUM_DASH_DOT_DOTC
+    xlsx.getBorderTopEnum shouldBe usermodel.BorderStyle.DASH_DOT
     xlsx.getBorderColor(XSSFCellBorder.BorderSide.TOP).getRGB.toList shouldBe
       Array[Byte](128.toByte, 128.toByte, 0.toByte).toList
   }

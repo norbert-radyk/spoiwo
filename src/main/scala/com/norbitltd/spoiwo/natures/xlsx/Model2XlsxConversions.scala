@@ -6,6 +6,7 @@ import java.util.{Calendar, Date}
 import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NoSplitOrFreeze, NumericCell, SplitPane, StringCell, _}
 import com.norbitltd.spoiwo.model.enums._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
+import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, HorizontalAlignment, VerticalAlignment}
 import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
@@ -25,7 +26,8 @@ object Model2XlsxConversions {
   private def Cache[K, V]() = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[K, V]]()
 
   private def convertColor(color: Color): XSSFColor = new XSSFColor(
-    Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte)
+    Array[Byte](color.r.toByte, color.g.toByte, color.b.toByte),
+    new DefaultIndexedColorMap()
   )
 
   private def mergeStyle(cell: Cell,
@@ -99,9 +101,7 @@ object Model2XlsxConversions {
     }
   }
   private def setHyperLinkUrlCell(cell: XSSFCell, value: HyperLinkUrl, row: XSSFRow) {
-    import org.apache.poi.common.usermodel.Hyperlink
-
-    val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(Hyperlink.LINK_URL)
+    val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(HyperlinkType.URL)
     link.setAddress(value.address)
     cell.setCellValue(value.text)
     cell.setHyperlink(link)
@@ -185,7 +185,7 @@ object Model2XlsxConversions {
     getCachedOrUpdate(fontCache, f, workbook) {
       val font = workbook.createFont()
       f.bold.foreach(font.setBold)
-      f.charSet.foreach(charSet => font.setCharSet(convertCharset(charSet)))
+      f.charSet.foreach(charSet => font.setCharSet(convertCharset(charSet).getNativeId))
       f.color.foreach(c => font.setColor(convertColor(c)))
       f.family.foreach(family => font.setFamily(convertFontFamily(family)))
       f.height.foreach(height => font.setFontHeightInPoints(height.toPoints))
@@ -348,7 +348,7 @@ object Model2XlsxConversions {
     sp.rowSumsBelow.foreach(sheet.setRowSumsBelow)
     sp.rowSumsRight.foreach(sheet.setRowSumsRight)
     sp.selected.foreach(sheet.setSelected)
-    sp.tabColor.foreach(sheet.setTabColor)
+    sp.tabColor.foreach(c => sheet.setTabColor(convertColor(c)))
     sp.virtuallyCenter.foreach(sheet.setVerticallyCenter)
     sp.zoom.foreach(sheet.setZoom)
   }

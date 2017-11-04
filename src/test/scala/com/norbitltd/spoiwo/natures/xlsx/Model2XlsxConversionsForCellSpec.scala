@@ -6,7 +6,7 @@ import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertCell, _}
-import org.apache.poi.ss.usermodel
+import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.{FlatSpec, Matchers}
@@ -23,7 +23,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
   private def row = new XSSFWorkbook().createSheet().createRow(0)
 
   "Cell conversion" should "return string cell type with empty string by default" in {
-    defaultCell.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    defaultCell.getCellTypeEnum shouldBe CellType.STRING
     defaultCell.getStringCellValue shouldBe ""
   }
 
@@ -65,56 +65,56 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
   it should "return string cell when set up with 'String'" in {
     val model = Cell("TEST_STRING")
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    xlsx.getCellTypeEnum shouldBe CellType.STRING
     xlsx.getStringCellValue shouldBe "TEST_STRING"
   }
 
   it should "return string cell when set up with String with newline value" in {
     val model = Cell("TEST_STRING\nAnd a 2nd line")
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    xlsx.getCellTypeEnum shouldBe CellType.STRING
     xlsx.getStringCellValue shouldBe "TEST_STRING\nAnd a 2nd line"
   }
 
   it should "return formula cell when set up with string starting with '=' sign" in {
     val model = Cell("=1000/3+7")
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_FORMULA
+    xlsx.getCellTypeEnum shouldBe CellType.FORMULA
     xlsx.getCellFormula shouldBe "1000/3+7"
   }
 
   it should "return numeric cell when set up with double value" in {
     val model = Cell(90.45)
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getCellTypeEnum shouldBe CellType.NUMERIC
     xlsx.getNumericCellValue shouldBe 90.45
   }
 
   it should "return numeric cell when set up with big decimal value" in {
     val model = Cell(BigDecimal(90.45))
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getCellTypeEnum shouldBe CellType.NUMERIC
     xlsx.getNumericCellValue shouldBe 90.45
   }
 
   it should "return numeric cell when set up with int value" in {
     val model = Cell(90)
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getCellTypeEnum shouldBe CellType.NUMERIC
     xlsx.getNumericCellValue shouldBe 90
   }
 
   it should "return numeric cell when set up with long value" in {
     val model = Cell(10000000000000l)
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_NUMERIC
+    xlsx.getCellTypeEnum shouldBe CellType.NUMERIC
     xlsx.getNumericCellValue shouldBe 10000000000000l
   }
 
   it should "return boolean cell when set up with boolean value" in {
     val model = Cell(true)
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_BOOLEAN
+    xlsx.getCellTypeEnum shouldBe CellType.BOOLEAN
     xlsx.getBooleanCellValue shouldBe true
   }
 
@@ -205,7 +205,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
   it should "return a string cell with hyperlink when setup with HyperLinkUrl value" in {
     val model = Cell(HyperLinkUrl("View Item", "https://www.google.com"))
     val xlsx = convert(model)
-    xlsx.getCellType shouldBe usermodel.Cell.CELL_TYPE_STRING
+    xlsx.getCellTypeEnum shouldBe CellType.STRING
     xlsx.getHyperlink.getAddress shouldBe "https://www.google.com"
   }
 }

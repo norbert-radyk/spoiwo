@@ -23,7 +23,7 @@ object SheetProperties {
             rowSumsBelow: java.lang.Boolean = null,
             rowSumsRight: java.lang.Boolean = null,
             selected: java.lang.Boolean = null,
-            tabColor: java.lang.Integer = null,
+            tabColor: Color = null,
             virtuallyCenter: java.lang.Boolean = null,
             zoom: java.lang.Integer = null): SheetProperties = SheetProperties(
     Option(autoFilter),
@@ -45,7 +45,7 @@ object SheetProperties {
     Option(rowSumsBelow).map(_.booleanValue),
     Option(rowSumsRight).map(_.booleanValue),
     Option(selected).map(_.booleanValue),
-    Option(tabColor).map(_.intValue),
+    Option(tabColor),
     Option(virtuallyCenter).map(_.booleanValue),
     Option(zoom).map(_.intValue)
   )
@@ -71,7 +71,7 @@ case class SheetProperties private[model](
                                            rowSumsBelow: Option[Boolean],
                                            rowSumsRight: Option[Boolean],
                                            selected: Option[Boolean],
-                                           tabColor: Option[Int],
+                                           tabColor: Option[Color],
                                            virtuallyCenter: Option[Boolean],
                                            zoom: Option[Int]) {
 
@@ -189,7 +189,7 @@ case class SheetProperties private[model](
   def withoutSelected: SheetProperties =
     copy(selected = Some(false))
 
-  def withTabColor(tabColor: Int): SheetProperties =
+  def withTabColor(tabColor: Color): SheetProperties =
     copy(tabColor = Option(tabColor))
 
   def withoutTabColor: SheetProperties =

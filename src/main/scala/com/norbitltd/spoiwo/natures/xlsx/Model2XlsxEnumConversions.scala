@@ -7,6 +7,7 @@ import com.norbitltd.spoiwo.model.enums.FontFamily
 import com.norbitltd.spoiwo.model.enums.FontScheme
 import com.norbitltd.spoiwo.model.enums.PageOrder
 import com.norbitltd.spoiwo.model.enums.PaperSize
+import org.apache.poi.common.usermodel.fonts.FontCharset
 
 object Model2XlsxEnumConversions {
 
@@ -23,36 +24,11 @@ object Model2XlsxEnumConversions {
       case Hair => HAIR
       case Medium => MEDIUM
       case MediumDashDot => MEDIUM_DASH_DOT
-      case MediumDashDotDot => MEDIUM_DASH_DOT_DOTC
       case MediumDashed => MEDIUM_DASHED
       case CellBorderStyle.None => NONE
       case SlantedDashDot => SLANTED_DASH_DOT
       case Thick => THICK
       case Thin => THIN
-      case CellBorderStyle(value) =>
-        throw new IllegalArgumentException(s"Unable to convert BorderStyle=$value to XLSX - unsupported enum!")
-    }
-  }
-
-  def convertBorderStyleFormatting(borderStyle: CellBorderStyle): Short = {
-    import CellBorderStyle._
-    import BorderFormatting._
-
-    borderStyle match {
-      case DashDot => BORDER_DASH_DOT
-      case DashDotDot => BORDER_DASH_DOT_DOT
-      case Dashed => BORDER_DASHED
-      case Dotted => BORDER_DOTTED
-      case Double => BORDER_DOUBLE
-      case Hair => BORDER_HAIR
-      case Medium => BORDER_MEDIUM
-      case MediumDashDot => BORDER_MEDIUM_DASH_DOT
-      case MediumDashDotDot => BORDER_MEDIUM_DASH_DOT_DOT
-      case MediumDashed => BORDER_MEDIUM_DASHED
-      case CellBorderStyle.None => BORDER_NONE
-      case SlantedDashDot => BORDER_SLANTED_DASH_DOT
-      case Thick => BORDER_THICK
-      case Thin => BORDER_THIN
       case CellBorderStyle(value) =>
         throw new IllegalArgumentException(s"Unable to convert BorderStyle=$value to XLSX - unsupported enum!")
     }
@@ -86,9 +62,9 @@ object Model2XlsxEnumConversions {
     }
   }
 
-  def convertCharset(charset: Charset): usermodel.FontCharset = {
+  def convertCharset(charset: Charset): FontCharset = {
     import Charset._
-    import usermodel.FontCharset._
+    import FontCharset._
 
     charset match {
       case Charset.ANSI => FontCharset.ANSI
@@ -99,7 +75,7 @@ object Model2XlsxEnumConversions {
       case EastEurope => EASTEUROPE
       case Charset.GB2312 => FontCharset.GB2312
       case Greek => GREEK
-      case Hangeul => HANGEUL
+      case Hangeul => HANGUL
       case Hebrew => HEBREW
       case Johab => JOHAB
       case Mac => MAC
@@ -107,7 +83,7 @@ object Model2XlsxEnumConversions {
       case Russian => RUSSIAN
       case ShiftJIS => SHIFTJIS
       case Symbol => SYMBOL
-      case Thai => THAI
+      case Thai => THAI_
       case Turkish => TURKISH
       case Vietnamese => VIETNAMESE
       case Charset(value) =>
@@ -167,9 +143,9 @@ object Model2XlsxEnumConversions {
     import MissingCellPolicy._
 
     missingCellPolicy match {
-      case ReturnNullAndBlank => usermodel.Row.RETURN_NULL_AND_BLANK
-      case ReturnBlankAsNull => usermodel.Row.RETURN_BLANK_AS_NULL
-      case CreateNullAsBlank => usermodel.Row.CREATE_NULL_AS_BLANK
+      case ReturnNullAndBlank => usermodel.Row.MissingCellPolicy.RETURN_NULL_AND_BLANK
+      case ReturnBlankAsNull => usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL
+      case CreateNullAsBlank => usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK
       case MissingCellPolicy(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert MissingCellPolicy=$value to XLSX - unsupported enum!")
     }
