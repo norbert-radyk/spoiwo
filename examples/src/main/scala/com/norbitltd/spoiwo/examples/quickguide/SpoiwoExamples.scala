@@ -1,11 +1,13 @@
 package com.norbitltd.spoiwo.examples.quickguide
 
+import java.io.FileOutputStream
+
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 import com.norbitltd.spoiwo.model._
 import java.util.{Calendar, Date}
 
-import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment => VA, CellHorizontalAlignment => HA, CellBorderStyle, Pane, CellFill}
+import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, Pane, CellHorizontalAlignment => HA, CellVerticalAlignment => VA}
 import org.apache.poi.ss.util.WorkbookUtil
 
 //noinspection TypeAnnotation
@@ -18,6 +20,12 @@ class SpoiwoExamples {
     Sheet(name = "second sheet"),
     Sheet(name = WorkbookUtil.createSafeSheetName("[O'Brien's sales*?]"))
   ).saveAsXlsx("workbook.xlsx")
+
+  def newSheetSavedWithOutputStream() = Workbook(
+    Sheet(name = "new sheet"),
+    Sheet(name = "second sheet"),
+    Sheet(name = WorkbookUtil.createSafeSheetName("[O'Brien's sales*?]"))
+  ).writeToOutputStream(new FileOutputStream("workbook.xlsx"))
 
 
   def creatingCells() = Sheet(name = "new sheet",

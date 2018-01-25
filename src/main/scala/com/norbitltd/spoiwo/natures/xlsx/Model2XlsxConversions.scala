@@ -1,18 +1,18 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import java.io.FileOutputStream
+import java.io.{FileOutputStream, OutputStream}
 import java.util.{Calendar, Date}
 
-import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NoSplitOrFreeze, NumericCell, SplitPane, StringCell, _}
 import com.norbitltd.spoiwo.model.enums._
+import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NoSplitOrFreeze, NumericCell, SplitPane, StringCell, _}
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, HorizontalAlignment, VerticalAlignment}
 import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
 import org.apache.poi.xssf.usermodel._
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
 import org.joda.time.{LocalDate, LocalDateTime}
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
 
 object Model2XlsxConversions {
 
@@ -532,30 +532,37 @@ object Model2XlsxConversions {
     def convertAsXlsx(): HorizontalAlignment = convertHorizontalAlignment(ha)
   }
 
-  implicit class XlsxSheet(s: Sheet) {
+  sealed trait XlsxExport {
+    def saveAsXlsx(fileName: String): Unit
+
+    def writeToOutputStream[T <: OutputStream](stream: T): T
+  }
+
+  implicit class XlsxSheet(s: Sheet) extends XlsxExport {
     def convertAsXlsx(workbook: XSSFWorkbook): XSSFSheet = convertSheet(s, workbook)
 
     def convertAsXlsx(): XSSFWorkbook = Workbook(s).convertAsXlsx()
 
-    def saveAsXlsx(fileName: String) {
+    override def saveAsXlsx(fileName: String) {
       Workbook(s).saveAsXlsx(fileName)
     }
+
+    override def writeToOutputStream[T <: OutputStream](stream: T): T = Workbook(s).writeToOutputStream(stream)
   }
 
   implicit class XlsxVerticalAlignment(va: CellVerticalAlignment) {
     def convertAsXlsx(): VerticalAlignment = convertVerticalAlignment(va)
   }
 
-  implicit class XlsxWorkbook(workbook: Workbook) {
-    def saveAsXlsx(fileName: String): Unit = {
-      val stream = new FileOutputStream(fileName)
-      try {
-        val workbook = convertAsXlsx()
-        workbook.write(stream)
-      } finally {
-        stream.flush()
-        stream.close()
-      }
+  implicit class XlsxWorkbook(workbook: Workbook) extends XlsxExport {
+    override def saveAsXlsx(fileName: String): Unit = writeToOutputStream(new FileOutputStream(fileName))
+
+    override def writeToOutputStream[T <: OutputStream](stream: T): T = try {
+      convertAsXlsx().write(stream)
+      stream
+    } finally {
+      stream.flush()
+      stream.close()
     }
 
     def convertAsXlsx(): XSSFWorkbook = convertWorkbook(workbook)
