@@ -28,7 +28,7 @@ lazy val commonSettings = Seq(
     "-Ywarn-dead-code",
     "-Ywarn-unused",
     "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.12.5", "2.11.11"),
+  crossScalaVersions := Seq("2.12.5", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
@@ -41,12 +41,12 @@ lazy val commonSettings = Seq(
   },
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml"         % "1.0.6",
+    "org.scala-lang.modules" %% "scala-xml"         % "1.1.0",
     "org.apache.poi"         %  "poi"               % "3.17",
     "org.apache.poi"         %  "poi-ooxml"         % "3.17",
     "joda-time"              %  "joda-time"         % "2.9.9",
-    "org.joda"               %  "joda-convert"      % "1.9.2",
-    "org.scalatest"          %% "scalatest"         % "3.0.4"   % "test"
+    "org.joda"               %  "joda-convert"      % "2.0.1",
+    "org.scalatest"          %% "scalatest"         % "3.0.5"   % "test"
   )
 )
 
@@ -54,7 +54,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.2.0"
+    version := "1.3.1-SNAPSHOT"
   )
 
 lazy val examples = (project in file("examples"))
@@ -62,5 +62,5 @@ lazy val examples = (project in file("examples"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.2.0"
+    version := "1.3.1-SNAPSHOT"
   )
