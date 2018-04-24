@@ -3,6 +3,7 @@ SPOIWO (Scala POI Wrapping Objects)
 
 [![Build Status](https://travis-ci.org/norbert-radyk/spoiwo.svg?branch=master)](https://travis-ci.org/norbert-radyk/spoiwo)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.norbitltd/spoiwo_2.12/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo)
+[![Javadocs](https://www.javadoc.io/badge/com.norbitltd/spoiwo_2.12.svg)](https://www.javadoc.io/doc/com.norbitltd/spoiwo_2.12)
 
 ### Overview
 
@@ -15,6 +16,12 @@ This documentation is intended for Spoiwo users and developers to give both an o
 ### Download
 
 Spoiwo is available in [The Central Repository](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo).
+
+```
+libraryDependencies ++= Seq(
+  "com.norbitltd" %% "spoiwo" % "1.3.0"
+)
+```
 
 ### Quick links
 
