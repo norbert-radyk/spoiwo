@@ -38,7 +38,7 @@ Please check out our [get in touch](https://github.com/norbert-radyk/spoiwo/wiki
 
 ### Copyright and license
 
-Spoiwo is copyright 2017 by Norbert Radyk.
+Spoiwo is copyright 2018 by Norbert Radyk.
 
 Licensed under [MIT License](http://opensource.org/licenses/MIT) you may not use this software except in compliance with the License.
 
