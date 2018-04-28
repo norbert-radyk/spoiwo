@@ -13,7 +13,6 @@ object CellHorizontalAlignment {
 
 }
 
-case class CellHorizontalAlignment private(value : String) {
+case class CellHorizontalAlignment private (value: String) {
   override def toString: String = value
 }
-

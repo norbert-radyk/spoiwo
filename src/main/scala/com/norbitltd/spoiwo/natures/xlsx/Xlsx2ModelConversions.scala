@@ -5,14 +5,13 @@ import com.norbitltd.spoiwo.model.Color
 
 object Xlsx2ModelConversions {
 
-  def convertXSSFColorSafe(color: XSSFColor) : Option[Color] = {
+  def convertXSSFColorSafe(color: XSSFColor): Option[Color] = {
     Option(color).map(convertXSSFColor)
   }
 
-  def convertXSSFColor(color: XSSFColor) : Color = {
+  def convertXSSFColor(color: XSSFColor): Color = {
     require(color != null, "Can't convert NULL color value!")
     Color(color.getRGB)
   }
-
 
 }

@@ -51,8 +51,7 @@ object SheetProperties {
   )
 }
 
-case class SheetProperties private[model](
-                                           autoFilter: Option[CellRange],
+case class SheetProperties private[model] (autoFilter: Option[CellRange],
                                            activeCell: Option[String],
                                            autoBreaks: Option[Boolean],
                                            defaultColumnWidth: Option[Int],

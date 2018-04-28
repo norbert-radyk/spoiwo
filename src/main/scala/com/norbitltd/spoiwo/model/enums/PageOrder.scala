@@ -6,7 +6,7 @@ object PageOrder {
   lazy val OverThenDown = PageOrder("OverThenDown")
 }
 
-case class PageOrder(value : String) {
+case class PageOrder(value: String) {
 
   override def toString: String = value
 

@@ -10,8 +10,6 @@ object CellVerticalAlignment {
 
 }
 
-case class CellVerticalAlignment private(value: String) {
+case class CellVerticalAlignment private (value: String) {
   override def toString: String = value
 }
-
-

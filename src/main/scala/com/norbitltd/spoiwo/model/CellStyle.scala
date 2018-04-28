@@ -36,8 +36,7 @@ object CellStyle {
     )
 }
 
-case class CellStyle private(
-                              borders: Option[CellBorders],
+case class CellStyle private (borders: Option[CellBorders],
                               dataFormat: Option[CellDataFormat],
                               font: Option[Font],
                               fillPattern: Option[CellFill],
@@ -51,21 +50,22 @@ case class CellStyle private(
                               rotation: Option[Short],
                               wrapText: Option[Boolean]) {
 
-  override def toString: String = "CellStyle(" + List(
-    borders.map("borders=" + _),
-    dataFormat.map("data format=" + _),
-    font.map("font=" + _),
-    fillPattern.map("fill pattern=" + _),
-    fillForegroundColor.map("fill foreground color=" + _),
-    fillBackgroundColor.map("fill background color=" + _),
-    horizontalAlignment.map("horizontal alignment=" + _),
-    verticalAlignment.map("vertical alignment=" + _),
-    hidden.map("hidden=" + _),
-    indention.map("indention=" + _),
-    locked.map("locked=" + _),
-    rotation.map("rotation=" + _),
-    wrapText.map("wrap text=" + _)
-  ).flatten.mkString(", ") + ")"
+  override def toString: String =
+    "CellStyle(" + List(
+      borders.map("borders=" + _),
+      dataFormat.map("data format=" + _),
+      font.map("font=" + _),
+      fillPattern.map("fill pattern=" + _),
+      fillForegroundColor.map("fill foreground color=" + _),
+      fillBackgroundColor.map("fill background color=" + _),
+      horizontalAlignment.map("horizontal alignment=" + _),
+      verticalAlignment.map("vertical alignment=" + _),
+      hidden.map("hidden=" + _),
+      indention.map("indention=" + _),
+      locked.map("locked=" + _),
+      rotation.map("rotation=" + _),
+      wrapText.map("wrap text=" + _)
+    ).flatten.mkString(", ") + ")"
 
   def withBorders(borders: CellBorders): CellStyle =
     copy(borders = Option(borders))
@@ -145,19 +145,19 @@ case class CellStyle private(
   def withoutWrapText: CellStyle =
     copy(wrapText = Some(false))
 
-  private def dw[T](current : Option[T], default: Option[T]) : Option[T] =
-    if( current.isDefined ) current else default
+  private def dw[T](current: Option[T], default: Option[T]): Option[T] =
+    if (current.isDefined) current else default
 
-  private def defaultFont(defaultCellStyle : CellStyle) : Option[Font] =
-    if(defaultCellStyle.font.isEmpty) {
+  private def defaultFont(defaultCellStyle: CellStyle): Option[Font] =
+    if (defaultCellStyle.font.isEmpty) {
       font
-    } else if(font.isEmpty) {
+    } else if (font.isEmpty) {
       defaultCellStyle.font
     } else {
       Option(font.get.defaultWith(defaultCellStyle.font.get))
     }
 
-  def defaultWith(defaultCellStyle : CellStyle) : CellStyle = CellStyle(
+  def defaultWith(defaultCellStyle: CellStyle): CellStyle = CellStyle(
     borders = dw(borders, defaultCellStyle.borders),
     dataFormat = dw(dataFormat, defaultCellStyle.dataFormat),
     font = defaultFont(defaultCellStyle),

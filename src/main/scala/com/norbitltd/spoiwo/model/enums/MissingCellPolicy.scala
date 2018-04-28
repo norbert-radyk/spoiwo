@@ -6,6 +6,6 @@ object MissingCellPolicy {
   lazy val CreateNullAsBlank = MissingCellPolicy("CreateNullAsBlank")
 }
 
-case class MissingCellPolicy private(value : String) {
+case class MissingCellPolicy private (value: String) {
   override def toString: String = value
 }

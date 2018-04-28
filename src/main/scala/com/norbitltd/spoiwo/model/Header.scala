@@ -2,7 +2,7 @@ package com.norbitltd.spoiwo.model
 
 object Header {
 
-  val Empty = Standard()
+  val Empty: Header = Standard()
 
   def Standard(left: String = null,
                center: String = null,
@@ -17,8 +17,13 @@ object Header {
       firstLeft = Option(firstLeft),
       firstCenter = Option(firstCenter),
       firstRight = Option(firstRight),
-      oddLeft = None, oddCenter = None, oddRight = None,
-      evenLeft = None, evenCenter = None, evenRight = None)
+      oddLeft = None,
+      oddCenter = None,
+      oddRight = None,
+      evenLeft = None,
+      evenCenter = None,
+      evenRight = None
+    )
 
   def EvenOdd(oddLeft: String = null,
               oddCenter: String = null,
@@ -39,12 +44,13 @@ object Header {
       firstLeft = Option(firstLeft),
       firstCenter = Option(firstCenter),
       firstRight = Option(firstRight),
-      left = None, center = None, right = None
+      left = None,
+      center = None,
+      right = None
     )
 }
 
-case class Header private(
-                           left: Option[String],
+case class Header private (left: Option[String],
                            center: Option[String],
                            right: Option[String],
                            firstLeft: Option[String],

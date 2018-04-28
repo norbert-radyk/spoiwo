@@ -47,24 +47,24 @@ object PrintSetup {
 
 }
 
-case class PrintSetup private(copies: Option[Short],
-                      draft: Option[Boolean],
-                      fitHeight: Option[Short],
-                      fitWidth: Option[Short],
-                      footerMargin: Option[Double],
-                      headerMargin: Option[Double],
-                      hResolution: Option[Short],
-                      landscape: Option[Boolean],
-                      leftToRight: Option[Boolean],
-                      noColor: Option[Boolean],
-                      noOrientation: Option[Boolean],
-                      pageOrder: Option[PageOrder],
-                      pageStart: Option[Short],
-                      paperSize: Option[PaperSize],
-                      scale: Option[Short],
-                      usePage: Option[Boolean],
-                      validSettings: Option[Boolean],
-                      vResolution: Option[Short]) {
+case class PrintSetup private (copies: Option[Short],
+                               draft: Option[Boolean],
+                               fitHeight: Option[Short],
+                               fitWidth: Option[Short],
+                               footerMargin: Option[Double],
+                               headerMargin: Option[Double],
+                               hResolution: Option[Short],
+                               landscape: Option[Boolean],
+                               leftToRight: Option[Boolean],
+                               noColor: Option[Boolean],
+                               noOrientation: Option[Boolean],
+                               pageOrder: Option[PageOrder],
+                               pageStart: Option[Short],
+                               paperSize: Option[PaperSize],
+                               scale: Option[Short],
+                               usePage: Option[Boolean],
+                               validSettings: Option[Boolean],
+                               vResolution: Option[Short]) {
 
   def withCopies(copies: Short): PrintSetup = copy(copies = Option(copies))
 

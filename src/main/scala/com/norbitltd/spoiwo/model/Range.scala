@@ -33,8 +33,7 @@ object ColumnRange {
   def apply(columnRange: (String, String)): ColumnRange = ColumnRange(columnRange._1, columnRange._2)
 
   def apply(firstColumnIndex: Int, lastColumnIndex: Int): ColumnRange = {
-    require(firstColumnIndex <= lastColumnIndex,
-      "First column index can't be greater that the last column index!")
+    require(firstColumnIndex <= lastColumnIndex, "First column index can't be greater that the last column index!")
     ColumnRange(
       CellReference.convertNumToColString(firstColumnIndex),
       CellReference.convertNumToColString(lastColumnIndex)

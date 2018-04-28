@@ -2,14 +2,13 @@ package com.norbitltd.spoiwo.model
 
 object Column {
 
-  def apply(
-             index: java.lang.Integer = null,
-             autoSized: java.lang.Boolean = null,
-             break: java.lang.Boolean = null,
-             groupCollapsed: java.lang.Boolean = null,
-             hidden: java.lang.Boolean = null,
-             style : CellStyle = null,
-             width: Width = null): Column =
+  def apply(index: java.lang.Integer = null,
+            autoSized: java.lang.Boolean = null,
+            break: java.lang.Boolean = null,
+            groupCollapsed: java.lang.Boolean = null,
+            hidden: java.lang.Boolean = null,
+            style: CellStyle = null,
+            width: Width = null): Column =
     Column(
       index = Option(index).map(_.intValue),
       autoSized = Option(autoSized).map(_.booleanValue),
@@ -21,22 +20,23 @@ object Column {
     )
 }
 
-case class Column private[model](index: Option[Int],
-                                 autoSized: Option[Boolean],
-                                 break: Option[Boolean],
-                                 groupCollapsed: Option[Boolean],
-                                 hidden: Option[Boolean],
-                                 style: Option[CellStyle],
-                                 width: Option[Width]) {
+case class Column private[model] (index: Option[Int],
+                                  autoSized: Option[Boolean],
+                                  break: Option[Boolean],
+                                  groupCollapsed: Option[Boolean],
+                                  hidden: Option[Boolean],
+                                  style: Option[CellStyle],
+                                  width: Option[Width]) {
 
-  override def toString: String = "Column(" + List(
-    index.map("index=" + _),
-    autoSized.map("auto sized=" + _),
-    break.map("break=" + _),
-    groupCollapsed.map("group collapsed=" + _),
-    hidden.map("hidden=" + _),
-    width.map("width=" + _)
-  ).flatten.mkString(", ") + ")"
+  override def toString: String =
+    "Column(" + List(
+      index.map("index=" + _),
+      autoSized.map("auto sized=" + _),
+      break.map("break=" + _),
+      groupCollapsed.map("group collapsed=" + _),
+      hidden.map("hidden=" + _),
+      width.map("width=" + _)
+    ).flatten.mkString(", ") + ")"
 
   def withIndex(index: Int): Column =
     copy(index = Option(index))

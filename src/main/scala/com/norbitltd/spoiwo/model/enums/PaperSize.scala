@@ -21,7 +21,7 @@ object PaperSize {
 
 }
 
-case class PaperSize private(value : String) {
+case class PaperSize private (value: String) {
 
   override def toString: String = value
 

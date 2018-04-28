@@ -18,8 +18,7 @@ object Margins {
     )
 }
 
-case class Margins private(
-                            top: Option[Double],
+case class Margins private (top: Option[Double],
                             bottom: Option[Double],
                             right: Option[Double],
                             left: Option[Double],
@@ -61,6 +60,5 @@ case class Margins private(
 
   def withoutFooter: Margins =
     copy(footer = None)
-
 
 }

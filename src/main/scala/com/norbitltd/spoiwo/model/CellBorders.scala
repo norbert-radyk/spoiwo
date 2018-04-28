@@ -4,23 +4,35 @@ import com.norbitltd.spoiwo.model.enums.CellBorderStyle
 
 object CellBorders {
 
-  def apply(leftStyle: CellBorderStyle = null, leftColor: Color = null,
-            topStyle: CellBorderStyle = null, topColor: Color = null,
-            rightStyle: CellBorderStyle = null, rightColor: Color = null,
-            bottomStyle: CellBorderStyle = null, bottomColor: Color = null): CellBorders =
+  def apply(leftStyle: CellBorderStyle = null,
+            leftColor: Color = null,
+            topStyle: CellBorderStyle = null,
+            topColor: Color = null,
+            rightStyle: CellBorderStyle = null,
+            rightColor: Color = null,
+            bottomStyle: CellBorderStyle = null,
+            bottomColor: Color = null): CellBorders =
     CellBorders(
-      Option(leftStyle), Option(leftColor),
-      Option(topStyle), Option(topColor),
-      Option(rightStyle), Option(rightColor),
-      Option(bottomStyle), Option(bottomColor)
+      Option(leftStyle),
+      Option(leftColor),
+      Option(topStyle),
+      Option(topColor),
+      Option(rightStyle),
+      Option(rightColor),
+      Option(bottomStyle),
+      Option(bottomColor)
     )
 
 }
 
-case class CellBorders(leftStyle: Option[CellBorderStyle], leftColor: Option[Color],
-                       topStyle: Option[CellBorderStyle], topColor: Option[Color],
-                       rightStyle: Option[CellBorderStyle], rightColor: Option[Color],
-                       bottomStyle: Option[CellBorderStyle], bottomColor: Option[Color]) {
+case class CellBorders(leftStyle: Option[CellBorderStyle],
+                       leftColor: Option[Color],
+                       topStyle: Option[CellBorderStyle],
+                       topColor: Option[Color],
+                       rightStyle: Option[CellBorderStyle],
+                       rightColor: Option[Color],
+                       bottomStyle: Option[CellBorderStyle],
+                       bottomColor: Option[Color]) {
 
   def withLeftStyle(leftStyle: CellBorderStyle): CellBorders =
     copy(leftStyle = Option(leftStyle))

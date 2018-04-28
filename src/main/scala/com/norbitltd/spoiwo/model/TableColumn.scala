@@ -1,8 +1,8 @@
 package com.norbitltd.spoiwo.model
 
 case class TableColumn(
-  name: String,
-  id: Long
+    name: String,
+    id: Long
 ) {
 
   def withName(name: String): TableColumn =

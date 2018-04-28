@@ -9,11 +9,6 @@ object Pane {
 
 }
 
-case class Pane private(value : String) {
+case class Pane private (value: String) {
   override def toString: String = value
 }
-
-
-
-
-

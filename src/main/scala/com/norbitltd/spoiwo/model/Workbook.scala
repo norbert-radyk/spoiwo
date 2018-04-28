@@ -27,15 +27,13 @@ object Workbook {
     Workbook(sheets = sheets)
 }
 
-case class Workbook private[model](
-                                    activeSheet: Option[Int],
+case class Workbook private[model] (activeSheet: Option[Int],
                                     firstVisibleTab: Option[Int],
                                     forceFormulaRecalculation: Option[Boolean],
                                     hidden: Option[Boolean],
                                     missingCellPolicy: Option[MissingCellPolicy],
                                     selectedTab: Option[Int],
                                     sheets: Iterable[Sheet]) {
-
 
   def withActiveSheet(activeSheet: Int): Workbook =
     copy(activeSheet = Option(activeSheet))
@@ -61,16 +59,16 @@ case class Workbook private[model](
   def withSheets(sheets: Sheet*): Workbook =
     copy(sheets = sheets)
 
-  def addSheet(sheet : Sheet): Workbook =
+  def addSheet(sheet: Sheet): Workbook =
     copy(sheets = sheets ++ List(sheet))
 
-  def addSheets(additionalSheets : Iterable[Sheet]): Workbook =
+  def addSheets(additionalSheets: Iterable[Sheet]): Workbook =
     copy(sheets = sheets ++ additionalSheets)
 
-  def removeSheet(sheet : Sheet): Workbook =
+  def removeSheet(sheet: Sheet): Workbook =
     copy(sheets = sheets.filter(_ != sheet))
 
-  def removeSheets(whereCondition : Sheet => Boolean): Workbook =
+  def removeSheets(whereCondition: Sheet => Boolean): Workbook =
     copy(sheets = sheets.filter(whereCondition))
 
 }

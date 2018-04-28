@@ -13,7 +13,7 @@ object CellStyleInheritance {
   val CellThenColumnThenRowThenSheet = CellStyleInheritance("CellThenColumnThenRowThenSheet")
 }
 
-case class CellStyleInheritance private (value : String) {
+case class CellStyleInheritance private (value: String) {
 
   override def toString: String = value
 

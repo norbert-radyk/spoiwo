@@ -11,7 +11,7 @@ object Underline {
 
 }
 
-case class Underline private(value : String) {
+case class Underline private (value: String) {
 
   override def toString: String = value
 

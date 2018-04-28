@@ -38,7 +38,7 @@ object CellFill {
 
 }
 
-case class CellFill private(value: String){
+case class CellFill private (value: String) {
 
   override def toString: String = value
 

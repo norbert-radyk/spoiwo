@@ -6,7 +6,7 @@ object TypeOffset {
   lazy val Subscript = TypeOffset("Subscript")
   lazy val Superscript = TypeOffset("Superscript")
 }
-case class TypeOffset private(value : String) {
+case class TypeOffset private (value: String) {
 
   override def toString: String = value
 

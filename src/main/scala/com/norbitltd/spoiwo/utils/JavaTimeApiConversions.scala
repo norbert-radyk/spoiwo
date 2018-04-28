@@ -7,14 +7,18 @@ import org.joda.time.{DateTime, LocalDate}
 object JavaTimeApiConversions {
 
   implicit class RichJavaLocalDate(ld: JLocalDate) {
-    def toDate: Date = new LocalDate(
-      ld.getYear, ld.getMonthValue, ld.getDayOfMonth
-    ).toDate
+    def toDate: Date =
+      new LocalDate(
+        ld.getYear,
+        ld.getMonthValue,
+        ld.getDayOfMonth
+      ).toDate
   }
 
   implicit class RichLocalDateTime(ldt: JLocalDateTime) {
-    def toDate: Date = new DateTime(
-      ldt.atZone(ZoneId.systemDefault()).toInstant.toEpochMilli
-    ).toDate
+    def toDate: Date =
+      new DateTime(
+        ldt.atZone(ZoneId.systemDefault()).toInstant.toEpochMilli
+      ).toDate
   }
 }

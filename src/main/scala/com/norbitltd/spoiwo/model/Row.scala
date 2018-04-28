@@ -14,11 +14,10 @@ object Row {
             style: CellStyle = null,
             hidden: java.lang.Boolean = null): Row =
     Row(cells = cells,
-      height = Option(height),
-      index = Option(index).map(_.intValue),
-      style = Option(style),
-      hidden = Option(hidden).map(_.booleanValue)
-    )
+        height = Option(height),
+        index = Option(index).map(_.intValue),
+        style = Option(style),
+        hidden = Option(hidden).map(_.booleanValue))
 
   def apply(cells: Cell*): Row =
     apply(cells = cells.toVector)
@@ -34,20 +33,20 @@ object Row {
 
 }
 
-case class Row private(cells: Iterable[Cell],
-                       height: Option[Height],
-                       index: Option[Int],
-                       style: Option[CellStyle],
-                       hidden: Option[Boolean]) {
+case class Row private (cells: Iterable[Cell],
+                        height: Option[Height],
+                        index: Option[Int],
+                        style: Option[CellStyle],
+                        hidden: Option[Boolean]) {
 
-  override def toString: String = "Row(" + List(
-    if (cells.isEmpty) None else Option("cells=" + cells.map(_.toString).mkString(", ")),
-    height.map("height=" + _),
-    index.map("index=" + _),
-    style.map("style=" + _),
-    hidden.map("hidden=" + _)
-  ).flatten.mkString(", ") + ")"
-
+  override def toString: String =
+    "Row(" + List(
+      if (cells.isEmpty) None else Option("cells=" + cells.map(_.toString).mkString(", ")),
+      height.map("height=" + _),
+      index.map("index=" + _),
+      style.map("style=" + _),
+      hidden.map("hidden=" + _)
+    ).flatten.mkString(", ") + ")"
 
   def withCells(cells: Cell*): Row =
     copy(cells = cells)
@@ -69,7 +68,7 @@ case class Row private(cells: Iterable[Cell],
       case dateValue: JLocalDate         => Cell(dateValue)
       case dateTimeValue: JLocalDateTime => Cell(dateTimeValue)
       case calendarValue: Calendar       => Cell(calendarValue)
-      case value                         =>
+      case value =>
         throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }
     copy(cells = cells.toVector)
@@ -78,16 +77,16 @@ case class Row private(cells: Iterable[Cell],
   def withCellValues(cellValues: Any*): Row =
     withCellValues(cellValues.toList)
 
-  def addCell(cell : Cell): Row =
+  def addCell(cell: Cell): Row =
     copy(cells = cells ++ List(cell))
 
-  def addCells(additionalCells : Iterable[Cell]): Row =
+  def addCells(additionalCells: Iterable[Cell]): Row =
     copy(cells = cells ++ additionalCells)
 
-  def removeCell(cell : Cell): Row =
+  def removeCell(cell: Cell): Row =
     copy(cells = cells.filter(_ != cell))
 
-  def removeCells(whereCondition : Cell => Boolean): Row =
+  def removeCells(whereCondition: Cell => Boolean): Row =
     copy(cells = cells.filter(whereCondition))
 
   def withHeight(height: Height): Row =
@@ -108,6 +107,3 @@ case class Row private(cells: Iterable[Cell],
   def withoutHidden: Row =
     copy(hidden = Some(false))
 }
-
-
-

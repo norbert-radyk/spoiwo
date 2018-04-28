@@ -13,7 +13,6 @@ import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.postfixOps
 
-
 class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
 
   private val defaultCell: XSSFCell = convert(Cell.Empty)
@@ -32,8 +31,8 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
   }
 
   it should "return cell style with 11pt Calibri by default" in {
-    defaultCell.getCellStyle.getFont.getFontHeightInPoints  shouldBe  11
-    defaultCell.getCellStyle.getFont.getFontName  shouldBe  "Calibri"
+    defaultCell.getCellStyle.getFont.getFontHeightInPoints shouldBe 11
+    defaultCell.getCellStyle.getFont.getFontName shouldBe "Calibri"
   }
 
   it should "return cell style with 14pt Arial when explicitly specified" in {
@@ -159,17 +158,17 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
       val xlsx = convert(model)
 
       val date = new DateTime(xlsx.getDateCellValue)
-      date.getYear           shouldBe ld.getYear
-      date.getMonthOfYear    shouldBe ld.getMonthValue
-      date.getDayOfMonth     shouldBe ld.getDayOfMonth
-      date.getHourOfDay      shouldBe 0
-      date.getMinuteOfHour   shouldBe 0
+      date.getYear shouldBe ld.getYear
+      date.getMonthOfYear shouldBe ld.getMonthValue
+      date.getDayOfMonth shouldBe ld.getDayOfMonth
+      date.getHourOfDay shouldBe 0
+      date.getMinuteOfHour shouldBe 0
       date.getSecondOfMinute shouldBe 0
     }
   }
 
   it should "return numeric cell when set up with java.time.LocalDateTime value" in {
-    test(JLocalDateTime.of(2011,  6, 13, 15, 30, 10))
+    test(JLocalDateTime.of(2011, 6, 13, 15, 30, 10))
     test(JLocalDateTime.of(2011, 11, 13, 15, 30, 10))
 
     def test(ldt: JLocalDateTime): Unit = {
@@ -177,11 +176,11 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
       val xlsx = convert(model)
 
       val date = new DateTime(xlsx.getDateCellValue)
-      date.getYear           shouldBe ldt.getYear
-      date.getMonthOfYear    shouldBe ldt.getMonthValue
-      date.getDayOfMonth     shouldBe ldt.getDayOfMonth
-      date.getHourOfDay      shouldBe ldt.getHour
-      date.getMinuteOfHour   shouldBe ldt.getMinute
+      date.getYear shouldBe ldt.getYear
+      date.getMonthOfYear shouldBe ldt.getMonthValue
+      date.getDayOfMonth shouldBe ldt.getDayOfMonth
+      date.getHourOfDay shouldBe ldt.getHour
+      date.getMinuteOfHour shouldBe ldt.getMinute
       date.getSecondOfMinute shouldBe ldt.getSecond
     }
   }
@@ -189,7 +188,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
   it should "return string cell with the date formatted yyyy-MM-dd if date before 1904" in {
     val model = Cell(new LocalDate(1856, 11, 3).toDate)
     val xlsx = convert(model)
-    "1856-11-03"  shouldBe  xlsx.getStringCellValue
+    "1856-11-03" shouldBe xlsx.getStringCellValue
   }
 
   it should "apply 14pt Arial cell style for column when set explicitly" in {

@@ -18,7 +18,6 @@ object CellBorderStyle {
 
 }
 
-case class CellBorderStyle private(value : String) {
+case class CellBorderStyle private (value: String) {
   override def toString: String = value
 }
-

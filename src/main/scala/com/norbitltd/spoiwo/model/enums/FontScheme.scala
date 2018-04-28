@@ -6,7 +6,7 @@ object FontScheme {
   lazy val Minor = FontScheme("Minor")
 }
 
-case class FontScheme private(value: String) {
+case class FontScheme private (value: String) {
 
   override def toString: String = value
 

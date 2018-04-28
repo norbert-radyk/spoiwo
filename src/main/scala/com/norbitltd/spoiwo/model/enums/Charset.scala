@@ -21,10 +21,10 @@ object Charset {
   lazy val Thai = Charset("Thai")
   lazy val Turkish = Charset("Turkish")
   lazy val Vietnamese = Charset("Vietnamese")
-  
+
 }
 
-case class Charset private(value : String) {
+case class Charset private (value: String) {
 
   override def toString: String = value
 

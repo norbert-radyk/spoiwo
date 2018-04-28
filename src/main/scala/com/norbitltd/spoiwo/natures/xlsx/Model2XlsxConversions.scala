@@ -4,7 +4,17 @@ import java.io.{FileOutputStream, OutputStream}
 import java.util.{Calendar, Date}
 
 import com.norbitltd.spoiwo.model.enums._
-import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NoSplitOrFreeze, NumericCell, SplitPane, StringCell, _}
+import com.norbitltd.spoiwo.model.{
+  BooleanCell,
+  CalendarCell,
+  DateCell,
+  FormulaCell,
+  NoSplitOrFreeze,
+  NumericCell,
+  SplitPane,
+  StringCell,
+  _
+}
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel
@@ -56,11 +66,16 @@ object Model2XlsxConversions {
       case CellStyleInheritance.CellThenRowThenColumnThenSheet =>
         cell.withDefaultStyle(rowStyle).withDefaultStyle(columnStyle).withDefaultStyle(sheetStyle)
       case unexpected =>
-        throw new IllegalArgumentException(s"Unable to convert CellStyleInheritance=$unexpected to XLSX - unsupported enum!")
+        throw new IllegalArgumentException(
+          s"Unable to convert CellStyleInheritance=$unexpected to XLSX - unsupported enum!")
     }
   }
 
-  private[xlsx] def convertCell(modelSheet: Sheet, modelColumns: Map[Int, Column], modelRow: Row, c: Cell, row: XSSFRow): XSSFCell = {
+  private[xlsx] def convertCell(modelSheet: Sheet,
+                                modelColumns: Map[Int, Column],
+                                modelRow: Row,
+                                c: Cell,
+                                row: XSSFRow): XSSFCell = {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
     val cell = row.createCell(cellNumber)
 
@@ -68,12 +83,12 @@ object Model2XlsxConversions {
     cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
 
     c match {
-      case StringCell(value, _, _, _) => cell.setCellValue(value)
-      case FormulaCell(formula, _, _, _) => cell.setCellFormula(formula)
-      case NumericCell(value, _, _, _) => cell.setCellValue(value)
-      case BooleanCell(value, _, _, _) => cell.setCellValue(value)
-      case DateCell(value, _, _, _) => setDateCell(c, cell, value)
-      case CalendarCell(value, _, _, _) => setCalendarCell(c, cell, value)
+      case StringCell(value, _, _, _)       => cell.setCellValue(value)
+      case FormulaCell(formula, _, _, _)    => cell.setCellFormula(formula)
+      case NumericCell(value, _, _, _)      => cell.setCellValue(value)
+      case BooleanCell(value, _, _, _)      => cell.setCellValue(value)
+      case DateCell(value, _, _, _)         => setDateCell(c, cell, value)
+      case CalendarCell(value, _, _, _)     => setCalendarCell(c, cell, value)
       case HyperLinkUrlCell(value, _, _, _) => setHyperLinkUrlCell(cell, value, row)
     }
     cell
@@ -151,8 +166,10 @@ object Model2XlsxConversions {
     }
 
   private[xlsx] def convertColumn(c: Column, sheet: XSSFSheet) {
-    val i = c.index.getOrElse(throw new IllegalArgumentException("Undefined column index! " +
-      "Something went terribly wrong as it should have been derived if not specified explicitly!"))
+    val i = c.index.getOrElse(
+      throw new IllegalArgumentException(
+        "Undefined column index! " +
+          "Something went terribly wrong as it should have been derived if not specified explicitly!"))
 
     c.autoSized.foreach(as => if (as) sheet.autoSizeColumn(i))
     c.break.foreach(b => if (b) sheet.setColumnBreak(i))
@@ -161,7 +178,8 @@ object Model2XlsxConversions {
     c.width.foreach(w => sheet.setColumnWidth(i, w.toUnits))
   }
 
-  private def convertColumnRange(cr: ColumnRange) = CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))
+  private def convertColumnRange(cr: ColumnRange) =
+    CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))
 
   private def convertFooter(f: Footer, sheet: XSSFSheet) {
     f.left.foreach(sheet.getFooter.setLeft)
@@ -226,9 +244,9 @@ object Model2XlsxConversions {
   }
 
   private def convertPane(pane: Pane): Int = pane match {
-    case Pane.LowerLeftPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_LEFT
+    case Pane.LowerLeftPane  => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_LEFT
     case Pane.LowerRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_RIGHT
-    case Pane.UpperLeftPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_LEFT
+    case Pane.UpperLeftPane  => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_LEFT
     case Pane.UpperRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_RIGHT
     case unexpected =>
       throw new IllegalArgumentException(s"Unable to convert Pane=$unexpected to XLSX - unsupported enum!")
@@ -245,7 +263,10 @@ object Model2XlsxConversions {
     }
   }
 
-  private[xlsx] def convertRow(modelColumns: Map[Int, Column], modelRow: Row, modelSheet: Sheet, sheet: XSSFSheet): XSSFRow = {
+  private[xlsx] def convertRow(modelColumns: Map[Int, Column],
+                               modelRow: Row,
+                               modelSheet: Sheet,
+                               sheet: XSSFSheet): XSSFRow = {
     validateCells(modelRow)
     val indexNumber = modelRow.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = sheet.createRow(indexNumber)
@@ -377,7 +398,8 @@ object Model2XlsxConversions {
     }
   }
 
-  private def convertRowRange(rr: RowRange) = CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
+  private def convertRowRange(rr: RowRange) =
+    CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
 
   private[xlsx] def validateTables(modelSheet: Sheet): Unit = {
     val ids = modelSheet.tables.flatMap(_.id)
@@ -395,12 +417,13 @@ object Model2XlsxConversions {
     validateTableColumns(modelTable)
 
     val tableId = modelTable.id.getOrElse {
-      throw new IllegalArgumentException("Undefined table id! " +
-        "Something went terribly wrong as it should have been derived if not specified explicitly!")
+      throw new IllegalArgumentException(
+        "Undefined table id! " +
+          "Something went terribly wrong as it should have been derived if not specified explicitly!")
     }
 
     val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
-    val name        = modelTable.name.getOrElse(s"ct_table_$tableId")
+    val name = modelTable.name.getOrElse(s"ct_table_$tableId")
 
     val table = sheet.createTable()
     table.setDisplayName(displayName)
@@ -417,8 +440,8 @@ object Model2XlsxConversions {
   private[xlsx] def validateTableColumns(modelTable: Table): Unit = {
 
     def insufficientColumnsDefined = {
-      val (sCol, eCol)   = modelTable.cellRange.columnRange
-      val neededColumns  = (eCol-sCol) + 1
+      val (sCol, eCol) = modelTable.cellRange.columnRange
+      val neededColumns = (eCol - sCol) + 1
       val definedColumns = modelTable.columns.size
       neededColumns != definedColumns
     }
@@ -434,18 +457,18 @@ object Model2XlsxConversions {
   private[xlsx] def convertTableColumns(modelTable: Table, ctTable: CTTable): CTTableColumns = {
 
     def generateColumns = {
-      val (sCol, eCol)   = modelTable.cellRange.columnRange
-      val neededColumns  = (eCol-sCol) + 1
+      val (sCol, eCol) = modelTable.cellRange.columnRange
+      val neededColumns = (eCol - sCol) + 1
       (0 until neededColumns) map { index ⇒
         val columnId = index + 1
         TableColumn(
           name = s"TableColumn$columnId",
-          id   = columnId.toLong
+          id = columnId.toLong
         )
       }
     }
 
-    val modelColumns = if(modelTable.columns.nonEmpty) modelTable.columns else generateColumns
+    val modelColumns = if (modelTable.columns.nonEmpty) modelTable.columns else generateColumns
     val columns = ctTable.addNewTableColumns()
     columns.setCount(modelColumns.size)
     modelColumns.foreach { mc ⇒
@@ -557,13 +580,14 @@ object Model2XlsxConversions {
   implicit class XlsxWorkbook(workbook: Workbook) extends XlsxExport {
     override def saveAsXlsx(fileName: String): Unit = writeToOutputStream(new FileOutputStream(fileName))
 
-    override def writeToOutputStream[T <: OutputStream](stream: T): T = try {
-      convertAsXlsx().write(stream)
-      stream
-    } finally {
-      stream.flush()
-      stream.close()
-    }
+    override def writeToOutputStream[T <: OutputStream](stream: T): T =
+      try {
+        convertAsXlsx().write(stream)
+        stream
+      } finally {
+        stream.flush()
+        stream.close()
+      }
 
     def convertAsXlsx(): XSSFWorkbook = convertWorkbook(workbook)
   }

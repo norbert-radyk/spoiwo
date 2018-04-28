@@ -3,21 +3,21 @@ package com.norbitltd.spoiwo.model
 object TableStyle {
 
   def apply(
-    name: TableStyleName,
-    showColumnStripes: java.lang.Boolean = null,
-    showRowStripes: java.lang.Boolean = null
+      name: TableStyleName,
+      showColumnStripes: java.lang.Boolean = null,
+      showRowStripes: java.lang.Boolean = null
   ): TableStyle =
     TableStyle(
-      name              = name,
+      name = name,
       showColumnStripes = Option(showColumnStripes).map(_.booleanValue),
-      showRowStripes    = Option(showRowStripes).map(_.booleanValue)
+      showRowStripes = Option(showRowStripes).map(_.booleanValue)
     )
 }
 
-case class TableStyle private(
-  name: TableStyleName,
-  showColumnStripes: Option[Boolean],
-  showRowStripes: Option[Boolean]
+case class TableStyle private (
+    name: TableStyleName,
+    showColumnStripes: Option[Boolean],
+    showRowStripes: Option[Boolean]
 ) {
 
   def withName(name: TableStyleName): TableStyle =

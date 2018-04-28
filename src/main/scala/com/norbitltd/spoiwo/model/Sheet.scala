@@ -43,8 +43,7 @@ object Sheet {
 
 }
 
-case class Sheet private(
-                          name: Option[String],
+case class Sheet private (name: Option[String],
                           columns: List[Column],
                           rows: List[Row],
                           mergedRegions: List[CellRange],
@@ -60,22 +59,24 @@ case class Sheet private(
                           password: Option[String],
                           tables: List[Table]) {
 
-  override def toString: String = "Sheet(" + List(
-    name.map("name=" + _),
-    if (columns.isEmpty) None else Option("columns=\n\t" + columns.map(_.toString).mkString("\n\t")),
-    if (rows.isEmpty) None else Option("rows=\n\t" + rows.map(_.toString).mkString("\n\t")),
-    if (mergedRegions.isEmpty) None else Option("merged regions=\n\t" + mergedRegions.map(_.toString).mkString("\n\t")),
-    printSetup.map("print setup=" + _),
-    header.map("header=" + _),
-    footer.map("footer=" + _),
-    properties.map("properties=" + _),
-    margins.map("margins=" + _),
-    paneAction.map("pane action=" + _),
-    repeatingRows.map("repeating rows=" + _),
-    repeatingColumns.map("repeating columns=" + _),
-    style.map("style=" + _),
-    password.map("password=" + _)
-  ).flatten.mkString(",\n") + ")"
+  override def toString: String =
+    "Sheet(" + List(
+      name.map("name=" + _),
+      if (columns.isEmpty) None else Option("columns=\n\t" + columns.map(_.toString).mkString("\n\t")),
+      if (rows.isEmpty) None else Option("rows=\n\t" + rows.map(_.toString).mkString("\n\t")),
+      if (mergedRegions.isEmpty) None
+      else Option("merged regions=\n\t" + mergedRegions.map(_.toString).mkString("\n\t")),
+      printSetup.map("print setup=" + _),
+      header.map("header=" + _),
+      footer.map("footer=" + _),
+      properties.map("properties=" + _),
+      margins.map("margins=" + _),
+      paneAction.map("pane action=" + _),
+      repeatingRows.map("repeating rows=" + _),
+      repeatingColumns.map("repeating columns=" + _),
+      style.map("style=" + _),
+      password.map("password=" + _)
+    ).flatten.mkString(",\n") + ")"
 
   def withSheetName(name: String): Sheet =
     copy(name = Option(name))
@@ -86,16 +87,16 @@ case class Sheet private(
   def withColumns(columns: Column*): Sheet =
     withColumns(columns.toList)
 
-  def addColumn(column : Column): Sheet =
+  def addColumn(column: Column): Sheet =
     copy(columns = columns ++ List(column))
 
-  def addColumns(additionalColumns : Iterable[Column]): Sheet =
+  def addColumns(additionalColumns: Iterable[Column]): Sheet =
     copy(columns = columns ++ additionalColumns)
 
-  def removeColumn(column : Column): Sheet =
+  def removeColumn(column: Column): Sheet =
     copy(columns = columns.filter(_ != column))
 
-  def removeColumns(whereCondition : Column => Boolean): Sheet =
+  def removeColumns(whereCondition: Column => Boolean): Sheet =
     copy(columns = columns.filter(whereCondition))
 
   def withRows(rows: Iterable[Row]): Sheet =
@@ -104,16 +105,16 @@ case class Sheet private(
   def withRows(rows: Row*): Sheet =
     withRows(rows)
 
-  def addRow(row : Row): Sheet =
+  def addRow(row: Row): Sheet =
     copy(rows = rows ++ List(row))
 
-  def addRows(additionalRows : Iterable[Row]): Sheet =
+  def addRows(additionalRows: Iterable[Row]): Sheet =
     copy(rows = rows ++ additionalRows)
 
-  def removeRow(row : Row): Sheet =
+  def removeRow(row: Row): Sheet =
     copy(rows = rows.filter(_ != row))
 
-  def removeRows(whereCondition : Row => Boolean): Sheet =
+  def removeRows(whereCondition: Row => Boolean): Sheet =
     copy(rows = rows.filter(whereCondition))
 
   def withMergedRegions(mergedRegions: Iterable[CellRange]): Sheet =
@@ -122,16 +123,16 @@ case class Sheet private(
   def withMergedRegions(mergedRegions: CellRange*): Sheet =
     withMergedRegions(mergedRegions)
 
-  def addMergedRegion(mergedRegion : CellRange): Sheet =
+  def addMergedRegion(mergedRegion: CellRange): Sheet =
     copy(mergedRegions = mergedRegions ++ List(mergedRegion))
 
-  def addMergedRegions(additionalMergedRegions : Iterable[CellRange]): Sheet =
+  def addMergedRegions(additionalMergedRegions: Iterable[CellRange]): Sheet =
     copy(mergedRegions = mergedRegions ++ additionalMergedRegions)
 
-  def removeMergedRegion(mergedRegion : CellRange): Sheet =
+  def removeMergedRegion(mergedRegion: CellRange): Sheet =
     copy(mergedRegions = mergedRegions.filter(_ != mergedRegion))
 
-  def removeMergedRegions(whereCondition : CellRange => Boolean): Sheet =
+  def removeMergedRegions(whereCondition: CellRange => Boolean): Sheet =
     copy(mergedRegions = mergedRegions.filter(whereCondition))
 
   def withPrintSetup(printSetup: PrintSetup): Sheet =
@@ -147,11 +148,10 @@ case class Sheet private(
     copy(header = None)
 
   def withPassword(password: String): Sheet =
-    copy(password= Option(password))
+    copy(password = Option(password))
 
   def withoutPassword: Sheet =
-    copy(password= None)
-
+    copy(password = None)
 
   def withFooter(footer: Footer): Sheet =
     copy(footer = Option(footer))
@@ -186,7 +186,7 @@ case class Sheet private(
   def withoutRepeatingColumns: Sheet =
     copy(repeatingColumns = None)
 
-  def withStyle(style : CellStyle): Sheet =
+  def withStyle(style: CellStyle): Sheet =
     copy(style = Option(style))
 
   def withTables(tables: Table*): Sheet =

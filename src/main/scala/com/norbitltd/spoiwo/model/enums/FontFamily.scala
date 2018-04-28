@@ -11,7 +11,7 @@ object FontFamily {
 
 }
 
-case class FontFamily private(value : String) {
+case class FontFamily private (value: String) {
 
   override def toString: String = value
 

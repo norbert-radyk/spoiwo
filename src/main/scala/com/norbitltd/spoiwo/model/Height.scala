@@ -5,7 +5,7 @@ object HeightUnit {
   lazy val Unit = HeightUnit("Unit")
 }
 
-case class HeightUnit private(value: String) {
+case class HeightUnit private (value: String) {
   override def toString: String = value
 }
 
@@ -23,13 +23,13 @@ class Height(measureValue: Int, measureUnit: HeightUnit) {
 
   private val heightInUnits = measureUnit match {
     case HeightUnit.Point => measureValue * 20
-    case HeightUnit.Unit => measureValue
-    case _ => throw new IllegalArgumentException(
-      s"Unable to convert Height Unit = $measureUnit to XLSX - unsupported enum!")
+    case HeightUnit.Unit  => measureValue
+    case _ =>
+      throw new IllegalArgumentException(s"Unable to convert Height Unit = $measureUnit to XLSX - unsupported enum!")
   }
 
   def toUnits: Int = heightInUnits
 
-  def toPoints : Short = (heightInUnits / 20).toShort
+  def toPoints: Short = (heightInUnits / 20).toShort
 
 }

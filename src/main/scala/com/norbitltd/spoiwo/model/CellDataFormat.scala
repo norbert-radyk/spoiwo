@@ -6,4 +6,4 @@ object CellDataFormat {
 
 }
 
-case class CellDataFormat private(formatString: Option[String])
+case class CellDataFormat private (formatString: Option[String])
