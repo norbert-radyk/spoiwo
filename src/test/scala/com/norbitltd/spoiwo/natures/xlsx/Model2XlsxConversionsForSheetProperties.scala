@@ -11,13 +11,13 @@ import scala.language.postfixOps
 
 class Model2XlsxConversionsForSheetProperties extends FlatSpec with Matchers {
 
-  private def apply(properties : SheetProperties) : XSSFSheet = {
+  private def apply(properties: SheetProperties): XSSFSheet = {
     val sheet = new XSSFWorkbook().createSheet()
     convertSheetProperties(properties, sheet)
     sheet
   }
 
-  private val defaultSheet : XSSFSheet = apply(SheetProperties())
+  private val defaultSheet: XSSFSheet = apply(SheetProperties())
 
   "Sheet properties conversion" should "return no active cell by default" in {
     defaultSheet.getActiveCell shouldBe null
@@ -200,7 +200,7 @@ class Model2XlsxConversionsForSheetProperties extends FlatSpec with Matchers {
   }
 
   it should "return the print area  when set explicitly" in {
-    val model = SheetProperties(printArea = CellRange(2->7, 1 -> 4))
+    val model = SheetProperties(printArea = CellRange(2 -> 7, 1 -> 4))
     val xssf = apply(model)
     xssf.getWorkbook.getPrintArea(0) shouldBe "Sheet0!$B$3:$E$8"
   }

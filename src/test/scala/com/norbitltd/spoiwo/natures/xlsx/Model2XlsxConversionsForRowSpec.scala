@@ -11,11 +11,11 @@ import scala.language.postfixOps
 
 class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
 
-  private def sheet : XSSFSheet = new XSSFWorkbook().createSheet()
+  private def sheet: XSSFSheet = new XSSFWorkbook().createSheet()
 
-  private def convert(row : Row) : XSSFRow = convertRow(Map(), row, Sheet(), sheet)
+  private def convert(row: Row): XSSFRow = convertRow(Map(), row, Sheet(), sheet)
 
-  private val defaultRow : XSSFRow = convert(Row.Empty)
+  private val defaultRow: XSSFRow = convert(Row.Empty)
 
   "Row conversion" should "return height of 15 points by default" in {
     defaultRow.getHeightInPoints shouldBe 15
@@ -23,8 +23,8 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   }
 
   it should "return height of 13 point when set explicitly" in {
-    val model : Row = Row(height = 13 points)
-    val xlsx : XSSFRow = convert(model)
+    val model: Row = Row(height = 13 points)
+    val xlsx: XSSFRow = convert(model)
     xlsx.getHeightInPoints shouldBe 13
     xlsx.getHeight shouldBe 260
   }
@@ -34,10 +34,10 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   }
 
   it should "return 14pt Arial row style when set explicitly" in {
-    val model : Row = Row(style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
-    val xlsx : XSSFRow = convert(model)
+    val model: Row = Row(style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
+    val xlsx: XSSFRow = convert(model)
 
-    val font : XSSFFont = xlsx.getRowStyle.getFont
+    val font: XSSFFont = xlsx.getRowStyle.getFont
     font.getFontHeightInPoints shouldBe 14
     font.getFontName shouldBe "Arial"
   }
@@ -47,14 +47,14 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   }
 
   it should "set unhidden row when explicitly set to false" in {
-    val model : Row = Row(hidden = false)
-    val xlsx : XSSFRow = convert(model)
+    val model: Row = Row(hidden = false)
+    val xlsx: XSSFRow = convert(model)
     xlsx.getZeroHeight shouldBe false
   }
 
   it should "set hidden row when explicitly set to true" in {
-    val model : Row = Row(hidden = true)
-    val xlsx : XSSFRow = convert(model)
+    val model: Row = Row(hidden = true)
+    val xlsx: XSSFRow = convert(model)
     xlsx.getZeroHeight shouldBe true
   }
 
@@ -67,7 +67,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
     sheetWithRows.createRow(0)
     sheetWithRows.createRow(1)
 
-    val xlsx : XSSFRow = convertRow(Map(), Row(), Sheet(), sheetWithRows)
+    val xlsx: XSSFRow = convertRow(Map(), Row(), Sheet(), sheetWithRows)
     xlsx.getRowNum shouldBe 2
   }
 
@@ -75,7 +75,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
     val sheetWithRows = sheet
     sheetWithRows.createRow(4)
 
-    val xlsx : XSSFRow = convertRow(Map(), Row(), Sheet(), sheetWithRows)
+    val xlsx: XSSFRow = convertRow(Map(), Row(), Sheet(), sheetWithRows)
     xlsx.getRowNum shouldBe 5
   }
 
@@ -84,9 +84,9 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   }
 
   it should "correctly initialize one cell" in {
-    val cell : Cell = Cell("Test", style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
-    val model : Row = Row(cells = cell :: Nil)
-    val xssf : XSSFRow = convert(model)
+    val cell: Cell = Cell("Test", style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
+    val model: Row = Row(cells = cell :: Nil)
+    val xssf: XSSFRow = convert(model)
 
     xssf.getFirstCellNum shouldBe 0
     xssf.getLastCellNum shouldBe 1
@@ -97,10 +97,10 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   }
 
   it should "correctly initialize multiple cells with no indexes" in {
-    val cell1 : Cell = Cell("Test1", style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
-    val cell2 : Cell = Cell("Test2", style = CellStyle(font = Font(fontName = "Arial", height = 16 points)))
-    val model : Row = Row(cells = cell1 :: cell2 ::  Nil)
-    val xssf : XSSFRow = convert(model)
+    val cell1: Cell = Cell("Test1", style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
+    val cell2: Cell = Cell("Test2", style = CellStyle(font = Font(fontName = "Arial", height = 16 points)))
+    val model: Row = Row(cells = cell1 :: cell2 :: Nil)
+    val xssf: XSSFRow = convert(model)
 
     xssf.getFirstCellNum shouldBe 0
     xssf.getLastCellNum shouldBe 2
@@ -116,8 +116,8 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
 
   it should "correctly initialize single cell with index" in {
     val cell = Cell("Test", index = 3)
-    val model : Row = Row(cells = cell :: Nil)
-    val xssf : XSSFRow = convert(model)
+    val model: Row = Row(cells = cell :: Nil)
+    val xssf: XSSFRow = convert(model)
     xssf.getFirstCellNum shouldBe 3
     xssf.getLastCellNum shouldBe 4
 
@@ -128,8 +128,8 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   it should "correctly initialize multiple cells with indexes" in {
     val cell1 = Cell("Test1", index = 3)
     val cell2 = Cell("Test2", index = 5)
-    val model : Row = Row(cells = cell1 :: cell2 :: Nil)
-    val xssf : XSSFRow = convert(model)
+    val model: Row = Row(cells = cell1 :: cell2 :: Nil)
+    val xssf: XSSFRow = convert(model)
     xssf.getFirstCellNum shouldBe 3
     xssf.getLastCellNum shouldBe 6
 
@@ -144,7 +144,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
     val cell1 = Cell("Test1", index = 2)
     val cell2 = Cell("Test2", index = 4)
     val cell3 = Cell("Test3", index = 2)
-    val model : Row = Row(cells = cell1 :: cell2 :: cell3 :: Nil)
+    val model: Row = Row(cells = cell1 :: cell2 :: cell3 :: Nil)
 
     val converted = Try {
 
@@ -156,7 +156,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   it should "fail when row has cells with and without explicit indexes" in {
     val cell1 = Cell("Test1", index = 2)
     val cell2 = Cell("Test2")
-    val model : Row = Row(cells = cell1 :: cell2 :: Nil)
+    val model: Row = Row(cells = cell1 :: cell2 :: Nil)
 
     val converted = Try {
 

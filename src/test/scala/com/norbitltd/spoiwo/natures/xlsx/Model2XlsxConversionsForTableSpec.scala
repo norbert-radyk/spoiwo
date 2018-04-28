@@ -73,10 +73,11 @@ class Model2XlsxConversionsForTableSpec extends FlatSpec with Matchers {
   }
 
   it should "have the columns when specified" in {
-    val model = defaultTable.withColumns(List(
-      TableColumn("ColA", 42),
-      TableColumn("ColB", 43)
-    ))
+    val model = defaultTable.withColumns(
+      List(
+        TableColumn("ColA", 42),
+        TableColumn("ColB", 43)
+      ))
     val xlsx = convertTable(model, defaultSheet)
     val xlsxColumns = xlsx.getCTTable.getTableColumns
 

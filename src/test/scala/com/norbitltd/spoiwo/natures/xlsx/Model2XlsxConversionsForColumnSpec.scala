@@ -11,7 +11,7 @@ import scala.language.postfixOps
 class Model2XlsxConversionsForColumnSpec extends FlatSpec with Matchers {
 
   private val DefaultWidth = (8 characters).toUnits
-  
+
   private def sheet: XSSFSheet = {
     val s = new XSSFWorkbook().createSheet()
     val r = s.createRow(0)

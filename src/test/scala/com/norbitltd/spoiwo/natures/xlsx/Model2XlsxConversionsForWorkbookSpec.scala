@@ -52,5 +52,4 @@ class Model2XlsxConversionsForWorkbookSpec extends FlatSpec with Matchers {
     xlsx.getFirstVisibleTab shouldBe 1
   }
 
-
 }

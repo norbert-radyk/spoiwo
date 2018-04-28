@@ -28,11 +28,10 @@ class Model2XlsxConversionsForCellStyleSpec extends FlatSpec with Matchers {
   }
 
   it should "return explicitly set borders" in {
-    val modelBorders = CellBorders(
-      leftStyle = CellBorderStyle.Double,
-      leftColor = Color.Blue,
-      rightStyle = CellBorderStyle.Thick,
-      rightColor = Color.Red)
+    val modelBorders = CellBorders(leftStyle = CellBorderStyle.Double,
+                                   leftColor = Color.Blue,
+                                   rightStyle = CellBorderStyle.Thick,
+                                   rightColor = Color.Red)
     val modelWithBorders = CellStyle(borders = modelBorders)
     val xssfWithBorders = convertCellStyle(modelWithBorders, workbook)
 
@@ -66,9 +65,9 @@ class Model2XlsxConversionsForCellStyleSpec extends FlatSpec with Matchers {
   }
 
   it should "return 14pt Arial when set explicitly" in {
-    val modelWithFont : CellStyle = CellStyle(font = Font(fontName = "Arial", height = 14 points))
-    val xssfWithFont : XSSFCellStyle = convertCellStyle(modelWithFont, workbook)
-    val xssfFont : XSSFFont = xssfWithFont.getFont
+    val modelWithFont: CellStyle = CellStyle(font = Font(fontName = "Arial", height = 14 points))
+    val xssfWithFont: XSSFCellStyle = convertCellStyle(modelWithFont, workbook)
+    val xssfFont: XSSFFont = xssfWithFont.getFont
     xssfFont.getFontName shouldBe "Arial"
     xssfFont.getFontHeightInPoints shouldBe 14
   }
@@ -80,123 +79,123 @@ class Model2XlsxConversionsForCellStyleSpec extends FlatSpec with Matchers {
   }
 
   it should "return 'Solid' fill pattern when explicitly set" in {
-    val modelWithFillPattern : CellStyle = CellStyle(fillPattern = CellFill.Solid)
-    val xssfWithFillPattern : XSSFCellStyle = convertCellStyle(modelWithFillPattern, workbook)
+    val modelWithFillPattern: CellStyle = CellStyle(fillPattern = CellFill.Solid)
+    val xssfWithFillPattern: XSSFCellStyle = convertCellStyle(modelWithFillPattern, workbook)
     xssfWithFillPattern.getFillPatternEnum shouldBe FillPatternType.SOLID_FOREGROUND
   }
 
   it should "return no background or foreground color by default" in {
-    val modelDefault : CellStyle = CellStyle()
-    val xssfDefault : XSSFCellStyle = convertCellStyle(modelDefault, workbook)
+    val modelDefault: CellStyle = CellStyle()
+    val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
     xssfDefault.getFillForegroundXSSFColor shouldBe null
     xssfDefault.getFillBackgroundXSSFColor shouldBe null
   }
 
   it should "return red background and blue foreground color when explicitly set" in {
-    val modelWithFillColors : CellStyle = CellStyle(fillBackgroundColor = Color.Red, fillForegroundColor = Color.Blue)
-    val xssfDefault : XSSFCellStyle = convertCellStyle(modelWithFillColors, workbook)
+    val modelWithFillColors: CellStyle = CellStyle(fillBackgroundColor = Color.Red, fillForegroundColor = Color.Blue)
+    val xssfDefault: XSSFCellStyle = convertCellStyle(modelWithFillColors, workbook)
     xssfDefault.getFillBackgroundXSSFColor.getRGB.toList shouldBe List(255.toByte, 0, 0)
     xssfDefault.getFillForegroundXSSFColor.getRGB.toList shouldBe List(0, 0, 255.toByte)
   }
 
   it should "return 'General' horizontal alignment by default" in {
-    val modelDefault : CellStyle = CellStyle()
-    val xssfDefault : XSSFCellStyle = convertCellStyle(modelDefault, workbook)
+    val modelDefault: CellStyle = CellStyle()
+    val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
     xssfDefault.getAlignmentEnum shouldBe HorizontalAlignment.GENERAL
   }
 
   it should "return 'Right' horizontal alignment when explicitly set" in {
-    val modelWithHA : CellStyle = CellStyle(horizontalAlignment = CellHorizontalAlignment.Right)
-    val xssfWithHA : XSSFCellStyle = convertCellStyle(modelWithHA, workbook)
+    val modelWithHA: CellStyle = CellStyle(horizontalAlignment = CellHorizontalAlignment.Right)
+    val xssfWithHA: XSSFCellStyle = convertCellStyle(modelWithHA, workbook)
     xssfWithHA.getAlignmentEnum shouldBe HorizontalAlignment.RIGHT
   }
 
   it should "return 'Bottom' vertical alignment by default" in {
-    val modelDefault : CellStyle = CellStyle()
-    val xssfDefault : XSSFCellStyle = convertCellStyle(modelDefault, workbook)
+    val modelDefault: CellStyle = CellStyle()
+    val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
     xssfDefault.getVerticalAlignmentEnum shouldBe VerticalAlignment.BOTTOM
   }
 
   it should "return 'Top' vertical alignment when explicitly set" in {
-    val modelWithVA : CellStyle = CellStyle(verticalAlignment = CellVerticalAlignment.Top)
-    val xssfWithVA : XSSFCellStyle = convertCellStyle(modelWithVA, workbook)
+    val modelWithVA: CellStyle = CellStyle(verticalAlignment = CellVerticalAlignment.Top)
+    val xssfWithVA: XSSFCellStyle = convertCellStyle(modelWithVA, workbook)
     xssfWithVA.getVerticalAlignmentEnum shouldBe VerticalAlignment.TOP
   }
 
   it should "return not hidden cell style by default" in {
-    val modelDefault : CellStyle = CellStyle()
+    val modelDefault: CellStyle = CellStyle()
     val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
     xssfDefault.getHidden shouldBe false
   }
 
   it should "return not hidden cell style when explicitly set to false" in {
-    val model : CellStyle = CellStyle(hidden = false)
+    val model: CellStyle = CellStyle(hidden = false)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getHidden shouldBe false
   }
 
   it should "return hidden cell style when explicitly set to true" in {
-    val model : CellStyle = CellStyle(hidden = true)
+    val model: CellStyle = CellStyle(hidden = true)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getHidden shouldBe true
   }
 
   it should "return no indention by default" in {
-    val model : CellStyle = CellStyle()
+    val model: CellStyle = CellStyle()
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getIndention shouldBe 0
   }
 
   it should "return indention of 4 spaces when explicitly set" in {
-    val model : CellStyle = CellStyle(indention = 4)
+    val model: CellStyle = CellStyle(indention = 4)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getIndention shouldBe 4
   }
 
   it should "return locked cell by default" in {
-    val model : CellStyle = CellStyle()
+    val model: CellStyle = CellStyle()
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getLocked shouldBe true
   }
 
   it should "return unlocked cell when explicitly set to false" in {
-    val model : CellStyle = CellStyle(locked = false)
+    val model: CellStyle = CellStyle(locked = false)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getLocked shouldBe false
   }
 
   it should "return locked cell when explicitly set to true" in {
-    val model : CellStyle = CellStyle(locked = true)
+    val model: CellStyle = CellStyle(locked = true)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getLocked shouldBe true
   }
 
   it should "return no rotation by default" in {
-    val model : CellStyle = CellStyle()
+    val model: CellStyle = CellStyle()
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getRotation shouldBe 0
   }
 
   it should "return 90 degree rotation if explicitly set" in {
-    val model : CellStyle = CellStyle(rotation = 90)
+    val model: CellStyle = CellStyle(rotation = 90)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getRotation shouldBe 90
   }
 
   it should "return unwrapped text by default" in {
-    val model : CellStyle = CellStyle()
+    val model: CellStyle = CellStyle()
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getWrapText shouldBe false
   }
 
   it should "return unwrapped text when explicitly set to false" in {
-    val model : CellStyle = CellStyle(wrapText = false)
+    val model: CellStyle = CellStyle(wrapText = false)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getWrapText shouldBe false
   }
 
   it should "return wrapped text when explicitly set to true" in {
-    val model : CellStyle = CellStyle(wrapText = true)
+    val model: CellStyle = CellStyle(wrapText = true)
     val xssf: XSSFCellStyle = convertCellStyle(model, workbook)
     xssf.getWrapText shouldBe true
   }

@@ -15,6 +15,7 @@ class JavaTimeApiConversionsSpec extends FlatSpec with Matchers {
 
   "Conversion from Java LocalDateTime to Date" should "produce same Date as from corresponding Joda DateTime" in {
     JLocalDateTime.of(2011, 6, 13, 15, 30, 10, 5000000).toDate shouldBe new DateTime(2011, 6, 13, 15, 30, 10, 5).toDate
-    JLocalDateTime.of(2011, 11, 13, 15, 30, 10, 999999999).toDate shouldBe new DateTime(2011, 11, 13, 15, 30, 10, 999).toDate
+    JLocalDateTime.of(2011, 11, 13, 15, 30, 10, 999999999).toDate shouldBe new DateTime(2011, 11, 13, 15, 30, 10,
+      999).toDate
   }
 }

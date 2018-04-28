@@ -15,33 +15,33 @@ class Model2XlsxConversionsForFontSpec extends FlatSpec with Matchers {
 
   def workbook = new XSSFWorkbook()
 
-  def convert(f : Font) : XSSFFont = convertFont(f, workbook)
+  def convert(f: Font): XSSFFont = convertFont(f, workbook)
 
-  def defaultFont : XSSFFont = convert(Font())
+  def defaultFont: XSSFFont = convert(Font())
 
   "Font conversion" should "return not bold font by default" in {
     defaultFont.getBold shouldBe false
   }
 
   it should "return not bold font when set explicitly to not bold" in {
-    val model : Font = Font(bold = false)
-    val xssf : XSSFFont = convert(model)
+    val model: Font = Font(bold = false)
+    val xssf: XSSFFont = convert(model)
     xssf.getBold shouldBe false
   }
 
   it should "return bold font when set explicitly to bold" in {
-    val model : Font = Font(bold = true)
-    val xssf : XSSFFont = convert(model)
+    val model: Font = Font(bold = true)
+    val xssf: XSSFFont = convert(model)
     xssf.getBold shouldBe true
   }
 
   it should "return ANSI charset by default" in {
-    FontCharset.valueOf(defaultFont.getCharSet)  shouldBe  FontCharset.ANSI
+    FontCharset.valueOf(defaultFont.getCharSet) shouldBe FontCharset.ANSI
   }
 
   it should "return Eastern European charset when set explicitly" in {
-    val model : Font = Font(charSet = Charset.EastEurope)
-    val xssf : XSSFFont = convert(model)
+    val model: Font = Font(charSet = Charset.EastEurope)
+    val xssf: XSSFFont = convert(model)
     FontCharset.valueOf(xssf.getCharSet) shouldBe FontCharset.EASTEUROPE
   }
 
@@ -50,8 +50,8 @@ class Model2XlsxConversionsForFontSpec extends FlatSpec with Matchers {
   }
 
   it should "return 'Lime' color when set explicitly" in {
-    val model : Font = Font(color = Color.Lime)
-    val xssf : XSSFFont = convert(model)
+    val model: Font = Font(color = Color.Lime)
+    val xssf: XSSFFont = convert(model)
     val rgbArray = xssf.getXSSFColor.getRGB
     rgbArray(0) shouldBe 0
     rgbArray(1) shouldBe 255.toByte
@@ -64,8 +64,8 @@ class Model2XlsxConversionsForFontSpec extends FlatSpec with Matchers {
   }
 
   it should "return 'Roman' font family when set explicitly" in {
-    val model : Font = Font(family = FontFamily.Roman)
-    val xssf : XSSFFont = convert(model)
+    val model: Font = Font(family = FontFamily.Roman)
+    val xssf: XSSFFont = convert(model)
     val xssfFamily = usermodel.FontFamily.valueOf(xssf.getFamily)
     xssfFamily shouldBe usermodel.FontFamily.ROMAN
   }

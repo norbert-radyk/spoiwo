@@ -11,7 +11,8 @@ class Model2CsvConversionsSpec extends FlatSpec with Matchers {
     val sheet = Sheet(name = "CSV conversion").withRows(
       Row().withCellValues("EUROPE", "Poland", "Wroclaw"),
       Row().withCellValues("EUROPE", "United Kingdom", "London"),
-      Row().withCellValues("ASIA", "China", "Tianjin"))
+      Row().withCellValues("ASIA", "China", "Tianjin")
+    )
 
     val csvText = "EUROPE,Poland,Wroclaw\nEUROPE,United Kingdom,London\nASIA,China,Tianjin"
     csvText shouldBe sheet.convertAsCsv()
@@ -21,7 +22,8 @@ class Model2CsvConversionsSpec extends FlatSpec with Matchers {
     val sheet = Sheet(name = "CSV conversion").withRows(
       Row().withCellValues("EUROPE", "Poland", "Wroclaw"),
       Row().withCellValues("EUROPE", "United Kingdom", "London"),
-      Row().withCellValues("ASIA", "China", "Tianjin"))
+      Row().withCellValues("ASIA", "China", "Tianjin")
+    )
     val properties = CsvProperties(separator = "|")
 
     val csvText = "EUROPE|Poland|Wroclaw\nEUROPE|United Kingdom|London\nASIA|China|Tianjin"
@@ -52,10 +54,10 @@ class Model2CsvConversionsSpec extends FlatSpec with Matchers {
   }
 
   it should "correctly format date value to yyyy-MM-dd by default" in {
-      val sheet = Sheet(name = "CSV conversion").withRows(
-        Row().withCellValues("Albert Einstein", new LocalDate(1879, 3, 14)),
-        Row().withCellValues("Thomas Edison", new LocalDate(1847, 2, 11))
-      )
+    val sheet = Sheet(name = "CSV conversion").withRows(
+      Row().withCellValues("Albert Einstein", new LocalDate(1879, 3, 14)),
+      Row().withCellValues("Thomas Edison", new LocalDate(1847, 2, 11))
+    )
 
     val csvText = "Albert Einstein,1879-03-14\nThomas Edison,1847-02-11"
     csvText shouldBe sheet.convertAsCsv()

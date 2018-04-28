@@ -8,12 +8,12 @@ import com.norbitltd.spoiwo.model.{CellBorders, Color}
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder
 import com.norbitltd.spoiwo.model.enums.CellBorderStyle
 
-class Model2XlsxConversionsForCellBordersSpec extends FlatSpec with Matchers{
+class Model2XlsxConversionsForCellBordersSpec extends FlatSpec with Matchers {
 
-  val cellStyle : XSSFCellStyle = new XSSFWorkbook().createCellStyle()
+  val cellStyle: XSSFCellStyle = new XSSFWorkbook().createCellStyle()
 
-  def convert(cellBorders : CellBorders) : XSSFCellStyle = {
-    val style : XSSFCellStyle = cellStyle
+  def convert(cellBorders: CellBorders): XSSFCellStyle = {
+    val style: XSSFCellStyle = cellStyle
     convertCellBorders(cellBorders, style)
     style
   }

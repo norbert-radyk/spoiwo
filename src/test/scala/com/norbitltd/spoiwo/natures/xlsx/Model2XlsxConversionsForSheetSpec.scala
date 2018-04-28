@@ -31,7 +31,7 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec with Matchers {
   it should "return defined name when set explicitly" in {
     val model = Sheet(name = "My Name")
     val xssf = convert(model)
-    xssf.getSheetName  shouldBe  "My Name"
+    xssf.getSheetName shouldBe "My Name"
   }
 
   it should "not have 1st column style by default" in {
@@ -114,7 +114,6 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec with Matchers {
     xlsxRow1.getCell(1).getNumericCellValue shouldBe 34
     xlsxRow2.getCell(0).getStringCellValue shouldBe "OK"
   }
-
 
   it should "have 3rd row with initialized with row with index" in {
     val row = Row(index = 2).withCellValues("Test", 34)
