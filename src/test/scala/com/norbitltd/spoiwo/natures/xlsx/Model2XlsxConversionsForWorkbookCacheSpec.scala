@@ -7,7 +7,9 @@ import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.scalatest.{FlatSpec, Matchers}
+
 import scala.language.postfixOps
+import scala.util.Try
 
 class Model2XlsxConversionsForWorkbookCacheSpec extends FlatSpec with Matchers {
 
@@ -22,15 +24,23 @@ class Model2XlsxConversionsForWorkbookCacheSpec extends FlatSpec with Matchers {
 
     private val conversions = Model2XlsxConversions
 
-    private val cellStyleCacheField: Field = conversions.getClass.getDeclaredField("cellStyleCache")
+    println(conversions.getClass.getDeclaredFields.mkString("\n"))
+
+    private val cellStyleCacheField: Field = getConversionsField("cellStyleCache")
     cellStyleCacheField.setAccessible(true)
-    private val dataFormatCacheField: Field = conversions.getClass.getDeclaredField("dataFormatCache")
+    private val dataFormatCacheField: Field = getConversionsField("dataFormatCache")
     dataFormatCacheField.setAccessible(true)
-    private val fontCacheField: Field = conversions.getClass.getDeclaredField("fontCache")
+    private val fontCacheField: Field =  getConversionsField("fontCache")
     fontCacheField.setAccessible(true)
 
     "Cached workbook " should "be removed from cache after conversion" in {
         assertNotCached(victim.convertAsXlsx())
+    }
+
+  //Workaround for the scala/2.11 compiler which messes up with the private variable names
+  private def getConversionsField(name : String) : Field = Try(conversions.getClass.getDeclaredField(name)).getOrElse {
+      val allFields = conversions.getClass.getDeclaredFields
+      allFields.filter(_.getName contains name).head
     }
 
     private def assertNotCached(workbook: XSSFWorkbook) {

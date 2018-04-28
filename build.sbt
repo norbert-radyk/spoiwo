@@ -21,14 +21,14 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.12.5",
+  scalaVersion := "2.12.6",
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
     "-Ywarn-dead-code",
     "-Ywarn-unused",
     "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.12.5", "2.11.12"),
+  crossScalaVersions := Seq("2.13.0-M3", "2.12.6", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
@@ -46,7 +46,7 @@ lazy val commonSettings = Seq(
     "org.apache.poi"         %  "poi-ooxml"         % "3.17",
     "joda-time"              %  "joda-time"         % "2.9.9",
     "org.joda"               %  "joda-convert"      % "2.0.1",
-    "org.scalatest"          %% "scalatest"         % "3.0.5"   % "test"
+    "org.scalatest"          %% "scalatest"         % "3.0.5-M1"   % "test"
   )
 )
 
