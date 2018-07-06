@@ -28,7 +28,7 @@ lazy val commonSettings = Seq(
     "-Ywarn-dead-code",
     "-Ywarn-unused",
     "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.13.0-M3", "2.12.6", "2.11.12"),
+  crossScalaVersions := Seq("2.13.0-M4", "2.12.6", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
@@ -47,7 +47,7 @@ lazy val commonSettings = Seq(
     "org.apache.xmlbeans"    %  "xmlbeans"          % "3.0.0",
     "org.apache.commons"     %  "commons-collections4" % "4.1",
     "org.apache.commons"     % "commons-compress"   % "1.17",
-    "org.scalatest"          %% "scalatest"         % "3.0.5-M1"   % "test"
+    "org.scalatest"          %% "scalatest"         % "3.0.6-SNAP1"   % Test
   )
 )
 
