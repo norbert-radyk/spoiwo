@@ -427,9 +427,9 @@ object Model2XlsxConversions {
 
     val table = sheet.createTable()
     table.setDisplayName(displayName)
+    table.setName(name)
     val ctTable = table.getCTTable
     ctTable.setId(tableId)
-    ctTable.setName(name)
     setTableReference(modelTable, ctTable)
     convertTableColumns(modelTable, ctTable)
     modelTable.style.foreach(convertTableStyle(_, ctTable))
