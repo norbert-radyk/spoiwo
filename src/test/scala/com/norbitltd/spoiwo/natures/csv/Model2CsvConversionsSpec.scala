@@ -1,7 +1,7 @@
 package com.norbitltd.spoiwo.natures.csv
 
 import org.scalatest.{FlatSpec, Matchers}
-import com.norbitltd.spoiwo.model.{Row, Sheet}
+import com.norbitltd.spoiwo.model.{HyperLinkUrl, Row, Sheet}
 import Model2CsvConversions._
 import org.joda.time.LocalDate
 
@@ -72,6 +72,17 @@ class Model2CsvConversionsSpec extends FlatSpec with Matchers {
 
     val csvText = "Albert Einstein,1879/03/14\nThomas Edison,1847/02/11"
     csvText shouldBe sheet.convertAsCsv(properties)
+  }
+
+  it should "correctly process the HyperLinkUrl values" in {
+    val sheet = Sheet(name = "CSV conversion").withRows(
+      Row().withCellValues(HyperLinkUrl(
+        text = "spoiwo issue",
+        address = "https://github.com/norbert-radyk/spoiwo/issues/34"))
+    )
+
+    val csvText = "spoiwo issue"
+    csvText shouldBe sheet.convertAsCsv()
   }
 
 }
