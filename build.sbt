@@ -32,6 +32,7 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
+  resolvers += "Apache Staging" at "https://repository.apache.org/content/repositories/staging",
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -44,9 +45,8 @@ lazy val commonSettings = Seq(
     "org.scala-lang.modules" %% "scala-xml"         % "1.1.0",
     "joda-time"              %  "joda-time"         % "2.9.9",
     "org.joda"               %  "joda-convert"      % "2.0.1",
-    "org.apache.xmlbeans"    %  "xmlbeans"          % "3.0.0",
-    "org.apache.commons"     %  "commons-collections4" % "4.1",
-    "org.apache.commons"     % "commons-compress"   % "1.17",
+    "org.apache.poi"         %  "poi"               % "4.0.0",
+    "org.apache.poi"         %  "poi-ooxml"         % "4.0.0",
     "org.scalatest"          %% "scalatest"         % "3.0.6-SNAP1"   % Test
   )
 )
