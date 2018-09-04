@@ -68,6 +68,7 @@ case class Row private (cells: Iterable[Cell],
       case dateValue: JLocalDate         => Cell(dateValue)
       case dateTimeValue: JLocalDateTime => Cell(dateTimeValue)
       case calendarValue: Calendar       => Cell(calendarValue)
+      case hyperLinkUrl: HyperLinkUrl    => Cell(hyperLinkUrl)
       case value =>
         throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }

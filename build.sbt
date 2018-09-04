@@ -55,7 +55,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.3.2-SNAPSHOT"
+    version := "1.3.3-SNAPSHOT"
   )
 
 lazy val examples = (project in file("examples"))
@@ -63,5 +63,5 @@ lazy val examples = (project in file("examples"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.3.2-SNAPSHOT"
+    version := "1.3.3-SNAPSHOT"
   )

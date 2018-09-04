@@ -61,6 +61,7 @@ object Model2CsvConversions {
     case x: BooleanCell  => if (x.value) properties.defaultBooleanTrueString else properties.defaultBooleanFalseString
     case x: DateCell     => LocalDate.fromDateFields(x.value).toString(properties.defaultDateFormat)
     case x: CalendarCell => LocalDate.fromCalendarFields(x.value).toString(properties.defaultDateFormat)
+    case x: HyperLinkUrlCell => x.value.text
     case value           => throw new IllegalArgumentException(s"Unable to convert to CSV cell for value: $value!")
   }
 }

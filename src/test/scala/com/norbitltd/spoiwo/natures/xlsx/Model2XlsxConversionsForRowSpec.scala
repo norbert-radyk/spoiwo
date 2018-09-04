@@ -29,7 +29,7 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
     xlsx.getHeight shouldBe 260
   }
 
-  it should "return no row style by defaylt" in {
+  it should "return no row style by default" in {
     defaultRow.getRowStyle shouldBe null
   }
 
