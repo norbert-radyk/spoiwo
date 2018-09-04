@@ -28,7 +28,7 @@ lazy val commonSettings = Seq(
     "-Ywarn-dead-code",
     "-Ywarn-unused",
     "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.13.0-M4", "2.12.6", "2.11.12"),
+  crossScalaVersions := Seq("2.13.0-M5", "2.12.6", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
