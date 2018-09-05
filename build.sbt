@@ -32,7 +32,7 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
-  resolvers += "Apache Staging" at "https://repository.apache.org/content/repositories/staging",
+  resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
