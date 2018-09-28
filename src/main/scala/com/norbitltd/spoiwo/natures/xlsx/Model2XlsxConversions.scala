@@ -269,7 +269,7 @@ object Model2XlsxConversions {
                                sheet: XSSFSheet): XSSFRow = {
     validateCells(modelRow)
     val indexNumber = modelRow.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
-    val row = sheet.createRow(indexNumber)
+    val row = Option(sheet.getRow(indexNumber)).getOrElse(sheet.createRow(indexNumber))
     modelRow.height.foreach(h => row.setHeightInPoints(h.toPoints))
     modelRow.style.foreach(s => row.setRowStyle(convertCellStyle(s, row.getSheet.getWorkbook)))
     modelRow.hidden.foreach(row.setZeroHeight)
@@ -290,10 +290,11 @@ object Model2XlsxConversions {
   }
 
   private[xlsx] def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
-    validateRows(s)
-    validateTables(s)
-    val sheetName = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
-    val sheet = workbook.createSheet(sheetName)
+    s.validate
+    writeToExistingSheet(s, workbook.createSheet(s.nameIn(workbook)))
+  }
+
+  private[xlsx] def writeToExistingSheet(s: Sheet, sheet: XSSFSheet): XSSFSheet = {
     val columns = updateColumnsWithIndexes(s)
     val columnsMap = columns.map(c => c.index.get -> c).toMap
 
@@ -315,7 +316,6 @@ object Model2XlsxConversions {
     tables.foreach(tbl ⇒ convertTable(tbl, sheet))
     sheet
   }
-
   private def validateRows(s: Sheet) {
     val indexedRows = s.rows.filter(_.index.isDefined)
     val contextRows = s.rows.filter(_.index.isEmpty)
@@ -493,8 +493,15 @@ object Model2XlsxConversions {
   }
 
   private[xlsx] def convertWorkbook(wb: Workbook): XSSFWorkbook = {
-    val workbook = new XSSFWorkbook()
-    wb.sheets.foreach(sheet => convertSheet(sheet, workbook))
+    writeToExistingWorkbook(wb, new XSSFWorkbook())
+  }
+
+  private[xlsx] def writeToExistingWorkbook(wb: Workbook, workbook: XSSFWorkbook): XSSFWorkbook = {
+    wb.sheets.foreach { s =>
+      s.validate
+      val sheetName = s.nameIn(workbook)
+      writeToExistingSheet(s, Option(workbook.getSheet(sheetName)).getOrElse(workbook.createSheet(sheetName)))
+    }
 
     //Parameters
     wb.activeSheet.foreach(workbook.setActiveSheet)
@@ -506,7 +513,6 @@ object Model2XlsxConversions {
     evictFromCache(workbook)
     workbook
   }
-
   private def evictFromCache(wb: XSSFWorkbook) {
     cellStyleCache.remove(wb)
     dataFormatCache.remove(wb)
@@ -562,6 +568,15 @@ object Model2XlsxConversions {
   }
 
   implicit class XlsxSheet(s: Sheet) extends XlsxExport {
+    def validate: Unit = {
+      validateRows(s)
+      validateTables(s)
+    }
+
+    def nameIn(workbook: XSSFWorkbook): String = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
+
+    def writeToExisting(existingSheet: XSSFSheet): Unit = writeToExistingSheet(s, existingSheet)
+
     def convertAsXlsx(workbook: XSSFWorkbook): XSSFSheet = convertSheet(s, workbook)
 
     def convertAsXlsx(): XSSFWorkbook = Workbook(s).convertAsXlsx()
@@ -578,6 +593,8 @@ object Model2XlsxConversions {
   }
 
   implicit class XlsxWorkbook(workbook: Workbook) extends XlsxExport {
+    def writeToExisting(existingWorkBook: XSSFWorkbook): Unit = writeToExistingWorkbook(workbook, existingWorkBook)
+
     override def saveAsXlsx(fileName: String): Unit = writeToOutputStream(new FileOutputStream(fileName))
 
     override def writeToOutputStream[T <: OutputStream](stream: T): T =

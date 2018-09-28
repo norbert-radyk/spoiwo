@@ -1,7 +1,8 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import Model2XlsxConversions.convertWorkbook
 import com.norbitltd.spoiwo.model.{Sheet, Workbook}
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertWorkbook, writeToExistingWorkbook}
+import com.norbitltd.spoiwo.natures.xlsx.Utils._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -30,6 +31,32 @@ class Model2XlsxConversionsForWorkbookSpec extends FlatSpec with Matchers {
     xlsx.getSheetAt(0).getSheetName shouldBe "Jeden"
     xlsx.getSheetAt(1).getSheetName shouldBe "Dwa"
     xlsx.getSheetAt(2).getSheetName shouldBe "Trzy"
+  }
+
+  it should "be able to merge sheets into existing workbook" in {
+    val previousSheet = generateSheet(0 to 2, 0 to 5).withSheetName("Overwrite")
+    val untouchedSheet = generateSheet(0 to 3, 0 to 5).withSheetName("Untouched")
+    val previousModel = Workbook(previousSheet, untouchedSheet)
+    val existingWorkbook = convertWorkbook(previousModel)
+    val overwritingSheet =
+      generateSheet[Int, Int](1 to 3, 1 to 4, (rowNum, colNum) => s"NEW $colNum,$rowNum").withSheetName("Overwrite")
+    val newSheet = generateSheet(0 to 3, 0 to 5).withSheetName("New")
+    val newModel = Workbook(
+      overwritingSheet,
+      newSheet
+    )
+    writeToExistingWorkbook(newModel, existingWorkbook)
+    existingWorkbook.getNumberOfSheets shouldBe 3
+    existingWorkbook.getSheetAt(0).getSheetName shouldBe "Overwrite"
+    existingWorkbook.getSheetAt(1).getSheetName shouldBe "Untouched"
+    existingWorkbook.getSheetAt(2).getSheetName shouldBe "New"
+    val overwrittenPoiSheet = existingWorkbook.getSheet("Overwrite")
+    val overwrittenSheetData = mergeSheetData(Seq(previousSheet, overwritingSheet), _.value.toString)
+    nonEqualCells(overwrittenPoiSheet, overwrittenSheetData, _.getStringCellValue) shouldBe empty
+    val untouchedSheetData = mergeSheetData(Seq(untouchedSheet), _.value.toString)
+    nonEqualCells(existingWorkbook.getSheet("Untouched"), untouchedSheetData, _.getStringCellValue) shouldBe empty
+    val newSheetData = mergeSheetData(Seq(newSheet), _.value.toString)
+    nonEqualCells(existingWorkbook.getSheet("New"), newSheetData, _.getStringCellValue) shouldBe empty
   }
 
   it should "return first sheet as active sheet by default" in {
