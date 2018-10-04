@@ -21,14 +21,14 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.7",
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
     "-Ywarn-dead-code",
     "-Ywarn-unused",
     "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.13.0-M4", "2.12.6", "2.11.12"),
+  crossScalaVersions := Seq("2.13.0-M4", "2.12.7", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
@@ -55,7 +55,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.3.3-SNAPSHOT"
+    version := "1.4.0"
   )
 
 lazy val examples = (project in file("examples"))
@@ -63,5 +63,5 @@ lazy val examples = (project in file("examples"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.3.3-SNAPSHOT"
+    version := "1.4.0"
   )

@@ -56,6 +56,7 @@ object Model2CsvConversions {
     r.cells.map(c => convertCellToCsv(c, properties)).mkString(properties.separator)
 
   private def convertCellToCsv(c: Cell, properties: CsvProperties): String = c match {
+    case _: BlankCell    => ""
     case x: StringCell   => x.value
     case x: NumericCell  => x.value.toString
     case x: BooleanCell  => if (x.value) properties.defaultBooleanTrueString else properties.defaultBooleanFalseString
