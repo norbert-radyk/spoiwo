@@ -22,7 +22,7 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
   private def row = new XSSFWorkbook().createSheet().createRow(0)
 
   "Cell conversion" should "return string cell type with empty string by default" in {
-    defaultCell.getCellType shouldBe CellType.STRING
+    defaultCell.getCellType shouldBe CellType.BLANK
     defaultCell.getStringCellValue shouldBe ""
   }
 
