@@ -83,6 +83,7 @@ object Model2XlsxConversions {
     cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
 
     c match {
+      case BlankCell(_, _, _)               => cell.setCellValue(null: String)
       case StringCell(value, _, _, _)       => cell.setCellValue(value)
       case FormulaCell(formula, _, _, _)    => cell.setCellFormula(formula)
       case NumericCell(value, _, _, _)      => cell.setCellValue(value)
