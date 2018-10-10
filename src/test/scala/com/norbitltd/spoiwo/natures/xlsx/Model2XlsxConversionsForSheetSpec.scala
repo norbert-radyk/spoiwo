@@ -5,7 +5,8 @@ import com.norbitltd.spoiwo.model.Width._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertSheet, writeToExistingSheet}
 import com.norbitltd.spoiwo.natures.xlsx.Utils._
-import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFSheet, XSSFWorkbook}
+import org.apache.poi.ss.usermodel.CellType
+import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFSheet, XSSFWorkbook, XSSFWorkbookFactory}
 import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.postfixOps
@@ -45,6 +46,17 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec with Matchers {
     writeToExistingSheet(newSheet, existingPoiSheet)
     val dataMatrix = mergeSheetData(Seq(previousSheet, newSheet), _.value.toString)
     nonEqualCells(existingPoiSheet, dataMatrix, _.getStringCellValue) shouldBe empty
+  }
+
+  it should "removes obsolete formulas" in {
+    val inputStream = this.getClass.getResourceAsStream("/with_formula.xlsx")
+    val w = XSSFWorkbookFactory.createWorkbook(inputStream)
+    w.getCalculationChain.getCTCalcChain.sizeOfCArray() should equal(1)
+    val existingPoiSheet = w.getSheetAt(0)
+    val newSheet = Sheet(Row(Seq(Cell(2.0, index = 0)), index = 0))
+    writeToExistingSheet(newSheet, existingPoiSheet)
+    existingPoiSheet.getRow(0).getCell(0).getCellType should equal(CellType.NUMERIC)
+    w.getCalculationChain.getCTCalcChain.sizeOfCArray() should equal(0)
   }
 
   it should "not have 1st column style by default" in {

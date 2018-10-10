@@ -18,7 +18,7 @@ import com.norbitltd.spoiwo.model.{
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel
-import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, HorizontalAlignment, VerticalAlignment}
+import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, VerticalAlignment}
 import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
 import org.apache.poi.xssf.usermodel._
 import org.joda.time.{LocalDate, LocalDateTime}
@@ -76,8 +76,11 @@ object Model2XlsxConversions {
                                 modelRow: Row,
                                 c: Cell,
                                 row: XSSFRow): XSSFCell = {
-    val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum)
-    val cell = row.createCell(cellNumber)
+    val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum.toInt)
+    val cell = Option(row.getCell(cellNumber)).getOrElse(row.createCell(cellNumber))
+    if (cell.getCellType == CellType.FORMULA) {
+      cell.setCellFormula(null)
+    }
 
     val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).flatMap(_.style), modelSheet.style)
     cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
