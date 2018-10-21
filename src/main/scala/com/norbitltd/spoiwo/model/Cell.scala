@@ -8,6 +8,7 @@ import com.norbitltd.spoiwo.utils.JavaTimeApiConversions._
 
 sealed class CellValueType[T]
 object CellValueType {
+  implicit object NullWitness extends CellValueType[Null]
   implicit object StringWitness extends CellValueType[String]
   implicit object DoubleWitness extends CellValueType[Double]
   implicit object BigDecimalWitness extends CellValueType[BigDecimal]
@@ -25,7 +26,7 @@ object CellValueType {
 
 object Cell {
 
-  lazy val Empty: Cell = apply("")
+  lazy val Empty: Cell = apply(null)
 
   def apply[T: CellValueType](value: T,
                               index: java.lang.Integer = null,
@@ -35,6 +36,7 @@ object Cell {
     val indexOption = Option(index).map(_.intValue)
     val styleOption = Option(style)
     value match {
+      case null => BlankCell(indexOption, styleOption, styleInheritance)
       case v: String =>
         if (v.startsWith("=")) {
           FormulaCell(v.drop(1), indexOption, styleOption, styleInheritance)
@@ -112,6 +114,17 @@ case class HyperLinkUrlCell private[model] (value: HyperLinkUrl,
     copy(value.asInstanceOf[HyperLinkUrl], index, style)
 
   protected def valueToString(): String = "\"" + value + "\""
+}
+
+case class BlankCell private[model] (index: Option[Int],
+                                     style: Option[CellStyle],
+                                     styleInheritance: CellStyleInheritance)
+    extends Cell {
+  def copyCell(value: Any, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
+    copy(index, style)
+
+  val value: Any = null
+  protected def valueToString(): String = "null"
 }
 
 case class StringCell private[model] (value: String,

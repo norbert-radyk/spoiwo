@@ -260,7 +260,7 @@ class JavaPoiExamples {
         cell.setCellValue("custom XSSF colors");
 
         XSSFCellStyle style1 = wb.createCellStyle();
-        style1.setFillForegroundColor(new XSSFColor(new java.awt.Color(128, 0, 128)));
+        style1.setFillForegroundColor(new XSSFColor(new java.awt.Color(128, 0, 128), new DefaultIndexedColorMap()));
         style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cell.setCellStyle(style1);
     }

@@ -21,17 +21,19 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.7",
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
     "-Ywarn-dead-code",
     "-Ywarn-unused",
-    "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.13.0-M5", "2.12.6", "2.11.12"),
+    //"-Ywarn-unused-import"),
+    ),
+  crossScalaVersions := Seq("2.13.0-M5", "2.12.7", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
+  resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -41,12 +43,12 @@ lazy val commonSettings = Seq(
   },
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml"         % "1.1.0",
-    "org.apache.poi"         %  "poi"               % "3.17",
-    "org.apache.poi"         %  "poi-ooxml"         % "3.17",
+    "org.scala-lang.modules" %% "scala-xml"         % "1.1.1",
     "joda-time"              %  "joda-time"         % "2.9.9",
     "org.joda"               %  "joda-convert"      % "2.0.1",
-    "org.scalatest"          %% "scalatest"         % "3.0.6-SNAP1"   % Test
+    "org.apache.poi"         %  "poi"               % "4.0.0",
+    "org.apache.poi"         %  "poi-ooxml"         % "4.0.0",
+    "org.scalatest"          %% "scalatest"         % "3.0.6-SNAP4"   % Test
   )
 )
 
@@ -54,7 +56,7 @@ lazy val spoiwo = (project in file("."))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.3.3-SNAPSHOT"
+    version := "1.4.1"
   )
 
 lazy val examples = (project in file("examples"))
@@ -62,5 +64,5 @@ lazy val examples = (project in file("examples"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.3.3-SNAPSHOT"
+    version := "1.4.1"
   )
