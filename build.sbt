@@ -27,8 +27,9 @@ lazy val commonSettings = Seq(
     "-feature",
     "-Ywarn-dead-code",
     "-Ywarn-unused",
-    "-Ywarn-unused-import"),
-  crossScalaVersions := Seq("2.13.0-M4", "2.12.7", "2.11.12"),
+    //"-Ywarn-unused-import"),
+    ),
+  crossScalaVersions := Seq("2.13.0-M5", "2.12.7", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   useGpg := true,
@@ -42,12 +43,12 @@ lazy val commonSettings = Seq(
   },
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml"         % "1.1.0",
+    "org.scala-lang.modules" %% "scala-xml"         % "1.1.1",
     "joda-time"              %  "joda-time"         % "2.9.9",
     "org.joda"               %  "joda-convert"      % "2.0.1",
     "org.apache.poi"         %  "poi"               % "4.0.0",
     "org.apache.poi"         %  "poi-ooxml"         % "4.0.0",
-    "org.scalatest"          %% "scalatest"         % "3.0.6-SNAP1"   % Test
+    "org.scalatest"          %% "scalatest"         % "3.0.6-SNAP4"   % Test
   )
 )
 
