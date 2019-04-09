@@ -83,7 +83,7 @@ object Model2XlsxEnumConversions {
       case Russian        => RUSSIAN
       case ShiftJIS       => SHIFTJIS
       case Symbol         => SYMBOL
-      case Thai           => THAI_
+      case Thai           => THAI
       case Turkish        => TURKISH
       case Vietnamese     => VIETNAMESE
       case Charset(value) =>

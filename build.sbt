@@ -46,8 +46,8 @@ lazy val commonSettings = Seq(
     "org.scala-lang.modules" %% "scala-xml"         % "1.1.1",
     "joda-time"              %  "joda-time"         % "2.9.9",
     "org.joda"               %  "joda-convert"      % "2.0.1",
-    "org.apache.poi"         %  "poi"               % "4.0.0",
-    "org.apache.poi"         %  "poi-ooxml"         % "4.0.0",
+    "org.apache.poi"         %  "poi"               % "4.1.0",
+    "org.apache.poi"         %  "poi-ooxml"         % "4.1.0",
     "org.scalatest"          %% "scalatest"         % "3.0.6-SNAP4"   % Test
   )
 )
