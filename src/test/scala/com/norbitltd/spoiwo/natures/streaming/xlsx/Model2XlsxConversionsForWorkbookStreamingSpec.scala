@@ -52,11 +52,11 @@ class Model2XlsxConversionsForWorkbookStreamingSpec extends FlatSpec with Matche
     existingWorkbook.getSheetAt(2).getSheetName shouldBe "New"
     val overwrittenPoiSheet = existingWorkbook.getSheet("Overwrite")
     val overwrittenSheetData = mergeSheetData(Seq(previousSheet, overwritingSheet), _.value.toString)
-    nonEqualCellsStreaming(overwrittenPoiSheet, overwrittenSheetData, _.getStringCellValue) shouldBe empty
+    nonEqualCells(overwrittenPoiSheet, overwrittenSheetData, _.getStringCellValue) shouldBe empty
     val untouchedSheetData = mergeSheetData(Seq(untouchedSheet), _.value.toString)
-    nonEqualCellsStreaming(existingWorkbook.getSheet("Untouched"), untouchedSheetData, _.getStringCellValue) shouldBe empty
+    nonEqualCells(existingWorkbook.getSheet("Untouched"), untouchedSheetData, _.getStringCellValue) shouldBe empty
     val newSheetData = mergeSheetData(Seq(newSheet), _.value.toString)
-    nonEqualCellsStreaming(existingWorkbook.getSheet("New"), newSheetData, _.getStringCellValue) shouldBe empty
+    nonEqualCells(existingWorkbook.getSheet("New"), newSheetData, _.getStringCellValue) shouldBe empty
   }
 
   it should "return first sheet as active sheet by default" in {

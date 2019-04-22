@@ -200,8 +200,7 @@ trait BaseXlsx {
     }
   }
 
-  protected[natures] def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit = {
-  }
+  protected[natures] def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit
 
   protected[natures] def convertRowRange(rr: RowRange) =
     CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))

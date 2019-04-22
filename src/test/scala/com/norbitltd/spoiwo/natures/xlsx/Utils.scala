@@ -1,9 +1,8 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import com.norbitltd.spoiwo.model.{Cell, HasIndex, Row, Sheet}
-import HasIndex._
-import org.apache.poi.xssf.streaming.{SXSSFCell, SXSSFSheet}
-import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFSheet}
+import com.norbitltd.spoiwo.model.HasIndex._
+import com.norbitltd.spoiwo.model.{Cell, Row, Sheet}
+import org.apache.poi.ss.usermodel
 
 import scala.reflect.ClassTag
 
@@ -30,22 +29,7 @@ object Utils {
     dataMatrix
   }
 
-  def nonEqualCells[T](sheet: XSSFSheet, data: Array[Array[T]], extractor: XSSFCell => T)(implicit ev: Null <:< T): Seq[(T, T)] = {
-    data.zipWithIndex.flatMap {
-      case (dataRow, rowIdx) =>
-        dataRow.zipWithIndex.flatMap {
-          case (expectedData, cellIdx) =>
-            val actualData = for {
-              row <- Option(sheet.getRow(rowIdx))
-              cell <- Option(row.getCell(cellIdx))
-            } yield extractor(cell)
-            if (actualData.orNull[T] == expectedData) Nil
-            else List((actualData.orNull[T], expectedData))
-        }
-    }.toSeq
-  }
-
-  def nonEqualCellsStreaming[T](sheet: SXSSFSheet, data: Array[Array[T]], extractor: SXSSFCell => T)(implicit ev: Null <:< T): Seq[(T, T)] = {
+  def nonEqualCells[T](sheet: usermodel.Sheet, data: Array[Array[T]], extractor: usermodel.Cell => T)(implicit ev: Null <:< T): Seq[(T, T)] = {
     data.zipWithIndex.flatMap {
       case (dataRow, rowIdx) =>
         dataRow.zipWithIndex.flatMap {
