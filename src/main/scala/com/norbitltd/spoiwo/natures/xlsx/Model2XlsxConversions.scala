@@ -7,7 +7,6 @@ import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaC
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, VerticalAlignment}
-import org.apache.poi.xssf.streaming.SXSSFSheet
 import org.apache.poi.xssf.usermodel._
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
 
@@ -161,7 +160,7 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor) {
-    sheet.asInstanceOf[SXSSFSheet].setTabColor(color)
+    sheet.asInstanceOf[XSSFSheet].setTabColor(color)
   }
 
   override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup) {

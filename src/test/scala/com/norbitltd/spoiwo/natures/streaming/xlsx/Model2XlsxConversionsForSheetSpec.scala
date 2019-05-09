@@ -48,6 +48,19 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec with Matchers {
     nonEqualCells(existingPoiSheet, dataMatrix, _.getStringCellValue) shouldBe empty
   }
 
+  it should "write to existing sheet by overwriting existing cells and custom print setup" in {
+    val w: SXSSFWorkbook = workbook
+    w.createSheet("Existing")
+    val previousSheet = generateSheet(0 to 2, 0 to 5)
+    val existingPoiSheet: SXSSFSheet= convertSheet(previousSheet, w)
+    val newSheet = generateSheet[Int, Int](1 to 3, 1 to 4, (rowNum, colNum) => s"NEW $colNum,$rowNum").copy(
+      printSetup = Some(PrintSetup(10, true, 1000))
+    )
+    writeToExistingSheet(newSheet, existingPoiSheet)
+    val dataMatrix = mergeSheetData(Seq(previousSheet, newSheet), _.value.toString)
+    nonEqualCells(existingPoiSheet, dataMatrix, _.getStringCellValue) shouldBe empty
+  }
+
   it should "fail if there is an attempt to modify an existing cell" in {
     val inputStream = this.getClass.getResourceAsStream("/with_formula.xlsx")
     val w = new SXSSFWorkbook(XSSFWorkbookFactory.createWorkbook(inputStream))
