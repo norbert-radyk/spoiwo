@@ -1,8 +1,8 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import com.norbitltd.spoiwo.model.{Cell, HasIndex, Row, Sheet}
-import HasIndex._
-import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFSheet}
+import com.norbitltd.spoiwo.model.HasIndex._
+import com.norbitltd.spoiwo.model.{Cell, Row, Sheet}
+import org.apache.poi.ss.usermodel
 
 import scala.reflect.ClassTag
 
@@ -29,7 +29,7 @@ object Utils {
     dataMatrix
   }
 
-  def nonEqualCells[T](sheet: XSSFSheet, data: Array[Array[T]], extractor: XSSFCell => T)(implicit ev: Null <:< T): Seq[(T, T)] = {
+  def nonEqualCells[T](sheet: usermodel.Sheet, data: Array[Array[T]], extractor: usermodel.Cell => T)(implicit ev: Null <:< T): Seq[(T, T)] = {
     data.zipWithIndex.flatMap {
       case (dataRow, rowIdx) =>
         dataRow.zipWithIndex.flatMap {

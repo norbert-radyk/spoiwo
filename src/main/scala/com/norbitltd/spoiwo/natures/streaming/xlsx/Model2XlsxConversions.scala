@@ -1,29 +1,31 @@
-package com.norbitltd.spoiwo.natures.xlsx
+package com.norbitltd.spoiwo.natures.streaming.xlsx
 
 import java.io.{FileOutputStream, OutputStream}
 
 import com.norbitltd.spoiwo.model.enums._
 import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NumericCell, StringCell, _}
+import com.norbitltd.spoiwo.natures.xlsx.BaseXlsx
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, VerticalAlignment}
+import org.apache.poi.xssf.streaming.{SXSSFCell, SXSSFRow, SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel._
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
 
 object Model2XlsxConversions extends BaseXlsx {
 
-  private type Cache[K, V] = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[K, V]]
+  private type Cache[K, V] = collection.mutable.Map[SXSSFWorkbook, collection.mutable.Map[K, V]]
   private lazy val cellStyleCache = Cache[CellStyle, XSSFCellStyle]()
-  private lazy val dataFormatCache = collection.mutable.Map[XSSFWorkbook, XSSFDataFormat]()
+  private lazy val dataFormatCache = collection.mutable.Map[SXSSFWorkbook, XSSFDataFormat]()
   private lazy val fontCache = Cache[Font, XSSFFont]()
 
-  private def Cache[K, V]() = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[K, V]]()
+  private def Cache[K, V]() = collection.mutable.Map[SXSSFWorkbook, collection.mutable.Map[K, V]]()
+
 
   private[xlsx] def convertCell(modelSheet: Sheet,
                                 modelColumns: Map[Int, Column],
                                 modelRow: Row,
                                 c: Cell,
-                                row: XSSFRow): XSSFCell = {
+                                row: SXSSFRow): SXSSFCell = {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum.toInt)
     val cell = Option(row.getCell(cellNumber)).getOrElse(row.createCell(cellNumber))
     if (cell.getCellType == CellType.FORMULA) {
@@ -31,7 +33,8 @@ object Model2XlsxConversions extends BaseXlsx {
     }
 
     val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).flatMap(_.style), modelSheet.style)
-    cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
+    cellWithStyle.style.foreach(s =>
+      cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook.asInstanceOf[SXSSFWorkbook])))
 
     c match {
       case BlankCell(_, _, _)               => cell.setCellValue(null: String)
@@ -46,17 +49,17 @@ object Model2XlsxConversions extends BaseXlsx {
     cell
   }
 
-  private def convertCellDataFormat(cdf: CellDataFormat, workbook: XSSFWorkbook, cellStyle: XSSFCellStyle) {
+  private def convertCellDataFormat(cdf: CellDataFormat, workbook: SXSSFWorkbook, cellStyle: usermodel.CellStyle) {
     cdf.formatString.foreach(formatString => {
-      val format = dataFormatCache.getOrElseUpdate(workbook, workbook.createDataFormat())
+      val format = dataFormatCache.getOrElseUpdate(workbook, workbook.getXSSFWorkbook.createDataFormat())
       val formatIndex = format.getFormat(formatString)
       cellStyle.setDataFormat(formatIndex)
     })
   }
 
-  private[xlsx] def convertCellStyle(cs: CellStyle, workbook: XSSFWorkbook): XSSFCellStyle =
+  private[xlsx] def convertCellStyle(cs: CellStyle, workbook: SXSSFWorkbook): XSSFCellStyle =
     getCachedOrUpdate(cellStyleCache, cs, workbook) {
-      val cellStyle = workbook.createCellStyle()
+      val cellStyle = workbook.getXSSFWorkbook.createCellStyle()
       cs.borders.foreach(b => convertCellBorders(b, cellStyle))
       cs.dataFormat.foreach(df => convertCellDataFormat(df, workbook, cellStyle))
       cs.font.foreach(f => cellStyle.setFont(convertFont(f, workbook)))
@@ -75,52 +78,28 @@ object Model2XlsxConversions extends BaseXlsx {
       cellStyle
     }
 
-  private def convertFooter(f: Footer, sheet: XSSFSheet) {
+  private def convertFooter(f: Footer, sheet: SXSSFSheet) {
     f.left.foreach(sheet.getFooter.setLeft)
     f.center.foreach(sheet.getFooter.setCenter)
     f.right.foreach(sheet.getFooter.setRight)
-
-    f.firstLeft.foreach(sheet.getFirstFooter.setLeft)
-    f.firstCenter.foreach(sheet.getFirstFooter.setCenter)
-    f.firstRight.foreach(sheet.getFirstFooter.setRight)
-
-    f.oddLeft.foreach(sheet.getOddFooter.setLeft)
-    f.oddCenter.foreach(sheet.getOddFooter.setCenter)
-    f.oddRight.foreach(sheet.getOddFooter.setRight)
-
-    f.evenLeft.foreach(sheet.getEvenFooter.setLeft)
-    f.evenCenter.foreach(sheet.getEvenFooter.setCenter)
-    f.evenRight.foreach(sheet.getEvenFooter.setRight)
   }
 
-  private[xlsx] def convertFont(f: Font, workbook: XSSFWorkbook): XSSFFont =
+  private[xlsx] def convertFont(f: Font, workbook: SXSSFWorkbook): XSSFFont =
     getCachedOrUpdate(fontCache, f, workbook) {
-      val font = workbook.createFont()
+      val font = workbook.getXSSFWorkbook.createFont()
       convertFont(f, font)
     }
 
-  private def convertHeader(h: Header, sheet: XSSFSheet) {
+  private def convertHeader(h: Header, sheet: SXSSFSheet) {
     h.left.foreach(sheet.getHeader.setLeft)
     h.center.foreach(sheet.getHeader.setCenter)
     h.right.foreach(sheet.getHeader.setRight)
-
-    h.firstLeft.foreach(sheet.getFirstHeader.setLeft)
-    h.firstCenter.foreach(sheet.getFirstHeader.setCenter)
-    h.firstRight.foreach(sheet.getFirstHeader.setRight)
-
-    h.oddLeft.foreach(sheet.getOddHeader.setLeft)
-    h.oddCenter.foreach(sheet.getOddHeader.setCenter)
-    h.oddRight.foreach(sheet.getOddHeader.setRight)
-
-    h.evenLeft.foreach(sheet.getEvenHeader.setLeft)
-    h.evenCenter.foreach(sheet.getEvenHeader.setCenter)
-    h.evenRight.foreach(sheet.getEvenHeader.setRight)
   }
 
   private[xlsx] def convertRow(modelColumns: Map[Int, Column],
                                modelRow: Row,
                                modelSheet: Sheet,
-                               sheet: XSSFSheet): XSSFRow = {
+                               sheet: SXSSFSheet): SXSSFRow = {
     validateCells(modelRow)
     val indexNumber = modelRow.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = Option(sheet.getRow(indexNumber)).getOrElse(sheet.createRow(indexNumber))
@@ -131,12 +110,12 @@ object Model2XlsxConversions extends BaseXlsx {
     row
   }
 
-  private[xlsx] def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
+  private[xlsx] def convertSheet(s: Sheet, workbook: SXSSFWorkbook): SXSSFSheet = {
     s.validate
     writeToExistingSheet(s, workbook.createSheet(s.nameIn(workbook)))
   }
 
-  private[xlsx] def writeToExistingSheet(s: Sheet, sheet: XSSFSheet): XSSFSheet = {
+  private[xlsx] def writeToExistingSheet(s: Sheet, sheet: SXSSFSheet): SXSSFSheet = {
     val columns = updateColumnsWithIndexes(s)
     val columnsMap = columns.map(c => c.index.get -> c).toMap
 
@@ -154,13 +133,12 @@ object Model2XlsxConversions extends BaseXlsx {
     s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
     s.repeatingColumns.foreach(rc => sheet.setRepeatingColumns(convertColumnRange(rc)))
     s.password.foreach(ps => sheet.protectSheet(ps))
-    val tables = updateTablesWithIds(s)
-    tables.foreach(tbl ⇒ convertTable(tbl, sheet))
+
     sheet
   }
 
   override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor) {
-    sheet.asInstanceOf[XSSFSheet].setTabColor(color)
+    sheet.asInstanceOf[SXSSFSheet].setTabColor(color)
   }
 
   override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup) {
@@ -172,101 +150,16 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   private[xlsx] def validateTables(modelSheet: Sheet): Unit = {
-    val ids = modelSheet.tables.flatMap(_.id)
-    if (ids.size != ids.toSet.size)
-      throw new IllegalArgumentException("Specified table ids need to be unique.")
-  }
-
-  private[xlsx] def updateTablesWithIds(modelSheet: Sheet): List[Table] = {
-    modelSheet.tables.zipWithIndex.map {
-      case (table, index) ⇒ if (table.id.isDefined) table else table.withId(index + 1)
+    if (!modelSheet.tables.isEmpty) {
+      throw new IllegalStateException("createTable is not supported by SXSSF right now")
     }
   }
 
-  private[xlsx] def convertTable(modelTable: Table, sheet: XSSFSheet): XSSFTable = {
-    validateTableColumns(modelTable)
-
-    val tableId = modelTable.id.getOrElse {
-      throw new IllegalArgumentException(
-        "Undefined table id! " +
-          "Something went terribly wrong as it should have been derived if not specified explicitly!")
-    }
-
-    val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
-    val name = modelTable.name.getOrElse(s"ct_table_$tableId")
-
-    val table = sheet.createTable()
-    table.setDisplayName(displayName)
-    table.setName(name)
-    val ctTable = table.getCTTable
-    ctTable.setId(tableId)
-    setTableReference(modelTable, ctTable)
-    convertTableColumns(modelTable, ctTable)
-    modelTable.style.foreach(convertTableStyle(_, ctTable))
-    modelTable.enableAutoFilter.foreach(af ⇒ if (af) ctTable.addNewAutoFilter())
-    table
+  private[xlsx] def convertWorkbook(wb: Workbook): SXSSFWorkbook = {
+    writeToExistingWorkbook(wb, new SXSSFWorkbook())
   }
 
-  private[xlsx] def validateTableColumns(modelTable: Table): Unit = {
-
-    def insufficientColumnsDefined = {
-      val (sCol, eCol) = modelTable.cellRange.columnRange
-      val neededColumns = (eCol - sCol) + 1
-      val definedColumns = modelTable.columns.size
-      neededColumns != definedColumns
-    }
-
-    if (modelTable.columns.nonEmpty && insufficientColumnsDefined) {
-      throw new IllegalArgumentException(
-        "When explicitly specifying table columns you are required to provide as many " +
-          "columns as in the cell range."
-      )
-    }
-  }
-
-  private[xlsx] def convertTableColumns(modelTable: Table, ctTable: CTTable): CTTableColumns = {
-
-    def generateColumns = {
-      val (sCol, eCol) = modelTable.cellRange.columnRange
-      val neededColumns = (eCol - sCol) + 1
-      (0 until neededColumns) map { index ⇒
-        val columnId = index + 1
-        TableColumn(
-          name = s"TableColumn$columnId",
-          id = columnId.toLong
-        )
-      }
-    }
-
-    val modelColumns = if (modelTable.columns.nonEmpty) modelTable.columns else generateColumns
-    val columns = ctTable.addNewTableColumns()
-    columns.setCount(modelColumns.size)
-    modelColumns.foreach { mc ⇒
-      val column = columns.addNewTableColumn()
-      column.setName(mc.name)
-      column.setId(mc.id)
-    }
-    columns
-  }
-
-  private[xlsx] def convertTableStyle(modelTableStyle: TableStyle, ctTable: CTTable): CTTableStyleInfo = {
-    val style = ctTable.addNewTableStyleInfo()
-    style.setName(modelTableStyle.name.value)
-    modelTableStyle.showColumnStripes.foreach(style.setShowColumnStripes)
-    modelTableStyle.showRowStripes.foreach(style.setShowRowStripes)
-    style
-  }
-
-  private[xlsx] def setTableReference(modelTable: Table, ctTable: CTTable): Unit = {
-    val cellRangeAddress = convertCellRange(modelTable.cellRange)
-    ctTable.setRef(cellRangeAddress.formatAsString())
-  }
-
-  private[xlsx] def convertWorkbook(wb: Workbook): XSSFWorkbook = {
-    writeToExistingWorkbook(wb, new XSSFWorkbook())
-  }
-
-  private[xlsx] def writeToExistingWorkbook(wb: Workbook, workbook: XSSFWorkbook): XSSFWorkbook = {
+  private[xlsx] def writeToExistingWorkbook(wb: Workbook, workbook: SXSSFWorkbook): SXSSFWorkbook = {
     wb.sheets.foreach { s =>
       s.validate
       val sheetName = s.nameIn(workbook)
@@ -283,14 +176,14 @@ object Model2XlsxConversions extends BaseXlsx {
     evictFromCache(workbook)
     workbook
   }
-  private def evictFromCache(wb: XSSFWorkbook) {
+  private def evictFromCache(wb: SXSSFWorkbook) {
     cellStyleCache.remove(wb)
     dataFormatCache.remove(wb)
     fontCache.remove(wb)
   }
 
   //================= Cache processing ====================
-  private def getCachedOrUpdate[K, V](cache: Cache[K, V], value: K, workbook: XSSFWorkbook)(newValue: => V): V = {
+  private def getCachedOrUpdate[K, V](cache: Cache[K, V], value: K, workbook: SXSSFWorkbook)(newValue: => V): V = {
     val workbookCache = cache.getOrElseUpdate(workbook, collection.mutable.Map[K, V]())
     workbookCache.getOrElseUpdate(value, newValue)
   }
@@ -308,23 +201,23 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   implicit class XlsxCellStyle(cs: CellStyle) {
-    def convertAsXlsx(cell: XSSFCell): XSSFCellStyle = convertAsXlsx(cell.getRow)
+    def convertAsXlsx(cell: SXSSFCell): XSSFCellStyle = convertAsXlsx(cell.getRow.asInstanceOf[SXSSFRow])
 
-    def convertAsXlsx(row: XSSFRow): XSSFCellStyle = convertAsXlsx(row.getSheet)
+    def convertAsXlsx(row: SXSSFRow): XSSFCellStyle = convertAsXlsx(row.getSheet)
 
-    def convertAsXlsx(sheet: XSSFSheet): XSSFCellStyle = convertAsXlsx(sheet.getWorkbook)
+    def convertAsXlsx(sheet: SXSSFSheet): XSSFCellStyle = convertAsXlsx(sheet.getWorkbook)
 
-    def convertAsXlsx(workbook: XSSFWorkbook): XSSFCellStyle = convertCellStyle(cs, workbook)
+    def convertAsXlsx(workbook: SXSSFWorkbook): XSSFCellStyle = convertCellStyle(cs, workbook)
   }
 
   implicit class XlsxFont(f: Font) {
-    def convertAsXlsx(cell: XSSFCell): XSSFFont = convertAsXlsx(cell.getRow)
+    def convertAsXlsx(cell: SXSSFCell): XSSFFont = convertAsXlsx(cell.getRow.asInstanceOf[SXSSFRow])
 
-    def convertAsXlsx(row: XSSFRow): XSSFFont = convertAsXlsx(row.getSheet)
+    def convertAsXlsx(row: SXSSFRow): XSSFFont = convertAsXlsx(row.getSheet)
 
-    def convertAsXlsx(sheet: XSSFSheet): XSSFFont = convertAsXlsx(sheet.getWorkbook)
+    def convertAsXlsx(sheet: SXSSFSheet): XSSFFont = convertAsXlsx(sheet.getWorkbook)
 
-    def convertAsXlsx(workbook: XSSFWorkbook): XSSFFont = convertFont(f, workbook)
+    def convertAsXlsx(workbook: SXSSFWorkbook): XSSFFont = convertFont(f, workbook)
   }
 
   implicit class XlsxHorizontalAlignment(ha: CellHorizontalAlignment) {
@@ -343,13 +236,13 @@ object Model2XlsxConversions extends BaseXlsx {
       validateTables(s)
     }
 
-    def nameIn(workbook: XSSFWorkbook): String = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
+    def nameIn(workbook: SXSSFWorkbook): String = s.name.getOrElse("Sheet" + (workbook.getNumberOfSheets + 1))
 
-    def writeToExisting(existingSheet: XSSFSheet): Unit = writeToExistingSheet(s, existingSheet)
+    def writeToExisting(existingSheet: SXSSFSheet): Unit = writeToExistingSheet(s, existingSheet)
 
-    def convertAsXlsx(workbook: XSSFWorkbook): XSSFSheet = convertSheet(s, workbook)
+    def convertAsXlsx(workbook: SXSSFWorkbook): SXSSFSheet = convertSheet(s, workbook)
 
-    def convertAsXlsx(): XSSFWorkbook = Workbook(s).convertAsXlsx()
+    def convertAsXlsx(): SXSSFWorkbook = Workbook(s).convertAsXlsx()
 
     override def saveAsXlsx(fileName: String) {
       Workbook(s).saveAsXlsx(fileName)
@@ -363,7 +256,7 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   implicit class XlsxWorkbook(workbook: Workbook) extends XlsxExport {
-    def writeToExisting(existingWorkBook: XSSFWorkbook): Unit = writeToExistingWorkbook(workbook, existingWorkBook)
+    def writeToExisting(existingWorkBook: SXSSFWorkbook): Unit = writeToExistingWorkbook(workbook, existingWorkBook)
 
     override def saveAsXlsx(fileName: String): Unit = writeToOutputStream(new FileOutputStream(fileName))
 
@@ -376,7 +269,7 @@ object Model2XlsxConversions extends BaseXlsx {
         stream.close()
       }
 
-    def convertAsXlsx(): XSSFWorkbook = convertWorkbook(workbook)
+    def convertAsXlsx(): SXSSFWorkbook = convertWorkbook(workbook)
   }
 
 }
