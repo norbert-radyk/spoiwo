@@ -1,14 +1,15 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import java.io.{FileOutputStream, OutputStream}
-
+import java.io.{ FileInputStream, FileOutputStream, OutputStream }
 import com.norbitltd.spoiwo.model.enums._
-import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NumericCell, StringCell, _}
+import com.norbitltd.spoiwo.model.{ BooleanCell, CalendarCell, DateCell, FormulaCell, NumericCell, StringCell, _ }
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
-import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, VerticalAlignment}
+import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType
+import org.apache.poi.ss.usermodel.{ BorderStyle, CellType, FillPatternType, HorizontalAlignment, VerticalAlignment }
+import org.apache.poi.util.IOUtils
 import org.apache.poi.xssf.usermodel._
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.{ CTTable, CTTableColumns, CTTableStyleInfo }
 
 object Model2XlsxConversions extends BaseXlsx {
 
@@ -156,6 +157,8 @@ object Model2XlsxConversions extends BaseXlsx {
     s.password.foreach(ps => sheet.protectSheet(ps))
     val tables = updateTablesWithIds(s)
     tables.foreach(tbl ⇒ convertTable(tbl, sheet))
+    s.images.foreach(img => addImage(img, sheet))
+
     sheet
   }
 
@@ -247,6 +250,41 @@ object Model2XlsxConversions extends BaseXlsx {
       column.setId(mc.id)
     }
     columns
+  }
+
+  private[xlsx] def convertImages(images: List[Image], sheet: XSSFSheet) =
+    images.foldLeft(sheet)((sheet, image) => addImage(image, sheet) )
+
+  private[xlsx] def addImage(image: Image, sheet: XSSFSheet) = {
+    val wb = sheet.getWorkbook
+
+    val imageFormat =
+      if(image.filePath.toLowerCase.endsWith(".jpg"))
+        org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_JPEG
+      else if(image.filePath.toLowerCase.endsWith(".png"))
+        org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_PNG
+      else throw new IllegalArgumentException(s"File format is not supported")
+
+    val is = new FileInputStream(image.filePath)
+    val bytes = IOUtils.toByteArray(is)
+    val pictureIdx = wb.addPicture(bytes, imageFormat)
+    val helper = wb.getCreationHelper
+    val drawing = sheet.createDrawingPatriarch
+
+    val anchor = helper.createClientAnchor
+    anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE)
+
+    val (fromColumn, toColumn)  = image.region.columnRange
+    val (fromRow, toRow)  = image.region.rowRange
+
+    anchor.setCol1(fromColumn)
+    anchor.setCol2(toColumn)
+    anchor.setRow1(fromRow)
+    anchor.setRow2(toRow)
+
+    val pict = drawing.createPicture(anchor, pictureIdx)
+    pict.resize()
+    sheet
   }
 
   private[xlsx] def convertTableStyle(modelTableStyle: TableStyle, ctTable: CTTable): CTTableStyleInfo = {
