@@ -4,7 +4,7 @@ import com.norbitltd.spoiwo.model.{Cell, CellRange, CellStyle, Color, Row, Sheet
 import com.norbitltd.spoiwo.model.enums.CellFill
 import com.norbitltd.spoiwo.model.grid.Grid
 
-class GridExamples {
+object GridExamples {
 
   import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
@@ -16,7 +16,7 @@ class GridExamples {
   def generateGrid(n: Int, m: Int, c: Color) = {
     val cell = Cell("").withStyle(CellStyle(fillForegroundColor = c, fillPattern = CellFill.Solid))
     val row  = Row().withCells(Seq.fill(m)(cell))
-    Grid { f =>
+    Grid { _ =>
       Seq.fill(n)(row)
     }
   }
@@ -45,7 +45,7 @@ class GridExamples {
     val grid = generateGrid(5, 5, Color.LightBlue)
     val gridWithMergedCells = Grid.addMergedRegion(grid, CellRange(2 -> 3, 2 -> 3))
     val rows = Grid.render(gridWithMergedCells)
-    Sheet(name = "new sheet").withRows(rows).saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet").withRows(rows).withMergedRegions(gridWithMergedCells.mergedRegions).saveAsXlsx("test.xlsx")
   }
   def theSameAsAboweButWithHelpers = {
     import Grid._
@@ -94,14 +94,24 @@ class GridExamples {
       .saveAsXlsx("test.xlsx")
   }
 
-  //if you write in the first line og the green area the last line will copy the values
+  //if you write in the first line of the green areas the last line will copy the values
   def ifYouHaveFormulasThoseHandledToo = {
     import Grid._
     val g1   = generateGrid(5, 5, Color.LightBlue)
     val g2   = generateGridWithFormula(6, 6, Color.Green)
-    val composed  = g1.addToLeft(g2)
+    val composed  = g1.addToRight(g2).addBelow(g2)
     Sheet(name = "new sheet")
       .withGrid(composed)
       .saveAsXlsx("test.xlsx")
+  }
+
+  def main(args: Array[String]): Unit = {
+    renderToRows
+    renderToRowsAndMergedCells
+    theSameAsAboweButWithHelpers
+    horizontalCompose
+    verticalCompose
+    biggerCompose
+    ifYouHaveFormulasThoseHandledToo
   }
 }

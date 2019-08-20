@@ -52,17 +52,31 @@ lazy val commonSettings = Seq(
   )
 )
 
-lazy val spoiwo = (project in file("."))
+lazy val libVersion = "1.4.2"
+
+lazy val root = project
+  .in(file("."))
+  .aggregate(spoiwo, spoiwoGrids, examples)
+
+lazy val spoiwo = (project in file("core"))
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo",
-    version := "1.4.2"
+    version := libVersion
   )
 
 lazy val examples = (project in file("examples"))
-  .dependsOn(spoiwo)
+  .dependsOn(spoiwo, spoiwoGrids)
   .settings(commonSettings : _*)
   .settings(
     name := "spoiwo-examples",
-    version := "1.4.2"
+    version := libVersion
+  )
+
+lazy val spoiwoGrids = (project in file("grids"))
+  .dependsOn(spoiwo)
+  .settings(commonSettings : _*)
+  .settings(
+    name := "spoiwo-grids",
+    version := libVersion
   )
