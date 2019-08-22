@@ -52,10 +52,14 @@ lazy val commonSettings = Seq(
   )
 )
 
-lazy val libVersion = "1.4.2"
+lazy val libVersion = "1.5.1-SNAPSHOT"
 
 lazy val root = project
   .in(file("."))
+  .settings(commonSettings : _*)
+  .settings(
+    publishArtifact := false
+  )
   .aggregate(spoiwo, spoiwoGrids, examples)
 
 lazy val spoiwo = (project in file("core"))
