@@ -172,4 +172,10 @@ class SpoiwoExamples {
     header = Header.Standard(left = "Left Header", center = "Center Header",
       right = """&"Stencil-Normal,Italic"&16 Right w / Stencil - Normal Italic font and size 16""")
   ).saveAsXlsx("workbook.xlsx")
+
+
+  def insertImage() = Sheet(name = "Sheet1",
+    images = List(Image(CellRange(1 -> 1, 1 -> 1), "examples/src/main/resources/einstein.jpg"))
+  ).saveAsXlsx("workbook.xlsx")
+
 }
