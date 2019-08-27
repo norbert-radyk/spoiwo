@@ -3,12 +3,12 @@ package com.norbitltd.spoiwo.natures.xlsx
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model.Width._
 import com.norbitltd.spoiwo.model._
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertSheet, writeToExistingSheet}
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{ convertSheet, writeToExistingSheet }
 import com.norbitltd.spoiwo.natures.xlsx.Utils._
 import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFSheet, XSSFWorkbook, XSSFWorkbookFactory}
-import org.scalatest.{FlatSpec, Matchers}
-
+import org.apache.poi.xssf.usermodel._
+import org.scalatest.{ FlatSpec, Matchers }
+import scala.collection.JavaConverters._
 import scala.language.postfixOps
 
 class Model2XlsxConversionsForSheetSpec extends FlatSpec with Matchers {
@@ -161,6 +161,26 @@ class Model2XlsxConversionsForSheetSpec extends FlatSpec with Matchers {
     xlsxRow1.getCell(0).getStringCellValue shouldBe "Test"
     xlsxRow1.getCell(1).getNumericCellValue shouldBe 34
     xlsxRow2.getCell(0).getStringCellValue shouldBe "OK"
+  }
+
+  it should "have image in the correct position" in {
+    val row1 = Row(index = 0)
+    val row2 = Row(index = 1)
+    val row3 = Row(index = 2)
+    val model = Sheet(rows = row1 :: row2 :: row3 :: Nil, images = Image(CellRange(2 -> 2, 2 -> 2), "src/test/resources/einstein.jpg") :: Nil)
+      .withColumns(Column(index = 0), Column(index = 1))
+
+    val xlsx = convert(model)
+
+    val drawing = xlsx.createDrawingPatriarch()
+    val pictures = drawing.getShapes.asScala.toStream.collect {
+      case p: XSSFPicture => p
+    }
+
+    pictures.size shouldBe 1
+
+    pictures.head.getClientAnchor.getRow1 shouldBe 2
+    pictures.head.getClientAnchor.getCol1 shouldBe 2
   }
 
   it should "not allow duplicate row indexes" in {
