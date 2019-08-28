@@ -18,7 +18,8 @@ object Sheet {
             repeatingColumns: ColumnRange = null,
             style: CellStyle = null,
             password: String = null,
-            tables: List[Table] = Nil): Sheet =
+            tables: List[Table] = Nil,
+            images: List[Image] = Nil): Sheet =
     Sheet(
       name = Option(name),
       columns = columns,
@@ -34,7 +35,8 @@ object Sheet {
       repeatingColumns = Option(repeatingColumns),
       style = Option(style),
       password = Option(password),
-      tables = tables
+      tables = tables,
+      images = images
     )
 
   def apply(rows: Row*): Sheet = apply(rows = rows.toList)
@@ -57,7 +59,8 @@ case class Sheet private (name: Option[String],
                           repeatingColumns: Option[ColumnRange],
                           style: Option[CellStyle],
                           password: Option[String],
-                          tables: List[Table]) {
+                          tables: List[Table],
+                          images: List[Image]) {
 
   override def toString: String =
     "Sheet(" + List(
