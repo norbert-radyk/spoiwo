@@ -52,7 +52,7 @@ lazy val commonSettings = Seq(
   )
 )
 
-lazy val libVersion = "1.5.1-SNAPSHOT"
+lazy val libVersion = "1.6.1-SNAPSHOT"
 
 lazy val root = project
   .in(file("."))
