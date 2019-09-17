@@ -5,7 +5,7 @@ import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 
 object TableExample {
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit =  {
 
     val sheetWithTable = Sheet(name = "Table Sheet",
       rows = {

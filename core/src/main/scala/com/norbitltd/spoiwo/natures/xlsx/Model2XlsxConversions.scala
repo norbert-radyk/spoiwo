@@ -47,7 +47,7 @@ object Model2XlsxConversions extends BaseXlsx {
     cell
   }
 
-  private def convertCellDataFormat(cdf: CellDataFormat, workbook: XSSFWorkbook, cellStyle: XSSFCellStyle) {
+  private def convertCellDataFormat(cdf: CellDataFormat, workbook: XSSFWorkbook, cellStyle: XSSFCellStyle): Unit =  {
     cdf.formatString.foreach(formatString => {
       val format = dataFormatCache.getOrElseUpdate(workbook, workbook.createDataFormat())
       val formatIndex = format.getFormat(formatString)
@@ -76,7 +76,7 @@ object Model2XlsxConversions extends BaseXlsx {
       cellStyle
     }
 
-  private def convertFooter(f: Footer, sheet: XSSFSheet) {
+  private def convertFooter(f: Footer, sheet: XSSFSheet): Unit =  {
     f.left.foreach(sheet.getFooter.setLeft)
     f.center.foreach(sheet.getFooter.setCenter)
     f.right.foreach(sheet.getFooter.setRight)
@@ -100,7 +100,7 @@ object Model2XlsxConversions extends BaseXlsx {
       convertFont(f, font)
     }
 
-  private def convertHeader(h: Header, sheet: XSSFSheet) {
+  private def convertHeader(h: Header, sheet: XSSFSheet): Unit =  {
     h.left.foreach(sheet.getHeader.setLeft)
     h.center.foreach(sheet.getHeader.setCenter)
     h.right.foreach(sheet.getHeader.setRight)
@@ -133,7 +133,7 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   private[xlsx] def convertSheet(s: Sheet, workbook: XSSFWorkbook): XSSFSheet = {
-    s.validate
+    s.validate()
     writeToExistingSheet(s, workbook.createSheet(s.nameIn(workbook)))
   }
 
@@ -156,17 +156,17 @@ object Model2XlsxConversions extends BaseXlsx {
     s.repeatingColumns.foreach(rc => sheet.setRepeatingColumns(convertColumnRange(rc)))
     s.password.foreach(ps => sheet.protectSheet(ps))
     val tables = updateTablesWithIds(s)
-    tables.foreach(tbl ⇒ convertTable(tbl, sheet))
+    tables.foreach(tbl => convertTable(tbl, sheet))
     s.images.foreach(img => addImage(img, sheet))
 
     sheet
   }
 
-  override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor) {
+  override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor): Unit = {
     sheet.asInstanceOf[XSSFSheet].setTabColor(color)
   }
 
-  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup) {
+  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit =  {
     if (printSetup != PrintSetup.Default) {
       val ps = sheetPs.asInstanceOf[XSSFPrintSetup]
       printSetup.pageOrder.foreach(po => ps.setPageOrder(convertPageOrder(po)))
@@ -182,7 +182,7 @@ object Model2XlsxConversions extends BaseXlsx {
 
   private[xlsx] def updateTablesWithIds(modelSheet: Sheet): List[Table] = {
     modelSheet.tables.zipWithIndex.map {
-      case (table, index) ⇒ if (table.id.isDefined) table else table.withId(index + 1)
+      case (table, index) => if (table.id.isDefined) table else table.withId(index + 1)
     }
   }
 
@@ -206,7 +206,7 @@ object Model2XlsxConversions extends BaseXlsx {
     setTableReference(modelTable, ctTable)
     convertTableColumns(modelTable, ctTable)
     modelTable.style.foreach(convertTableStyle(_, ctTable))
-    modelTable.enableAutoFilter.foreach(af ⇒ if (af) ctTable.addNewAutoFilter())
+    modelTable.enableAutoFilter.foreach(af => if (af) ctTable.addNewAutoFilter())
     table
   }
 
@@ -232,7 +232,7 @@ object Model2XlsxConversions extends BaseXlsx {
     def generateColumns = {
       val (sCol, eCol) = modelTable.cellRange.columnRange
       val neededColumns = (eCol - sCol) + 1
-      (0 until neededColumns) map { index ⇒
+      (0 until neededColumns) map { index =>
         val columnId = index + 1
         TableColumn(
           name = s"TableColumn$columnId",
@@ -244,7 +244,7 @@ object Model2XlsxConversions extends BaseXlsx {
     val modelColumns = if (modelTable.columns.nonEmpty) modelTable.columns else generateColumns
     val columns = ctTable.addNewTableColumns()
     columns.setCount(modelColumns.size)
-    modelColumns.foreach { mc ⇒
+    modelColumns.foreach { mc =>
       val column = columns.addNewTableColumn()
       column.setName(mc.name)
       column.setId(mc.id)
@@ -306,7 +306,7 @@ object Model2XlsxConversions extends BaseXlsx {
 
   private[xlsx] def writeToExistingWorkbook(wb: Workbook, workbook: XSSFWorkbook): XSSFWorkbook = {
     wb.sheets.foreach { s =>
-      s.validate
+      s.validate()
       val sheetName = s.nameIn(workbook)
       writeToExistingSheet(s, Option(workbook.getSheet(sheetName)).getOrElse(workbook.createSheet(sheetName)))
     }
@@ -321,7 +321,7 @@ object Model2XlsxConversions extends BaseXlsx {
     evictFromCache(workbook)
     workbook
   }
-  private def evictFromCache(wb: XSSFWorkbook) {
+  private def evictFromCache(wb: XSSFWorkbook): Unit =  {
     cellStyleCache.remove(wb)
     dataFormatCache.remove(wb)
     fontCache.remove(wb)
@@ -376,7 +376,7 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   implicit class XlsxSheet(s: Sheet) extends XlsxExport {
-    def validate: Unit = {
+    def validate(): Unit = {
       validateRows(s)
       validateTables(s)
     }
@@ -389,7 +389,7 @@ object Model2XlsxConversions extends BaseXlsx {
 
     def convertAsXlsx(): XSSFWorkbook = Workbook(s).convertAsXlsx()
 
-    override def saveAsXlsx(fileName: String) {
+    override def saveAsXlsx(fileName: String): Unit =  {
       Workbook(s).saveAsXlsx(fileName)
     }
 

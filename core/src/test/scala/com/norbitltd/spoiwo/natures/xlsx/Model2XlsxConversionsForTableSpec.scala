@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import com.norbitltd.spoiwo.model._
@@ -82,7 +82,7 @@ class Model2XlsxConversionsForTableSpec extends FlatSpec with Matchers {
     val xlsxColumns = xlsx.getCTTable.getTableColumns
 
     model.columns.zipWithIndex.foreach {
-      case (modelColumn, index) ⇒
+      case (modelColumn, index) =>
         val xlsxCol = xlsxColumns.getTableColumnArray(index)
         xlsxCol.getId shouldBe modelColumn.id
         xlsxCol.getName shouldBe modelColumn.name
@@ -95,7 +95,7 @@ class Model2XlsxConversionsForTableSpec extends FlatSpec with Matchers {
     val xlsxColumns = xlsx.getCTTable.getTableColumns
 
     xlsxColumns.getCount shouldBe 2
-    (0 to 1).foreach { index ⇒
+    (0 to 1).foreach { index =>
       val xlsxCol = xlsxColumns.getTableColumnArray(index)
       val expectedId = index + 1
       val expectedName = s"TableColumn$expectedId"

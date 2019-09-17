@@ -104,10 +104,10 @@ class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
   }
 
   it should "return numeric cell when set up with long value" in {
-    val model = Cell(10000000000000l)
+    val model = Cell(10000000000000L)
     val xlsx = convert(model)
     xlsx.getCellType shouldBe CellType.NUMERIC
-    xlsx.getNumericCellValue shouldBe 10000000000000l
+    xlsx.getNumericCellValue shouldBe 10000000000000L
   }
 
   it should "return boolean cell when set up with boolean value" in {

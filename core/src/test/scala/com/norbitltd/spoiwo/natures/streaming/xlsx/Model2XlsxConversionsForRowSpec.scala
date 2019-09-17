@@ -87,12 +87,12 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   it should "correctly initialize one cell" in {
     val cell: Cell = Cell("Test", style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
     val model: Row = Row(cells = cell :: Nil)
-    val SXSSF: SXSSFRow = convert(model)
+    val xslx: SXSSFRow = convert(model)
 
-    SXSSF.getFirstCellNum shouldBe 0
-    SXSSF.getLastCellNum shouldBe 1
+    xslx.getFirstCellNum shouldBe 0
+    xslx.getLastCellNum shouldBe 1
 
-    val convertedFont = SXSSF.getCell(0).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
+    val convertedFont = xslx.getCell(0).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
     convertedFont.getFontName shouldBe "Arial"
     convertedFont.getFontHeightInPoints shouldBe 14
   }
@@ -101,16 +101,16 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
     val cell1: Cell = Cell("Test1", style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
     val cell2: Cell = Cell("Test2", style = CellStyle(font = Font(fontName = "Arial", height = 16 points)))
     val model: Row = Row(cells = cell1 :: cell2 :: Nil)
-    val SXSSF: SXSSFRow = convert(model)
+    val xlsx: SXSSFRow = convert(model)
 
-    SXSSF.getFirstCellNum shouldBe 0
-    SXSSF.getLastCellNum shouldBe 2
+    xlsx.getFirstCellNum shouldBe 0
+    xlsx.getLastCellNum shouldBe 2
 
-    val convertedFont1 = SXSSF.getCell(0).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
+    val convertedFont1 = xlsx.getCell(0).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
     convertedFont1.getFontName shouldBe "Arial"
     convertedFont1.getFontHeightInPoints shouldBe 14
 
-    val convertedFont2 = SXSSF.getCell(1).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
+    val convertedFont2 = xlsx.getCell(1).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
     convertedFont2.getFontName shouldBe "Arial"
     convertedFont2.getFontHeightInPoints shouldBe 16
   }
@@ -118,11 +118,11 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
   it should "correctly initialize single cell with index" in {
     val cell = Cell("Test", index = 3)
     val model: Row = Row(cells = cell :: Nil)
-    val SXSSF: SXSSFRow = convert(model)
-    SXSSF.getFirstCellNum shouldBe 3
-    SXSSF.getLastCellNum shouldBe 4
+    val xlsx: SXSSFRow = convert(model)
+    xlsx.getFirstCellNum shouldBe 3
+    xlsx.getLastCellNum shouldBe 4
 
-    val SXSSFCell = SXSSF.getCell(3)
+    val SXSSFCell = xlsx.getCell(3)
     SXSSFCell.getStringCellValue shouldBe "Test"
   }
 
@@ -130,14 +130,14 @@ class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
     val cell1 = Cell("Test1", index = 3)
     val cell2 = Cell("Test2", index = 5)
     val model: Row = Row(cells = cell1 :: cell2 :: Nil)
-    val SXSSF: SXSSFRow = convert(model)
-    SXSSF.getFirstCellNum shouldBe 3
-    SXSSF.getLastCellNum shouldBe 6
+    val xlsx: SXSSFRow = convert(model)
+    xlsx.getFirstCellNum shouldBe 3
+    xlsx.getLastCellNum shouldBe 6
 
-    val SXSSFCell1 = SXSSF.getCell(3)
+    val SXSSFCell1 = xlsx.getCell(3)
     SXSSFCell1.getStringCellValue shouldBe "Test1"
 
-    val SXSSFCell2 = SXSSF.getCell(5)
+    val SXSSFCell2 = xlsx.getCell(5)
     SXSSFCell2.getStringCellValue shouldBe "Test2"
   }
 

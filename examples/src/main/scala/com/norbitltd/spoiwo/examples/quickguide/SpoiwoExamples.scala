@@ -33,7 +33,7 @@ class SpoiwoExamples {
   ).saveAsXlsx("workbook.xlsx")
 
 
-  def creatingDateCells() {
+  def creatingDateCells(): Unit =  {
     val style = CellStyle(dataFormat = CellDataFormat("m/d/yy h:mm"))
     val simplestDateCell = Cell(new Date())
     val formattedDateCell = Cell(new Date(), style = style)
@@ -58,7 +58,7 @@ class SpoiwoExamples {
     Cell("Align It", style = CellStyle(horizontalAlignment = ha, verticalAlignment = va))
 
 
-  def variousAlignmentOptions() {
+  def variousAlignmentOptions(): Unit =  {
     val alignments = List(HA.Center -> VA.Bottom, HA.CenterSelection -> VA.Bottom, HA.Fill -> VA.Center,
       HA.General -> VA.Center, HA.Justify -> VA.Justify, HA.Left -> VA.Top, HA.Right -> VA.Top)
 
@@ -68,7 +68,7 @@ class SpoiwoExamples {
   }
 
 
-  def workingWithBorders() {
+  def workingWithBorders(): Unit =  {
     val borders = CellBorders(
       bottomStyle = CellBorderStyle.Thin, bottomColor = Color.Black,
       leftStyle = CellBorderStyle.Thin, leftColor = Color.Green,
@@ -97,7 +97,7 @@ class SpoiwoExamples {
     .saveAsXlsx("workbook.xls")
 
 
-  def workingWithFonts() {
+  def workingWithFonts(): Unit =  {
     import Height._
     val style = CellStyle(font = Font(height = 24.points, fontName = "Courier New", italic = true, strikeout = true))
     Sheet(name = "new sheet",
@@ -106,7 +106,7 @@ class SpoiwoExamples {
   }
 
 
-  def workingWithMultipleFonts() {
+  def workingWithMultipleFonts(): Unit =  {
     val cell = Cell(value = 0, style = CellStyle(font = Font(bold = true)))
     Sheet(name = "new sheet",
       rows = (0 to 10000).map(_ => Row(cell)).toList

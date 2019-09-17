@@ -43,7 +43,7 @@ class Model2XlsxConversionsForWorkbookCacheSpec extends FlatSpec with Matchers {
     allFields.filter(_.getName contains name).head
   }
 
-  private def assertNotCached(workbook: XSSFWorkbook) {
+  private def assertNotCached(workbook: XSSFWorkbook): Unit =  {
     def getValue(field: Field) = field.get(conversions).asInstanceOf[collection.mutable.Map[XSSFWorkbook, _]]
     getValue(cellStyleCacheField).keySet should not contain workbook
     getValue(dataFormatCacheField).keySet should not contain workbook

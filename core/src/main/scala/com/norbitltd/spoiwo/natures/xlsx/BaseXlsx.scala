@@ -46,7 +46,7 @@ trait BaseXlsx {
     }
   }
 
-  protected[natures] def convertColumn(c: Column, sheet: usermodel.Sheet) {
+  protected[natures] def convertColumn(c: Column, sheet: usermodel.Sheet): Unit = {
     val i = c.index.getOrElse(
       throw new IllegalArgumentException(
         "Undefined column index! " +
@@ -59,7 +59,7 @@ trait BaseXlsx {
     c.width.foreach(w => sheet.setColumnWidth(i, w.toUnits))
   }
 
-  protected[natures] def convertCellBorders(borders: CellBorders, style: XSSFCellStyle) {
+  protected[natures] def convertCellBorders(borders: CellBorders, style: XSSFCellStyle): Unit = {
     borders.leftStyle.foreach(s => style.setBorderLeft(convertBorderStyle(s)))
     borders.leftColor.foreach(c => style.setLeftBorderColor(convertColor(c)))
     borders.bottomStyle.foreach(s => style.setBorderBottom(convertBorderStyle(s)))
@@ -75,7 +75,7 @@ trait BaseXlsx {
     new DefaultIndexedColorMap()
   )
 
-  protected[natures] def setHyperLinkUrlCell(cell: usermodel.Cell, value: HyperLinkUrl, row: usermodel.Row) {
+  protected[natures] def setHyperLinkUrlCell(cell: usermodel.Cell, value: HyperLinkUrl, row: usermodel.Row): Unit = {
     val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(HyperlinkType.URL)
     link.setAddress(value.address)
     cell.setCellValue(value.text)
@@ -87,7 +87,7 @@ trait BaseXlsx {
     new org.apache.poi.ss.util.CellRangeAddress(cr.rowRange._1, cr.rowRange._2, cr.columnRange._1, cr.columnRange._2)
 
   protected[natures] def convertFont(f: Font,
-                          font: XSSFFont) = {
+                          font: XSSFFont): XSSFFont = {
     f.bold.foreach(font.setBold)
     f.charSet.foreach(charSet => font.setCharSet(convertCharset(charSet).getNativeId))
     f.color.foreach(c => font.setColor(convertColor(c)))
@@ -102,7 +102,7 @@ trait BaseXlsx {
     font
   }
 
-  protected[natures] def validateCells(r: Row) {
+  protected[natures] def validateCells(r: Row): Unit = {
     val indexedCells = r.cells.filter(_.index.isDefined)
     val contextCells = r.cells.filter(_.index.isEmpty)
 
@@ -115,7 +115,7 @@ trait BaseXlsx {
   }
 
 
-  protected[natures] def validateRows(s: Sheet) {
+  protected[natures] def validateRows(s: Sheet): Unit = {
     val indexedRows = s.rows.filter(_.index.isDefined)
     val contextRows = s.rows.filter(_.index.isEmpty)
 
@@ -144,7 +144,7 @@ trait BaseXlsx {
   }
 
 
-  protected[natures] def convertSheetProperties(sp: SheetProperties, sheet: usermodel.Sheet) {
+  protected[natures] def convertSheetProperties(sp: SheetProperties, sheet: usermodel.Sheet): Unit = {
     sp.autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(convertCellRange(autoFilterRange)))
     sp.activeCell.foreach(stringReference => sheet.setActiveCell(new CellAddress(stringReference)))
     sp.autoBreaks.foreach(sheet.setAutobreaks)
@@ -176,7 +176,7 @@ trait BaseXlsx {
 
   protected[natures] def setTabColor( sheet: usermodel.Sheet, XSSFColor: XSSFColor ): Unit
 
-  protected[natures] def convertPrintSetup(printSetup: PrintSetup, sheet: usermodel.Sheet) {
+  protected[natures] def convertPrintSetup(printSetup: PrintSetup, sheet: usermodel.Sheet): Unit = {
     if (printSetup != PrintSetup.Default) {
       val ps = sheet.getPrintSetup
       printSetup.copies.foreach(ps.setCopies)
@@ -202,13 +202,13 @@ trait BaseXlsx {
 
   protected[natures] def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit
 
-  protected[natures] def convertRowRange(rr: RowRange) =
+  protected[natures] def convertRowRange(rr: RowRange): CellRangeAddress =
     CellRangeAddress.valueOf("%d:%d".format(rr.firstRowIndex, rr.lastRowIndex))
 
-  protected[natures] def convertColumnRange(cr: ColumnRange) =
+  protected[natures] def convertColumnRange(cr: ColumnRange): CellRangeAddress =
     CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))
 
-  protected[natures] def setDateCell(c: Cell, cell: usermodel.Cell, value: Date) {
+  protected[natures] def setDateCell(c: Cell, cell: usermodel.Cell, value: Date): Unit = {
     val dateStyle = c.format.getOrElse("yyyy-MM-dd")
     val dateTime = LocalDateTime.fromDateFields(value)
     val date = dateTime.toLocalDate
@@ -219,7 +219,7 @@ trait BaseXlsx {
     }
   }
 
-  protected[natures] def setCalendarCell(c: Cell, cell: usermodel.Cell, value: Calendar) {
+  protected[natures] def setCalendarCell(c: Cell, cell: usermodel.Cell, value: Calendar): Unit = {
     val dateStyle = c.format.getOrElse("yyyy-MM-dd")
     val dateTime = LocalDateTime.fromCalendarFields(value)
     val date = dateTime.toLocalDate
@@ -239,7 +239,7 @@ trait BaseXlsx {
       throw new IllegalArgumentException(s"Unable to convert Pane=$unexpected to XLSX - unsupported enum!")
   }
 
-  protected[natures] def convertPaneAction(paneAction: PaneAction, sheet: usermodel.Sheet) {
+  protected[natures] def convertPaneAction(paneAction: PaneAction, sheet: usermodel.Sheet): Unit = {
     paneAction match {
       case NoSplitOrFreeze() =>
         sheet.createFreezePane(0, 0)
@@ -250,7 +250,7 @@ trait BaseXlsx {
     }
   }
 
-  protected[natures] def convertMargins(margins: Margins, sheet: usermodel.Sheet) {
+  protected[natures] def convertMargins(margins: Margins, sheet: usermodel.Sheet): Unit = {
     margins.top.foreach(topMargin => sheet.setMargin(usermodel.Sheet.TopMargin, topMargin))
     margins.bottom.foreach(bottomMargin => sheet.setMargin(usermodel.Sheet.BottomMargin, bottomMargin))
     margins.right.foreach(rightMargin => sheet.setMargin(usermodel.Sheet.RightMargin, rightMargin))

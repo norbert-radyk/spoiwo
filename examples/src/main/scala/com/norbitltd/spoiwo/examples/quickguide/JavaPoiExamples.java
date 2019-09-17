@@ -278,7 +278,7 @@ class JavaPoiExamples {
         cs.setWrapText(true);
         cell.setCellStyle(cs);
 
-        //increase row height to accomodate two lines of text
+        //increase row height to accommodate two lines of text
         row.setHeightInPoints((2*sheet.getDefaultRowHeightInPoints()));
 
         //adjust column width to fit the content

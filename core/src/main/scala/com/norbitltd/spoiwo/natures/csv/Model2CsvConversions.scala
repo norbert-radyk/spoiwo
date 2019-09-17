@@ -15,7 +15,7 @@ object Model2CsvConversions {
     def convertAsCsv(properties: CsvProperties = CsvProperties.Default): Map[String, String] =
       convertWorkbookToCsv(wb, properties)
 
-    def saveAsCsv(fileName: String, properties: CsvProperties = CsvProperties.Default) {
+    def saveAsCsv(fileName: String, properties: CsvProperties = CsvProperties.Default): Unit = {
       val convertedCsvData = convertAsCsv(properties)
       if (wb.sheets.size <= 1) {
         convertedCsvData.values.foreach(csvContent => FileUtils.write(fileName, csvContent))
@@ -35,7 +35,7 @@ object Model2CsvConversions {
     def convertAsCsv(properties: CsvProperties = CsvProperties.Default): String =
       convertSheetToCsv(s, properties)._2
 
-    def saveAsCsv(fileName: String, properties: CsvProperties = CsvProperties.Default) {
+    def saveAsCsv(fileName: String, properties: CsvProperties = CsvProperties.Default): Unit = {
       Workbook(s).saveAsCsv(fileName, properties)
     }
   }

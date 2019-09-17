@@ -13,7 +13,7 @@ object GridExamples {
     The upper one creates an NxM grid with colored background.
     The second creates an NxM grid where the last row use a formula to copy the first row (and with colored background).
    */
-  def generateGrid(n: Int, m: Int, c: Color) = {
+  def generateGrid(n: Int, m: Int, c: Color): Grid = {
     val cell = Cell("").withStyle(CellStyle(fillForegroundColor = c, fillPattern = CellFill.Solid))
     val row  = Row().withCells(Seq.fill(m)(cell))
     Grid { _ =>
@@ -21,7 +21,7 @@ object GridExamples {
     }
   }
 
-  def generateGridWithFormula(n: Int, m: Int, c: Color) = {
+  def generateGridWithFormula(n: Int, m: Int, c: Color): Grid = {
     val cell = Cell("").withStyle(CellStyle(fillForegroundColor = c, fillPattern = CellFill.Solid))
     val row  = Row().withCells(Seq.fill(m)(cell))
 
@@ -37,17 +37,17 @@ object GridExamples {
   /*
     Actual examples!
    */
-  def renderToRows = {
+  def renderToRows(): Unit = {
     val rows = Grid.render(generateGrid(5, 5, Color.LightBlue))
     Sheet(name = "new sheet").withRows(rows).saveAsXlsx("test.xlsx")
   }
-  def renderToRowsAndMergedCells = {
+  def renderToRowsAndMergedCells(): Unit = {
     val grid = generateGrid(5, 5, Color.LightBlue)
     val gridWithMergedCells = Grid.addMergedRegion(grid, CellRange(2 -> 3, 2 -> 3))
     val rows = Grid.render(gridWithMergedCells)
     Sheet(name = "new sheet").withRows(rows).withMergedRegions(gridWithMergedCells.mergedRegions).saveAsXlsx("test.xlsx")
   }
-  def theSameAsAboweButWithHelpers = {
+  def theSameAsAboveButWithHelpers(): Unit = {
     import Grid._
     Sheet(name = "new sheet")
       .withGrid(generateGrid(5, 5, Color.LightBlue).addMergedRegion(CellRange(2 -> 3, 2 -> 3)))
@@ -55,7 +55,7 @@ object GridExamples {
   }
 
   //This will create an 5x5 blue, a 2x2 green and a 7x7 read area besides each other.
-  def horizontalCompose = {
+  def horizontalCompose(): Unit = {
     import Grid._
     val g1 = generateGrid(5, 5, Color.LightBlue)
     val g2 = generateGrid(2, 2, Color.Green)
@@ -68,7 +68,7 @@ object GridExamples {
   }
 
   //This will create an 5x5 blue, a 2x2 green and a 7x7 read area under each other.
-  def verticalCompose = {
+  def verticalCompose(): Unit = {
     import Grid._
     val g1 = generateGrid(5, 5, Color.LightBlue)
     val g2 = generateGrid(2, 2, Color.Green)
@@ -81,7 +81,7 @@ object GridExamples {
   }
 
   //blue and green next to each other, the red below those, and the yellow next to all of the previous composition
-  def biggerCompose = {
+  def biggerCompose(): Unit = {
     import Grid._
     val g1 = generateGrid(5, 5, Color.LightBlue)
     val g2 = generateGrid(2, 2, Color.Green)
@@ -95,7 +95,7 @@ object GridExamples {
   }
 
   //if you write in the first line of the green areas the last line will copy the values
-  def ifYouHaveFormulasThoseHandledToo = {
+  def ifYouHaveFormulasThoseHandledToo(): Unit = {
     import Grid._
     val g1   = generateGrid(5, 5, Color.LightBlue)
     val g2   = generateGridWithFormula(6, 6, Color.Green)
@@ -106,12 +106,12 @@ object GridExamples {
   }
 
   def main(args: Array[String]): Unit = {
-    renderToRows
-    renderToRowsAndMergedCells
-    theSameAsAboweButWithHelpers
-    horizontalCompose
-    verticalCompose
-    biggerCompose
-    ifYouHaveFormulasThoseHandledToo
+    renderToRows()
+    renderToRowsAndMergedCells()
+    theSameAsAboveButWithHelpers()
+    horizontalCompose()
+    verticalCompose()
+    biggerCompose()
+    ifYouHaveFormulasThoseHandledToo()
   }
 }

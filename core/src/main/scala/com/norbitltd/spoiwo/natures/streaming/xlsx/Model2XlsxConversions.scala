@@ -49,7 +49,7 @@ object Model2XlsxConversions extends BaseXlsx {
     cell
   }
 
-  private def convertCellDataFormat(cdf: CellDataFormat, workbook: SXSSFWorkbook, cellStyle: usermodel.CellStyle) {
+  private def convertCellDataFormat(cdf: CellDataFormat, workbook: SXSSFWorkbook, cellStyle: usermodel.CellStyle): Unit = {
     cdf.formatString.foreach(formatString => {
       val format = dataFormatCache.getOrElseUpdate(workbook, workbook.getXSSFWorkbook.createDataFormat())
       val formatIndex = format.getFormat(formatString)
@@ -78,7 +78,7 @@ object Model2XlsxConversions extends BaseXlsx {
       cellStyle
     }
 
-  private def convertFooter(f: Footer, sheet: SXSSFSheet) {
+  private def convertFooter(f: Footer, sheet: SXSSFSheet): Unit = {
     f.left.foreach(sheet.getFooter.setLeft)
     f.center.foreach(sheet.getFooter.setCenter)
     f.right.foreach(sheet.getFooter.setRight)
@@ -90,7 +90,7 @@ object Model2XlsxConversions extends BaseXlsx {
       convertFont(f, font)
     }
 
-  private def convertHeader(h: Header, sheet: SXSSFSheet) {
+  private def convertHeader(h: Header, sheet: SXSSFSheet): Unit = {
     h.left.foreach(sheet.getHeader.setLeft)
     h.center.foreach(sheet.getHeader.setCenter)
     h.right.foreach(sheet.getHeader.setRight)
@@ -111,7 +111,7 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   private[xlsx] def convertSheet(s: Sheet, workbook: SXSSFWorkbook): SXSSFSheet = {
-    s.validate
+    s.validate()
     writeToExistingSheet(s, workbook.createSheet(s.nameIn(workbook)))
   }
 
@@ -137,11 +137,11 @@ object Model2XlsxConversions extends BaseXlsx {
     sheet
   }
 
-  override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor) {
+  override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor): Unit = {
     sheet.asInstanceOf[SXSSFSheet].setTabColor(color)
   }
 
-  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup) {
+  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit = {
     if (printSetup != PrintSetup.Default) {
       val ps = sheetPs.asInstanceOf[XSSFPrintSetup]
       printSetup.pageOrder.foreach(po => ps.setPageOrder(convertPageOrder(po)))
@@ -150,7 +150,7 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   private[xlsx] def validateTables(modelSheet: Sheet): Unit = {
-    if (!modelSheet.tables.isEmpty) {
+    if (modelSheet.tables.nonEmpty) {
       throw new IllegalStateException("createTable is not supported by SXSSF right now")
     }
   }
@@ -161,7 +161,7 @@ object Model2XlsxConversions extends BaseXlsx {
 
   private[xlsx] def writeToExistingWorkbook(wb: Workbook, workbook: SXSSFWorkbook): SXSSFWorkbook = {
     wb.sheets.foreach { s =>
-      s.validate
+      s.validate()
       val sheetName = s.nameIn(workbook)
       writeToExistingSheet(s, Option(workbook.getSheet(sheetName)).getOrElse(workbook.createSheet(sheetName)))
     }
@@ -176,7 +176,7 @@ object Model2XlsxConversions extends BaseXlsx {
     evictFromCache(workbook)
     workbook
   }
-  private def evictFromCache(wb: SXSSFWorkbook) {
+  private def evictFromCache(wb: SXSSFWorkbook): Unit = {
     cellStyleCache.remove(wb)
     dataFormatCache.remove(wb)
     fontCache.remove(wb)
@@ -231,7 +231,7 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   implicit class XlsxSheet(s: Sheet) extends XlsxExport {
-    def validate: Unit = {
+    def validate(): Unit = {
       validateRows(s)
       validateTables(s)
     }
@@ -244,7 +244,7 @@ object Model2XlsxConversions extends BaseXlsx {
 
     def convertAsXlsx(): SXSSFWorkbook = Workbook(s).convertAsXlsx()
 
-    override def saveAsXlsx(fileName: String) {
+    override def saveAsXlsx(fileName: String): Unit = {
       Workbook(s).saveAsXlsx(fileName)
     }
 

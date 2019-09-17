@@ -21,7 +21,7 @@ object GettingStartedExample {
       Column(index = 0, style = CellStyle(font = Font(bold = true)), autoSized = true)
     )
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit =  {
     gettingStartedSheet.saveAsXlsx(args(0))
   }
 }

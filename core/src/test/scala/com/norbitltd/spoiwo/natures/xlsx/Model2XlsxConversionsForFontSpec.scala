@@ -5,7 +5,8 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
 import com.norbitltd.spoiwo.model.{Color, Font, Height}
 import Model2XlsxConversions._
-import org.apache.poi.ss.usermodel.{FontCharset, FontUnderline}
+import org.apache.poi.common.usermodel.fonts.FontCharset
+import org.apache.poi.ss.usermodel.FontUnderline
 import Height._
 
 import scala.language.postfixOps
