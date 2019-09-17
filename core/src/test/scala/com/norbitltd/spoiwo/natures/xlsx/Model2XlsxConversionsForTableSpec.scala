@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import com.norbitltd.spoiwo.model._
