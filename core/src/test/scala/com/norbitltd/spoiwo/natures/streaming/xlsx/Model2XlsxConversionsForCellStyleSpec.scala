@@ -102,7 +102,7 @@ class Model2XlsxConversionsForCellStyleSpec extends FlatSpec with Matchers {
   it should "return 'Context' reading order by default" in {
     val modelDefault: CellStyle = CellStyle()
     val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
-    xssfDefault.getReadingOrder shouldBe ReadingOrder.RIGHT_TO_LEFT
+    xssfDefault.getReadingOrder shouldBe ReadingOrder.CONTEXT
   }
 
   it should "return 'Right to Left' reading order when explicitly set" in {
