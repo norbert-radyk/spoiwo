@@ -188,6 +188,19 @@ object Model2XlsxEnumConversions {
     }
   }
 
+  def convertReadingOrder(readingOrder: CellReadingOrder): ReadingOrder = {
+    import CellReadingOrder._
+    import ReadingOrder._
+
+    readingOrder match {
+      case Context => CONTEXT
+      case LeftToRight  => LEFT_TO_RIGHT
+      case RightToLeft  => RIGHT_TO_LEFT
+      case CellReadingOrder(value) =>
+        throw new IllegalArgumentException(s"Unable to convert ReadingOrder=$value to XLSX - unsupported enum!")
+    }
+  }
+
   def convertTypeOffset(typeOffset: TypeOffset): Short = {
     import TypeOffset._
 

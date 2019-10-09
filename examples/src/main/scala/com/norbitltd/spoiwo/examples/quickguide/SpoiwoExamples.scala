@@ -7,7 +7,7 @@ import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 import com.norbitltd.spoiwo.model._
 import java.util.{Calendar, Date}
 
-import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, Pane, CellHorizontalAlignment => HA, CellVerticalAlignment => VA}
+import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, Pane, CellHorizontalAlignment => HA, CellReadingOrder => RO, CellVerticalAlignment => VA}
 import org.apache.poi.ss.util.WorkbookUtil
 
 //noinspection TypeAnnotation
@@ -52,6 +52,21 @@ class SpoiwoExamples {
   def workingWithDifferentTypesOfCells() = Sheet(name = "new sheet",
     row = Row(index = 2).withCellValues(1.1, new Date(), Calendar.getInstance(), "a string", true, "=1/0")
   ).saveAsXlsx("workbook.xlsx")
+
+
+  def variousReadingOrder(): Unit = {
+    val persian = "«راست‌چین»"
+    val texts = List((ro: RO) => List(persian, ro.toString, persian) mkString " ", (ro: RO) => List(ro.toString, persian, ro.toString) mkString " ")
+    val readingOrders = List(RO.Context, RO.LeftToRight, RO.RightToLeft)
+    val cells = for {
+      readingOrder <- readingOrders
+      text <- texts
+    } yield Cell(text(readingOrder), style = CellStyle(readingOrder = readingOrder, horizontalAlignment = HA.Center, verticalAlignment = VA.Center))
+
+    Sheet(
+      Row(index = 2, height = 30.points).withCells(cells)
+    ).saveAsXlsx("xssf-reading-order.xlsx")
+  }
 
 
   def createCell(ha: HA, va: VA) =

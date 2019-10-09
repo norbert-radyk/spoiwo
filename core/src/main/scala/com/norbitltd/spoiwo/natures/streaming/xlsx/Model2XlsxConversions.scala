@@ -7,7 +7,7 @@ import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaC
 import com.norbitltd.spoiwo.natures.xlsx.BaseXlsx
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
-import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, VerticalAlignment}
+import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, ReadingOrder, VerticalAlignment}
 import org.apache.poi.xssf.streaming.{SXSSFCell, SXSSFRow, SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel._
 
@@ -67,6 +67,7 @@ object Model2XlsxConversions extends BaseXlsx {
       cs.fillBackgroundColor.foreach(c => cellStyle.setFillBackgroundColor(convertColor(c)))
       cs.fillForegroundColor.foreach(c => cellStyle.setFillForegroundColor(convertColor(c)))
 
+      cs.readingOrder.foreach(ro => cellStyle.setReadingOrder(convertReadingOrder(ro)))
       cs.horizontalAlignment.foreach(ha => cellStyle.setAlignment(convertHorizontalAlignment(ha)))
       cs.verticalAlignment.foreach(va => cellStyle.setVerticalAlignment(convertVerticalAlignment(va)))
 
@@ -228,6 +229,10 @@ object Model2XlsxConversions extends BaseXlsx {
     def saveAsXlsx(fileName: String): Unit
 
     def writeToOutputStream[T <: OutputStream](stream: T): T
+  }
+
+  implicit class XlsxReadingOrder(ro: CellReadingOrder) {
+    def convertAsXlsx(): ReadingOrder = convertReadingOrder(ro)
   }
 
   implicit class XlsxSheet(s: Sheet) extends XlsxExport {

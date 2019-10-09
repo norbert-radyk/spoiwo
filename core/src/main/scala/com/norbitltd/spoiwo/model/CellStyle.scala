@@ -1,6 +1,6 @@
 package com.norbitltd.spoiwo.model
 
-import com.norbitltd.spoiwo.model.enums.{CellVerticalAlignment, CellHorizontalAlignment, CellFill}
+import com.norbitltd.spoiwo.model.enums.{CellReadingOrder, CellVerticalAlignment, CellHorizontalAlignment, CellFill}
 
 object CellStyle {
 
@@ -12,6 +12,7 @@ object CellStyle {
             fillPattern: CellFill = null,
             fillForegroundColor: Color = null,
             fillBackgroundColor: Color = null,
+            readingOrder: CellReadingOrder = null,
             horizontalAlignment: CellHorizontalAlignment = null,
             verticalAlignment: CellVerticalAlignment = null,
             hidden: java.lang.Boolean = null,
@@ -26,6 +27,7 @@ object CellStyle {
       fillPattern = Option(fillPattern),
       fillForegroundColor = Option(fillForegroundColor),
       fillBackgroundColor = Option(fillBackgroundColor),
+      readingOrder = Option(readingOrder),
       horizontalAlignment = Option(horizontalAlignment),
       verticalAlignment = Option(verticalAlignment),
       hidden = Option(hidden).map(_.booleanValue),
@@ -42,6 +44,7 @@ case class CellStyle private (borders: Option[CellBorders],
                               fillPattern: Option[CellFill],
                               fillForegroundColor: Option[Color],
                               fillBackgroundColor: Option[Color],
+                              readingOrder: Option[CellReadingOrder],
                               horizontalAlignment: Option[CellHorizontalAlignment],
                               verticalAlignment: Option[CellVerticalAlignment],
                               hidden: Option[Boolean],
@@ -58,6 +61,7 @@ case class CellStyle private (borders: Option[CellBorders],
       fillPattern.map("fill pattern=" + _),
       fillForegroundColor.map("fill foreground color=" + _),
       fillBackgroundColor.map("fill background color=" + _),
+      readingOrder.map("reading order=" + _),
       horizontalAlignment.map("horizontal alignment=" + _),
       verticalAlignment.map("vertical alignment=" + _),
       hidden.map("hidden=" + _),
@@ -102,6 +106,12 @@ case class CellStyle private (borders: Option[CellBorders],
 
   def withoutFillBackgroundColor: CellStyle =
     copy(fillBackgroundColor = None)
+
+  def withReadingOrder(readingOrder: CellReadingOrder): CellStyle =
+    copy(readingOrder = Option(readingOrder))
+
+  def withoutReadingOrder: CellStyle =
+    copy(readingOrder = None)
 
   def withHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment): CellStyle =
     copy(horizontalAlignment = Option(horizontalAlignment))
@@ -164,6 +174,7 @@ case class CellStyle private (borders: Option[CellBorders],
     fillPattern = dw(fillPattern, defaultCellStyle.fillPattern),
     fillForegroundColor = dw(fillForegroundColor, defaultCellStyle.fillForegroundColor),
     fillBackgroundColor = dw(fillBackgroundColor, defaultCellStyle.fillBackgroundColor),
+    readingOrder = dw(readingOrder, defaultCellStyle.readingOrder),
     horizontalAlignment = dw(horizontalAlignment, defaultCellStyle.horizontalAlignment),
     verticalAlignment = dw(verticalAlignment, defaultCellStyle.verticalAlignment),
     hidden = dw(hidden, defaultCellStyle.hidden),
