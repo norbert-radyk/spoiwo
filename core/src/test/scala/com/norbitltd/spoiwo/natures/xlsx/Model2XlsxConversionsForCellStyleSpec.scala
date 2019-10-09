@@ -4,9 +4,9 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFFont, XSSFWorkbook}
 import com.norbitltd.spoiwo.model._
 import Model2XlsxConversions._
-import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, HorizontalAlignment, VerticalAlignment}
+import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, ReadingOrder, HorizontalAlignment, VerticalAlignment}
 import Height._
-import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, CellHorizontalAlignment, CellVerticalAlignment}
+import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, CellReadingOrder, CellHorizontalAlignment, CellVerticalAlignment}
 
 import scala.language.postfixOps
 
@@ -96,6 +96,18 @@ class Model2XlsxConversionsForCellStyleSpec extends FlatSpec with Matchers {
     val xssfDefault: XSSFCellStyle = convertCellStyle(modelWithFillColors, workbook)
     xssfDefault.getFillBackgroundXSSFColor.getRGB.toList shouldBe List(255.toByte, 0, 0)
     xssfDefault.getFillForegroundXSSFColor.getRGB.toList shouldBe List(0, 0, 255.toByte)
+  }
+
+  it should "return 'Context' reading order by default" in {
+    val modelDefault: CellStyle = CellStyle()
+    val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
+    xssfDefault.getReadingOrder shouldBe ReadingOrder.CONTEXT
+  }
+
+  it should "return 'Right to Left' reading order when explicitly set" in {
+    val modelWithHA: CellStyle = CellStyle(readingOrder = CellReadingOrder.RightToLeft)
+    val xssfWithHA: XSSFCellStyle = convertCellStyle(modelWithHA, workbook)
+    xssfWithHA.getReadingOrder shouldBe ReadingOrder.RIGHT_TO_LEFT
   }
 
   it should "return 'General' horizontal alignment by default" in {
