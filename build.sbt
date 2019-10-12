@@ -21,7 +21,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.13.0",
+  scalaVersion := "2.13.1",
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -43,7 +43,7 @@ lazy val commonSettings = Seq(
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
     "org.scala-lang.modules" %% "scala-xml"         % "1.2.0",
-    "joda-time"              %  "joda-time"         % "2.10.3",
+    "joda-time"              %  "joda-time"         % "2.10.4",
     "org.joda"               %  "joda-convert"      % "2.2.1",
     "org.apache.poi"         %  "poi"               % "4.1.0",
     "org.apache.poi"         %  "poi-ooxml"         % "4.1.0",
@@ -51,7 +51,7 @@ lazy val commonSettings = Seq(
   )
 )
 
-lazy val libVersion = "1.6.1-SNAPSHOT"
+lazy val libVersion = "1.6.2-SNAPSHOT"
 
 lazy val root = project
   .in(file("."))
