@@ -4,9 +4,10 @@ import java.io.ByteArrayOutputStream
 
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.streaming.xlsx.Model2XlsxConversions._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ExportWorkbookStreamingSpec extends FlatSpec with Matchers {
+class ExportWorkbookStreamingSpec extends AnyFlatSpec with Matchers {
 
   "Writing workbook to an output stream" should "write non empty content" in {
     val baos = new ByteArrayOutputStream()

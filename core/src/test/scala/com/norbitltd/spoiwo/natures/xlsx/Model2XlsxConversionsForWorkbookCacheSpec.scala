@@ -6,12 +6,13 @@ import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.postfixOps
 import scala.util.Try
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForWorkbookCacheSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForWorkbookCacheSpec extends AnyFlatSpec with Matchers {
 
   private val style = CellStyle(
     font = Font(height = 24 points, fontName = "Courier New", italic = true, strikeout = true),

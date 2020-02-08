@@ -1,14 +1,15 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFSheet, XSSFWorkbook}
 import com.norbitltd.spoiwo.model.Column
 import Model2XlsxConversions.convertColumn
 import com.norbitltd.spoiwo.model.Width._
 
 import scala.language.postfixOps
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForColumnSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForColumnSpec extends AnyFlatSpec with Matchers {
 
   private val DefaultWidth = (8 characters).toUnits
 

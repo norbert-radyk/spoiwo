@@ -9,11 +9,12 @@ import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertCell, _}
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
 import org.joda.time.{DateTime, LocalDate}
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.postfixOps
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForCellSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForCellSpec extends AnyFlatSpec with Matchers {
 
   private val defaultCell: XSSFCell = convert(Cell.Empty)
 

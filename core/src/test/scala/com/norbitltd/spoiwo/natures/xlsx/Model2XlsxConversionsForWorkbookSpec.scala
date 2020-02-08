@@ -4,9 +4,10 @@ import com.norbitltd.spoiwo.model.{Sheet, Workbook}
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertWorkbook, writeToExistingWorkbook}
 import com.norbitltd.spoiwo.natures.xlsx.Utils._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForWorkbookSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForWorkbookSpec extends AnyFlatSpec with Matchers {
 
   def defaultWorkbook = Workbook(
     Sheet(name = "Sheet 1"),

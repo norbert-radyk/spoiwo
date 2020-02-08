@@ -5,12 +5,13 @@ import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.streaming.xlsx.Model2XlsxConversions.convertRow
 import org.apache.poi.xssf.streaming.{SXSSFRow, SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFFont}
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.postfixOps
 import scala.util.Try
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForRowSpec extends AnyFlatSpec with Matchers {
 
   private def sheet: SXSSFSheet = new SXSSFWorkbook().createSheet()
 

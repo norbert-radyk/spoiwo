@@ -2,11 +2,12 @@ package com.norbitltd.spoiwo.utils
 
 import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
 
-import org.scalatest.{FlatSpec, Matchers}
 import org.joda.time.{DateTime, LocalDate}
 import JavaTimeApiConversions._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class JavaTimeApiConversionsSpec extends FlatSpec with Matchers {
+class JavaTimeApiConversionsSpec extends AnyFlatSpec with Matchers {
 
   "Conversion from Java LocalDate to Date" should "produce same Date as from corresponding Joda LocalDate" in {
     JLocalDate.of(2011, 6, 13).toDate shouldBe new LocalDate(2011, 6, 13).toDate

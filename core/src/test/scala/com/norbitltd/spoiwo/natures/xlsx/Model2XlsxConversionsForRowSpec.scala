@@ -4,12 +4,13 @@ import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model._
 import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFRow, XSSFSheet, XSSFWorkbook}
 import Model2XlsxConversions.convertRow
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.util.Try
 import scala.language.postfixOps
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForRowSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForRowSpec extends AnyFlatSpec with Matchers {
 
   private def sheet: XSSFSheet = new XSSFWorkbook().createSheet()
 

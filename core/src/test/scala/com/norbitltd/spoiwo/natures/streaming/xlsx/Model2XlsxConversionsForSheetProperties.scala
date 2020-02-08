@@ -6,11 +6,12 @@ import com.norbitltd.spoiwo.natures.streaming.xlsx.Model2XlsxConversions.convert
 import org.apache.poi.ss.util.CellAddress
 import org.apache.poi.xssf.streaming.{SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.postfixOps
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForSheetProperties extends FlatSpec with Matchers {
+class Model2XlsxConversionsForSheetProperties extends AnyFlatSpec with Matchers {
 
   private def apply(properties: SheetProperties): SXSSFSheet = {
     val sheet = new SXSSFWorkbook().createSheet()

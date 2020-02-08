@@ -1,11 +1,12 @@
 package com.norbitltd.spoiwo.natures.csv
 
-import org.scalatest.{FlatSpec, Matchers}
 import com.norbitltd.spoiwo.model.{HyperLinkUrl, Row, Sheet}
 import Model2CsvConversions._
 import org.joda.time.LocalDate
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2CsvConversionsSpec extends FlatSpec with Matchers {
+class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
 
   "Model to CSV conversion" should "correctly convert the single text-only sheet" in {
     val sheet = Sheet(name = "CSV conversion").withRows(

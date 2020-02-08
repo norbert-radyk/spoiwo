@@ -3,9 +3,10 @@ package com.norbitltd.spoiwo.natures.xlsx
 import java.io.ByteArrayOutputStream
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ExportWorkbookSpec extends FlatSpec with Matchers {
+class ExportWorkbookSpec extends AnyFlatSpec with Matchers {
 
   private val workbook = Workbook(Sheet(name = "Test Sheet", rows = List.empty))
 

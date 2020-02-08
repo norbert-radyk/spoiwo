@@ -47,7 +47,7 @@ lazy val commonSettings = Seq(
     "org.joda"               %  "joda-convert"      % "2.2.1",
     "org.apache.poi"         %  "poi"               % "4.1.1",
     "org.apache.poi"         %  "poi-ooxml"         % "4.1.1",
-    "org.scalatest"          %% "scalatest"         % "3.0.8"   % Test
+    "org.scalatest"          %% "scalatest"         % "3.1.0"   % Test
   )
 )
 

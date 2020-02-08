@@ -7,11 +7,12 @@ import com.norbitltd.spoiwo.natures.streaming.xlsx.Model2XlsxConversions.{conver
 import com.norbitltd.spoiwo.natures.xlsx.Utils._
 import org.apache.poi.xssf.streaming.{SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFWorkbookFactory}
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.postfixOps
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForSheetSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
 
   private def workbook = new SXSSFWorkbook()
 

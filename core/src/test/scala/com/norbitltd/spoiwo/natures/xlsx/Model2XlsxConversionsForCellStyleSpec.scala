@@ -1,6 +1,5 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFFont, XSSFWorkbook}
 import com.norbitltd.spoiwo.model._
 import Model2XlsxConversions._
@@ -9,8 +8,10 @@ import Height._
 import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, CellReadingOrder, CellHorizontalAlignment, CellVerticalAlignment}
 
 import scala.language.postfixOps
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForCellStyleSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForCellStyleSpec extends AnyFlatSpec with Matchers {
 
   val workbook = new XSSFWorkbook()
 

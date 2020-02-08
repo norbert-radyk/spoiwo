@@ -1,14 +1,15 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import org.scalatest.{FlatSpec, Matchers}
 import Model2XlsxConversions.convertCellBorders
 import org.apache.poi.ss.usermodel
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFWorkbook}
 import com.norbitltd.spoiwo.model.{CellBorders, Color}
 import org.apache.poi.xssf.usermodel.extensions.XSSFCellBorder
 import com.norbitltd.spoiwo.model.enums.CellBorderStyle
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForCellBordersSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForCellBordersSpec extends AnyFlatSpec with Matchers {
 
   val cellStyle: XSSFCellStyle = new XSSFWorkbook().createCellStyle()
 

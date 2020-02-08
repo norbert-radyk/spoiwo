@@ -1,12 +1,13 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
 import scala.collection.JavaConverters._
-import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertSheet, convertTable}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForTableSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForTableSpec extends AnyFlatSpec with Matchers {
 
   private def defaultTableWithoutId =
     Table(cellRange = CellRange(0 -> 1, 0 -> 1))

@@ -1,7 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
 import org.apache.poi.ss.usermodel
-import org.scalatest.{FlatSpec, Matchers}
 import org.apache.poi.xssf.usermodel.{XSSFFont, XSSFWorkbook}
 import com.norbitltd.spoiwo.model.{Color, Font, Height}
 import Model2XlsxConversions._
@@ -11,8 +10,10 @@ import Height._
 
 import scala.language.postfixOps
 import com.norbitltd.spoiwo.model.enums._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForFontSpec extends FlatSpec with Matchers {
+class Model2XlsxConversionsForFontSpec extends AnyFlatSpec with Matchers {
 
   def workbook = new XSSFWorkbook()
 

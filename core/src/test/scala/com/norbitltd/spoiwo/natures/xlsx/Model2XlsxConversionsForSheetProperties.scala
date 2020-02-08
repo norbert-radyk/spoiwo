@@ -2,14 +2,15 @@ package com.norbitltd.spoiwo.natures.xlsx
 
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 import org.apache.poi.ss.util.CellAddress
-import org.scalatest.{FlatSpec, Matchers}
 import com.norbitltd.spoiwo.model.{CellRange, SheetProperties}
 import Model2XlsxConversions.convertSheetProperties
 import com.norbitltd.spoiwo.model.Height._
 
 import scala.language.postfixOps
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForSheetProperties extends FlatSpec with Matchers {
+class Model2XlsxConversionsForSheetProperties extends AnyFlatSpec with Matchers {
 
   private def apply(properties: SheetProperties): XSSFSheet = {
     val sheet = new XSSFWorkbook().createSheet()
