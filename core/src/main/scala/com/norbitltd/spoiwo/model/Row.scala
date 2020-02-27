@@ -1,8 +1,7 @@
 package com.norbitltd.spoiwo.model
 
 import java.util.{Calendar, Date}
-import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
-import org.joda.time.{DateTime, LocalDate}
+import java.time.{LocalDate, LocalDateTime}
 
 object Row {
 
@@ -64,9 +63,7 @@ case class Row private (cells: Iterable[Cell],
       case booleanValue: Boolean         => Cell(booleanValue)
       case dateValue: Date               => Cell(dateValue)
       case dateValue: LocalDate          => Cell(dateValue)
-      case dateValue: DateTime           => Cell(dateValue)
-      case dateValue: JLocalDate         => Cell(dateValue)
-      case dateTimeValue: JLocalDateTime => Cell(dateTimeValue)
+      case dateTimeValue: LocalDateTime  => Cell(dateTimeValue)
       case calendarValue: Calendar       => Cell(calendarValue)
       case hyperLinkUrl: HyperLinkUrl    => Cell(hyperLinkUrl)
       case value =>

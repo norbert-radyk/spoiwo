@@ -1,14 +1,13 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import java.util.Calendar
-import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
+import java.util.{Calendar, Date}
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertCell, _}
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFWorkbook}
-import org.joda.time.{DateTime, LocalDate}
 
 import scala.language.postfixOps
 import org.scalatest.flatspec.AnyFlatSpec
@@ -119,22 +118,13 @@ class Model2XlsxConversionsForCellSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return numeric cell when set up with java.util.Date value" in {
-    val model = Cell(new LocalDate(2011, 11, 13).toDate)
+    val localDate = LocalDate.of(2011, 11, 13)
+    val model = Cell(Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant))
     val xlsx = convert(model)
 
-    val date = new LocalDate(xlsx.getDateCellValue)
+    val date = xlsx.getDateCellValue.toInstant.atZone(ZoneId.systemDefault()).toLocalDate
     date.getYear shouldBe 2011
-    date.getMonthOfYear shouldBe 11
-    date.getDayOfMonth shouldBe 13
-  }
-
-  it should "return numeric cell when set up with org.joda.time.LocalDate value" in {
-    val model = Cell(new LocalDate(2011, 11, 13))
-    val xlsx = convert(model)
-
-    val date = new LocalDate(xlsx.getDateCellValue)
-    date.getYear shouldBe 2011
-    date.getMonthOfYear shouldBe 11
+    date.getMonthValue shouldBe 11
     date.getDayOfMonth shouldBe 13
   }
 
@@ -144,50 +134,50 @@ class Model2XlsxConversionsForCellSpec extends AnyFlatSpec with Matchers {
     val model = Cell(calendar)
     val xlsx = convert(model)
 
-    val date = new LocalDate(xlsx.getDateCellValue)
+    val date = xlsx.getDateCellValue.toInstant.atZone(ZoneId.systemDefault()).toLocalDate
     date.getYear shouldBe 2011
-    date.getMonthOfYear shouldBe 12
+    date.getMonthValue shouldBe 12
     date.getDayOfMonth shouldBe 13
   }
 
   it should "return numeric cell when set up with java.time.LocalDate value" in {
-    test(JLocalDate.of(2011, 6, 13))
-    test(JLocalDate.of(2011, 11, 13))
+    test(LocalDate.of(2011, 6, 13))
+    test(LocalDate.of(2011, 11, 13))
 
-    def test(ld: JLocalDate): Unit = {
+    def test(ld: LocalDate): Unit = {
       val model = Cell(ld)
       val xlsx = convert(model)
 
-      val date = new DateTime(xlsx.getDateCellValue)
+      val date = xlsx.getDateCellValue.toInstant.atZone(ZoneId.systemDefault())
       date.getYear shouldBe ld.getYear
-      date.getMonthOfYear shouldBe ld.getMonthValue
+      date.getMonthValue shouldBe ld.getMonthValue
       date.getDayOfMonth shouldBe ld.getDayOfMonth
-      date.getHourOfDay shouldBe 0
-      date.getMinuteOfHour shouldBe 0
-      date.getSecondOfMinute shouldBe 0
+      date.getHour shouldBe 0
+      date.getMinute shouldBe 0
+      date.getSecond shouldBe 0
     }
   }
 
   it should "return numeric cell when set up with java.time.LocalDateTime value" in {
-    test(JLocalDateTime.of(2011, 6, 13, 15, 30, 10))
-    test(JLocalDateTime.of(2011, 11, 13, 15, 30, 10))
+    test(LocalDateTime.of(2011, 6, 13, 15, 30, 10))
+    test(LocalDateTime.of(2011, 11, 13, 15, 30, 10))
 
-    def test(ldt: JLocalDateTime): Unit = {
+    def test(ldt: LocalDateTime): Unit = {
       val model = Cell(ldt)
       val xlsx = convert(model)
 
-      val date = new DateTime(xlsx.getDateCellValue)
+      val date = xlsx.getDateCellValue.toInstant.atZone(ZoneId.systemDefault())
       date.getYear shouldBe ldt.getYear
-      date.getMonthOfYear shouldBe ldt.getMonthValue
+      date.getMonthValue shouldBe ldt.getMonthValue
       date.getDayOfMonth shouldBe ldt.getDayOfMonth
-      date.getHourOfDay shouldBe ldt.getHour
-      date.getMinuteOfHour shouldBe ldt.getMinute
-      date.getSecondOfMinute shouldBe ldt.getSecond
+      date.getHour shouldBe ldt.getHour
+      date.getMinute shouldBe ldt.getMinute
+      date.getSecond shouldBe ldt.getSecond
     }
   }
 
   it should "return string cell with the date formatted yyyy-MM-dd if date before 1904" in {
-    val model = Cell(new LocalDate(1856, 11, 3).toDate)
+    val model = Cell(LocalDate.of(1856, 11, 3))
     val xlsx = convert(model)
     "1856-11-03" shouldBe xlsx.getStringCellValue
   }

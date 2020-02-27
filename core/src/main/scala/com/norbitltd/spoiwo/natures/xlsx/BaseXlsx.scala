@@ -1,4 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, ZoneId}
 import java.util.{Calendar, Date}
 
 import com.norbitltd.spoiwo.model._
@@ -8,12 +10,11 @@ import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
 import org.apache.poi.xssf.usermodel._
-import org.joda.time.{LocalDate, LocalDateTime}
 
 trait BaseXlsx {
 
-  private val FirstSupportedDate = new LocalDate(1904, 1, 1)
-  private val LastSupportedDate = new LocalDate(9999, 12, 31)
+  private val FirstSupportedDate = LocalDate.of(1904, 1, 1)
+  private val LastSupportedDate = LocalDate.of(9999, 12, 31)
 
   protected[natures] def mergeStyle(cell: Cell,
                          rowStyle: Option[CellStyle],
@@ -209,22 +210,20 @@ trait BaseXlsx {
     CellRangeAddress.valueOf("%s:%s".format(cr.firstColumnName, cr.lastColumnName))
 
   protected[natures] def setDateCell(c: Cell, cell: usermodel.Cell, value: Date): Unit = {
-    val dateStyle = c.format.getOrElse("yyyy-MM-dd")
-    val dateTime = LocalDateTime.fromDateFields(value)
-    val date = dateTime.toLocalDate
-    if (date.isBefore(FirstSupportedDate) || date.isAfter(LastSupportedDate)) {
-      cell.setCellValue(dateTime.toString(dateStyle))
+    val dateStyle = DateTimeFormatter.ofPattern(c.format.getOrElse("yyyy-MM-dd"))
+    val date = value.toInstant.atZone(ZoneId.systemDefault())
+    if (date.toLocalDate.isBefore(FirstSupportedDate) || date.toLocalDate.isAfter(LastSupportedDate)) {
+      cell.setCellValue(date.format(dateStyle))
     } else {
       cell.setCellValue(value)
     }
   }
 
   protected[natures] def setCalendarCell(c: Cell, cell: usermodel.Cell, value: Calendar): Unit = {
-    val dateStyle = c.format.getOrElse("yyyy-MM-dd")
-    val dateTime = LocalDateTime.fromCalendarFields(value)
-    val date = dateTime.toLocalDate
-    if (date.isBefore(FirstSupportedDate) || date.isAfter(LastSupportedDate)) {
-      cell.setCellValue(dateTime.toString(dateStyle))
+    val dateStyle = DateTimeFormatter.ofPattern(c.format.getOrElse("yyyy-MM-dd"))
+    val date = value.toInstant.atZone(ZoneId.systemDefault())
+    if (date.toLocalDate.isBefore(FirstSupportedDate) || date.toLocalDate.isAfter(LastSupportedDate)) {
+      cell.setCellValue(date.format(dateStyle))
     } else {
       cell.setCellValue(value)
     }

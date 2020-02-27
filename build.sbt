@@ -43,15 +43,13 @@ lazy val commonSettings = Seq(
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
     "org.scala-lang.modules" %% "scala-xml"         % "1.2.0",
-    "joda-time"              %  "joda-time"         % "2.10.5",
-    "org.joda"               %  "joda-convert"      % "2.2.1",
     "org.apache.poi"         %  "poi"               % "4.1.2",
     "org.apache.poi"         %  "poi-ooxml"         % "4.1.2",
     "org.scalatest"          %% "scalatest"         % "3.1.1"   % Test
   )
 )
 
-lazy val libVersion = "1.6.2-SNAPSHOT"
+lazy val libVersion = "1.7.0-SNAPSHOT"
 
 lazy val root = project
   .in(file("."))

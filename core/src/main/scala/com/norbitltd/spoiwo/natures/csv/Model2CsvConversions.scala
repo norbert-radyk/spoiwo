@@ -1,8 +1,9 @@
 package com.norbitltd.spoiwo.natures.csv
 
+import java.time.ZoneId
+
 import com.norbitltd.spoiwo.utils.FileUtils
 import com.norbitltd.spoiwo.model._
-import org.joda.time.LocalDate
 
 object Model2CsvConversions {
 
@@ -60,8 +61,8 @@ object Model2CsvConversions {
     case x: StringCell   => x.value
     case x: NumericCell  => x.value.toString
     case x: BooleanCell  => if (x.value) properties.defaultBooleanTrueString else properties.defaultBooleanFalseString
-    case x: DateCell     => LocalDate.fromDateFields(x.value).toString(properties.defaultDateFormat)
-    case x: CalendarCell => LocalDate.fromCalendarFields(x.value).toString(properties.defaultDateFormat)
+    case x: DateCell     => x.value.toInstant.atZone(ZoneId.systemDefault()).format(properties.defaultDateFormatter)
+    case x: CalendarCell => x.value.toInstant.atZone(ZoneId.systemDefault()).format(properties.defaultDateFormatter)
     case x: HyperLinkUrlCell => x.value.text
     case value           => throw new IllegalArgumentException(s"Unable to convert to CSV cell for value: $value!")
   }

@@ -1,8 +1,9 @@
 package com.norbitltd.spoiwo.natures.csv
 
+import java.time.LocalDate
+
 import com.norbitltd.spoiwo.model.{HyperLinkUrl, Row, Sheet}
 import Model2CsvConversions._
-import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -56,8 +57,8 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
 
   it should "correctly format date value to yyyy-MM-dd by default" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
-      Row().withCellValues("Albert Einstein", new LocalDate(1879, 3, 14)),
-      Row().withCellValues("Thomas Edison", new LocalDate(1847, 2, 11))
+      Row().withCellValues("Albert Einstein", LocalDate.of(1879, 3, 14)),
+      Row().withCellValues("Thomas Edison", LocalDate.of(1847, 2, 11))
     )
 
     val csvText = "Albert Einstein,1879-03-14\nThomas Edison,1847-02-11"
@@ -66,8 +67,8 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
 
   it should "correctly format date value to yyyy/MM/dd by default" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
-      Row().withCellValues("Albert Einstein", new LocalDate(1879, 3, 14)),
-      Row().withCellValues("Thomas Edison", new LocalDate(1847, 2, 11))
+      Row().withCellValues("Albert Einstein", LocalDate.of(1879, 3, 14)),
+      Row().withCellValues("Thomas Edison", LocalDate.of(1847, 2, 11))
     )
     val properties = CsvProperties(defaultDateFormat = "yyyy/MM/dd")
 

@@ -1,8 +1,7 @@
 package com.norbitltd.spoiwo.model
 
 import java.util.{Calendar, Date}
-import java.time.{LocalDate => JLocalDate, LocalDateTime => JLocalDateTime}
-import org.joda.time.{LocalDate, DateTime}
+import java.time.{LocalDate, LocalDateTime}
 import com.norbitltd.spoiwo.model.enums.CellStyleInheritance
 import com.norbitltd.spoiwo.utils.JavaTimeApiConversions._
 
@@ -16,11 +15,9 @@ object CellValueType {
   implicit object LongWitness extends CellValueType[Long]
   implicit object BooleanWitness extends CellValueType[Boolean]
   implicit object DateWitness extends CellValueType[Date]
-  implicit object DateTimeWitness extends CellValueType[DateTime]
-  implicit object LocalDateWitness extends CellValueType[LocalDate]
   implicit object CalendarWitness extends CellValueType[Calendar]
-  implicit object JLocalDateWitness extends CellValueType[JLocalDate]
-  implicit object JLocalDateTimeWitness extends CellValueType[JLocalDateTime]
+  implicit object LocalDateWitness extends CellValueType[LocalDate]
+  implicit object LocalDateTimeWitness extends CellValueType[LocalDateTime]
   implicit object HyperLinkUrlWitness extends CellValueType[HyperLinkUrl]
 }
 
@@ -51,10 +48,8 @@ object Cell {
       case v: Long           => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
       case v: Boolean        => BooleanCell(v, indexOption, styleOption, styleInheritance)
       case v: Date           => DateCell(v, indexOption, styleOption, styleInheritance)
-      case v: DateTime       => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
-      case v: LocalDate      => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
-      case v: JLocalDate     => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
-      case v: JLocalDateTime => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
+      case v: LocalDate     => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
+      case v: LocalDateTime => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
       case v: Calendar       => CalendarCell(v, indexOption, styleOption, styleInheritance)
       case v: HyperLinkUrl   => HyperLinkUrlCell(v, indexOption, styleOption, styleInheritance)
     }
