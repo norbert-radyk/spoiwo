@@ -88,12 +88,12 @@ class Model2XlsxConversionsForRowSpec extends AnyFlatSpec with Matchers {
   it should "correctly initialize one cell" in {
     val cell: Cell = Cell("Test", style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
     val model: Row = Row(cells = cell :: Nil)
-    val xslx: SXSSFRow = convert(model)
+    val xlsx: SXSSFRow = convert(model)
 
-    xslx.getFirstCellNum shouldBe 0
-    xslx.getLastCellNum shouldBe 1
+    xlsx.getFirstCellNum shouldBe 0
+    xlsx.getLastCellNum shouldBe 1
 
-    val convertedFont = xslx.getCell(0).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
+    val convertedFont = xlsx.getCell(0).getCellStyle.asInstanceOf[XSSFCellStyle].getFont
     convertedFont.getFontName shouldBe "Arial"
     convertedFont.getFontHeightInPoints shouldBe 14
   }

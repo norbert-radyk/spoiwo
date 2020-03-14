@@ -26,7 +26,7 @@ class JavaPoiExamples {
         fileOut.close();
     }
     public static void newSheet() throws IOException {
-        Workbook wb = new XSSFWorkbook();  // or new XSSFWorkbook();
+        Workbook wb = new XSSFWorkbook();
         Sheet sheet1 = wb.createSheet("new sheet");
         Sheet sheet2 = wb.createSheet("second sheet");
         String safeName = WorkbookUtil.createSafeSheetName("[O'Brien's sales*?]"); // returns " O'Brien's sales   "
@@ -92,7 +92,6 @@ class JavaPoiExamples {
         row.createCell(2).setCellValue(Calendar.getInstance());
         row.createCell(3).setCellValue("a string");
         row.createCell(4).setCellValue(true);
-        row.createCell(5).setCellType(CellType.ERROR);
 
         // Write the output to a file
         FileOutputStream fileOut = new FileOutputStream("workbook.xls");
