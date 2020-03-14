@@ -1,9 +1,9 @@
 package com.norbitltd.spoiwo.model.enums
 
 object FontScheme {
-  lazy val None = FontScheme("None")
-  lazy val Major = FontScheme("Major")
-  lazy val Minor = FontScheme("Minor")
+  lazy val None: FontScheme = FontScheme("None")
+  lazy val Major: FontScheme = FontScheme("Major")
+  lazy val Minor: FontScheme = FontScheme("Minor")
 }
 
 case class FontScheme private (value: String) {

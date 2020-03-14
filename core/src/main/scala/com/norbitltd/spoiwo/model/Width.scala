@@ -1,8 +1,8 @@
 package com.norbitltd.spoiwo.model
 
 object WidthUnit {
-  lazy val Character = WidthUnit("Character")
-  lazy val Unit = WidthUnit("Unit")
+  lazy val Character: WidthUnit = WidthUnit("Character")
+  lazy val Unit: WidthUnit = WidthUnit("Unit")
 }
 
 case class WidthUnit private (value: String) {

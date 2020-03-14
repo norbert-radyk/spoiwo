@@ -5,7 +5,7 @@ import org.apache.poi.ss.util.CellReference
 
 object CellRange {
 
-  val None = CellRange(0 -> 0, 0 -> 0)
+  val None: CellRange = CellRange(0 -> 0, 0 -> 0)
 
 }
 
@@ -16,7 +16,7 @@ case class CellRange(rowRange: (Int, Int), columnRange: (Int, Int)) {
 
 object RowRange {
 
-  val None = RowRange(0, 0)
+  val None: RowRange = RowRange(0, 0)
 
   def apply(rowRange: (Int, Int)): RowRange = RowRange(rowRange._1, rowRange._2)
 
@@ -28,7 +28,7 @@ case class RowRange(firstRowIndex: Int, lastRowIndex: Int) {
 
 object ColumnRange {
 
-  val None = ColumnRange("A", "A")
+  val None: ColumnRange = ColumnRange("A", "A")
 
   def apply(columnRange: (String, String)): ColumnRange = ColumnRange(columnRange._1, columnRange._2)
 

@@ -1,8 +1,8 @@
 package com.norbitltd.spoiwo.model
 
 object HeightUnit {
-  lazy val Point = HeightUnit("Point")
-  lazy val Unit = HeightUnit("Unit")
+  lazy val Point: HeightUnit = HeightUnit("Point")
+  lazy val Unit: HeightUnit = HeightUnit("Unit")
 }
 
 case class HeightUnit private (value: String) {

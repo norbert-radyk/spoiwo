@@ -9,7 +9,7 @@ import org.scalatest.matchers.should.Matchers
 
 class Model2XlsxConversionsForWorkbookStreamingSpec extends AnyFlatSpec with Matchers {
 
-  def defaultWorkbook = Workbook(
+  def defaultWorkbook: Workbook = Workbook(
     Sheet(name = "Sheet 1"),
     Sheet(name = "Sheet 2")
   )
