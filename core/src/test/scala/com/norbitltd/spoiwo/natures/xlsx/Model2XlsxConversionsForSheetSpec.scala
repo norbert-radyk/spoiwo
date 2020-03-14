@@ -170,7 +170,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val row3 = Row(index = 2)
     val model = Sheet(
       rows = row1 :: row2 :: row3 :: Nil,
-      images = Image(CellRange(2 -> 2, 2 -> 2), "src/test/resources/einstein.jpg") :: Nil
+      images = Image(CellRange(2 -> 2, 2 -> 2), "core/src/test/resources/einstein.jpg") :: Nil
     ).withColumns(Column(index = 0), Column(index = 1))
 
     val xlsx = convert(model)
