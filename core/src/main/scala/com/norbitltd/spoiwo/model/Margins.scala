@@ -2,12 +2,14 @@ package com.norbitltd.spoiwo.model
 
 object Margins {
 
-  def apply(top: java.lang.Double = null,
-            bottom: java.lang.Double = null,
-            right: java.lang.Double = null,
-            left: java.lang.Double = null,
-            header: java.lang.Double = null,
-            footer: java.lang.Double = null): Margins =
+  def apply(
+      top: java.lang.Double = null,
+      bottom: java.lang.Double = null,
+      right: java.lang.Double = null,
+      left: java.lang.Double = null,
+      header: java.lang.Double = null,
+      footer: java.lang.Double = null
+  ): Margins =
     Margins(
       Option(top).map(_.doubleValue),
       Option(bottom).map(_.doubleValue),
@@ -18,12 +20,14 @@ object Margins {
     )
 }
 
-case class Margins private (top: Option[Double],
-                            bottom: Option[Double],
-                            right: Option[Double],
-                            left: Option[Double],
-                            header: Option[Double],
-                            footer: Option[Double]) {
+case class Margins private (
+    top: Option[Double],
+    bottom: Option[Double],
+    right: Option[Double],
+    left: Option[Double],
+    header: Option[Double],
+    footer: Option[Double]
+) {
 
   def withTop(top: Double): Margins =
     copy(top = Option(top))

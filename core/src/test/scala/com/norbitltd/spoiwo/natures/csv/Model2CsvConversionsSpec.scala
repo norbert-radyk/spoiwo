@@ -78,9 +78,9 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
 
   it should "correctly process the HyperLinkUrl values" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
-      Row().withCellValues(HyperLinkUrl(
-        text = "spoiwo issue",
-        address = "https://github.com/norbert-radyk/spoiwo/issues/34"))
+      Row().withCellValues(
+        HyperLinkUrl(text = "spoiwo issue", address = "https://github.com/norbert-radyk/spoiwo/issues/34")
+      )
     )
 
     val csvText = "spoiwo issue"

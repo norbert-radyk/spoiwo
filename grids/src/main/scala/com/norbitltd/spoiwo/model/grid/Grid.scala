@@ -44,8 +44,8 @@ object Grid {
 
   implicit class MergedRegionsHelper(mergedRegions: Seq[CellRange]) {
     def moveTo(x: Int, y: Int): Seq[CellRange] = {
-      mergedRegions.map(
-        r => CellRange((r.rowRange._1 + y, r.rowRange._2 + y), (r.columnRange._1 + x, r.columnRange._2 + x))
+      mergedRegions.map(r =>
+        CellRange((r.rowRange._1 + y, r.rowRange._2 + y), (r.columnRange._1 + x, r.columnRange._2 + x))
       )
     }
   }
@@ -64,6 +64,5 @@ object Grid {
     def render: Seq[Row] = Grid.render(g)
     def addMergedRegion(region: CellRange): Grid = Grid.addMergedRegion(g, region)
   }
-
 
 }

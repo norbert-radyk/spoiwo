@@ -7,16 +7,20 @@ object Row {
 
   val Empty: Row = apply()
 
-  def apply(cells: Iterable[Cell] = Nil,
-            height: Height = null,
-            index: java.lang.Integer = null,
-            style: CellStyle = null,
-            hidden: java.lang.Boolean = null): Row =
-    Row(cells = cells,
-        height = Option(height),
-        index = Option(index).map(_.intValue),
-        style = Option(style),
-        hidden = Option(hidden).map(_.booleanValue))
+  def apply(
+      cells: Iterable[Cell] = Nil,
+      height: Height = null,
+      index: java.lang.Integer = null,
+      style: CellStyle = null,
+      hidden: java.lang.Boolean = null
+  ): Row =
+    Row(
+      cells = cells,
+      height = Option(height),
+      index = Option(index).map(_.intValue),
+      style = Option(style),
+      hidden = Option(hidden).map(_.booleanValue)
+    )
 
   def apply(cells: Cell*): Row =
     apply(cells = cells.toVector)
@@ -32,11 +36,13 @@ object Row {
 
 }
 
-case class Row private (cells: Iterable[Cell],
-                        height: Option[Height],
-                        index: Option[Int],
-                        style: Option[CellStyle],
-                        hidden: Option[Boolean]) {
+case class Row private (
+    cells: Iterable[Cell],
+    height: Option[Height],
+    index: Option[Int],
+    style: Option[CellStyle],
+    hidden: Option[Boolean]
+) {
 
   override def toString: String =
     "Row(" + List(
@@ -55,17 +61,17 @@ case class Row private (cells: Iterable[Cell],
 
   def withCellValues(cellValues: List[Any]): Row = {
     val cells = cellValues.map {
-      case stringValue: String           => Cell(stringValue)
-      case doubleValue: Double           => Cell(doubleValue)
-      case decimalValue: BigDecimal      => Cell(decimalValue)
-      case intValue: Int                 => Cell(intValue)
-      case longValue: Long               => Cell(longValue)
-      case booleanValue: Boolean         => Cell(booleanValue)
-      case dateValue: Date               => Cell(dateValue)
-      case dateValue: LocalDate          => Cell(dateValue)
-      case dateTimeValue: LocalDateTime  => Cell(dateTimeValue)
-      case calendarValue: Calendar       => Cell(calendarValue)
-      case hyperLinkUrl: HyperLinkUrl    => Cell(hyperLinkUrl)
+      case stringValue: String          => Cell(stringValue)
+      case doubleValue: Double          => Cell(doubleValue)
+      case decimalValue: BigDecimal     => Cell(decimalValue)
+      case intValue: Int                => Cell(intValue)
+      case longValue: Long              => Cell(longValue)
+      case booleanValue: Boolean        => Cell(booleanValue)
+      case dateValue: Date              => Cell(dateValue)
+      case dateValue: LocalDate         => Cell(dateValue)
+      case dateTimeValue: LocalDateTime => Cell(dateTimeValue)
+      case calendarValue: Calendar      => Cell(calendarValue)
+      case hyperLinkUrl: HyperLinkUrl   => Cell(hyperLinkUrl)
       case value =>
         throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }

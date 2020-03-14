@@ -4,12 +4,14 @@ object Header {
 
   val Empty: Header = Standard()
 
-  def Standard(left: String = null,
-               center: String = null,
-               right: String = null,
-               firstLeft: String = null,
-               firstCenter: String = null,
-               firstRight: String = null): Header =
+  def Standard(
+      left: String = null,
+      center: String = null,
+      right: String = null,
+      firstLeft: String = null,
+      firstCenter: String = null,
+      firstRight: String = null
+  ): Header =
     Header(
       left = Option(left),
       center = Option(center),
@@ -25,15 +27,17 @@ object Header {
       evenRight = None
     )
 
-  def EvenOdd(oddLeft: String = null,
-              oddCenter: String = null,
-              oddRight: String = null,
-              evenLeft: String = null,
-              evenCenter: String = null,
-              evenRight: String = null,
-              firstLeft: String = null,
-              firstCenter: String = null,
-              firstRight: String = null): Header =
+  def EvenOdd(
+      oddLeft: String = null,
+      oddCenter: String = null,
+      oddRight: String = null,
+      evenLeft: String = null,
+      evenCenter: String = null,
+      evenRight: String = null,
+      firstLeft: String = null,
+      firstCenter: String = null,
+      firstRight: String = null
+  ): Header =
     Header(
       oddLeft = Option(oddLeft),
       oddCenter = Option(oddCenter),
@@ -50,18 +54,20 @@ object Header {
     )
 }
 
-case class Header private (left: Option[String],
-                           center: Option[String],
-                           right: Option[String],
-                           firstLeft: Option[String],
-                           firstCenter: Option[String],
-                           firstRight: Option[String],
-                           oddLeft: Option[String],
-                           oddCenter: Option[String],
-                           oddRight: Option[String],
-                           evenLeft: Option[String],
-                           evenCenter: Option[String],
-                           evenRight: Option[String]) {
+case class Header private (
+    left: Option[String],
+    center: Option[String],
+    right: Option[String],
+    firstLeft: Option[String],
+    firstCenter: Option[String],
+    firstRight: Option[String],
+    oddLeft: Option[String],
+    oddCenter: Option[String],
+    oddRight: Option[String],
+    evenLeft: Option[String],
+    evenCenter: Option[String],
+    evenRight: Option[String]
+) {
 
   def withFirstPageLeft(firstLeft: String): Header =
     copy(firstLeft = Option(firstLeft))

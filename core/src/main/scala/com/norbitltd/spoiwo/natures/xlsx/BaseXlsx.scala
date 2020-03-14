@@ -16,10 +16,12 @@ trait BaseXlsx {
   private val FirstSupportedDate = LocalDate.of(1904, 1, 1)
   private val LastSupportedDate = LocalDate.of(9999, 12, 31)
 
-  protected[natures] def mergeStyle(cell: Cell,
-                         rowStyle: Option[CellStyle],
-                         columnStyle: Option[CellStyle],
-                         sheetStyle: Option[CellStyle]): Cell = {
+  protected[natures] def mergeStyle(
+      cell: Cell,
+      rowStyle: Option[CellStyle],
+      columnStyle: Option[CellStyle],
+      sheetStyle: Option[CellStyle]
+  ): Cell = {
     cell.styleInheritance match {
       case CellStyleInheritance.CellOnly =>
         cell
@@ -43,7 +45,8 @@ trait BaseXlsx {
         cell.withDefaultStyle(rowStyle).withDefaultStyle(columnStyle).withDefaultStyle(sheetStyle)
       case unexpected =>
         throw new IllegalArgumentException(
-          s"Unable to convert CellStyleInheritance=$unexpected to XLSX - unsupported enum!")
+          s"Unable to convert CellStyleInheritance=$unexpected to XLSX - unsupported enum!"
+        )
     }
   }
 
@@ -51,7 +54,9 @@ trait BaseXlsx {
     val i = c.index.getOrElse(
       throw new IllegalArgumentException(
         "Undefined column index! " +
-          "Something went terribly wrong as it should have been derived if not specified explicitly!"))
+          "Something went terribly wrong as it should have been derived if not specified explicitly!"
+      )
+    )
 
     c.autoSized.foreach(as => if (as) sheet.autoSizeColumn(i))
     c.break.foreach(b => if (b) sheet.setColumnBreak(i))
@@ -83,12 +88,10 @@ trait BaseXlsx {
     cell.setHyperlink(link)
   }
 
-
   protected[natures] def convertCellRange(cr: CellRange): CellRangeAddress =
     new org.apache.poi.ss.util.CellRangeAddress(cr.rowRange._1, cr.rowRange._2, cr.columnRange._1, cr.columnRange._2)
 
-  protected[natures] def convertFont(f: Font,
-                          font: XSSFFont): XSSFFont = {
+  protected[natures] def convertFont(f: Font, font: XSSFFont): XSSFFont = {
     f.bold.foreach(font.setBold)
     f.charSet.foreach(charSet => font.setCharSet(convertCharset(charSet).getNativeId))
     f.color.foreach(c => font.setColor(convertColor(c)))
@@ -115,7 +118,6 @@ trait BaseXlsx {
       throw new IllegalArgumentException("It is not allowed to have cells with duplicate index within a single row!")
   }
 
-
   protected[natures] def validateRows(s: Sheet): Unit = {
     val indexedRows = s.rows.filter(_.index.isDefined)
     val contextRows = s.rows.filter(_.index.isEmpty)
@@ -140,10 +142,10 @@ trait BaseXlsx {
     } else {
       throw new IllegalArgumentException(
         "When explicitly specifying column index you are required to provide it " +
-          "uniquely for all columns in this sheet definition!")
+          "uniquely for all columns in this sheet definition!"
+      )
     }
   }
-
 
   protected[natures] def convertSheetProperties(sp: SheetProperties, sheet: usermodel.Sheet): Unit = {
     sp.autoFilter.foreach(autoFilterRange => sheet.setAutoFilter(convertCellRange(autoFilterRange)))
@@ -175,7 +177,7 @@ trait BaseXlsx {
     sp.zoom.foreach(sheet.setZoom)
   }
 
-  protected[natures] def setTabColor( sheet: usermodel.Sheet, XSSFColor: XSSFColor ): Unit
+  protected[natures] def setTabColor(sheet: usermodel.Sheet, XSSFColor: XSSFColor): Unit
 
   protected[natures] def convertPrintSetup(printSetup: PrintSetup, sheet: usermodel.Sheet): Unit = {
     if (printSetup != PrintSetup.Default) {

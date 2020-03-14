@@ -2,7 +2,13 @@ package com.norbitltd.spoiwo.natures.streaming.xlsx
 
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model._
-import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, CellReadingOrder, CellHorizontalAlignment, CellVerticalAlignment}
+import com.norbitltd.spoiwo.model.enums.{
+  CellBorderStyle,
+  CellFill,
+  CellReadingOrder,
+  CellHorizontalAlignment,
+  CellVerticalAlignment
+}
 import com.norbitltd.spoiwo.natures.streaming.xlsx.Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, ReadingOrder, HorizontalAlignment, VerticalAlignment}
 import org.apache.poi.xssf.streaming.SXSSFWorkbook
@@ -30,10 +36,12 @@ class Model2XlsxConversionsForCellStyleSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return explicitly set borders" in {
-    val modelBorders = CellBorders(leftStyle = CellBorderStyle.Double,
-                                   leftColor = Color.Blue,
-                                   rightStyle = CellBorderStyle.Thick,
-                                   rightColor = Color.Red)
+    val modelBorders = CellBorders(
+      leftStyle = CellBorderStyle.Double,
+      leftColor = Color.Blue,
+      rightStyle = CellBorderStyle.Thick,
+      rightColor = Color.Red
+    )
     val modelWithBorders = CellStyle(borders = modelBorders)
     val xssfWithBorders = convertCellStyle(modelWithBorders, workbook)
 

@@ -4,26 +4,28 @@ import com.norbitltd.spoiwo.model.enums.{PaperSize, PageOrder}
 
 object PrintSetup {
 
-  val Default = PrintSetup()
+  val Default: PrintSetup = PrintSetup()
 
-  def apply(copies: java.lang.Integer = null,
-            draft: java.lang.Boolean = null,
-            fitHeight: java.lang.Integer = null,
-            fitWidth: java.lang.Integer = null,
-            footerMargin: java.lang.Double = null,
-            headerMargin: java.lang.Double = null,
-            hResolution: java.lang.Integer = null,
-            landscape: java.lang.Boolean = null,
-            leftToRight: java.lang.Boolean = null,
-            noColor: java.lang.Boolean = null,
-            noOrientation: java.lang.Boolean = null,
-            pageOrder: PageOrder = null,
-            pageStart: java.lang.Integer = null,
-            paperSize: PaperSize = null,
-            scale: java.lang.Integer = null,
-            usePage: java.lang.Boolean = null,
-            validSettings: java.lang.Boolean = null,
-            vResolution: java.lang.Integer = null): PrintSetup =
+  def apply(
+      copies: java.lang.Integer = null,
+      draft: java.lang.Boolean = null,
+      fitHeight: java.lang.Integer = null,
+      fitWidth: java.lang.Integer = null,
+      footerMargin: java.lang.Double = null,
+      headerMargin: java.lang.Double = null,
+      hResolution: java.lang.Integer = null,
+      landscape: java.lang.Boolean = null,
+      leftToRight: java.lang.Boolean = null,
+      noColor: java.lang.Boolean = null,
+      noOrientation: java.lang.Boolean = null,
+      pageOrder: PageOrder = null,
+      pageStart: java.lang.Integer = null,
+      paperSize: PaperSize = null,
+      scale: java.lang.Integer = null,
+      usePage: java.lang.Boolean = null,
+      validSettings: java.lang.Boolean = null,
+      vResolution: java.lang.Integer = null
+  ): PrintSetup =
     new PrintSetup(
       copies = Option(copies).map(_.shortValue),
       draft = Option(draft).map(_.booleanValue),
@@ -47,24 +49,26 @@ object PrintSetup {
 
 }
 
-case class PrintSetup private (copies: Option[Short],
-                               draft: Option[Boolean],
-                               fitHeight: Option[Short],
-                               fitWidth: Option[Short],
-                               footerMargin: Option[Double],
-                               headerMargin: Option[Double],
-                               hResolution: Option[Short],
-                               landscape: Option[Boolean],
-                               leftToRight: Option[Boolean],
-                               noColor: Option[Boolean],
-                               noOrientation: Option[Boolean],
-                               pageOrder: Option[PageOrder],
-                               pageStart: Option[Short],
-                               paperSize: Option[PaperSize],
-                               scale: Option[Short],
-                               usePage: Option[Boolean],
-                               validSettings: Option[Boolean],
-                               vResolution: Option[Short]) {
+case class PrintSetup private (
+    copies: Option[Short],
+    draft: Option[Boolean],
+    fitHeight: Option[Short],
+    fitWidth: Option[Short],
+    footerMargin: Option[Double],
+    headerMargin: Option[Double],
+    hResolution: Option[Short],
+    landscape: Option[Boolean],
+    leftToRight: Option[Boolean],
+    noColor: Option[Boolean],
+    noOrientation: Option[Boolean],
+    pageOrder: Option[PageOrder],
+    pageStart: Option[Short],
+    paperSize: Option[PaperSize],
+    scale: Option[Short],
+    usePage: Option[Boolean],
+    validSettings: Option[Boolean],
+    vResolution: Option[Short]
+) {
 
   def withCopies(copies: Short): PrintSetup = copy(copies = Option(copies))
 

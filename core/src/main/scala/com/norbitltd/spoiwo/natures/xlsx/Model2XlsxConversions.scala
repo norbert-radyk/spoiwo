@@ -1,15 +1,22 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
-import java.io.{ FileInputStream, FileOutputStream, OutputStream }
+import java.io.{FileInputStream, FileOutputStream, OutputStream}
 import com.norbitltd.spoiwo.model.enums._
-import com.norbitltd.spoiwo.model.{ BooleanCell, CalendarCell, DateCell, FormulaCell, NumericCell, StringCell, _ }
+import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaCell, NumericCell, StringCell, _}
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType
-import org.apache.poi.ss.usermodel.{ BorderStyle, CellType, FillPatternType, ReadingOrder, HorizontalAlignment, VerticalAlignment }
+import org.apache.poi.ss.usermodel.{
+  BorderStyle,
+  CellType,
+  FillPatternType,
+  ReadingOrder,
+  HorizontalAlignment,
+  VerticalAlignment
+}
 import org.apache.poi.util.IOUtils
 import org.apache.poi.xssf.usermodel._
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.{ CTTable, CTTableColumns, CTTableStyleInfo }
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
 
 object Model2XlsxConversions extends BaseXlsx {
 
@@ -20,11 +27,13 @@ object Model2XlsxConversions extends BaseXlsx {
 
   private def Cache[K, V]() = collection.mutable.Map[XSSFWorkbook, collection.mutable.Map[K, V]]()
 
-  private[xlsx] def convertCell(modelSheet: Sheet,
-                                modelColumns: Map[Int, Column],
-                                modelRow: Row,
-                                c: Cell,
-                                row: XSSFRow): XSSFCell = {
+  private[xlsx] def convertCell(
+      modelSheet: Sheet,
+      modelColumns: Map[Int, Column],
+      modelRow: Row,
+      c: Cell,
+      row: XSSFRow
+  ): XSSFCell = {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum.toInt)
     val cell = Option(row.getCell(cellNumber)).getOrElse(row.createCell(cellNumber))
     if (cell.getCellType == CellType.FORMULA) {
@@ -47,7 +56,7 @@ object Model2XlsxConversions extends BaseXlsx {
     cell
   }
 
-  private def convertCellDataFormat(cdf: CellDataFormat, workbook: XSSFWorkbook, cellStyle: XSSFCellStyle): Unit =  {
+  private def convertCellDataFormat(cdf: CellDataFormat, workbook: XSSFWorkbook, cellStyle: XSSFCellStyle): Unit = {
     cdf.formatString.foreach(formatString => {
       val format = dataFormatCache.getOrElseUpdate(workbook, workbook.createDataFormat())
       val formatIndex = format.getFormat(formatString)
@@ -77,7 +86,7 @@ object Model2XlsxConversions extends BaseXlsx {
       cellStyle
     }
 
-  private def convertFooter(f: Footer, sheet: XSSFSheet): Unit =  {
+  private def convertFooter(f: Footer, sheet: XSSFSheet): Unit = {
     f.left.foreach(sheet.getFooter.setLeft)
     f.center.foreach(sheet.getFooter.setCenter)
     f.right.foreach(sheet.getFooter.setRight)
@@ -101,7 +110,7 @@ object Model2XlsxConversions extends BaseXlsx {
       convertFont(f, font)
     }
 
-  private def convertHeader(h: Header, sheet: XSSFSheet): Unit =  {
+  private def convertHeader(h: Header, sheet: XSSFSheet): Unit = {
     h.left.foreach(sheet.getHeader.setLeft)
     h.center.foreach(sheet.getHeader.setCenter)
     h.right.foreach(sheet.getHeader.setRight)
@@ -119,10 +128,12 @@ object Model2XlsxConversions extends BaseXlsx {
     h.evenRight.foreach(sheet.getEvenHeader.setRight)
   }
 
-  private[xlsx] def convertRow(modelColumns: Map[Int, Column],
-                               modelRow: Row,
-                               modelSheet: Sheet,
-                               sheet: XSSFSheet): XSSFRow = {
+  private[xlsx] def convertRow(
+      modelColumns: Map[Int, Column],
+      modelRow: Row,
+      modelSheet: Sheet,
+      sheet: XSSFSheet
+  ): XSSFRow = {
     validateCells(modelRow)
     val indexNumber = modelRow.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = Option(sheet.getRow(indexNumber)).getOrElse(sheet.createRow(indexNumber))
@@ -167,7 +178,7 @@ object Model2XlsxConversions extends BaseXlsx {
     sheet.asInstanceOf[XSSFSheet].setTabColor(color)
   }
 
-  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit =  {
+  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit = {
     if (printSetup != PrintSetup.Default) {
       val ps = sheetPs.asInstanceOf[XSSFPrintSetup]
       printSetup.pageOrder.foreach(po => ps.setPageOrder(convertPageOrder(po)))
@@ -193,7 +204,8 @@ object Model2XlsxConversions extends BaseXlsx {
     val tableId = modelTable.id.getOrElse {
       throw new IllegalArgumentException(
         "Undefined table id! " +
-          "Something went terribly wrong as it should have been derived if not specified explicitly!")
+          "Something went terribly wrong as it should have been derived if not specified explicitly!"
+      )
     }
 
     val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
@@ -254,15 +266,15 @@ object Model2XlsxConversions extends BaseXlsx {
   }
 
   private[xlsx] def convertImages(images: List[Image], sheet: XSSFSheet) =
-    images.foldLeft(sheet)((sheet, image) => addImage(image, sheet) )
+    images.foldLeft(sheet)((sheet, image) => addImage(image, sheet))
 
   private[xlsx] def addImage(image: Image, sheet: XSSFSheet) = {
     val wb = sheet.getWorkbook
 
     val imageFormat =
-      if(image.filePath.toLowerCase.endsWith(".jpg"))
+      if (image.filePath.toLowerCase.endsWith(".jpg"))
         org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_JPEG
-      else if(image.filePath.toLowerCase.endsWith(".png"))
+      else if (image.filePath.toLowerCase.endsWith(".png"))
         org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_PNG
       else throw new IllegalArgumentException(s"File format is not supported")
 
@@ -275,8 +287,8 @@ object Model2XlsxConversions extends BaseXlsx {
     val anchor = helper.createClientAnchor
     anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE)
 
-    val (fromColumn, toColumn)  = image.region.columnRange
-    val (fromRow, toRow)  = image.region.rowRange
+    val (fromColumn, toColumn) = image.region.columnRange
+    val (fromRow, toRow) = image.region.rowRange
 
     anchor.setCol1(fromColumn)
     anchor.setCol2(toColumn)
@@ -322,7 +334,7 @@ object Model2XlsxConversions extends BaseXlsx {
     evictFromCache(workbook)
     workbook
   }
-  private def evictFromCache(wb: XSSFWorkbook): Unit =  {
+  private def evictFromCache(wb: XSSFWorkbook): Unit = {
     cellStyleCache.remove(wb)
     dataFormatCache.remove(wb)
     fontCache.remove(wb)
@@ -380,7 +392,6 @@ object Model2XlsxConversions extends BaseXlsx {
     def convertAsXlsx(): ReadingOrder = convertReadingOrder(ro)
   }
 
-
   implicit class XlsxSheet(s: Sheet) extends XlsxExport {
     def validate(): Unit = {
       validateRows(s)
@@ -395,7 +406,7 @@ object Model2XlsxConversions extends BaseXlsx {
 
     def convertAsXlsx(): XSSFWorkbook = Workbook(s).convertAsXlsx()
 
-    override def saveAsXlsx(fileName: String): Unit =  {
+    override def saveAsXlsx(fileName: String): Unit = {
       Workbook(s).saveAsXlsx(fileName)
     }
 

@@ -78,7 +78,8 @@ class Model2XlsxConversionsForTableSpec extends AnyFlatSpec with Matchers {
       List(
         TableColumn("ColA", 42),
         TableColumn("ColB", 43)
-      ))
+      )
+    )
     val xlsx = convertTable(model, defaultSheet)
     val xlsxColumns = xlsx.getCTTable.getTableColumns
 

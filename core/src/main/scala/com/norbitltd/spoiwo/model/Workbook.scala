@@ -6,13 +6,15 @@ object Workbook {
 
   val Empty: Workbook = apply()
 
-  def apply(activeSheet: java.lang.Integer = null,
-            firstVisibleTab: java.lang.Integer = null,
-            forceFormulaRecalculation: java.lang.Boolean = null,
-            hidden: java.lang.Boolean = null,
-            missingCellPolicy: MissingCellPolicy = null,
-            selectedTab: java.lang.Integer = null,
-            sheets: Iterable[Sheet] = Nil): Workbook =
+  def apply(
+      activeSheet: java.lang.Integer = null,
+      firstVisibleTab: java.lang.Integer = null,
+      forceFormulaRecalculation: java.lang.Boolean = null,
+      hidden: java.lang.Boolean = null,
+      missingCellPolicy: MissingCellPolicy = null,
+      selectedTab: java.lang.Integer = null,
+      sheets: Iterable[Sheet] = Nil
+  ): Workbook =
     Workbook(
       Option(activeSheet).map(_.intValue),
       Option(firstVisibleTab).map(_.intValue),
@@ -27,13 +29,15 @@ object Workbook {
     Workbook(sheets = sheets)
 }
 
-case class Workbook private[model] (activeSheet: Option[Int],
-                                    firstVisibleTab: Option[Int],
-                                    forceFormulaRecalculation: Option[Boolean],
-                                    hidden: Option[Boolean],
-                                    missingCellPolicy: Option[MissingCellPolicy],
-                                    selectedTab: Option[Int],
-                                    sheets: Iterable[Sheet]) {
+case class Workbook private[model] (
+    activeSheet: Option[Int],
+    firstVisibleTab: Option[Int],
+    forceFormulaRecalculation: Option[Boolean],
+    hidden: Option[Boolean],
+    missingCellPolicy: Option[MissingCellPolicy],
+    selectedTab: Option[Int],
+    sheets: Iterable[Sheet]
+) {
 
   def withActiveSheet(activeSheet: Int): Workbook =
     copy(activeSheet = Option(activeSheet))

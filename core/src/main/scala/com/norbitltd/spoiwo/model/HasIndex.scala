@@ -14,7 +14,7 @@ object HasIndex {
 
   implicit class RichHasIndexSeq[T](indexed: Iterable[T])(implicit indexer: HasIndex[T]) {
     def maxIndex: Int = {
-      indexed.foldLeft(0) { case (maxIdx, e) => math.max(maxIdx, indexer.index(e).getOrElse(maxIdx + 1))}
+      indexed.foldLeft(0) { case (maxIdx, e) => math.max(maxIdx, indexer.index(e).getOrElse(maxIdx + 1)) }
     }
   }
 }

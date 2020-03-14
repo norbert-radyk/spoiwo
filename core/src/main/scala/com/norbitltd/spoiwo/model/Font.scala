@@ -4,17 +4,19 @@ import com.norbitltd.spoiwo.model.enums._
 
 object Font {
 
-  def apply(height: Height = null,
-            bold: java.lang.Boolean = null,
-            italic: java.lang.Boolean = null,
-            charSet: Charset = null,
-            color: Color = null,
-            family: FontFamily = null,
-            scheme: FontScheme = null,
-            fontName: String = null,
-            strikeout: java.lang.Boolean = null,
-            typeOffset: TypeOffset = null,
-            underline: Underline = null): Font =
+  def apply(
+      height: Height = null,
+      bold: java.lang.Boolean = null,
+      italic: java.lang.Boolean = null,
+      charSet: Charset = null,
+      color: Color = null,
+      family: FontFamily = null,
+      scheme: FontScheme = null,
+      fontName: String = null,
+      strikeout: java.lang.Boolean = null,
+      typeOffset: TypeOffset = null,
+      underline: Underline = null
+  ): Font =
     Font(
       height = Option(height),
       bold = Option(bold).map(_.booleanValue),
@@ -30,17 +32,19 @@ object Font {
     )
 }
 
-case class Font private[model] (height: Option[Height],
-                                bold: Option[Boolean],
-                                italic: Option[Boolean],
-                                charSet: Option[Charset],
-                                color: Option[Color],
-                                family: Option[FontFamily],
-                                scheme: Option[FontScheme],
-                                fontName: Option[String],
-                                strikeout: Option[Boolean],
-                                typeOffset: Option[TypeOffset],
-                                underline: Option[Underline]) {
+case class Font private[model] (
+    height: Option[Height],
+    bold: Option[Boolean],
+    italic: Option[Boolean],
+    charSet: Option[Charset],
+    color: Option[Color],
+    family: Option[FontFamily],
+    scheme: Option[FontScheme],
+    fontName: Option[String],
+    strikeout: Option[Boolean],
+    typeOffset: Option[TypeOffset],
+    underline: Option[Underline]
+) {
 
   def withHeight(height: Height): Font =
     copy(height = Option(height))

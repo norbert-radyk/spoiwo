@@ -15,15 +15,13 @@ object GridExamples {
    */
   def generateGrid(n: Int, m: Int, c: Color): Grid = {
     val cell = Cell("").withStyle(CellStyle(fillForegroundColor = c, fillPattern = CellFill.Solid))
-    val row  = Row().withCells(Seq.fill(m)(cell))
-    Grid { _ =>
-      Seq.fill(n)(row)
-    }
+    val row = Row().withCells(Seq.fill(m)(cell))
+    Grid { _ => Seq.fill(n)(row) }
   }
 
   def generateGridWithFormula(n: Int, m: Int, c: Color): Grid = {
     val cell = Cell("").withStyle(CellStyle(fillForegroundColor = c, fillPattern = CellFill.Solid))
-    val row  = Row().withCells(Seq.fill(m)(cell))
+    val row = Row().withCells(Seq.fill(m)(cell))
 
     Grid { f =>
       def cellWithFormula(x: Int) =
@@ -45,7 +43,10 @@ object GridExamples {
     val grid = generateGrid(5, 5, Color.LightBlue)
     val gridWithMergedCells = Grid.addMergedRegion(grid, CellRange(2 -> 3, 2 -> 3))
     val rows = Grid.render(gridWithMergedCells)
-    Sheet(name = "new sheet").withRows(rows).withMergedRegions(gridWithMergedCells.mergedRegions).saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet")
+      .withRows(rows)
+      .withMergedRegions(gridWithMergedCells.mergedRegions)
+      .saveAsXlsx("test.xlsx")
   }
   def theSameAsAboveButWithHelpers(): Unit = {
     import Grid._
@@ -88,7 +89,7 @@ object GridExamples {
     val g3 = generateGrid(7, 7, Color.IndianRed)
     val g4 = generateGrid(12, 8, Color.LightYellow)
 
-    val composed  = g1.addToLeft(g2).addBelow(g3).addToLeft(g4)
+    val composed = g1.addToLeft(g2).addBelow(g3).addToLeft(g4)
     Sheet(name = "new sheet")
       .withGrid(composed)
       .saveAsXlsx("test.xlsx")
@@ -97,9 +98,9 @@ object GridExamples {
   //if you write in the first line of the green areas the last line will copy the values
   def ifYouHaveFormulasThoseHandledToo(): Unit = {
     import Grid._
-    val g1   = generateGrid(5, 5, Color.LightBlue)
-    val g2   = generateGridWithFormula(6, 6, Color.Green)
-    val composed  = g1.addToRight(g2).addBelow(g2)
+    val g1 = generateGrid(5, 5, Color.LightBlue)
+    val g2 = generateGridWithFormula(6, 6, Color.Green)
+    val composed = g1.addToRight(g2).addBelow(g2)
     Sheet(name = "new sheet")
       .withGrid(composed)
       .saveAsXlsx("test.xlsx")

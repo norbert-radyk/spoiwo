@@ -4,22 +4,24 @@ import com.norbitltd.spoiwo.model.enums.{CellReadingOrder, CellVerticalAlignment
 
 object CellStyle {
 
-  val Default = CellStyle()
+  val Default: CellStyle = CellStyle()
 
-  def apply(borders: CellBorders = null,
-            dataFormat: CellDataFormat = null,
-            font: Font = null,
-            fillPattern: CellFill = null,
-            fillForegroundColor: Color = null,
-            fillBackgroundColor: Color = null,
-            readingOrder: CellReadingOrder = null,
-            horizontalAlignment: CellHorizontalAlignment = null,
-            verticalAlignment: CellVerticalAlignment = null,
-            hidden: java.lang.Boolean = null,
-            indention: java.lang.Integer = null,
-            locked: java.lang.Boolean = null,
-            rotation: java.lang.Integer = null,
-            wrapText: java.lang.Boolean = null): CellStyle =
+  def apply(
+      borders: CellBorders = null,
+      dataFormat: CellDataFormat = null,
+      font: Font = null,
+      fillPattern: CellFill = null,
+      fillForegroundColor: Color = null,
+      fillBackgroundColor: Color = null,
+      readingOrder: CellReadingOrder = null,
+      horizontalAlignment: CellHorizontalAlignment = null,
+      verticalAlignment: CellVerticalAlignment = null,
+      hidden: java.lang.Boolean = null,
+      indention: java.lang.Integer = null,
+      locked: java.lang.Boolean = null,
+      rotation: java.lang.Integer = null,
+      wrapText: java.lang.Boolean = null
+  ): CellStyle =
     CellStyle(
       borders = Option(borders),
       dataFormat = Option(dataFormat),
@@ -38,20 +40,22 @@ object CellStyle {
     )
 }
 
-case class CellStyle private (borders: Option[CellBorders],
-                              dataFormat: Option[CellDataFormat],
-                              font: Option[Font],
-                              fillPattern: Option[CellFill],
-                              fillForegroundColor: Option[Color],
-                              fillBackgroundColor: Option[Color],
-                              readingOrder: Option[CellReadingOrder],
-                              horizontalAlignment: Option[CellHorizontalAlignment],
-                              verticalAlignment: Option[CellVerticalAlignment],
-                              hidden: Option[Boolean],
-                              indention: Option[Short],
-                              locked: Option[Boolean],
-                              rotation: Option[Short],
-                              wrapText: Option[Boolean]) {
+case class CellStyle private (
+    borders: Option[CellBorders],
+    dataFormat: Option[CellDataFormat],
+    font: Option[Font],
+    fillPattern: Option[CellFill],
+    fillForegroundColor: Option[Color],
+    fillBackgroundColor: Option[Color],
+    readingOrder: Option[CellReadingOrder],
+    horizontalAlignment: Option[CellHorizontalAlignment],
+    verticalAlignment: Option[CellVerticalAlignment],
+    hidden: Option[Boolean],
+    indention: Option[Short],
+    locked: Option[Boolean],
+    rotation: Option[Short],
+    wrapText: Option[Boolean]
+) {
 
   override def toString: String =
     "CellStyle(" + List(

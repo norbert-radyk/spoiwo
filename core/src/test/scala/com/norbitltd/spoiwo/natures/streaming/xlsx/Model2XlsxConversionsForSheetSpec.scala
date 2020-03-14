@@ -28,7 +28,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val w: SXSSFWorkbook = workbook
     w.createSheet("Test1")
     w.createSheet("Test2")
-    val sheet3: SXSSFSheet= convertSheet(Sheet(), w)
+    val sheet3: SXSSFSheet = convertSheet(Sheet(), w)
     sheet3.getSheetName shouldBe "Sheet3"
   }
 
@@ -42,7 +42,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val w: SXSSFWorkbook = workbook
     w.createSheet("Existing")
     val previousSheet = generateSheet(0 to 2, 0 to 5)
-    val existingPoiSheet: SXSSFSheet= convertSheet(previousSheet, w)
+    val existingPoiSheet: SXSSFSheet = convertSheet(previousSheet, w)
     val newSheet = generateSheet[Int, Int](1 to 3, 1 to 4, (rowNum, colNum) => s"NEW $colNum,$rowNum")
     writeToExistingSheet(newSheet, existingPoiSheet)
     val dataMatrix = mergeSheetData(Seq(previousSheet, newSheet), _.value.toString)
@@ -53,7 +53,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val w: SXSSFWorkbook = workbook
     w.createSheet("Existing")
     val previousSheet = generateSheet(0 to 2, 0 to 5)
-    val existingPoiSheet: SXSSFSheet= convertSheet(previousSheet, w)
+    val existingPoiSheet: SXSSFSheet = convertSheet(previousSheet, w)
     val newSheet = generateSheet[Int, Int](1 to 3, 1 to 4, (rowNum, colNum) => s"NEW $colNum,$rowNum").copy(
       printSetup = Some(PrintSetup(10, true, 1000))
     )

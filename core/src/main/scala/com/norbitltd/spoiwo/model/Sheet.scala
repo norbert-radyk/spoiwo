@@ -2,24 +2,26 @@ package com.norbitltd.spoiwo.model
 
 object Sheet {
 
-  val Blank = Sheet()
+  val Blank: Sheet = Sheet()
 
-  def apply(name: String = null,
-            columns: List[Column] = Nil,
-            rows: List[Row] = Nil,
-            mergedRegions: List[CellRange] = Nil,
-            printSetup: PrintSetup = null,
-            header: Header = null,
-            footer: Footer = null,
-            properties: SheetProperties = null,
-            margins: Margins = null,
-            paneAction: PaneAction = null,
-            repeatingRows: RowRange = null,
-            repeatingColumns: ColumnRange = null,
-            style: CellStyle = null,
-            password: String = null,
-            tables: List[Table] = Nil,
-            images: List[Image] = Nil): Sheet =
+  def apply(
+      name: String = null,
+      columns: List[Column] = Nil,
+      rows: List[Row] = Nil,
+      mergedRegions: List[CellRange] = Nil,
+      printSetup: PrintSetup = null,
+      header: Header = null,
+      footer: Footer = null,
+      properties: SheetProperties = null,
+      margins: Margins = null,
+      paneAction: PaneAction = null,
+      repeatingRows: RowRange = null,
+      repeatingColumns: ColumnRange = null,
+      style: CellStyle = null,
+      password: String = null,
+      tables: List[Table] = Nil,
+      images: List[Image] = Nil
+  ): Sheet =
     Sheet(
       name = Option(name),
       columns = columns,
@@ -45,22 +47,24 @@ object Sheet {
 
 }
 
-case class Sheet private (name: Option[String],
-                          columns: List[Column],
-                          rows: List[Row],
-                          mergedRegions: List[CellRange],
-                          printSetup: Option[PrintSetup],
-                          header: Option[Header],
-                          footer: Option[Footer],
-                          properties: Option[SheetProperties],
-                          margins: Option[Margins],
-                          paneAction: Option[PaneAction],
-                          repeatingRows: Option[RowRange],
-                          repeatingColumns: Option[ColumnRange],
-                          style: Option[CellStyle],
-                          password: Option[String],
-                          tables: List[Table],
-                          images: List[Image]) {
+case class Sheet private (
+    name: Option[String],
+    columns: List[Column],
+    rows: List[Row],
+    mergedRegions: List[CellRange],
+    printSetup: Option[PrintSetup],
+    header: Option[Header],
+    footer: Option[Footer],
+    properties: Option[SheetProperties],
+    margins: Option[Margins],
+    paneAction: Option[PaneAction],
+    repeatingRows: Option[RowRange],
+    repeatingColumns: Option[ColumnRange],
+    style: Option[CellStyle],
+    password: Option[String],
+    tables: List[Table],
+    images: List[Image]
+) {
 
   override def toString: String =
     "Sheet(" + List(

@@ -8,8 +8,13 @@ import com.norbitltd.spoiwo.model.enums.CellFill
 
 object GettingStartedExample {
 
-  val headerStyle =
-    CellStyle(fillPattern = CellFill.Solid, fillForegroundColor = Color.AquaMarine, fillBackgroundColor = Color.AquaMarine, font = Font(bold = true))
+  val headerStyle: CellStyle =
+    CellStyle(
+      fillPattern = CellFill.Solid,
+      fillForegroundColor = Color.AquaMarine,
+      fillBackgroundColor = Color.AquaMarine,
+      font = Font(bold = true)
+    )
 
   val gettingStartedSheet: Sheet = Sheet(name = "Some serious stuff")
     .withRows(
@@ -22,7 +27,7 @@ object GettingStartedExample {
       Column(index = 0, style = CellStyle(font = Font(bold = true)), autoSized = true)
     )
 
-  def main(args: Array[String]): Unit =  {
+  def main(args: Array[String]): Unit = {
     gettingStartedSheet.saveAsXlsx(args(0))
   }
 }

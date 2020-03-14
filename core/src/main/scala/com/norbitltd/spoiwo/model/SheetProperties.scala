@@ -2,30 +2,32 @@ package com.norbitltd.spoiwo.model
 
 object SheetProperties {
 
-  lazy val Default = SheetProperties()
+  lazy val Default: SheetProperties = SheetProperties()
 
-  def apply(autoFilter: CellRange = null,
-            activeCell: String = null,
-            autoBreaks: java.lang.Boolean = null,
-            defaultColumnWidth: java.lang.Integer = null,
-            defaultRowHeight: Height = null,
-            displayFormulas: java.lang.Boolean = null,
-            displayGridLines: java.lang.Boolean = null,
-            displayGuts: java.lang.Boolean = null,
-            displayRowColHeadings: java.lang.Boolean = null,
-            displayZeros: java.lang.Boolean = null,
-            fitToPage: java.lang.Boolean = null,
-            forceFormulaRecalculation: java.lang.Boolean = null,
-            horizontallyCenter: java.lang.Boolean = null,
-            printArea: CellRange = null,
-            printGridLines: java.lang.Boolean = null,
-            rightToLeft: java.lang.Boolean = null,
-            rowSumsBelow: java.lang.Boolean = null,
-            rowSumsRight: java.lang.Boolean = null,
-            selected: java.lang.Boolean = null,
-            tabColor: Color = null,
-            virtuallyCenter: java.lang.Boolean = null,
-            zoom: java.lang.Integer = null): SheetProperties = SheetProperties(
+  def apply(
+      autoFilter: CellRange = null,
+      activeCell: String = null,
+      autoBreaks: java.lang.Boolean = null,
+      defaultColumnWidth: java.lang.Integer = null,
+      defaultRowHeight: Height = null,
+      displayFormulas: java.lang.Boolean = null,
+      displayGridLines: java.lang.Boolean = null,
+      displayGuts: java.lang.Boolean = null,
+      displayRowColHeadings: java.lang.Boolean = null,
+      displayZeros: java.lang.Boolean = null,
+      fitToPage: java.lang.Boolean = null,
+      forceFormulaRecalculation: java.lang.Boolean = null,
+      horizontallyCenter: java.lang.Boolean = null,
+      printArea: CellRange = null,
+      printGridLines: java.lang.Boolean = null,
+      rightToLeft: java.lang.Boolean = null,
+      rowSumsBelow: java.lang.Boolean = null,
+      rowSumsRight: java.lang.Boolean = null,
+      selected: java.lang.Boolean = null,
+      tabColor: Color = null,
+      virtuallyCenter: java.lang.Boolean = null,
+      zoom: java.lang.Integer = null
+  ): SheetProperties = SheetProperties(
     Option(autoFilter),
     Option(activeCell),
     Option(autoBreaks).map(_.booleanValue),
@@ -51,28 +53,30 @@ object SheetProperties {
   )
 }
 
-case class SheetProperties private[model] (autoFilter: Option[CellRange],
-                                           activeCell: Option[String],
-                                           autoBreaks: Option[Boolean],
-                                           defaultColumnWidth: Option[Int],
-                                           defaultRowHeight: Option[Height],
-                                           displayFormulas: Option[Boolean],
-                                           displayGridLines: Option[Boolean],
-                                           displayGuts: Option[Boolean],
-                                           displayRowColHeadings: Option[Boolean],
-                                           displayZeros: Option[Boolean],
-                                           fitToPage: Option[Boolean],
-                                           forceFormulaRecalculation: Option[Boolean],
-                                           horizontallyCenter: Option[Boolean],
-                                           printArea: Option[CellRange],
-                                           printGridLines: Option[Boolean],
-                                           rightToLeft: Option[Boolean],
-                                           rowSumsBelow: Option[Boolean],
-                                           rowSumsRight: Option[Boolean],
-                                           selected: Option[Boolean],
-                                           tabColor: Option[Color],
-                                           virtuallyCenter: Option[Boolean],
-                                           zoom: Option[Int]) {
+case class SheetProperties private[model] (
+    autoFilter: Option[CellRange],
+    activeCell: Option[String],
+    autoBreaks: Option[Boolean],
+    defaultColumnWidth: Option[Int],
+    defaultRowHeight: Option[Height],
+    displayFormulas: Option[Boolean],
+    displayGridLines: Option[Boolean],
+    displayGuts: Option[Boolean],
+    displayRowColHeadings: Option[Boolean],
+    displayZeros: Option[Boolean],
+    fitToPage: Option[Boolean],
+    forceFormulaRecalculation: Option[Boolean],
+    horizontallyCenter: Option[Boolean],
+    printArea: Option[CellRange],
+    printGridLines: Option[Boolean],
+    rightToLeft: Option[Boolean],
+    rowSumsBelow: Option[Boolean],
+    rowSumsRight: Option[Boolean],
+    selected: Option[Boolean],
+    tabColor: Option[Color],
+    virtuallyCenter: Option[Boolean],
+    zoom: Option[Int]
+) {
 
   def withAutoFilter(autoFilterRange: CellRange): SheetProperties =
     copy(autoFilter = Option(autoFilterRange))

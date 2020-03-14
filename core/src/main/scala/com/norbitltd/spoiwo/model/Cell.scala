@@ -25,11 +25,12 @@ object Cell {
 
   lazy val Empty: Cell = apply(null)
 
-  def apply[T: CellValueType](value: T,
-                              index: java.lang.Integer = null,
-                              style: CellStyle = null,
-                              styleInheritance: CellStyleInheritance =
-                                CellStyleInheritance.CellThenRowThenColumnThenSheet): Cell = {
+  def apply[T: CellValueType](
+      value: T,
+      index: java.lang.Integer = null,
+      style: CellStyle = null,
+      styleInheritance: CellStyleInheritance = CellStyleInheritance.CellThenRowThenColumnThenSheet
+  ): Cell = {
     val indexOption = Option(index).map(_.intValue)
     val styleOption = Option(style)
     value match {
@@ -42,16 +43,16 @@ object Cell {
         } else {
           StringCell(v, indexOption, styleOption, styleInheritance)
         }
-      case v: Double         => NumericCell(v, indexOption, styleOption, styleInheritance)
-      case v: BigDecimal     => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
-      case v: Int            => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
-      case v: Long           => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
-      case v: Boolean        => BooleanCell(v, indexOption, styleOption, styleInheritance)
-      case v: Date           => DateCell(v, indexOption, styleOption, styleInheritance)
+      case v: Double        => NumericCell(v, indexOption, styleOption, styleInheritance)
+      case v: BigDecimal    => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
+      case v: Int           => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
+      case v: Long          => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
+      case v: Boolean       => BooleanCell(v, indexOption, styleOption, styleInheritance)
+      case v: Date          => DateCell(v, indexOption, styleOption, styleInheritance)
       case v: LocalDate     => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
       case v: LocalDateTime => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
-      case v: Calendar       => CalendarCell(v, indexOption, styleOption, styleInheritance)
-      case v: HyperLinkUrl   => HyperLinkUrlCell(v, indexOption, styleOption, styleInheritance)
+      case v: Calendar      => CalendarCell(v, indexOption, styleOption, styleInheritance)
+      case v: HyperLinkUrl  => HyperLinkUrlCell(v, indexOption, styleOption, styleInheritance)
     }
   }
 }
@@ -100,21 +101,23 @@ sealed trait Cell {
 
 case class HyperLinkUrl(text: String, address: String)
 
-case class HyperLinkUrlCell private[model] (value: HyperLinkUrl,
-                                            index: Option[Int],
-                                            style: Option[CellStyle],
-                                            styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class HyperLinkUrlCell private[model] (
+    value: HyperLinkUrl,
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(value.asInstanceOf[HyperLinkUrl], index, style)
 
   protected def valueToString(): String = "\"" + value + "\""
 }
 
-case class BlankCell private[model] (index: Option[Int],
-                                     style: Option[CellStyle],
-                                     styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class BlankCell private[model] (
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(index, style)
 
@@ -122,66 +125,72 @@ case class BlankCell private[model] (index: Option[Int],
   protected def valueToString(): String = "null"
 }
 
-case class StringCell private[model] (value: String,
-                                      index: Option[Int],
-                                      style: Option[CellStyle],
-                                      styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class StringCell private[model] (
+    value: String,
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(value.asInstanceOf[String], index, style)
 
   protected def valueToString(): String = "\"" + value + "\""
 }
 
-case class FormulaCell private[model] (value: String,
-                                       index: Option[Int],
-                                       style: Option[CellStyle],
-                                       styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class FormulaCell private[model] (
+    value: String,
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(value.asInstanceOf[String], index, style)
 
   protected def valueToString() = s"<=$value>"
 }
 
-case class NumericCell private[model] (value: Double,
-                                       index: Option[Int],
-                                       style: Option[CellStyle],
-                                       styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class NumericCell private[model] (
+    value: Double,
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(value.asInstanceOf[Double], index, style)
 
   protected def valueToString(): String = value.toString
 }
 
-case class BooleanCell private[model] (value: Boolean,
-                                       index: Option[Int],
-                                       style: Option[CellStyle],
-                                       styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class BooleanCell private[model] (
+    value: Boolean,
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(value.asInstanceOf[Boolean], index, style)
 
   protected def valueToString(): String = value.toString
 }
 
-case class DateCell private[model] (value: Date,
-                                    index: Option[Int],
-                                    style: Option[CellStyle],
-                                    styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class DateCell private[model] (
+    value: Date,
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(value.asInstanceOf[Date], index, style)
 
   protected def valueToString(): String = value.toString
 }
 
-case class CalendarCell private[model] (value: Calendar,
-                                        index: Option[Int],
-                                        style: Option[CellStyle],
-                                        styleInheritance: CellStyleInheritance)
-    extends Cell {
+case class CalendarCell private[model] (
+    value: Calendar,
+    index: Option[Int],
+    style: Option[CellStyle],
+    styleInheritance: CellStyleInheritance
+) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
     copy(value.asInstanceOf[Calendar], index, style)
 

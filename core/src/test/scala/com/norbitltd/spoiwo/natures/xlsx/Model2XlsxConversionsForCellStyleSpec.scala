@@ -5,7 +5,13 @@ import com.norbitltd.spoiwo.model._
 import Model2XlsxConversions._
 import org.apache.poi.ss.usermodel.{BorderStyle, FillPatternType, ReadingOrder, HorizontalAlignment, VerticalAlignment}
 import Height._
-import com.norbitltd.spoiwo.model.enums.{CellBorderStyle, CellFill, CellReadingOrder, CellHorizontalAlignment, CellVerticalAlignment}
+import com.norbitltd.spoiwo.model.enums.{
+  CellBorderStyle,
+  CellFill,
+  CellReadingOrder,
+  CellHorizontalAlignment,
+  CellVerticalAlignment
+}
 
 import scala.language.postfixOps
 import org.scalatest.flatspec.AnyFlatSpec
@@ -29,10 +35,12 @@ class Model2XlsxConversionsForCellStyleSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return explicitly set borders" in {
-    val modelBorders = CellBorders(leftStyle = CellBorderStyle.Double,
-                                   leftColor = Color.Blue,
-                                   rightStyle = CellBorderStyle.Thick,
-                                   rightColor = Color.Red)
+    val modelBorders = CellBorders(
+      leftStyle = CellBorderStyle.Double,
+      leftColor = Color.Blue,
+      rightStyle = CellBorderStyle.Thick,
+      rightColor = Color.Red
+    )
     val modelWithBorders = CellStyle(borders = modelBorders)
     val xssfWithBorders = convertCellStyle(modelWithBorders, workbook)
 

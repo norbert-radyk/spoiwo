@@ -3,7 +3,7 @@ package com.norbitltd.spoiwo.natures.xlsx
 import com.norbitltd.spoiwo.model.Height._
 import com.norbitltd.spoiwo.model.Width._
 import com.norbitltd.spoiwo.model._
-import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{ convertSheet, writeToExistingSheet }
+import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertSheet, writeToExistingSheet}
 import com.norbitltd.spoiwo.natures.xlsx.Utils._
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel._
@@ -168,8 +168,10 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val row1 = Row(index = 0)
     val row2 = Row(index = 1)
     val row3 = Row(index = 2)
-    val model = Sheet(rows = row1 :: row2 :: row3 :: Nil, images = Image(CellRange(2 -> 2, 2 -> 2), "src/test/resources/einstein.jpg") :: Nil)
-      .withColumns(Column(index = 0), Column(index = 1))
+    val model = Sheet(
+      rows = row1 :: row2 :: row3 :: Nil,
+      images = Image(CellRange(2 -> 2, 2 -> 2), "src/test/resources/einstein.jpg") :: Nil
+    ).withColumns(Column(index = 0), Column(index = 1))
 
     val xlsx = convert(model)
 

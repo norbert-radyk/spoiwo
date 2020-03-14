@@ -12,14 +12,14 @@ object RowHelper {
     def fixOtherData(a: A): A
   }
   implicit val CellFixup: IndexFixupable[Cell] = new IndexFixupable[Cell] {
-    override def extractIndex(a: Cell): Option[Int]   = a.index
+    override def extractIndex(a: Cell): Option[Int] = a.index
     override def fixIndex(a: Cell, newIdx: Int): Cell = a.withIndex(newIdx)
-    override def fixOtherData(a: Cell): Cell          = a
+    override def fixOtherData(a: Cell): Cell = a
   }
   implicit val RowFixup: IndexFixupable[Row] = new IndexFixupable[Row] {
-    override def extractIndex(a: Row): Option[Int]  = a.index
+    override def extractIndex(a: Row): Option[Int] = a.index
     override def fixIndex(a: Row, newIdx: Int): Row = a.copy(index = Some(newIdx))
-    override def fixOtherData(a: Row): Row          = a.copy(cells = fixupIndexes(a.cells.toSeq))
+    override def fixOtherData(a: Row): Row = a.copy(cells = fixupIndexes(a.cells.toSeq))
   }
 
   def fixupIndexes[A](data: Seq[A])(implicit fixer: IndexFixupable[A]): Seq[A] = {
@@ -30,24 +30,25 @@ object RowHelper {
             .extractIndex(d)
             .fold {
               (fixer.fixOtherData(fixer.fixIndex(d, idx)) :: list) -> (idx + 1)
-            } { i =>
-              (fixer.fixOtherData(d) :: list) -> i
-            }
-      }._1.sortBy(fixer.extractIndex(_).getOrElse(0))
+            } { i => (fixer.fixOtherData(d) :: list) -> i }
+      }
+      ._1
+      .sortBy(fixer.extractIndex(_).getOrElse(0))
   }
 
   implicit class RowMergerHelper(rows: Seq[Row]) {
+
     /**
-     * This function may not work on Rows with mixed explicit indexes if it has non-explicit indexes too!
-     * So [Row(5), Row(), Row(1), Row(7), Row(6)] will possibly broke the output bcs 5 + 1 and 6 will collide!
-     */
+      * This function may not work on Rows with mixed explicit indexes if it has non-explicit indexes too!
+      * So [Row(5), Row(), Row(1), Row(7), Row(6)] will possibly broke the output bcs 5 + 1 and 6 will collide!
+      */
     def fixupIndexes: Seq[Row] = {
       RowHelper.fixupIndexes(rows)
     }
 
     def moveTo(x: Int, y: Int): Seq[Row] = {
-      rows.fixupIndexes.map(
-        r => r.copy(index = Some(r.index.get + y), cells = r.cells.map(c => c.withIndex(c.index.get + x)))
+      rows.fixupIndexes.map(r =>
+        r.copy(index = Some(r.index.get + y), cells = r.cells.map(c => c.withIndex(c.index.get + x)))
       )
     }
 

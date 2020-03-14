@@ -7,7 +7,14 @@ import com.norbitltd.spoiwo.model.{BooleanCell, CalendarCell, DateCell, FormulaC
 import com.norbitltd.spoiwo.natures.xlsx.BaseXlsx
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
-import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, ReadingOrder, VerticalAlignment}
+import org.apache.poi.ss.usermodel.{
+  BorderStyle,
+  CellType,
+  FillPatternType,
+  HorizontalAlignment,
+  ReadingOrder,
+  VerticalAlignment
+}
 import org.apache.poi.xssf.streaming.{SXSSFCell, SXSSFRow, SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel._
 
@@ -20,12 +27,13 @@ object Model2XlsxConversions extends BaseXlsx {
 
   private def Cache[K, V]() = collection.mutable.Map[SXSSFWorkbook, collection.mutable.Map[K, V]]()
 
-
-  private[xlsx] def convertCell(modelSheet: Sheet,
-                                modelColumns: Map[Int, Column],
-                                modelRow: Row,
-                                c: Cell,
-                                row: SXSSFRow): SXSSFCell = {
+  private[xlsx] def convertCell(
+      modelSheet: Sheet,
+      modelColumns: Map[Int, Column],
+      modelRow: Row,
+      c: Cell,
+      row: SXSSFRow
+  ): SXSSFCell = {
     val cellNumber = c.index.getOrElse(if (row.getLastCellNum < 0) 0 else row.getLastCellNum.toInt)
     val cell = Option(row.getCell(cellNumber)).getOrElse(row.createCell(cellNumber))
     if (cell.getCellType == CellType.FORMULA) {
@@ -34,7 +42,8 @@ object Model2XlsxConversions extends BaseXlsx {
 
     val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).flatMap(_.style), modelSheet.style)
     cellWithStyle.style.foreach(s =>
-      cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook.asInstanceOf[SXSSFWorkbook])))
+      cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook.asInstanceOf[SXSSFWorkbook]))
+    )
 
     c match {
       case BlankCell(_, _, _)               => cell.setCellValue(null: String)
@@ -49,7 +58,11 @@ object Model2XlsxConversions extends BaseXlsx {
     cell
   }
 
-  private def convertCellDataFormat(cdf: CellDataFormat, workbook: SXSSFWorkbook, cellStyle: usermodel.CellStyle): Unit = {
+  private def convertCellDataFormat(
+      cdf: CellDataFormat,
+      workbook: SXSSFWorkbook,
+      cellStyle: usermodel.CellStyle
+  ): Unit = {
     cdf.formatString.foreach(formatString => {
       val format = dataFormatCache.getOrElseUpdate(workbook, workbook.getXSSFWorkbook.createDataFormat())
       val formatIndex = format.getFormat(formatString)
@@ -97,10 +110,12 @@ object Model2XlsxConversions extends BaseXlsx {
     h.right.foreach(sheet.getHeader.setRight)
   }
 
-  private[xlsx] def convertRow(modelColumns: Map[Int, Column],
-                               modelRow: Row,
-                               modelSheet: Sheet,
-                               sheet: SXSSFSheet): SXSSFRow = {
+  private[xlsx] def convertRow(
+      modelColumns: Map[Int, Column],
+      modelRow: Row,
+      modelSheet: Sheet,
+      sheet: SXSSFSheet
+  ): SXSSFRow = {
     validateCells(modelRow)
     val indexNumber = modelRow.index.getOrElse(if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0)
     val row = Option(sheet.getRow(indexNumber)).getOrElse(sheet.createRow(indexNumber))
