@@ -21,7 +21,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.13.1",
+  scalaVersion := "2.13.2",
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -42,10 +42,10 @@ lazy val commonSettings = Seq(
   },
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml"         % "1.2.0",
+    "org.scala-lang.modules" %% "scala-xml"         % "1.3.0",
     "org.apache.poi"         %  "poi"               % "4.1.2",
     "org.apache.poi"         %  "poi-ooxml"         % "4.1.2",
-    "org.scalatest"          %% "scalatest"         % "3.1.1"   % Test
+    "org.scalatest"          %% "scalatest"         % "3.1.2"   % Test
   )
 )
 
