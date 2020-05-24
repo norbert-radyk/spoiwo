@@ -162,6 +162,7 @@ object Model2XlsxConversions extends BaseXlsx {
     s.footer.foreach(f => convertFooter(f, sheet))
 
     s.properties.foreach(sp => convertSheetProperties(sp, sheet))
+    s.locking.foreach(sl => convertSheetLocking(sl, sheet))
     s.margins.foreach(m => convertMargins(m, sheet))
     s.paneAction.foreach(pa => convertPaneAction(pa, sheet))
     s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
@@ -200,13 +201,9 @@ object Model2XlsxConversions extends BaseXlsx {
 
   private[xlsx] def convertTable(modelTable: Table, sheet: XSSFSheet): XSSFTable = {
     validateTableColumns(modelTable)
-
-    val tableId = modelTable.id.getOrElse {
-      throw new IllegalArgumentException(
-        "Undefined table id! " +
-          "Something went terribly wrong as it should have been derived if not specified explicitly!"
-      )
-    }
+    val tableId = modelTable.id.getOrElse(throw new IllegalArgumentException(
+      "Undefined table id! Something went terribly wrong as it should have been derived if not specified explicitly!"
+    ))
 
     val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
     val name = modelTable.name.getOrElse(s"ct_table_$tableId")

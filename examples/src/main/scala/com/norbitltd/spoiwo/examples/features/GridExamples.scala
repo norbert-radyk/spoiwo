@@ -1,8 +1,8 @@
-package com.norbitltd.spoiwo.examples.grid
+package com.norbitltd.spoiwo.examples.features
 
-import com.norbitltd.spoiwo.model.{Cell, CellRange, CellStyle, Color, Row, Sheet}
 import com.norbitltd.spoiwo.model.enums.CellFill
 import com.norbitltd.spoiwo.model.grid.Grid
+import com.norbitltd.spoiwo.model._
 
 object GridExamples {
 

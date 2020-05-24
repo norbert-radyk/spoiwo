@@ -144,6 +144,7 @@ object Model2XlsxConversions extends BaseXlsx {
     s.footer.foreach(f => convertFooter(f, sheet))
 
     s.properties.foreach(sp => convertSheetProperties(sp, sheet))
+    s.locking.foreach(sl => convertSheetLocking(sl, sheet))
     s.margins.foreach(m => convertMargins(m, sheet))
     s.paneAction.foreach(pa => convertPaneAction(pa, sheet))
     s.repeatingRows.foreach(rr => sheet.setRepeatingRows(convertRowRange(rr)))
@@ -155,6 +156,25 @@ object Model2XlsxConversions extends BaseXlsx {
 
   override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor): Unit = {
     sheet.asInstanceOf[SXSSFSheet].setTabColor(color)
+  }
+
+  private def convertSheetLocking(sl: SheetLocking, sheet: SXSSFSheet): Unit = {
+    sheet.lockAutoFilter(sl.lockedAutoFilter)
+    sheet.lockDeleteColumns(sl.lockedDeleteColumns)
+    sheet.lockDeleteRows(sl.lockedDeleteRows)
+    sheet.lockFormatCells(sl.lockedFormatCells)
+    sheet.lockFormatColumns(sl.lockedFormatColumns)
+    sheet.lockFormatRows(sl.lockedFormatRows)
+    sheet.lockInsertColumns(sl.lockedInsertColumns)
+    sheet.lockInsertHyperlinks(sl.lockedInsertHyperlinks)
+    sheet.lockInsertRows(sl.lockedInsertRows)
+    sheet.lockPivotTables(sl.lockedPivotTables)
+    sheet.lockSort(sl.lockedSort)
+    sheet.lockObjects(sl.lockedObjects)
+    sheet.lockScenarios(sl.lockedScenarios)
+    sheet.lockSelectLockedCells(sl.lockedSelectLockedCells)
+    sheet.lockSelectUnlockedCells(sl.lockedSelectUnlockedCells)
+    sheet.enableLocking()
   }
 
   override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit = {

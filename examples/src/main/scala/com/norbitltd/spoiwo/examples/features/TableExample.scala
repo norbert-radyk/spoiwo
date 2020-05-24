@@ -1,4 +1,4 @@
-package com.norbitltd.spoiwo.examples.gettingstarted
+package com.norbitltd.spoiwo.examples.features
 
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions._

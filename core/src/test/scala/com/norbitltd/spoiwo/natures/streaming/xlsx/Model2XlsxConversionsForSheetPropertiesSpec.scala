@@ -1,24 +1,25 @@
-package com.norbitltd.spoiwo.natures.xlsx
+package com.norbitltd.spoiwo.natures.streaming.xlsx
 
-import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
-import org.apache.poi.ss.util.CellAddress
-import com.norbitltd.spoiwo.model.{CellRange, SheetProperties}
-import Model2XlsxConversions.convertSheetProperties
 import com.norbitltd.spoiwo.model.Height._
+import com.norbitltd.spoiwo.model.{CellRange, SheetProperties}
+import com.norbitltd.spoiwo.natures.streaming.xlsx.Model2XlsxConversions.convertSheetProperties
+import org.apache.poi.ss.util.CellAddress
+import org.apache.poi.xssf.streaming.{SXSSFSheet, SXSSFWorkbook}
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 import scala.language.postfixOps
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class Model2XlsxConversionsForSheetProperties extends AnyFlatSpec with Matchers {
+class Model2XlsxConversionsForSheetPropertiesSpec extends AnyFlatSpec with Matchers {
 
-  private def apply(properties: SheetProperties): XSSFSheet = {
-    val sheet = new XSSFWorkbook().createSheet()
+  private def apply(properties: SheetProperties): SXSSFSheet = {
+    val sheet = new SXSSFWorkbook().createSheet()
     convertSheetProperties(properties, sheet)
     sheet
   }
 
-  private val defaultSheet: XSSFSheet = apply(SheetProperties())
+  private val defaultSheet: SXSSFSheet = apply(SheetProperties())
 
   "Sheet properties conversion" should "return no active cell by default" in {
     defaultSheet.getActiveCell shouldBe null

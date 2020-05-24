@@ -13,6 +13,7 @@ object Sheet {
       header: Header = null,
       footer: Footer = null,
       properties: SheetProperties = null,
+      locking: SheetLocking = null,
       margins: Margins = null,
       paneAction: PaneAction = null,
       repeatingRows: RowRange = null,
@@ -31,6 +32,7 @@ object Sheet {
       header = Option(header),
       footer = Option(footer),
       properties = Option(properties),
+      locking = Option(locking),
       margins = Option(margins),
       paneAction = Option(paneAction),
       repeatingRows = Option(repeatingRows),
@@ -56,6 +58,7 @@ case class Sheet private (
     header: Option[Header],
     footer: Option[Footer],
     properties: Option[SheetProperties],
+    locking: Option[SheetLocking],
     margins: Option[Margins],
     paneAction: Option[PaneAction],
     repeatingRows: Option[RowRange],
@@ -77,6 +80,7 @@ case class Sheet private (
       header.map("header=" + _),
       footer.map("footer=" + _),
       properties.map("properties=" + _),
+      locking.map("locking=" + _),
       margins.map("margins=" + _),
       paneAction.map("pane action=" + _),
       repeatingRows.map("repeating rows=" + _),
@@ -196,9 +200,16 @@ case class Sheet private (
   def withStyle(style: CellStyle): Sheet =
     copy(style = Option(style))
 
+  def withoutStyle: Sheet =
+    copy(style = None)
+
   def withTables(tables: Table*): Sheet =
     copy(tables = tables.toList)
 
-  def withoutStyle: Sheet =
-    copy(style = None)
+  def withLocking(locking: SheetLocking): Sheet =
+    copy(locking = Option(locking))
+
+  def withoutLocking: Sheet =
+    copy(locking = None)
+
 }

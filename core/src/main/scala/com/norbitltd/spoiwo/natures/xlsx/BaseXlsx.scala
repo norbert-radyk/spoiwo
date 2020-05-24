@@ -177,6 +177,25 @@ trait BaseXlsx {
     sp.zoom.foreach(sheet.setZoom)
   }
 
+  protected[natures] def convertSheetLocking(sl: SheetLocking, sheet: XSSFSheet): Unit = {
+    sheet.lockAutoFilter(sl.lockedAutoFilter)
+    sheet.lockDeleteColumns(sl.lockedDeleteColumns)
+    sheet.lockDeleteRows(sl.lockedDeleteRows)
+    sheet.lockFormatCells(sl.lockedFormatCells)
+    sheet.lockFormatColumns(sl.lockedFormatColumns)
+    sheet.lockFormatRows(sl.lockedFormatRows)
+    sheet.lockInsertColumns(sl.lockedInsertColumns)
+    sheet.lockInsertHyperlinks(sl.lockedInsertHyperlinks)
+    sheet.lockInsertRows(sl.lockedInsertRows)
+    sheet.lockPivotTables(sl.lockedPivotTables)
+    sheet.lockSort(sl.lockedSort)
+    sheet.lockObjects(sl.lockedObjects)
+    sheet.lockScenarios(sl.lockedScenarios)
+    sheet.lockSelectLockedCells(sl.lockedSelectLockedCells)
+    sheet.lockSelectUnlockedCells(sl.lockedSelectUnlockedCells)
+    sheet.enableLocking()
+  }
+
   protected[natures] def setTabColor(sheet: usermodel.Sheet, XSSFColor: XSSFColor): Unit
 
   protected[natures] def convertPrintSetup(printSetup: PrintSetup, sheet: usermodel.Sheet): Unit = {
