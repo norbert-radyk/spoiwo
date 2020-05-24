@@ -31,15 +31,9 @@ lazy val commonSettings = Seq(
   crossScalaVersions := Seq(scalaVersion.value, "2.12.10", "2.11.12"),
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  useGpg := true,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-  },
+  version := "1.8.1-SNAPSHOT",
+  publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
     "org.scala-lang.modules" %% "scala-xml"         % "1.3.0",
@@ -48,8 +42,6 @@ lazy val commonSettings = Seq(
     "org.scalatest"          %% "scalatest"         % "3.1.2"   % Test
   )
 )
-
-lazy val libVersion = "1.8.0"
 
 lazy val root = project
   .in(file("."))
@@ -62,22 +54,19 @@ lazy val root = project
 lazy val spoiwo = (project in file("core"))
   .settings(commonSettings : _*)
   .settings(
-    name := "spoiwo",
-    version := libVersion
+    name := "spoiwo"
   )
 
 lazy val examples = (project in file("examples"))
   .dependsOn(spoiwo, spoiwoGrids)
   .settings(commonSettings : _*)
   .settings(
-    name := "spoiwo-examples",
-    version := libVersion
+    name := "spoiwo-examples"
   )
 
 lazy val spoiwoGrids = (project in file("grids"))
   .dependsOn(spoiwo)
   .settings(commonSettings : _*)
   .settings(
-    name := "spoiwo-grids",
-    version := libVersion
+    name := "spoiwo-grids"
   )
