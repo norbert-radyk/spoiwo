@@ -201,9 +201,11 @@ object Model2XlsxConversions extends BaseXlsx {
 
   private[xlsx] def convertTable(modelTable: Table, sheet: XSSFSheet): XSSFTable = {
     validateTableColumns(modelTable)
-    val tableId = modelTable.id.getOrElse(throw new IllegalArgumentException(
-      "Undefined table id! Something went terribly wrong as it should have been derived if not specified explicitly!"
-    ))
+    val tableId = modelTable.id.getOrElse(
+      throw new IllegalArgumentException(
+        "Undefined table id! Something went terribly wrong as it should have been derived if not specified explicitly!"
+      )
+    )
 
     val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
     val name = modelTable.name.getOrElse(s"ct_table_$tableId")
