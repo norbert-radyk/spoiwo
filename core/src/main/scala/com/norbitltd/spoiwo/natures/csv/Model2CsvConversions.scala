@@ -57,13 +57,13 @@ object Model2CsvConversions {
     r.cells.map(c => convertCellToCsv(c, properties)).mkString(properties.separator)
 
   private def convertCellToCsv(c: Cell, properties: CsvProperties): String = c match {
-    case _: BlankCell        => ""
-    case x: StringCell       => x.value
-    case x: NumericCell      => x.value.toString
-    case x: BooleanCell      => if (x.value) properties.defaultBooleanTrueString else properties.defaultBooleanFalseString
-    case x: DateCell         => x.value.toInstant.atZone(ZoneId.systemDefault()).format(properties.defaultDateFormatter)
-    case x: CalendarCell     => x.value.toInstant.atZone(ZoneId.systemDefault()).format(properties.defaultDateFormatter)
-    case x: HyperLinkUrlCell => x.value.text
-    case value               => throw new IllegalArgumentException(s"Unable to convert to CSV cell for value: $value!")
+    case _: BlankCell     => ""
+    case x: StringCell    => x.value
+    case x: NumericCell   => x.value.toString
+    case x: BooleanCell   => if (x.value) properties.defaultBooleanTrueString else properties.defaultBooleanFalseString
+    case x: DateCell      => x.value.toInstant.atZone(ZoneId.systemDefault()).format(properties.defaultDateFormatter)
+    case x: CalendarCell  => x.value.toInstant.atZone(ZoneId.systemDefault()).format(properties.defaultDateFormatter)
+    case x: HyperLinkCell => x.value.text
+    case value            => throw new IllegalArgumentException(s"Unable to convert to CSV cell for value: $value!")
   }
 }

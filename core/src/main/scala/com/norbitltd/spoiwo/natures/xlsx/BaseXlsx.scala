@@ -6,7 +6,6 @@ import java.util.{Calendar, Date}
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.model.enums.{CellStyleInheritance, Pane}
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxEnumConversions._
-import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
 import org.apache.poi.xssf.usermodel._
@@ -81,8 +80,9 @@ trait BaseXlsx {
     new DefaultIndexedColorMap()
   )
 
-  protected[natures] def setHyperLinkUrlCell(cell: usermodel.Cell, value: HyperLinkUrl, row: usermodel.Row): Unit = {
-    val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(HyperlinkType.URL)
+  protected[natures] def setHyperLinkCell(cell: usermodel.Cell, value: HyperLink, row: usermodel.Row): Unit = {
+    val xlsxHyperlinkType = convertHyperlinkType(value.linkType)
+    val link = row.getSheet.getWorkbook.getCreationHelper.createHyperlink(xlsxHyperlinkType)
     link.setAddress(value.address)
     cell.setCellValue(value.text)
     cell.setHyperlink(link)

@@ -2,7 +2,7 @@ package com.norbitltd.spoiwo.natures.csv
 
 import java.time.LocalDate
 
-import com.norbitltd.spoiwo.model.{HyperLinkUrl, Row, Sheet}
+import com.norbitltd.spoiwo.model.{HyperLink, Row, Sheet}
 import Model2CsvConversions._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -79,7 +79,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
   it should "correctly process the HyperLinkUrl values" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
       Row().withCellValues(
-        HyperLinkUrl(text = "spoiwo issue", address = "https://github.com/norbert-radyk/spoiwo/issues/34")
+        HyperLink(text = "spoiwo issue", address = "https://github.com/norbert-radyk/spoiwo/issues/34")
       )
     )
 

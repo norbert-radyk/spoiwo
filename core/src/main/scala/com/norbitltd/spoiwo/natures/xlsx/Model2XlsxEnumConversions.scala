@@ -121,6 +121,20 @@ object Model2XlsxEnumConversions {
     }
   }
 
+  def convertHyperlinkType(hyperlinkType: HyperLinkType): org.apache.poi.common.usermodel.HyperlinkType = {
+    import HyperLinkType._
+    import org.apache.poi.common.usermodel.HyperlinkType._
+
+    hyperlinkType match {
+      case Url      => URL
+      case Document => DOCUMENT
+      case Email    => EMAIL
+      case File     => FILE
+      case HyperLinkType(value) =>
+        throw new IllegalArgumentException(s"Unable to convert HyperlinkType=$value to XLSX - unsupported enum!")
+    }
+  }
+
   def convertHorizontalAlignment(horizontalAlignment: CellHorizontalAlignment): HorizontalAlignment = {
     import CellHorizontalAlignment._
     import HorizontalAlignment._

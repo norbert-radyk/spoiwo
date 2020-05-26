@@ -71,7 +71,7 @@ case class Row private (
       case dateValue: LocalDate         => Cell(dateValue)
       case dateTimeValue: LocalDateTime => Cell(dateTimeValue)
       case calendarValue: Calendar      => Cell(calendarValue)
-      case hyperLinkUrl: HyperLinkUrl   => Cell(hyperLinkUrl)
+      case hyperLinkUrl: HyperLink      => Cell(hyperLinkUrl)
       case value =>
         throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }

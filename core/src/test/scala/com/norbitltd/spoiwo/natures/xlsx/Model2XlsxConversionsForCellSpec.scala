@@ -193,7 +193,7 @@ class Model2XlsxConversionsForCellSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "return a string cell with hyperlink when setup with HyperLinkUrl value" in {
-    val model = Cell(HyperLinkUrl("View Item", "https://www.google.com"))
+    val model = Cell(HyperLink("View Item", "https://www.google.com"))
     val xlsx = convert(model)
     xlsx.getCellType shouldBe CellType.STRING
     xlsx.getHyperlink.getAddress shouldBe "https://www.google.com"

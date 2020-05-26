@@ -44,14 +44,14 @@ object Model2XlsxConversions extends BaseXlsx {
     cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook)))
 
     c match {
-      case BlankCell(_, _, _)               => cell.setCellValue(null: String)
-      case StringCell(value, _, _, _)       => cell.setCellValue(value)
-      case FormulaCell(formula, _, _, _)    => cell.setCellFormula(formula)
-      case NumericCell(value, _, _, _)      => cell.setCellValue(value)
-      case BooleanCell(value, _, _, _)      => cell.setCellValue(value)
-      case DateCell(value, _, _, _)         => setDateCell(c, cell, value)
-      case CalendarCell(value, _, _, _)     => setCalendarCell(c, cell, value)
-      case HyperLinkUrlCell(value, _, _, _) => setHyperLinkUrlCell(cell, value, row)
+      case BlankCell(_, _, _)            => cell.setCellValue(null: String)
+      case StringCell(value, _, _, _)    => cell.setCellValue(value)
+      case FormulaCell(formula, _, _, _) => cell.setCellFormula(formula)
+      case NumericCell(value, _, _, _)   => cell.setCellValue(value)
+      case BooleanCell(value, _, _, _)   => cell.setCellValue(value)
+      case DateCell(value, _, _, _)      => setDateCell(c, cell, value)
+      case CalendarCell(value, _, _, _)  => setCalendarCell(c, cell, value)
+      case HyperLinkCell(value, _, _, _) => setHyperLinkCell(cell, value, row)
     }
     cell
   }

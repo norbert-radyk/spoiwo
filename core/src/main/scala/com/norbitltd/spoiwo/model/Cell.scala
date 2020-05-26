@@ -2,7 +2,8 @@ package com.norbitltd.spoiwo.model
 
 import java.util.{Calendar, Date}
 import java.time.{LocalDate, LocalDateTime}
-import com.norbitltd.spoiwo.model.enums.CellStyleInheritance
+
+import com.norbitltd.spoiwo.model.enums.{CellStyleInheritance, HyperLinkType}
 import com.norbitltd.spoiwo.utils.JavaTimeApiConversions._
 
 sealed class CellValueType[T]
@@ -18,7 +19,7 @@ object CellValueType {
   implicit object CalendarWitness extends CellValueType[Calendar]
   implicit object LocalDateWitness extends CellValueType[LocalDate]
   implicit object LocalDateTimeWitness extends CellValueType[LocalDateTime]
-  implicit object HyperLinkUrlWitness extends CellValueType[HyperLinkUrl]
+  implicit object HyperLinkUrlWitness extends CellValueType[HyperLink]
 }
 
 object Cell {
@@ -52,7 +53,7 @@ object Cell {
       case v: LocalDate     => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
       case v: LocalDateTime => DateCell(v.toDate, indexOption, styleOption, styleInheritance)
       case v: Calendar      => CalendarCell(v, indexOption, styleOption, styleInheritance)
-      case v: HyperLinkUrl  => HyperLinkUrlCell(v, indexOption, styleOption, styleInheritance)
+      case v: HyperLink     => HyperLinkCell(v, indexOption, styleOption, styleInheritance)
     }
   }
 }
@@ -99,16 +100,16 @@ sealed trait Cell {
 
 }
 
-case class HyperLinkUrl(text: String, address: String)
+case class HyperLink(text: String, address: String, linkType: HyperLinkType = HyperLinkType.Url)
 
-case class HyperLinkUrlCell private[model] (
-    value: HyperLinkUrl,
+case class HyperLinkCell private[model] (
+    value: HyperLink,
     index: Option[Int],
     style: Option[CellStyle],
     styleInheritance: CellStyleInheritance
 ) extends Cell {
   def copyCell(value: Any = value, index: Option[Int] = index, style: Option[CellStyle] = style): Cell =
-    copy(value.asInstanceOf[HyperLinkUrl], index, style)
+    copy(value.asInstanceOf[HyperLink], index, style)
 
   protected def valueToString(): String = "\"" + value + "\""
 }
