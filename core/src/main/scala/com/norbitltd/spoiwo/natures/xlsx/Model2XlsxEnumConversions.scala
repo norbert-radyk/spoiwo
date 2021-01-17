@@ -1,5 +1,6 @@
 package com.norbitltd.spoiwo.natures.xlsx
 
+import org.apache.poi.common.usermodel.fonts.FontCharset
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.usermodel._
 import com.norbitltd.spoiwo.model.enums._
@@ -7,7 +8,6 @@ import com.norbitltd.spoiwo.model.enums.FontFamily
 import com.norbitltd.spoiwo.model.enums.FontScheme
 import com.norbitltd.spoiwo.model.enums.PageOrder
 import com.norbitltd.spoiwo.model.enums.PaperSize
-import org.apache.poi.common.usermodel.fonts.FontCharset
 
 object Model2XlsxEnumConversions {
 
@@ -231,9 +231,9 @@ object Model2XlsxEnumConversions {
     import TypeOffset._
 
     typeOffset match {
-      case TypeOffset.None => FontFormatting.SS_NONE
-      case Subscript       => FontFormatting.SS_SUB
-      case Superscript     => FontFormatting.SS_SUPER
+      case TypeOffset.None => Font.SS_NONE
+      case Subscript       => Font.SS_SUB
+      case Superscript     => Font.SS_SUPER
       case TypeOffset(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Type Offset = $value to XLSX - unsupported enum!")
     }
@@ -256,14 +256,13 @@ object Model2XlsxEnumConversions {
 
   def convertUnderlineFormatting(underline: Underline): Byte = {
     import Underline._
-    import FontFormatting._
 
     underline match {
-      case Double           => U_DOUBLE
-      case DoubleAccounting => U_DOUBLE_ACCOUNTING
-      case Underline.None   => U_NONE
-      case Single           => U_SINGLE
-      case SingleAccounting => U_SINGLE_ACCOUNTING
+      case Double           => Font.U_DOUBLE
+      case DoubleAccounting => Font.U_DOUBLE_ACCOUNTING
+      case Underline.None   => Font.U_NONE
+      case Single           => Font.U_SINGLE
+      case SingleAccounting => Font.U_SINGLE_ACCOUNTING
       case Underline(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Underline=$value to XLSX - unsupported enum!")
     }

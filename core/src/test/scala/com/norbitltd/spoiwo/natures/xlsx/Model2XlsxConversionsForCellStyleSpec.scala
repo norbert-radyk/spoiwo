@@ -24,10 +24,10 @@ class Model2XlsxConversionsForCellStyleSpec extends AnyFlatSpec with Matchers {
   "Cell style conversion" should "return no borders by default" in {
     val modelDefault = CellStyle()
     val xssfDefault = convertCellStyle(modelDefault, workbook)
-    xssfDefault.getBorderBottomEnum shouldBe BorderStyle.NONE
-    xssfDefault.getBorderLeftEnum shouldBe BorderStyle.NONE
-    xssfDefault.getBorderRightEnum shouldBe BorderStyle.NONE
-    xssfDefault.getBorderTopEnum shouldBe BorderStyle.NONE
+    xssfDefault.getBorderBottom shouldBe BorderStyle.NONE
+    xssfDefault.getBorderLeft shouldBe BorderStyle.NONE
+    xssfDefault.getBorderRight shouldBe BorderStyle.NONE
+    xssfDefault.getBorderTop shouldBe BorderStyle.NONE
     xssfDefault.getBottomBorderXSSFColor shouldBe null
     xssfDefault.getTopBorderXSSFColor shouldBe null
     xssfDefault.getLeftBorderXSSFColor shouldBe null
@@ -44,8 +44,8 @@ class Model2XlsxConversionsForCellStyleSpec extends AnyFlatSpec with Matchers {
     val modelWithBorders = CellStyle(borders = modelBorders)
     val xssfWithBorders = convertCellStyle(modelWithBorders, workbook)
 
-    xssfWithBorders.getBorderLeftEnum shouldBe BorderStyle.DOUBLE
-    xssfWithBorders.getBorderRightEnum shouldBe BorderStyle.THICK
+    xssfWithBorders.getBorderLeft shouldBe BorderStyle.DOUBLE
+    xssfWithBorders.getBorderRight shouldBe BorderStyle.THICK
 
     val leftColorRGB = xssfWithBorders.getLeftBorderXSSFColor.getRGB
     leftColorRGB.toList shouldBe List(0, 0, 255.toByte)
@@ -84,13 +84,13 @@ class Model2XlsxConversionsForCellStyleSpec extends AnyFlatSpec with Matchers {
   it should "return no fill pattern by default" in {
     val modelDefault = CellStyle()
     val xssfDefault = convertCellStyle(modelDefault, workbook)
-    xssfDefault.getFillPatternEnum shouldBe FillPatternType.NO_FILL
+    xssfDefault.getFillPattern shouldBe FillPatternType.NO_FILL
   }
 
   it should "return 'Solid' fill pattern when explicitly set" in {
     val modelWithFillPattern: CellStyle = CellStyle(fillPattern = CellFill.Solid)
     val xssfWithFillPattern: XSSFCellStyle = convertCellStyle(modelWithFillPattern, workbook)
-    xssfWithFillPattern.getFillPatternEnum shouldBe FillPatternType.SOLID_FOREGROUND
+    xssfWithFillPattern.getFillPattern shouldBe FillPatternType.SOLID_FOREGROUND
   }
 
   it should "return no background or foreground color by default" in {
@@ -122,25 +122,25 @@ class Model2XlsxConversionsForCellStyleSpec extends AnyFlatSpec with Matchers {
   it should "return 'General' horizontal alignment by default" in {
     val modelDefault: CellStyle = CellStyle()
     val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
-    xssfDefault.getAlignmentEnum shouldBe HorizontalAlignment.GENERAL
+    xssfDefault.getAlignment shouldBe HorizontalAlignment.GENERAL
   }
 
   it should "return 'Right' horizontal alignment when explicitly set" in {
     val modelWithHA: CellStyle = CellStyle(horizontalAlignment = CellHorizontalAlignment.Right)
     val xssfWithHA: XSSFCellStyle = convertCellStyle(modelWithHA, workbook)
-    xssfWithHA.getAlignmentEnum shouldBe HorizontalAlignment.RIGHT
+    xssfWithHA.getAlignment shouldBe HorizontalAlignment.RIGHT
   }
 
   it should "return 'Bottom' vertical alignment by default" in {
     val modelDefault: CellStyle = CellStyle()
     val xssfDefault: XSSFCellStyle = convertCellStyle(modelDefault, workbook)
-    xssfDefault.getVerticalAlignmentEnum shouldBe VerticalAlignment.BOTTOM
+    xssfDefault.getVerticalAlignment shouldBe VerticalAlignment.BOTTOM
   }
 
   it should "return 'Top' vertical alignment when explicitly set" in {
     val modelWithVA: CellStyle = CellStyle(verticalAlignment = CellVerticalAlignment.Top)
     val xssfWithVA: XSSFCellStyle = convertCellStyle(modelWithVA, workbook)
-    xssfWithVA.getVerticalAlignmentEnum shouldBe VerticalAlignment.TOP
+    xssfWithVA.getVerticalAlignment shouldBe VerticalAlignment.TOP
   }
 
   it should "return not hidden cell style by default" in {

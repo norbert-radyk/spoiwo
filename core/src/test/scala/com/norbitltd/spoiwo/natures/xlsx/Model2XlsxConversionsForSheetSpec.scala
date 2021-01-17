@@ -5,8 +5,10 @@ import com.norbitltd.spoiwo.model.Width._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.xlsx.Model2XlsxConversions.{convertSheet, writeToExistingSheet}
 import com.norbitltd.spoiwo.natures.xlsx.Utils._
+import org.apache.poi.openxml4j.opc.OPCPackage
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel._
+
 import scala.collection.JavaConverters._
 import scala.language.postfixOps
 import org.scalatest.flatspec.AnyFlatSpec
@@ -51,7 +53,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
 
   it should "removes obsolete formulas" in {
     val inputStream = this.getClass.getResourceAsStream("/with_formula.xlsx")
-    val w = XSSFWorkbookFactory.createWorkbook(inputStream)
+    val w = XSSFWorkbookFactory.createWorkbook(OPCPackage.open(inputStream))
     w.getCalculationChain.getCTCalcChain.sizeOfCArray() should equal(1)
     val existingPoiSheet = w.getSheetAt(0)
     val newSheet = Sheet(Row(Seq(Cell(2.0, index = 0)), index = 0))

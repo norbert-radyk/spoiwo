@@ -210,7 +210,7 @@ object Model2XlsxConversions extends BaseXlsx {
     val displayName = modelTable.displayName.getOrElse(s"Table$tableId")
     val name = modelTable.name.getOrElse(s"ct_table_$tableId")
 
-    val table = sheet.createTable()
+    val table = sheet.createTable(null)
     table.setDisplayName(displayName)
     table.setName(name)
     val ctTable = table.getCTTable
