@@ -5,6 +5,7 @@ import com.norbitltd.spoiwo.model.Width._
 import com.norbitltd.spoiwo.model._
 import com.norbitltd.spoiwo.natures.streaming.xlsx.Model2XlsxConversions.{convertSheet, writeToExistingSheet}
 import com.norbitltd.spoiwo.natures.xlsx.Utils._
+import org.apache.poi.openxml4j.opc.OPCPackage
 import org.apache.poi.xssf.streaming.{SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFWorkbookFactory}
 
@@ -64,7 +65,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
 
   it should "fail if there is an attempt to modify an existing cell" in {
     val inputStream = this.getClass.getResourceAsStream("/with_formula.xlsx")
-    val w = new SXSSFWorkbook(XSSFWorkbookFactory.createWorkbook(inputStream))
+    val w = new SXSSFWorkbook(XSSFWorkbookFactory.createWorkbook(OPCPackage.open(inputStream)))
     w.getXSSFWorkbook.getCalculationChain.getCTCalcChain.sizeOfCArray() should equal(1)
     val existingPoiSheet = w.getSheetAt(0)
     val newSheet = Sheet(Row(Seq(Cell(2.0, index = 0)), index = 0))
@@ -80,7 +81,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
 
   it should "Access initial cells and rows in the template. After constructing all internal windows are empty and SXSSFSheet.getRow(int) and SXSSFRow.getCell(int) return null" in {
     val inputStream = this.getClass.getResourceAsStream("/with_formula.xlsx")
-    val w = new SXSSFWorkbook(XSSFWorkbookFactory.createWorkbook(inputStream))
+    val w = new SXSSFWorkbook(XSSFWorkbookFactory.createWorkbook(OPCPackage.open(inputStream)))
     w.getXSSFWorkbook.getCalculationChain.getCTCalcChain.sizeOfCArray() should equal(1)
     val existingPoiSheet = w.getSheetAt(0)
 
