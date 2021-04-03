@@ -1,7 +1,7 @@
 SPOIWO (Scala POI Wrapping Objects)
 ==============
 
-[![Build Status](https://travis-ci.org/norbert-radyk/spoiwo.svg?branch=master)](https://travis-ci.org/norbert-radyk/spoiwo)
+![Continuous Integration](https://github.com/norbert-radyk/spoiwo/workflows/Continuous%20Integration/badge.svg)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.norbitltd/spoiwo_2.12/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo)
 [![Javadocs](https://www.javadoc.io/badge/com.norbitltd/spoiwo_2.12.svg)](https://www.javadoc.io/doc/com.norbitltd/spoiwo_2.12)
 
