@@ -21,14 +21,16 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  scalaVersion := "2.13.5",
+  ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.5"),
+  ThisBuild / scalaVersion := crossScalaVersions.value.last,
+  ThisBuild / githubWorkflowPublishTargetBranches := List(),
+  ThisBuild / githubWorkflowBuildPreamble ++= List(),
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
     "-Ywarn-dead-code",
     "-Ywarn-unused",
-    ),
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.12", "2.11.12"),
+  ),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
