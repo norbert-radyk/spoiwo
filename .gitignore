@@ -2,3 +2,10 @@ target/
 .idea/
 test.xlsx
 .bsp
+
+# Metals
+.metals/*
+.bloop/*
+.vscode/*
+**/.bloop/*
+**/metals.sbt

@@ -20,55 +20,53 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
   </developers>
 
 lazy val commonSettings = Seq(
-  organization := "com.norbitltd",
-  ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.5"),
+  organization := "spoiwo",
+  ThisBuild / crossScalaVersions := Seq("2.12.14", "2.13.6", "3.0.0"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowPublishTargetBranches := List(),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
   scalacOptions ++= Seq(
     "-deprecation",
-    "-feature",
-    "-Ywarn-dead-code",
-    "-Ywarn-unused",
+    "-feature"
   ),
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  version := "1.8.1-SNAPSHOT",
+  version := "2.0.0-SNAPSHOT",
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml"         % "1.3.0",
-    "org.apache.poi"         %  "poi"               % "5.0.0",
-    "org.apache.poi"         %  "poi-ooxml"         % "5.0.0",
-    "org.scalatest"          %% "scalatest"         % "3.1.2"   % Test
+    "org.scala-lang.modules" %% "scala-xml" % "2.0.0",
+    "org.apache.poi" % "poi" % "5.0.0",
+    "org.apache.poi" % "poi-ooxml" % "5.0.0",
+    "org.scalatest" %% "scalatest" % "3.2.9" % Test
   )
 )
 
 lazy val root = project
   .in(file("."))
-  .settings(commonSettings : _*)
+  .settings(commonSettings: _*)
   .settings(
     publishArtifact := false
   )
   .aggregate(spoiwo, spoiwoGrids, examples)
 
 lazy val spoiwo = (project in file("core"))
-  .settings(commonSettings : _*)
+  .settings(commonSettings: _*)
   .settings(
     name := "spoiwo"
   )
 
 lazy val examples = (project in file("examples"))
   .dependsOn(spoiwo, spoiwoGrids)
-  .settings(commonSettings : _*)
+  .settings(commonSettings: _*)
   .settings(
     name := "spoiwo-examples"
   )
 
 lazy val spoiwoGrids = (project in file("grids"))
   .dependsOn(spoiwo)
-  .settings(commonSettings : _*)
+  .settings(commonSettings: _*)
   .settings(
     name := "spoiwo-grids"
   )
