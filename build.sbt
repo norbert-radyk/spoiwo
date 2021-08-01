@@ -20,7 +20,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
   </developers>
 
 lazy val commonSettings = Seq(
-  organization := "spoiwo",
+  organization := "com.norbitltd",
   ThisBuild / crossScalaVersions := Seq("2.12.14", "2.13.6", "3.0.1"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowPublishTargetBranches := List(),
@@ -32,7 +32,7 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   Test / publishArtifact := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  version := "2.0.0-SNAPSHOT",
+  version := "2.0.0",
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
