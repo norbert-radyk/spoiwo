@@ -1,8 +1,11 @@
 package spoiwo.natures.csv
 
-import java.time.ZoneId
+import com.github.tototoshi.csv.{CSVWriter, DefaultCSVFormat, defaultCSVFormat}
 import spoiwo.utils.FileUtils
 import spoiwo.model._
+
+import java.io.StringWriter
+import java.time.ZoneId
 
 object Model2CsvConversions {
 
@@ -52,8 +55,32 @@ object Model2CsvConversions {
     s.name.getOrElse("") -> s.rows.map(r => convertRowToCsv(r, properties)).mkString("\n")
   }
 
-  private def convertRowToCsv(r: Row, properties: CsvProperties): String =
-    r.cells.map(c => convertCellToCsv(c, properties)).mkString(properties.separator)
+  private val oneLineCsvFormat = new DefaultCSVFormat {
+    override val lineTerminator: String = ""
+  }
+
+  private def convertRowToCsv(r: Row, properties: CsvProperties): String = {
+    val sw = new StringWriter()
+    try {
+      val format = if (properties.separator.isEmpty || properties.separator == ",") {
+        oneLineCsvFormat
+      } else {
+        new DefaultCSVFormat {
+          override val delimiter: Char = properties.separator.charAt(0)
+          override val lineTerminator: String = ""
+        }
+      }
+      val csvWriter = CSVWriter.open(sw)(format)
+      try {
+        csvWriter.writeRow(r.cells.map(c => convertCellToCsv(c, properties)).toSeq)
+      } finally {
+        csvWriter.close()
+      }
+    } finally {
+      sw.close()
+    }
+    sw.toString
+  }
 
   private def convertCellToCsv(c: Cell, properties: CsvProperties): String = c match {
     case _: BlankCell     => ""
