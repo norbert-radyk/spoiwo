@@ -21,7 +21,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  ThisBuild / crossScalaVersions := Seq("2.12.14", "2.13.6", "3.0.1"),
+  ThisBuild / crossScalaVersions := Seq("2.12.15", "2.13.6", "3.0.2"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowPublishTargetBranches := List(),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
@@ -36,10 +36,10 @@ lazy val commonSettings = Seq(
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml" % "2.0.0",
+    "org.scala-lang.modules" %% "scala-xml" % "2.0.1",
     "org.apache.poi" % "poi" % "5.1.0",
     "org.apache.poi" % "poi-ooxml" % "5.1.0",
-    "org.scalatest" %% "scalatest" % "3.2.9" % Test
+    "org.scalatest" %% "scalatest" % "3.2.10" % Test
   )
 )
 
