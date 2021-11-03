@@ -51,35 +51,35 @@ object Model2CsvConversions {
     wb.sheets.map(s => convertSheetToCsv(s, properties)).toMap
   }
 
+  private val customCsvFormat = new DefaultCSVFormat {
+    override val lineTerminator: String = "\n"
+  }
+
   private def convertSheetToCsv(s: Sheet, properties: CsvProperties): (String, String) = {
-    s.name.getOrElse("") -> s.rows.map(r => convertRowToCsv(r, properties)).mkString("\n")
-  }
-
-  private val oneLineCsvFormat = new DefaultCSVFormat {
-    override val lineTerminator: String = ""
-  }
-
-  private def convertRowToCsv(r: Row, properties: CsvProperties): String = {
+    val format = if (properties.separator.isEmpty || properties.separator == ",") {
+      customCsvFormat
+    } else {
+      new DefaultCSVFormat {
+        override val delimiter: Char = properties.separator.charAt(0)
+        override val lineTerminator: String = customCsvFormat.lineTerminator
+      }
+    }
     val sw = new StringWriter()
     try {
-      val format = if (properties.separator.isEmpty || properties.separator == ",") {
-        oneLineCsvFormat
-      } else {
-        new DefaultCSVFormat {
-          override val delimiter: Char = properties.separator.charAt(0)
-          override val lineTerminator: String = ""
-        }
-      }
       val csvWriter = CSVWriter.open(sw)(format)
       try {
-        csvWriter.writeRow(r.cells.map(c => convertCellToCsv(c, properties)).toSeq)
+        s.rows.map(r => writeRowAsCsv(csvWriter, r, properties))
       } finally {
         csvWriter.close()
       }
     } finally {
       sw.close()
     }
-    sw.toString
+    s.name.getOrElse("") -> sw.toString
+  }
+
+  private def writeRowAsCsv(csvWriter: CSVWriter, r: Row, properties: CsvProperties): Unit = {
+    csvWriter.writeRow(r.cells.map(c => convertCellToCsv(c, properties)).toSeq)
   }
 
   private def convertCellToCsv(c: Cell, properties: CsvProperties): String = c match {

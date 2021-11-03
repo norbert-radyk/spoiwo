@@ -15,7 +15,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
       Row().withCellValues("ASIA", "China", "Tianjin")
     )
 
-    val csvText = "EUROPE,Poland,Wroclaw\nEUROPE,United Kingdom,London\nASIA,China,Tianjin"
+    val csvText = "EUROPE,Poland,Wroclaw\nEUROPE,United Kingdom,London\nASIA,China,Tianjin\n"
     csvText shouldBe sheet.convertAsCsv()
   }
 
@@ -31,7 +31,8 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
         |Text With New Lines,"1
         |2
         |3"
-        |Plain Text,123""".stripMargin
+        |Plain Text,123
+        |""".stripMargin
     csvText shouldBe sheet.convertAsCsv()
   }
 
@@ -43,7 +44,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
     )
     val properties = CsvProperties(separator = "|")
 
-    val csvText = "EUROPE|Poland|Wroclaw\nEUROPE|United Kingdom|London\nASIA|China|Tianjin"
+    val csvText = "EUROPE|Poland|Wroclaw\nEUROPE|United Kingdom|London\nASIA|China|Tianjin\n"
     csvText shouldBe sheet.convertAsCsv(properties)
   }
 
@@ -54,7 +55,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
       Row().withCellValues("Wroclaw", false)
     )
 
-    val csvText = "City,Is Capital\nLondon,true\nWroclaw,false"
+    val csvText = "City,Is Capital\nLondon,true\nWroclaw,false\n"
     csvText shouldBe sheet.convertAsCsv()
   }
 
@@ -66,7 +67,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
     )
     val properties = CsvProperties(defaultBooleanTrueString = "Y", defaultBooleanFalseString = "N")
 
-    val csvText = "City,Is Capital\nLondon,Y\nWroclaw,N"
+    val csvText = "City,Is Capital\nLondon,Y\nWroclaw,N\n"
     csvText shouldBe sheet.convertAsCsv(properties)
   }
 
@@ -76,7 +77,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
       Row().withCellValues("Thomas Edison", LocalDate.of(1847, 2, 11))
     )
 
-    val csvText = "Albert Einstein,1879-03-14\nThomas Edison,1847-02-11"
+    val csvText = "Albert Einstein,1879-03-14\nThomas Edison,1847-02-11\n"
     csvText shouldBe sheet.convertAsCsv()
   }
 
@@ -87,7 +88,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
     )
     val properties = CsvProperties(defaultDateFormat = "yyyy/MM/dd")
 
-    val csvText = "Albert Einstein,1879/03/14\nThomas Edison,1847/02/11"
+    val csvText = "Albert Einstein,1879/03/14\nThomas Edison,1847/02/11\n"
     csvText shouldBe sheet.convertAsCsv(properties)
   }
 
@@ -98,7 +99,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
       )
     )
 
-    val csvText = "spoiwo issue"
+    val csvText = "spoiwo issue\n"
     csvText shouldBe sheet.convertAsCsv()
   }
 
