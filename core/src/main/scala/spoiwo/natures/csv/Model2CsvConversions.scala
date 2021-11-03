@@ -1,6 +1,6 @@
 package spoiwo.natures.csv
 
-import com.github.tototoshi.csv.{CSVWriter, DefaultCSVFormat, defaultCSVFormat}
+import com.github.tototoshi.csv.{CSVWriter, DefaultCSVFormat}
 import spoiwo.utils.FileUtils
 import spoiwo.model._
 
