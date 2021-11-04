@@ -36,6 +36,23 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
     csvText shouldBe sheet.convertAsCsv()
   }
 
+  it should "correctly convert the values that contain text that matches the separator (| case)" in {
+    val sheet = Sheet(name = "CSV conversion").withRows(
+      Row().withCellValues("Text With Pipes", "1|2|3"),
+      Row().withCellValues("Text With New Lines", "1\n2\n3"),
+      Row().withCellValues("Text With Commas", "1,2,3"),
+    )
+
+    val delimitedText =
+      """Text With Pipes|"1|2|3"
+        >Text With New Lines|"1
+        >2
+        >3"
+        >Text With Commas|1,2,3
+        >""".stripMargin('>')
+    delimitedText shouldBe sheet.convertAsCsv(CsvProperties("|"))
+  }
+
   it should "correctly convert the single text-only sheet with '|' separator" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
       Row().withCellValues("EUROPE", "Poland", "Wroclaw"),
