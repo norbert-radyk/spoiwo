@@ -26,31 +26,18 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
       Row().withCellValues("Plain Text", "123"),
     )
 
-    val csvText =
-      """Text With Commas,"1,2,3"
-        |Text With New Lines,"1
-        |2
-        |3"
-        |Plain Text,123
-        |""".stripMargin
+    val csvText = "Text With Commas,\"1,2,3\"\nText With New Lines,\"1\n2\n3\"\nPlain Text,123\n"
     csvText shouldBe sheet.convertAsCsv()
   }
 
   it should "correctly convert the values that contain text that matches the separator (| case)" in {
     val sheet = Sheet(name = "CSV conversion").withRows(
       Row().withCellValues("Text With Pipes", "1|2|3"),
-      Row().withCellValues("Text With New Lines", "1\n2\n3"),
       Row().withCellValues("Text With Commas", "1,2,3"),
     )
 
-    val delimitedText =
-      """Text With Pipes|"1|2|3"
-        >Text With New Lines|"1
-        >2
-        >3"
-        >Text With Commas|1,2,3
-        >""".stripMargin('>')
-    delimitedText shouldBe sheet.convertAsCsv(CsvProperties("|"))
+    val delimitedText = "Text With Pipes|\"1|2|3\"\nText With Commas|1,2,3\n"
+    delimitedText shouldBe sheet.convertAsCsv(CsvProperties('|'))
   }
 
   it should "correctly convert the single text-only sheet with '|' separator" in {
@@ -59,7 +46,7 @@ class Model2CsvConversionsSpec extends AnyFlatSpec with Matchers {
       Row().withCellValues("EUROPE", "United Kingdom", "London"),
       Row().withCellValues("ASIA", "China", "Tianjin")
     )
-    val properties = CsvProperties(separator = "|")
+    val properties = CsvProperties(separator = '|')
 
     val csvText = "EUROPE|Poland|Wroclaw\nEUROPE|United Kingdom|London\nASIA|China|Tianjin\n"
     csvText shouldBe sheet.convertAsCsv(properties)

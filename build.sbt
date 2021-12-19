@@ -15,13 +15,12 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
     <developer>
       <id>norbert-radyk</id>
       <name>Norbert Radyk</name>
-      <email>norbert.radyk@gmail.com</email>
     </developer>
   </developers>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  ThisBuild / crossScalaVersions := Seq("2.12.15", "2.13.6", "3.0.2"),
+  ThisBuild / crossScalaVersions := Seq("2.12.15", "2.13.7", "3.1.0"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowPublishTargetBranches := List(),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
@@ -32,12 +31,12 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   Test / publishArtifact := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  version := "2.0.0",
+  version := "2.1.0",
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
     "org.scala-lang.modules" %% "scala-xml" % "2.0.1",
-    "com.github.tototoshi" %% "scala-csv" % "1.3.8",
+    "com.github.tototoshi" %% "scala-csv" % "1.3.9",
     "org.apache.poi" % "poi" % "5.1.0",
     "org.apache.poi" % "poi-ooxml" % "5.1.0",
     "org.scalatest" %% "scalatest" % "3.2.10" % Test

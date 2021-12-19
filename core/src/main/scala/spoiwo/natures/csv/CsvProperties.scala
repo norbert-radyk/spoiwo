@@ -9,7 +9,7 @@ object CsvProperties {
 }
 
 case class CsvProperties(
-    separator: String = ",",
+    separator: Char = ',',
     defaultDateFormat: String = "yyyy-MM-dd",
     defaultBooleanTrueString: String = "true",
     defaultBooleanFalseString: String = "false"
