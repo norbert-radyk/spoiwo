@@ -2,8 +2,6 @@ package spoiwo.model.grid
 
 import spoiwo.model.{Cell, Row}
 
-import scala.annotation.tailrec
-
 object RowHelper {
 
   def fixupIndexes(rows: Seq[Row]): Seq[Row] = {
@@ -32,7 +30,8 @@ object RowHelper {
 
     /**
       * This function may not work on Rows with mixed explicit indexes if it has non-explicit indexes too!
-      * So [Row(5), Row(), Row(1), Row(7), Row(6)] will possibly broke the output bcs 5 + 1 and 6 will collide!
+      * So [Row(5), Row(), Row(1), Row(7), Row(6)] would possibly broke the output bcs 5 + 1 and 6 collides.
+      * The given input should be all explicit or all implicit indexed.
       */
     def fixupIndexes: Seq[Row] = {
       RowHelper.fixupIndexes(rows)
@@ -42,32 +41,14 @@ object RowHelper {
       rows.fixupIndexes.map(r => r.withIndex(r.index.get + y).withCells(r.cells.map(c => c.withIndex(c.index.get + x))))
     }
 
+    /**
+      * The given rows list should be explicitly indexed
+      */
     def merge: Seq[Row] = {
-      def mergeRows(row1: Row, row2: Row) = {
-        if (row1.index == row2.index) {
-          (Row(index = row1.index.get, cells = row1.cells ++ row2.cells), true)
-        } else {
-          (row1, false)
-        }
-      }
-
-      //This is probably slow as hell if you have huge number of rows
-      @tailrec
-      def merger(all: List[Row], acc: List[Row]): List[Row] = {
-        all match {
-          case h :: t =>
-            val (newList, added) = acc.foldLeft((List.empty[Row], false)) {
-              case ((acc, merged), row) =>
-                val (newRow, mergedNow) = mergeRows(row, h)
-                (newRow :: acc, mergedNow || merged)
-            }
-            val newestList = if (added) newList else h :: newList
-            merger(t, newestList)
-          case Nil => acc
-        }
-      }
-
-      merger(rows.toList, List.empty)
+      rows.groupBy(_.index).map { case (_, v) =>
+        val r = Row(v.flatMap(_.cells))
+        v.headOption.flatMap(_.index).fold(r)(i => r.withIndex(i))
+      }.toSeq.sortBy(_.index)
     }
   }
 }
