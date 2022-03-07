@@ -35,7 +35,6 @@ lazy val commonSettings = Seq(
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "org.scala-lang.modules" %% "scala-xml" % "2.0.1",
     "com.github.tototoshi" %% "scala-csv" % "1.3.10",
     "org.apache.poi" % "poi" % "5.2.0",
     "org.apache.poi" % "poi-ooxml" % "5.2.0",
