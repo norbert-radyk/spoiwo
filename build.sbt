@@ -20,7 +20,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  ThisBuild / crossScalaVersions := Seq("2.12.15", "2.13.8", "3.2.0"),
+  ThisBuild / crossScalaVersions := Seq("2.12.15", "2.13.8", "3.1.0"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowPublishTargetBranches := List(),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
