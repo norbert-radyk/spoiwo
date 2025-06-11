@@ -19,7 +19,7 @@ Spoiwo is available in [The Central Repository](https://search.maven.org/#search
 
 ```
 libraryDependencies ++= Seq(
-  "com.norbitltd" %% "spoiwo" % "2.2.1"
+  "com.norbitltd" %% "spoiwo" % "2.2.2"
 )
 ```
 
