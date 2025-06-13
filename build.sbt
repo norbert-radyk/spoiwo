@@ -20,7 +20,7 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  ThisBuild / crossScalaVersions := Seq("2.12.15", "2.13.8", "3.1.0"),
+  ThisBuild / crossScalaVersions := Seq("2.13.16", "3.6.3"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowPublishTargetBranches := List(),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
@@ -31,42 +31,42 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   Test / publishArtifact := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  version := "2.2.2",
+  version := "2.3.0-SNAPSHOT",
   versionScheme := Some("early-semver"),
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
-    "com.github.tototoshi" %% "scala-csv" % "1.3.10",
+    "com.github.tototoshi" %% "scala-csv" % "2.0.0",
     "org.apache.poi" % "poi" % "5.4.1",
     "org.apache.poi" % "poi-ooxml" % "5.4.1",
-    "org.scalatest" %% "scalatest" % "3.2.11" % Test
+    "org.scalatest" %% "scalatest" % "3.2.19" % Test
   )
 )
 
 lazy val root = project
   .in(file("."))
-  .settings(commonSettings: _*)
+  .settings(commonSettings *)
   .settings(
     publishArtifact := false
   )
   .aggregate(spoiwo, spoiwoGrids, examples)
 
 lazy val spoiwo = (project in file("core"))
-  .settings(commonSettings: _*)
+  .settings(commonSettings *)
   .settings(
     name := "spoiwo"
   )
 
 lazy val examples = (project in file("examples"))
   .dependsOn(spoiwo, spoiwoGrids)
-  .settings(commonSettings: _*)
+  .settings(commonSettings *)
   .settings(
     name := "spoiwo-examples"
   )
 
 lazy val spoiwoGrids = (project in file("grids"))
   .dependsOn(spoiwo)
-  .settings(commonSettings: _*)
+  .settings(commonSettings *)
   .settings(
     name := "spoiwo-grids"
   )

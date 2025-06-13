@@ -6,7 +6,7 @@ import org.apache.poi.openxml4j.opc.OPCPackage
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.language.postfixOps
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -178,7 +178,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val xlsx = convert(model)
 
     val drawing = xlsx.createDrawingPatriarch()
-    val pictures = drawing.getShapes.asScala.toStream.collect {
+    val pictures = drawing.getShapes.asScala.to(LazyList).collect {
       case p: XSSFPicture => p
     }
 

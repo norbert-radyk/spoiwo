@@ -1,11 +1,11 @@
 package spoiwo.natures.xlsx
 
-import scala.collection.JavaConverters._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import Model2XlsxConversions.{convertSheet, convertTable}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import spoiwo.model._
+import scala.jdk.CollectionConverters._
 
 class Model2XlsxConversionsForTableSpec extends AnyFlatSpec with Matchers {
 

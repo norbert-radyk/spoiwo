@@ -41,11 +41,11 @@ class Model2XlsxConversionsForWorkbookCacheSpec extends AnyFlatSpec with Matcher
   //Workaround for the scala/2.11 compiler which messes up with the private variable names
   private def getConversionsField(name: String): Field = Try(conversions.getClass.getDeclaredField(name)).getOrElse {
     val allFields = conversions.getClass.getDeclaredFields
-    allFields.filter(_.getName contains name).head
+    allFields.filter(_.getName.contains(name)).head
   }
 
   private def assertNotCached(workbook: XSSFWorkbook): Unit = {
-    def getValue(field: Field) = field.get(conversions).asInstanceOf[collection.mutable.Map[XSSFWorkbook, _]]
+    def getValue(field: Field) = field.get(conversions).asInstanceOf[collection.mutable.Map[XSSFWorkbook, ?]]
     getValue(cellStyleCacheField).keySet should not contain workbook
     getValue(dataFormatCacheField).keySet should not contain workbook
     getValue(fontCacheField).keySet should not contain workbook
