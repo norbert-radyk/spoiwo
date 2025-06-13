@@ -31,14 +31,14 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   Test / publishArtifact := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  version := "2.2.1",
+  version := "2.2.2",
   versionScheme := Some("early-semver"),
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
     "com.github.tototoshi" %% "scala-csv" % "1.3.10",
-    "org.apache.poi" % "poi" % "5.2.3",
-    "org.apache.poi" % "poi-ooxml" % "5.2.3",
+    "org.apache.poi" % "poi" % "5.4.1",
+    "org.apache.poi" % "poi-ooxml" % "5.4.1",
     "org.scalatest" %% "scalatest" % "3.2.11" % Test
   )
 )
