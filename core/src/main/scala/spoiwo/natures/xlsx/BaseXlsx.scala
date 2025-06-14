@@ -5,6 +5,7 @@ import java.time.{LocalDate, ZoneId}
 import java.util.{Calendar, Date}
 import Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
+import org.apache.poi.ss.usermodel.{PageMargin, PaneType}
 import org.apache.poi.ss.util.{CellAddress, CellRangeAddress}
 import org.apache.poi.xssf.usermodel._
 import spoiwo.model._
@@ -250,11 +251,11 @@ trait BaseXlsx {
     }
   }
 
-  protected[natures] def convertPane(pane: Pane): Int = pane match {
-    case Pane.LowerLeftPane  => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_LEFT
-    case Pane.LowerRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_LOWER_RIGHT
-    case Pane.UpperLeftPane  => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_LEFT
-    case Pane.UpperRightPane => org.apache.poi.ss.usermodel.Sheet.PANE_UPPER_RIGHT
+  protected[natures] def convertPaneType(pane: Pane): PaneType = pane match {
+    case Pane.LowerLeftPane  => PaneType.LOWER_LEFT
+    case Pane.LowerRightPane => PaneType.LOWER_RIGHT
+    case Pane.UpperLeftPane  => PaneType.UPPER_LEFT
+    case Pane.UpperRightPane => PaneType.UPPER_RIGHT
     case unexpected =>
       throw new IllegalArgumentException(s"Unable to convert Pane=$unexpected to XLSX - unsupported enum!")
   }
@@ -266,17 +267,17 @@ trait BaseXlsx {
       case FreezePane(columnSplit, rowSplit, leftMostColumn, topRow) =>
         sheet.createFreezePane(columnSplit, rowSplit, leftMostColumn, topRow)
       case SplitPane(xSplitPosition, ySplitPosition, leftMostColumn, topRow, activePane) =>
-        sheet.createSplitPane(xSplitPosition, ySplitPosition, leftMostColumn, topRow, convertPane(activePane))
+        sheet.createSplitPane(xSplitPosition, ySplitPosition, leftMostColumn, topRow, convertPaneType(activePane))
     }
   }
 
   protected[natures] def convertMargins(margins: Margins, sheet: usermodel.Sheet): Unit = {
-    margins.top.foreach(topMargin => sheet.setMargin(usermodel.Sheet.TopMargin, topMargin))
-    margins.bottom.foreach(bottomMargin => sheet.setMargin(usermodel.Sheet.BottomMargin, bottomMargin))
-    margins.right.foreach(rightMargin => sheet.setMargin(usermodel.Sheet.RightMargin, rightMargin))
-    margins.left.foreach(leftMargin => sheet.setMargin(usermodel.Sheet.LeftMargin, leftMargin))
-    margins.header.foreach(headerMargin => sheet.setMargin(usermodel.Sheet.HeaderMargin, headerMargin))
-    margins.footer.foreach(footerMargin => sheet.setMargin(usermodel.Sheet.FooterMargin, footerMargin))
+    margins.top.foreach(topMargin => sheet.setMargin(PageMargin.TOP, topMargin))
+    margins.bottom.foreach(bottomMargin => sheet.setMargin(PageMargin.BOTTOM, bottomMargin))
+    margins.right.foreach(rightMargin => sheet.setMargin(PageMargin.RIGHT, rightMargin))
+    margins.left.foreach(leftMargin => sheet.setMargin(PageMargin.LEFT, leftMargin))
+    margins.header.foreach(headerMargin => sheet.setMargin(PageMargin.HEADER, headerMargin))
+    margins.footer.foreach(footerMargin => sheet.setMargin(PageMargin.FOOTER, footerMargin))
   }
 
 }
