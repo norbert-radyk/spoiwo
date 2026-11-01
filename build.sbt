@@ -29,6 +29,14 @@ lazy val commonSettings = Seq(
       )
     )
   ),
+  ThisBuild / githubWorkflowPublishPostamble := Seq(
+    WorkflowStep.Run(
+      commands = List("gh release create \"$GITHUB_REF_NAME\" --verify-tag --generate-notes"),
+      name = Some("Create GitHub Release"),
+      env = Map("GH_TOKEN" -> "${{ github.token }}")
+    )
+  ),
+  ThisBuild / githubWorkflowPermissions := Some(Permissions.Specify(Map(PermissionScope.Contents -> PermissionValue.Write))),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
   ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
   scalacOptions ++= Seq(
