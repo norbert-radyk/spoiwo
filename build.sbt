@@ -14,6 +14,7 @@ inThisBuild(
 )
 
 lazy val commonSettings = Seq(
+  // Must be set per project: in inThisBuild alone, sbt defaults each project's organization to its name
   organization := "com.norbitltd",
   ThisBuild / crossScalaVersions := Seq("2.13.18", "3.10.0"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
