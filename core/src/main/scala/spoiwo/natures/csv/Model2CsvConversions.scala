@@ -1,6 +1,6 @@
 package spoiwo.natures.csv
 
-import com.github.tototoshi.csv.{CSVWriter, DefaultCSVFormat}
+import com.github.tototoshi.csv.{CSVFormat, CSVWriter, DefaultCSVFormat}
 import spoiwo.utils.FileUtils
 import spoiwo.model._
 
@@ -52,14 +52,14 @@ object Model2CsvConversions {
   }
 
   private def convertSheetToCsv(s: Sheet, properties: CsvProperties): (String, String) = {
-    val format = new DefaultCSVFormat {
+    implicit val format: CSVFormat = new DefaultCSVFormat {
       override val delimiter: Char = properties.separator
       override val lineTerminator: String = "\n"
     }
 
     val sw = new StringWriter()
     try {
-      val csvWriter = CSVWriter.open(sw)(format)
+      val csvWriter = CSVWriter.open(sw)
       try {
         val allRows = s.rows.map(r => r.cells.map(c => convertCellToCsv(c, properties)).toSeq)
         csvWriter.writeAll(allRows)

@@ -41,8 +41,8 @@ object Utils {
               row <- Option(sheet.getRow(rowIdx))
               cell <- Option(row.getCell(cellIdx))
             } yield extractor(cell)
-            if (actualData.orNull[T] == expectedData) Nil
-            else List((actualData.orNull[T], expectedData))
+            if (actualData.getOrElse(ev(null)) == expectedData) Nil
+            else List((actualData.getOrElse(ev(null)), expectedData))
         }
     }.toSeq
   }

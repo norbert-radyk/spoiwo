@@ -87,7 +87,7 @@ class SpoiwoExamples {
     )
 
     Sheet(
-      Row(index = 2, height = 30.points).withCells(alignments.map((createCell _).tupled))
+      Row(index = 2, height = 30.points).withCells(alignments.map((createCell(_, _)).tupled))
     ).saveAsXlsx("xssf-align.xlsx")
   }
 

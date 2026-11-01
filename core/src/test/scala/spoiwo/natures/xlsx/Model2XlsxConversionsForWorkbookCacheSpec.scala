@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 import spoiwo.model.Height.HeightEnrichment
 import spoiwo.model._
 
-import java.lang.reflect.Field
+import java.lang.reflect.{Field, Modifier}
 
 class Model2XlsxConversionsForWorkbookCacheSpec extends AnyFlatSpec with Matchers {
 
@@ -41,7 +41,7 @@ class Model2XlsxConversionsForWorkbookCacheSpec extends AnyFlatSpec with Matcher
   //Workaround for the scala/2.11 compiler which messes up with the private variable names
   private def getConversionsField(name: String): Field = Try(conversions.getClass.getDeclaredField(name)).getOrElse {
     val allFields = conversions.getClass.getDeclaredFields
-    allFields.filter(_.getName.contains(name)).head
+    allFields.filter(f => f.getName.contains(name) && !Modifier.isStatic(f.getModifiers)).head
   }
 
   private def assertNotCached(workbook: XSSFWorkbook): Unit = {
