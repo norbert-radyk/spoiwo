@@ -1,41 +1,51 @@
-lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
-  <licenses>
-    <license>
-      <name>MIT-License</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <scm>
-    <url>https://github.com/norbert-radyk/spoiwo</url>
-    <developerConnection>scm:git:git@github.com:norbert-radyk/spoiwo.git</developerConnection>
-    <connection>scm:git:git@github.com:norbert-radyk/spoiwo.git</connection>
-  </scm>
-  <developers>
-    <developer>
-      <id>norbert-radyk</id>
-      <name>Norbert Radyk</name>
-    </developer>
-  </developers>
+inThisBuild(
+  List(
+    homepage := Some(url("https://github.com/norbert-radyk/spoiwo")),
+    licenses := List("MIT" -> url("http://www.opensource.org/licenses/mit-license.php")),
+    scmInfo := Some(
+      ScmInfo(
+        url("https://github.com/norbert-radyk/spoiwo"),
+        "scm:git:git@github.com:norbert-radyk/spoiwo.git",
+        "scm:git:git@github.com:norbert-radyk/spoiwo.git"
+      )
+    ),
+    developers := List(Developer("norbert-radyk", "Norbert Radyk", "", url("https://github.com/norbert-radyk")))
+  )
+)
 
 lazy val commonSettings = Seq(
-  organization := "com.norbitltd",
   ThisBuild / crossScalaVersions := Seq("2.13.18", "3.10.0"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
-  ThisBuild / githubWorkflowPublishTargetBranches := List(),
+  ThisBuild / githubWorkflowTargetTags ++= Seq("v*"),
+  ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v"))),
+  ThisBuild / githubWorkflowPublish := Seq(
+    WorkflowStep.Sbt(
+      commands = List("ci-release"),
+      env = Map(
+        "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+        "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+        "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+      )
+    )
+  ),
+  ThisBuild / githubWorkflowPublishPostamble := Seq(
+    WorkflowStep.Run(
+      commands = List("gh release create \"$GITHUB_REF_NAME\" --verify-tag --generate-notes"),
+      name = Some("Create GitHub Release"),
+      env = Map("GH_TOKEN" -> "${{ github.token }}")
+    )
+  ),
+  ThisBuild / githubWorkflowPermissions := Some(Permissions.Specify(Map(PermissionScope.Contents -> PermissionValue.Write))),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
   ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature"
   ),
-  publishMavenStyle := true,
   Test / publishArtifact := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  version := "3.0.0-SNAPSHOT",
   versionScheme := Some("early-semver"),
-  publishTo := sonatypePublishToBundle.value,
-  pomExtra := pomDetails,
   libraryDependencies ++= Seq(
     "com.github.tototoshi" %% "scala-csv" % "2.0.0",
     "org.apache.poi" % "poi" % "6.0.0",
