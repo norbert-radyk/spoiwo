@@ -14,6 +14,7 @@ inThisBuild(
 )
 
 lazy val commonSettings = Seq(
+  organization := "com.norbitltd",
   ThisBuild / crossScalaVersions := Seq("2.13.18", "3.10.0"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowTargetTags ++= Seq("v*"),
