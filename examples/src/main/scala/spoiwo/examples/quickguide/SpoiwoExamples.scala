@@ -7,7 +7,7 @@ import spoiwo.model.Height.HeightEnrichment
 import spoiwo.model._
 import spoiwo.model.enums._
 import spoiwo.natures.xlsx.Model2XlsxConversions._
-import spoiwo.model.enums.{CellVerticalAlignment => VA, CellHorizontalAlignment => HA, CellReadingOrder => RO}
+import spoiwo.model.enums.{CellHorizontalAlignment => HA, CellReadingOrder => RO, CellVerticalAlignment => VA}
 
 //noinspection TypeAnnotation
 class SpoiwoExamples {
@@ -37,14 +37,13 @@ class SpoiwoExamples {
     val formattedDateCell = Cell(new Date(), style = style)
     val formattedCalendarCell = Cell(Calendar.getInstance(), style = style)
 
-    Sheet(name = "new sheet", row = Row(simplestDateCell, formattedDateCell, formattedCalendarCell))
-      .saveAsXlsx("workbook.xlsx")
+    Sheet(name = "new sheet", row = Row(simplestDateCell, formattedDateCell, formattedCalendarCell)).saveAsXlsx("workbook.xlsx")
   }
 
-  //There is no way to explicitly specify type of the cell as it is derived form the type of value passed
-  //and therefore the error cell type can't be specified in the way shown in Java POI example.
-  //I hesitate to believe it makes much sense to explicitly generate error cells when generating the report,
-  //however to simulate this case we're passing error formula here.
+  // There is no way to explicitly specify type of the cell as it is derived form the type of value passed
+  // and therefore the error cell type can't be specified in the way shown in Java POI example.
+  // I hesitate to believe it makes much sense to explicitly generate error cells when generating the report,
+  // however to simulate this case we're passing error formula here.
   def workingWithDifferentTypesOfCells() =
     Sheet(
       name = "new sheet",
@@ -103,8 +102,7 @@ class SpoiwoExamples {
       topColor = Color.Black
     )
 
-    Sheet(name = "new sheet", row = Row(index = 1, Cell(value = 4, index = 1, style = CellStyle(borders = borders))))
-      .saveAsXlsx("workbook.xls")
+    Sheet(name = "new sheet", row = Row(index = 1, Cell(value = 4, index = 1, style = CellStyle(borders = borders)))).saveAsXlsx("workbook.xls")
   }
 
   def fillsAndColors() =
@@ -126,8 +124,7 @@ class SpoiwoExamples {
 
   def workingWithFonts(): Unit = {
     val style = CellStyle(font = Font(height = 24.points, fontName = "Courier New", italic = true, strikeout = true))
-    Sheet(name = "new sheet", row = Row(index = 1, Cell("This is a test of fonts", 1, style)))
-      .saveAsXlsx("workbook.xls")
+    Sheet(name = "new sheet", row = Row(index = 1, Cell("This is a test of fonts", 1, style))).saveAsXlsx("workbook.xls")
   }
 
   def workingWithMultipleFonts(): Unit = {
@@ -167,8 +164,7 @@ class SpoiwoExamples {
     ).saveAsXlsx("workbook.xls")
 
   def setPrintArea() =
-    Sheet(name = "Sheet1", properties = SheetProperties(printArea = CellRange(0 -> 0, 0 -> 1)))
-      .saveAsXlsx("workbook.xlsx")
+    Sheet(name = "Sheet1", properties = SheetProperties(printArea = CellRange(0 -> 0, 0 -> 1))).saveAsXlsx("workbook.xlsx")
 
   def setPageNumbersOnFooter() =
     Sheet(name = "format sheet", footer = Footer.Standard(right = "Page &P of &N")).saveAsXlsx("workbook.xlsx")
@@ -179,7 +175,7 @@ class SpoiwoExamples {
 
   def splitAndFreezePanes() =
     Workbook(
-      //INFO: When creating freeze pane scrolling default to freeze, so no need duplicating 0, 1
+      // INFO: When creating freeze pane scrolling default to freeze, so no need duplicating 0, 1
       Sheet(name = "new sheet", paneAction = FreezePane(0, 1)),
       Sheet(name = "second sheet", paneAction = FreezePane(1, 0)),
       Sheet(name = "third sheet", paneAction = FreezePane(2, 2)),
@@ -203,7 +199,6 @@ class SpoiwoExamples {
     ).saveAsXlsx("workbook.xlsx")
 
   def insertImage() =
-    Sheet(name = "Sheet1", images = List(Image(CellRange(1 -> 1, 1 -> 1), "examples/src/main/resources/einstein.jpg")))
-      .saveAsXlsx("workbook.xlsx")
+    Sheet(name = "Sheet1", images = List(Image(CellRange(1 -> 1, 1 -> 1), "examples/src/main/resources/einstein.jpg"))).saveAsXlsx("workbook.xlsx")
 
 }

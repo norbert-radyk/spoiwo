@@ -55,8 +55,7 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     w.createSheet("Existing")
     val previousSheet = generateSheet(0 to 2, 0 to 5)
     val existingPoiSheet: SXSSFSheet = convertSheet(previousSheet, w)
-    val newSheet = generateSheet[Int, Int](1 to 3, 1 to 4, (rowNum, colNum) => s"NEW $colNum,$rowNum")
-      .withPrintSetup(PrintSetup(10, true, 1000))
+    val newSheet = generateSheet[Int, Int](1 to 3, 1 to 4, (rowNum, colNum) => s"NEW $colNum,$rowNum").withPrintSetup(PrintSetup(10, true, 1000))
     writeToExistingSheet(newSheet, existingPoiSheet)
     val dataMatrix = mergeSheetData(Seq(previousSheet, newSheet), _.value.toString)
     nonEqualCells(existingPoiSheet, dataMatrix, _.getStringCellValue) shouldBe empty

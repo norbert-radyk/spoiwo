@@ -11,9 +11,8 @@ object FileUtils {
     try {
       writer.write(content)
       writer.flush()
-    } finally {
+    } finally
       writer.close()
-    }
   }
 
 }

@@ -38,7 +38,7 @@ class Model2XlsxConversionsForCellBordersSpec extends AnyFlatSpec with Matchers 
 
     xlsx.getBorderBottom shouldBe usermodel.BorderStyle.DASHED
     xlsx.getBorderColor(XSSFCellBorder.BorderSide.BOTTOM).getRGB.toList shouldBe
-      Array[Byte](0, 0, 255.toByte).toList
+    Array[Byte](0, 0, 255.toByte).toList
   }
 
   it should "return user defined top border" in {
@@ -47,7 +47,7 @@ class Model2XlsxConversionsForCellBordersSpec extends AnyFlatSpec with Matchers 
 
     xlsx.getBorderTop shouldBe usermodel.BorderStyle.DASH_DOT
     xlsx.getBorderColor(XSSFCellBorder.BorderSide.TOP).getRGB.toList shouldBe
-      Array[Byte](128.toByte, 128.toByte, 0.toByte).toList
+    Array[Byte](128.toByte, 128.toByte, 0.toByte).toList
   }
 
   it should "return user defined left border" in {
@@ -56,7 +56,7 @@ class Model2XlsxConversionsForCellBordersSpec extends AnyFlatSpec with Matchers 
 
     xlsx.getBorderLeft shouldBe usermodel.BorderStyle.DOTTED
     xlsx.getBorderColor(XSSFCellBorder.BorderSide.LEFT).getRGB.toList shouldBe
-      Array[Byte](0, 0, 255.toByte).toList
+    Array[Byte](0, 0, 255.toByte).toList
   }
 
   it should "return user defined right border" in {
@@ -65,7 +65,7 @@ class Model2XlsxConversionsForCellBordersSpec extends AnyFlatSpec with Matchers 
 
     xlsx.getBorderRight shouldBe usermodel.BorderStyle.HAIR
     xlsx.getBorderColor(XSSFCellBorder.BorderSide.RIGHT).getRGB.toList shouldBe
-      Array[Byte](0, 0, 255.toByte).toList
+    Array[Byte](0, 0, 255.toByte).toList
   }
 
 }

@@ -1,15 +1,12 @@
 package spoiwo.model.grid
 
 case class FunctionHelper(x: Int, y: Int) {
-  def getRelativeCol(relativeX: Int): String = {
+  def getRelativeCol(relativeX: Int): String =
     FunctionHelper.colToLetter(x + relativeX - 1)
-  }
-  def getRelativeRow(relativeY: Int): String = {
+  def getRelativeRow(relativeY: Int): String =
     (y + relativeY + 1).toString
-  }
-  def getCellByIndexes(x: Int, y: Int): String = {
+  def getCellByIndexes(x: Int, y: Int): String =
     getRelativeCol(x) + getRelativeRow(y)
-  }
 
   protected[grid] def moveRight(x2: Int): FunctionHelper = FunctionHelper(x2 + x, y)
   protected[grid] def moveDown(y2: Int): FunctionHelper = FunctionHelper(x, y + y2)

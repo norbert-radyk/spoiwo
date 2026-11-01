@@ -4,14 +4,7 @@ import java.io.{FileInputStream, FileOutputStream, OutputStream}
 import Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
 import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType
-import org.apache.poi.ss.usermodel.{
-  BorderStyle,
-  CellType,
-  FillPatternType,
-  HorizontalAlignment,
-  ReadingOrder,
-  VerticalAlignment
-}
+import org.apache.poi.ss.usermodel.{BorderStyle, CellType, FillPatternType, HorizontalAlignment, ReadingOrder, VerticalAlignment}
 import org.apache.poi.util.IOUtils
 import org.apache.poi.xssf.usermodel._
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.{CTTable, CTTableColumns, CTTableStyleInfo}
@@ -56,13 +49,12 @@ object Model2XlsxConversions extends BaseXlsx {
     cell
   }
 
-  private def convertCellDataFormat(cdf: CellDataFormat, workbook: XSSFWorkbook, cellStyle: XSSFCellStyle): Unit = {
-    cdf.formatString.foreach(formatString => {
+  private def convertCellDataFormat(cdf: CellDataFormat, workbook: XSSFWorkbook, cellStyle: XSSFCellStyle): Unit =
+    cdf.formatString.foreach { formatString =>
       val format = dataFormatCache.getOrElseUpdate(workbook, workbook.createDataFormat())
       val formatIndex = format.getFormat(formatString)
       cellStyle.setDataFormat(formatIndex)
-    })
-  }
+    }
 
   private[xlsx] def convertCellStyle(cs: CellStyle, workbook: XSSFWorkbook): XSSFCellStyle =
     getCachedOrUpdate(cellStyleCache, cs, workbook) {
@@ -175,17 +167,15 @@ object Model2XlsxConversions extends BaseXlsx {
     sheet
   }
 
-  override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor): Unit = {
+  override def setTabColor(sheet: usermodel.Sheet, color: XSSFColor): Unit =
     sheet.asInstanceOf[XSSFSheet].setTabColor(color)
-  }
 
-  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit = {
+  override def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit =
     if (printSetup != PrintSetup.Default) {
       val ps = sheetPs.asInstanceOf[XSSFPrintSetup]
       printSetup.pageOrder.foreach(po => ps.setPageOrder(convertPageOrder(po)))
       printSetup.paperSize.foreach(px => ps.setPaperSize(convertPaperSize(px)))
     }
-  }
 
   private[xlsx] def validateTables(modelSheet: Sheet): Unit = {
     val ids = modelSheet.tables.flatMap(_.id)
@@ -193,11 +183,10 @@ object Model2XlsxConversions extends BaseXlsx {
       throw new IllegalArgumentException("Specified table ids need to be unique.")
   }
 
-  private[xlsx] def updateTablesWithIds(modelSheet: Sheet): List[Table] = {
-    modelSheet.tables.zipWithIndex.map {
-      case (table, index) => if (table.id.isDefined) table else table.withId(index + 1)
+  private[xlsx] def updateTablesWithIds(modelSheet: Sheet): List[Table] =
+    modelSheet.tables.zipWithIndex.map { case (table, index) =>
+      if (table.id.isDefined) table else table.withId(index + 1)
     }
-  }
 
   private[xlsx] def convertTable(modelTable: Table, sheet: XSSFSheet): XSSFTable = {
     validateTableColumns(modelTable)
@@ -312,9 +301,8 @@ object Model2XlsxConversions extends BaseXlsx {
     ctTable.setRef(cellRangeAddress.formatAsString())
   }
 
-  private[xlsx] def convertWorkbook(wb: Workbook): XSSFWorkbook = {
+  private[xlsx] def convertWorkbook(wb: Workbook): XSSFWorkbook =
     writeToExistingWorkbook(wb, new XSSFWorkbook())
-  }
 
   private[xlsx] def writeToExistingWorkbook(wb: Workbook, workbook: XSSFWorkbook): XSSFWorkbook = {
     wb.sheets.foreach { s =>
@@ -323,7 +311,7 @@ object Model2XlsxConversions extends BaseXlsx {
       writeToExistingSheet(s, Option(workbook.getSheet(sheetName)).getOrElse(workbook.createSheet(sheetName)))
     }
 
-    //Parameters
+    // Parameters
     wb.activeSheet.foreach(workbook.setActiveSheet)
     wb.firstVisibleTab.foreach(workbook.setFirstVisibleTab)
     wb.forceFormulaRecalculation.foreach(workbook.setForceFormulaRecalculation)
@@ -339,7 +327,7 @@ object Model2XlsxConversions extends BaseXlsx {
     fontCache.remove(wb)
   }
 
-  //================= Cache processing ====================
+  // ================= Cache processing ====================
   private def getCachedOrUpdate[K, V](cache: Cache[K, V], value: K, workbook: XSSFWorkbook)(newValue: => V): V = {
     val workbookCache = cache.getOrElseUpdate(workbook, collection.mutable.Map[K, V]())
     workbookCache.getOrElseUpdate(value, newValue)
@@ -405,9 +393,8 @@ object Model2XlsxConversions extends BaseXlsx {
 
     def convertAsXlsx(): XSSFWorkbook = Workbook(s).convertAsXlsx()
 
-    override def saveAsXlsx(fileName: String): Unit = {
+    override def saveAsXlsx(fileName: String): Unit =
       Workbook(s).saveAsXlsx(fileName)
-    }
 
     override def writeToOutputStream[T <: OutputStream](stream: T): T = Workbook(s).writeToOutputStream(stream)
   }

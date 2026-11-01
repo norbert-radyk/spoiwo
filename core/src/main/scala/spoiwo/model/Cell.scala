@@ -35,7 +35,7 @@ object Cell {
     val indexOption = Option(index).map(_.intValue)
     val styleOption = Option(style)
     value match {
-      case null => BlankCell(indexOption, styleOption, styleInheritance)
+      case null      => BlankCell(indexOption, styleOption, styleInheritance)
       case v: String =>
         if (v.startsWith("=")) {
           FormulaCell(v.drop(1), indexOption, styleOption, styleInheritance)

@@ -11,9 +11,9 @@ object Model2CsvConversions {
 
   implicit class CsvWorkbook(wb: Workbook) {
 
-    /**
-      * Converts the defined workbook into the sheet name -> csv content map for all of the sheets.
-      * @return A sheet name -> CSV content map for each of the sheets
+    /** Converts the defined workbook into the sheet name -> csv content map for all of the sheets.
+      * @return
+      *   A sheet name -> CSV content map for each of the sheets
       */
     def convertAsCsv(properties: CsvProperties = CsvProperties.Default): Map[String, String] =
       convertWorkbookToCsv(wb, properties)
@@ -24,10 +24,9 @@ object Model2CsvConversions {
         convertedCsvData.values.foreach(csvContent => FileUtils.write(fileName, csvContent))
       } else {
         val fileNameCore = fileName.replace(".csv", "").replace(".CSV", "")
-        convertedCsvData.foreach {
-          case (sheetName, csvContent) =>
-            val sheetFileName = fileNameCore + "_" + sheetName + ".csv"
-            FileUtils.write(sheetFileName, csvContent)
+        convertedCsvData.foreach { case (sheetName, csvContent) =>
+          val sheetFileName = fileNameCore + "_" + sheetName + ".csv"
+          FileUtils.write(sheetFileName, csvContent)
         }
       }
     }
@@ -38,9 +37,8 @@ object Model2CsvConversions {
     def convertAsCsv(properties: CsvProperties = CsvProperties.Default): String =
       convertSheetToCsv(s, properties)._2
 
-    def saveAsCsv(fileName: String, properties: CsvProperties = CsvProperties.Default): Unit = {
+    def saveAsCsv(fileName: String, properties: CsvProperties = CsvProperties.Default): Unit =
       Workbook(s).saveAsCsv(fileName, properties)
-    }
   }
 
   private def convertWorkbookToCsv(wb: Workbook, properties: CsvProperties): Map[String, String] = {
@@ -63,12 +61,10 @@ object Model2CsvConversions {
       try {
         val allRows = s.rows.map(r => r.cells.map(c => convertCellToCsv(c, properties)).toSeq)
         csvWriter.writeAll(allRows)
-      } finally {
+      } finally
         csvWriter.close()
-      }
-    } finally {
+    } finally
       sw.close()
-    }
     s.name.getOrElse("") -> sw.toString
   }
 

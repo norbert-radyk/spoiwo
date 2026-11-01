@@ -175,7 +175,7 @@ class Model2XlsxConversionsForFontSpec extends AnyFlatSpec with Matchers {
     xssfWithUnderline.getUnderline shouldBe FontUnderline.DOUBLE.getByteValue
   }
 
-  //Next 4 test cases will test enhanced boolean conversion
+  // Next 4 test cases will test enhanced boolean conversion
   it should "return no bold, no italic by default" in {
     defaultFont.getBold shouldBe false
     defaultFont.getItalic shouldBe false

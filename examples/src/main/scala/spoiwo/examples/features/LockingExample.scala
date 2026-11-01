@@ -26,8 +26,7 @@ object LockingExample {
     )
     .withLocking(locking)
 
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit =
     gettingStartedSheet.saveAsXlsx(args(0))
-  }
 
 }

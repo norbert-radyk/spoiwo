@@ -11,12 +11,12 @@ object Utils {
       rowRange: Seq[R],
       columnRange: Seq[C],
       dataGenerator: (R, C) => String = (r: R, c: C) => s"$c,$r"
-  )(
-      implicit rNum: Numeric[R],
+  )(implicit
+      rNum: Numeric[R],
       cNum: Numeric[C]
   ): Sheet = {
     val rows = rowRange.map { rowNum =>
-      val cells = columnRange.map { colNum => Cell(dataGenerator(rowNum, colNum), index = cNum.toInt(colNum)) }
+      val cells = columnRange.map(colNum => Cell(dataGenerator(rowNum, colNum), index = cNum.toInt(colNum)))
       Row(cells, index = rNum.toInt(rowNum))
     }
     Sheet(rows: _*)
@@ -30,20 +30,17 @@ object Utils {
     dataMatrix
   }
 
-  def nonEqualCells[T](sheet: usermodel.Sheet, data: Array[Array[T]], extractor: usermodel.Cell => T)(
-      implicit ev: Null <:< T
-  ): Seq[(T, T)] = {
-    data.zipWithIndex.flatMap {
-      case (dataRow, rowIdx) =>
-        dataRow.zipWithIndex.flatMap {
-          case (expectedData, cellIdx) =>
-            val actualData = for {
-              row <- Option(sheet.getRow(rowIdx))
-              cell <- Option(row.getCell(cellIdx))
-            } yield extractor(cell)
-            if (actualData.getOrElse(ev(null)) == expectedData) Nil
-            else List((actualData.getOrElse(ev(null)), expectedData))
-        }
+  def nonEqualCells[T](sheet: usermodel.Sheet, data: Array[Array[T]], extractor: usermodel.Cell => T)(implicit
+      ev: Null <:< T
+  ): Seq[(T, T)] =
+    data.zipWithIndex.flatMap { case (dataRow, rowIdx) =>
+      dataRow.zipWithIndex.flatMap { case (expectedData, cellIdx) =>
+        val actualData = for {
+          row <- Option(sheet.getRow(rowIdx))
+          cell <- Option(row.getCell(cellIdx))
+        } yield extractor(cell)
+        if (actualData.getOrElse(ev(null)) == expectedData) Nil
+        else List((actualData.getOrElse(ev(null)), expectedData))
+      }
     }.toSeq
-  }
 }

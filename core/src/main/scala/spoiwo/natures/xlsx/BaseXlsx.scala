@@ -21,7 +21,7 @@ trait BaseXlsx {
       rowStyle: Option[CellStyle],
       columnStyle: Option[CellStyle],
       sheetStyle: Option[CellStyle]
-  ): Cell = {
+  ): Cell =
     cell.styleInheritance match {
       case CellStyleInheritance.CellOnly =>
         cell
@@ -48,7 +48,6 @@ trait BaseXlsx {
           s"Unable to convert CellStyleInheritance=$unexpected to XLSX - unsupported enum!"
         )
     }
-  }
 
   protected[natures] def convertColumn(c: Column, sheet: usermodel.Sheet): Unit = {
     val i = c.index.getOrElse(
@@ -135,8 +134,8 @@ trait BaseXlsx {
   protected[natures] def updateColumnsWithIndexes(s: Sheet): List[Column] = {
     val currentColumnIndexes = s.columns.flatMap(_.index).toSet
     if (currentColumnIndexes.isEmpty) {
-      s.columns.zipWithIndex.map {
-        case (column, index) => column.withIndex(index)
+      s.columns.zipWithIndex.map { case (column, index) =>
+        column.withIndex(index)
       }
     } else if (currentColumnIndexes.size == s.columns.size) {
       s.columns
@@ -162,11 +161,10 @@ trait BaseXlsx {
     sp.fitToPage.foreach(sheet.setFitToPage)
     sp.forceFormulaRecalculation.foreach(sheet.setForceFormulaRecalculation)
     sp.horizontallyCenter.foreach(sheet.setHorizontallyCenter)
-    sp.printArea.foreach {
-      case CellRange((startRow, endRow), (startColumn, endColumn)) =>
-        val workbook = sheet.getWorkbook
-        val sheetIndex = workbook.getNumberOfSheets - 1
-        workbook.setPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow)
+    sp.printArea.foreach { case CellRange((startRow, endRow), (startColumn, endColumn)) =>
+      val workbook = sheet.getWorkbook
+      val sheetIndex = workbook.getNumberOfSheets - 1
+      workbook.setPrintArea(sheetIndex, startColumn, endColumn, startRow, endRow)
     }
     sp.printGridLines.foreach(sheet.setPrintGridlines)
     sp.rightToLeft.foreach(sheet.setRightToLeft)
@@ -199,7 +197,7 @@ trait BaseXlsx {
 
   protected[natures] def setTabColor(sheet: usermodel.Sheet, XSSFColor: XSSFColor): Unit
 
-  protected[natures] def convertPrintSetup(printSetup: PrintSetup, sheet: usermodel.Sheet): Unit = {
+  protected[natures] def convertPrintSetup(printSetup: PrintSetup, sheet: usermodel.Sheet): Unit =
     if (printSetup != PrintSetup.Default) {
       val ps = sheet.getPrintSetup
       printSetup.copies.foreach(ps.setCopies)
@@ -221,7 +219,6 @@ trait BaseXlsx {
 
       additionalPrintSetup(printSetup, ps)
     }
-  }
 
   protected[natures] def additionalPrintSetup(printSetup: PrintSetup, sheetPs: usermodel.PrintSetup): Unit
 
@@ -256,11 +253,11 @@ trait BaseXlsx {
     case Pane.LowerRightPane => PaneType.LOWER_RIGHT
     case Pane.UpperLeftPane  => PaneType.UPPER_LEFT
     case Pane.UpperRightPane => PaneType.UPPER_RIGHT
-    case unexpected =>
+    case unexpected          =>
       throw new IllegalArgumentException(s"Unable to convert Pane=$unexpected to XLSX - unsupported enum!")
   }
 
-  protected[natures] def convertPaneAction(paneAction: PaneAction, sheet: usermodel.Sheet): Unit = {
+  protected[natures] def convertPaneAction(paneAction: PaneAction, sheet: usermodel.Sheet): Unit =
     paneAction match {
       case NoSplitOrFreeze() =>
         sheet.createFreezePane(0, 0)
@@ -269,7 +266,6 @@ trait BaseXlsx {
       case SplitPane(xSplitPosition, ySplitPosition, leftMostColumn, topRow, activePane) =>
         sheet.createSplitPane(xSplitPosition, ySplitPosition, leftMostColumn, topRow, convertPaneType(activePane))
     }
-  }
 
   protected[natures] def convertMargins(margins: Margins, sheet: usermodel.Sheet): Unit = {
     margins.top.foreach(topMargin => sheet.setMargin(PageMargin.TOP, topMargin))

@@ -34,11 +34,10 @@ class Model2XlsxConversionsForWorkbookCacheSpec extends AnyFlatSpec with Matcher
   private val fontCacheField: Field = getConversionsField("fontCache")
   fontCacheField.setAccessible(true)
 
-  "Cached workbook " should "be removed from cache after conversion" in {
+  "Cached workbook " should "be removed from cache after conversion" in
     assertNotCached(victim.convertAsXlsx())
-  }
 
-  //Workaround for the scala/2.11 compiler which messes up with the private variable names
+  // Workaround for the scala/2.11 compiler which messes up with the private variable names
   private def getConversionsField(name: String): Field = Try(conversions.getClass.getDeclaredField(name)).getOrElse {
     val allFields = conversions.getClass.getDeclaredFields
     allFields.filter(f => f.getName.contains(name) && !Modifier.isStatic(f.getModifiers)).head

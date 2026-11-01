@@ -1,7 +1,7 @@
 package spoiwo.utils
 
 import java.util.Date
-import java.time.{ZoneId, LocalDate, LocalDateTime}
+import java.time.{LocalDate, LocalDateTime, ZoneId}
 
 object JavaTimeApiConversions {
 
