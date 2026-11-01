@@ -124,6 +124,7 @@ object Model2XlsxConversions extends BaseXlsx {
     val columns = updateColumnsWithIndexes(s)
     val columnsMap = columns.map(c => c.index.get -> c).toMap
 
+    columns.filter(_.autoSized.contains(true)).foreach(c => sheet.trackColumnForAutoSizing(c.index.get))
     s.rows.foreach(row => convertRow(columnsMap, row, s, sheet))
     columns.foreach(c => convertColumn(c, sheet))
     s.mergedRegions.foreach(mergedRegion => sheet.addMergedRegion(convertCellRange(mergedRegion)))
