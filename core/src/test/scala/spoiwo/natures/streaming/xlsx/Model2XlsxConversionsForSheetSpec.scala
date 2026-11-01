@@ -205,4 +205,17 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     an[IllegalArgumentException] should be thrownBy convert(model)
   }
 
+  it should "auto-size a column" in {
+    val model = Sheet(Row(Cell("A value wider than the default column"))).withColumns(Column(autoSized = true))
+    convert(model).getColumnWidth(0) should not be defaultSheet.getColumnWidth(0)
+  }
+
+  it should "auto-size a column to content in rows already flushed from the row access window" in {
+    val wideRow = Row(Cell("A value wider than the default column"))
+    val narrowRows = (1 to SXSSFWorkbook.DEFAULT_WINDOW_SIZE * 2).map(_ => Row(Cell("x")))
+    val model = Sheet(wideRow +: narrowRows: _*).withColumns(Column(autoSized = true))
+    val inMemoryWidth = spoiwo.natures.xlsx.Model2XlsxConversions.XlsxSheet(model).convertAsXlsx().getSheetAt(0).getColumnWidth(0)
+    convert(model).getColumnWidth(0) shouldBe inMemoryWidth
+  }
+
 }
