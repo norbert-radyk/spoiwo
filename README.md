@@ -2,8 +2,8 @@ SPOIWO (Scala POI Wrapping Objects)
 ==============
 
 ![Continuous Integration](https://github.com/norbert-radyk/spoiwo/workflows/Continuous%20Integration/badge.svg)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.norbitltd/spoiwo_2.12/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo)
-[![Javadocs](https://www.javadoc.io/badge/com.norbitltd/spoiwo_2.12.svg)](https://www.javadoc.io/doc/com.norbitltd/spoiwo_2.12)
+[![Maven Central](https://img.shields.io/maven-central/v/com.norbitltd/spoiwo_3)](https://central.sonatype.com/artifact/com.norbitltd/spoiwo_3)
+[![Javadocs](https://www.javadoc.io/badge/com.norbitltd/spoiwo_3.svg)](https://www.javadoc.io/doc/com.norbitltd/spoiwo_3)
 
 ### Overview
 
@@ -15,11 +15,11 @@ This documentation is intended for Spoiwo users and developers to give both an o
 
 ### Download
 
-Spoiwo is available in [The Central Repository](https://search.maven.org/#search%7Cga%7C1%7Cspoiwo).
+Spoiwo is available in [The Central Repository](https://central.sonatype.com/namespace/com.norbitltd) for Scala 2.13 and 3, and requires Java 17 or newer.
 
 ```
 libraryDependencies ++= Seq(
-  "com.norbitltd" %% "spoiwo" % "2.2.2"
+  "com.norbitltd" %% "spoiwo" % "3.0.0"
 )
 ```
 
@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
 * **[About Spoiwo](https://github.com/norbert-radyk/spoiwo/wiki/Spoiwo)** - Introduces the reasons behind creating Spoiwo and presents overview of the core functionality
 * **[Quick Start Guide](https://github.com/norbert-radyk/spoiwo/wiki/Quick-start-guide)** - A step-by-step guide to setting up Spoiwo and creating first few simple spreadsheets
 * **[Technical Documentation](https://github.com/norbert-radyk/spoiwo/wiki/Technical-documentation)** - Detailed technical documentation on Spoiwo intended for advanced users and project contributors
-* **[Release Notes](https://github.com/norbert-radyk/spoiwo/wiki/Release-Notes)** - Overview of the past and coming Spoiwo releases
+* **[Release Notes](https://github.com/norbert-radyk/spoiwo/releases)** - Overview of the past Spoiwo releases (up to 2.2.1 on the [wiki](https://github.com/norbert-radyk/spoiwo/wiki/Release-Notes))
 
 ### Questions or need help
 
