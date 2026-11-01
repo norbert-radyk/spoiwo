@@ -178,8 +178,8 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val xlsx = convert(model)
 
     val drawing = xlsx.createDrawingPatriarch()
-    val pictures = drawing.getShapes.asScala.to(LazyList).collect {
-      case p: XSSFPicture => p
+    val pictures = drawing.getShapes.asScala.to(LazyList).collect { case p: XSSFPicture =>
+      p
     }
 
     pictures.size shouldBe 1

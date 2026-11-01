@@ -72,7 +72,7 @@ case class Row private (
       case dateTimeValue: LocalDateTime => Cell(dateTimeValue)
       case calendarValue: Calendar      => Cell(calendarValue)
       case hyperLinkUrl: HyperLink      => Cell(hyperLinkUrl)
-      case value =>
+      case value                        =>
         throw new UnsupportedOperationException("Unable to construct cell from " + value.getClass + " type value!")
     }
     copy(cells = cells.toVector)

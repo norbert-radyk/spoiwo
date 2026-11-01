@@ -32,12 +32,11 @@ class Model2XlsxConversionsForTableSpec extends AnyFlatSpec with Matchers {
     xlsx.getCTTable.getId shouldBe specifiedId
   }
 
-  it should "throw IllegalArgumentException if id not specified" in {
+  it should "throw IllegalArgumentException if id not specified" in
     intercept[IllegalArgumentException] {
       val model = defaultTableWithoutId
       convertTable(model, defaultSheet)
     }
-  }
 
   it should "have the table display name as specified" in {
     val specifiedDisplayName = "Foo"
@@ -83,11 +82,10 @@ class Model2XlsxConversionsForTableSpec extends AnyFlatSpec with Matchers {
     val xlsx = convertTable(model, defaultSheet)
     val xlsxColumns = xlsx.getCTTable.getTableColumns
 
-    model.columns.zipWithIndex.foreach {
-      case (modelColumn, index) =>
-        val xlsxCol = xlsxColumns.getTableColumnArray(index)
-        xlsxCol.getId shouldBe modelColumn.id
-        xlsxCol.getName shouldBe modelColumn.name
+    model.columns.zipWithIndex.foreach { case (modelColumn, index) =>
+      val xlsxCol = xlsxColumns.getTableColumnArray(index)
+      xlsxCol.getId shouldBe modelColumn.id
+      xlsxCol.getName shouldBe modelColumn.name
     }
   }
 

@@ -20,10 +20,11 @@ lazy val pomDetails = <url>https://github.com/norbert-radyk/spoiwo/</url>
 
 lazy val commonSettings = Seq(
   organization := "com.norbitltd",
-  ThisBuild / crossScalaVersions := Seq("2.13.16", "3.6.3"),
+  ThisBuild / crossScalaVersions := Seq("2.13.18", "3.10.0"),
   ThisBuild / scalaVersion := crossScalaVersions.value.last,
   ThisBuild / githubWorkflowPublishTargetBranches := List(),
   ThisBuild / githubWorkflowBuildPreamble ++= List(),
+  ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature"
@@ -31,15 +32,15 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   Test / publishArtifact := false,
   resolvers += "Apache Releases" at "https://repository.apache.org/content/repositories/releases",
-  version := "2.3.0-SNAPSHOT",
+  version := "3.0.0-SNAPSHOT",
   versionScheme := Some("early-semver"),
   publishTo := sonatypePublishToBundle.value,
   pomExtra := pomDetails,
   libraryDependencies ++= Seq(
     "com.github.tototoshi" %% "scala-csv" % "2.0.0",
-    "org.apache.poi" % "poi" % "5.4.1",
-    "org.apache.poi" % "poi-ooxml" % "5.4.1",
-    "org.scalatest" %% "scalatest" % "3.2.19" % Test
+    "org.apache.poi" % "poi" % "6.0.0",
+    "org.apache.poi" % "poi-ooxml" % "6.0.0",
+    "org.scalatest" %% "scalatest" % "3.2.20" % Test
   )
 )
 

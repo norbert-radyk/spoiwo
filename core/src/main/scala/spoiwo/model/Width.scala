@@ -24,7 +24,7 @@ class Width(measureValue: Int, measureUnit: WidthUnit) {
   private val widthInUnits: Int = measureUnit match {
     case WidthUnit.Character => measureValue * 256
     case WidthUnit.Unit      => measureValue
-    case _ =>
+    case _                   =>
       throw new IllegalArgumentException(
         s"Unable to convert Width Unit = $measureUnit to XLSX - unsupported enum!"
       )

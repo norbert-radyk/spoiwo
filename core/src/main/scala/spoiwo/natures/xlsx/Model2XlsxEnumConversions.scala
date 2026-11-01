@@ -14,25 +14,25 @@ object Model2XlsxEnumConversions {
     import BorderStyle._
 
     borderStyle match {
-      case DashDot              => DASH_DOT
-      case DashDotDot           => DASH_DOT_DOT
-      case Dashed               => DASHED
-      case Dotted               => DOTTED
-      case Double               => DOUBLE
-      case Hair                 => HAIR
-      case Medium               => MEDIUM
-      case MediumDashDot        => MEDIUM_DASH_DOT
-      case MediumDashed         => MEDIUM_DASHED
-      case CellBorderStyle.None => NONE
-      case SlantedDashDot       => SLANTED_DASH_DOT
-      case Thick                => THICK
-      case Thin                 => THIN
+      case DashDot                => DASH_DOT
+      case DashDotDot             => DASH_DOT_DOT
+      case Dashed                 => DASHED
+      case Dotted                 => DOTTED
+      case Double                 => DOUBLE
+      case Hair                   => HAIR
+      case Medium                 => MEDIUM
+      case MediumDashDot          => MEDIUM_DASH_DOT
+      case MediumDashed           => MEDIUM_DASHED
+      case CellBorderStyle.None   => NONE
+      case SlantedDashDot         => SLANTED_DASH_DOT
+      case Thick                  => THICK
+      case Thin                   => THIN
       case CellBorderStyle(value) =>
         throw new IllegalArgumentException(s"Unable to convert BorderStyle=$value to XLSX - unsupported enum!")
     }
   }
 
-  def convertCellFill(cf: CellFill): FillPatternType = {
+  def convertCellFill(cf: CellFill): FillPatternType =
     cf match {
       case CellFill.None                   => FillPatternType.NO_FILL
       case CellFill.Solid                  => FillPatternType.SOLID_FOREGROUND
@@ -53,10 +53,9 @@ object Model2XlsxEnumConversions {
       case Pattern.Bands.ThickVertical     => FillPatternType.THICK_VERT_BANDS
       case Pattern.Bands.ThinHorizontal    => FillPatternType.THIN_HORZ_BANDS
       case Pattern.Bands.ThinVertical      => FillPatternType.THIN_VERT_BANDS
-      case unexpected =>
+      case unexpected                      =>
         throw new IllegalArgumentException(s"Unable to convert CellFill=$unexpected to XLSX - unsupported enum!")
     }
-  }
 
   def convertCharset(charset: Charset): FontCharset = {
     import FontCharset._
@@ -92,12 +91,12 @@ object Model2XlsxEnumConversions {
     import usermodel.FontFamily._
 
     fontFamily match {
-      case NotApplicable => NOT_APPLICABLE
-      case Roman         => ROMAN
-      case Swiss         => SWISS
-      case Modern        => MODERN
-      case Script        => SCRIPT
-      case Decorative    => DECORATIVE
+      case NotApplicable                                => NOT_APPLICABLE
+      case Roman                                        => ROMAN
+      case Swiss                                        => SWISS
+      case Modern                                       => MODERN
+      case Script                                       => SCRIPT
+      case Decorative                                   => DECORATIVE
       case spoiwo.model.enums.FontFamily(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert FontFamily=$value to XLSX - unsupported enum!")
 
@@ -109,9 +108,9 @@ object Model2XlsxEnumConversions {
     import usermodel.FontScheme._
 
     fontScheme match {
-      case spoiwo.model.enums.FontScheme.None => NONE
-      case Major                              => MAJOR
-      case Minor                              => MINOR
+      case spoiwo.model.enums.FontScheme.None           => NONE
+      case Major                                        => MAJOR
+      case Minor                                        => MINOR
       case spoiwo.model.enums.FontScheme(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert FontScheme=$value to XLSX - unsupported enum!")
     }
@@ -121,10 +120,10 @@ object Model2XlsxEnumConversions {
     import org.apache.poi.common.usermodel.HyperlinkType._
     import spoiwo.model.enums.HyperLinkType._
     hyperlinkType match {
-      case Url      => URL
-      case Document => DOCUMENT
-      case Email    => EMAIL
-      case File     => FILE
+      case Url                                     => URL
+      case Document                                => DOCUMENT
+      case Email                                   => EMAIL
+      case File                                    => FILE
       case spoiwo.model.enums.HyperLinkType(value) =>
         throw new IllegalArgumentException(s"Unable to convert HyperlinkType=$value to XLSX - unsupported enum!")
     }
@@ -135,14 +134,14 @@ object Model2XlsxEnumConversions {
     import spoiwo.model.enums.CellHorizontalAlignment._
 
     horizontalAlignment match {
-      case Center          => CENTER
-      case CenterSelection => CENTER_SELECTION
-      case Disturbed       => DISTRIBUTED
-      case Fill            => FILL
-      case General         => GENERAL
-      case Justify         => JUSTIFY
-      case Left            => LEFT
-      case Right           => RIGHT
+      case Center                                            => CENTER
+      case CenterSelection                                   => CENTER_SELECTION
+      case Disturbed                                         => DISTRIBUTED
+      case Fill                                              => FILL
+      case General                                           => GENERAL
+      case Justify                                           => JUSTIFY
+      case Left                                              => LEFT
+      case Right                                             => RIGHT
       case spoiwo.model.enums.CellHorizontalAlignment(value) =>
         throw new IllegalArgumentException(s"Unable to convert HorizontalAlignment=$value to XLSX - unsupported enum!")
     }
@@ -151,9 +150,9 @@ object Model2XlsxEnumConversions {
   def convertMissingCellPolicy(missingCellPolicy: MissingCellPolicy): usermodel.Row.MissingCellPolicy = {
     import spoiwo.model.enums.MissingCellPolicy._
     missingCellPolicy match {
-      case ReturnNullAndBlank => usermodel.Row.MissingCellPolicy.RETURN_NULL_AND_BLANK
-      case ReturnBlankAsNull  => usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL
-      case CreateNullAsBlank  => usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK
+      case ReturnNullAndBlank                                  => usermodel.Row.MissingCellPolicy.RETURN_NULL_AND_BLANK
+      case ReturnBlankAsNull                                   => usermodel.Row.MissingCellPolicy.RETURN_BLANK_AS_NULL
+      case CreateNullAsBlank                                   => usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_BLANK
       case spoiwo.model.enums.MissingCellPolicy(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert MissingCellPolicy=$value to XLSX - unsupported enum!")
     }
@@ -163,8 +162,8 @@ object Model2XlsxEnumConversions {
     import spoiwo.model.enums.PageOrder._
 
     po match {
-      case DownThenOver => usermodel.PageOrder.DOWN_THEN_OVER
-      case OverThenDown => usermodel.PageOrder.OVER_THEN_DOWN
+      case DownThenOver                                => usermodel.PageOrder.DOWN_THEN_OVER
+      case OverThenDown                                => usermodel.PageOrder.OVER_THEN_DOWN
       case spoiwo.model.enums.PageOrder(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert PageOrder=$value to XLSX - unsupported enum!")
     }
@@ -174,23 +173,23 @@ object Model2XlsxEnumConversions {
     import spoiwo.model.enums.PaperSize._
 
     ps match {
-      case Letter        => usermodel.PaperSize.LETTER_PAPER
-      case LetterSmall   => usermodel.PaperSize.LETTER_SMALL_PAPER
-      case Tabloid       => usermodel.PaperSize.TABLOID_PAPER
-      case Ledger        => usermodel.PaperSize.LEDGER_PAPER
-      case Legal         => usermodel.PaperSize.LEGAL_PAPER
-      case Statement     => usermodel.PaperSize.STATEMENT_PAPER
-      case Executive     => usermodel.PaperSize.EXECUTIVE_PAPER
-      case A3            => usermodel.PaperSize.A3_PAPER
-      case A4            => usermodel.PaperSize.A4_PAPER
-      case A4Small       => usermodel.PaperSize.A4_SMALL_PAPER
-      case A5            => usermodel.PaperSize.A5_PAPER
-      case B4            => usermodel.PaperSize.B4_PAPER
-      case B5            => usermodel.PaperSize.B5_PAPER
-      case Folio         => usermodel.PaperSize.FOLIO_PAPER
-      case Quarto        => usermodel.PaperSize.QUARTO_PAPER
-      case Standard10x14 => usermodel.PaperSize.STANDARD_PAPER_10_14
-      case Standard11x17 => usermodel.PaperSize.STANDARD_PAPER_11_17
+      case Letter                              => usermodel.PaperSize.LETTER_PAPER
+      case LetterSmall                         => usermodel.PaperSize.LETTER_SMALL_PAPER
+      case Tabloid                             => usermodel.PaperSize.TABLOID_PAPER
+      case Ledger                              => usermodel.PaperSize.LEDGER_PAPER
+      case Legal                               => usermodel.PaperSize.LEGAL_PAPER
+      case Statement                           => usermodel.PaperSize.STATEMENT_PAPER
+      case Executive                           => usermodel.PaperSize.EXECUTIVE_PAPER
+      case A3                                  => usermodel.PaperSize.A3_PAPER
+      case A4                                  => usermodel.PaperSize.A4_PAPER
+      case A4Small                             => usermodel.PaperSize.A4_SMALL_PAPER
+      case A5                                  => usermodel.PaperSize.A5_PAPER
+      case B4                                  => usermodel.PaperSize.B4_PAPER
+      case B5                                  => usermodel.PaperSize.B5_PAPER
+      case Folio                               => usermodel.PaperSize.FOLIO_PAPER
+      case Quarto                              => usermodel.PaperSize.QUARTO_PAPER
+      case Standard10x14                       => usermodel.PaperSize.STANDARD_PAPER_10_14
+      case Standard11x17                       => usermodel.PaperSize.STANDARD_PAPER_11_17
       case spoiwo.model.enums.PaperSize(value) =>
         throw new IllegalArgumentException(s"Unable to convert PaperSize=$value to XLSX - unsupported enum!")
     }
@@ -201,9 +200,9 @@ object Model2XlsxEnumConversions {
     import spoiwo.model.enums.CellReadingOrder._
 
     readingOrder match {
-      case Context     => CONTEXT
-      case LeftToRight => LEFT_TO_RIGHT
-      case RightToLeft => RIGHT_TO_LEFT
+      case Context                                    => CONTEXT
+      case LeftToRight                                => LEFT_TO_RIGHT
+      case RightToLeft                                => RIGHT_TO_LEFT
       case spoiwo.model.enums.CellReadingOrder(value) =>
         throw new IllegalArgumentException(s"Unable to convert ReadingOrder=$value to XLSX - unsupported enum!")
     }
@@ -213,9 +212,9 @@ object Model2XlsxEnumConversions {
     import spoiwo.model.enums.TypeOffset._
 
     typeOffset match {
-      case TypeOffset.None => usermodel.Font.SS_NONE
-      case Subscript       => usermodel.Font.SS_SUB
-      case Superscript     => usermodel.Font.SS_SUPER
+      case TypeOffset.None                              => usermodel.Font.SS_NONE
+      case Subscript                                    => usermodel.Font.SS_SUB
+      case Superscript                                  => usermodel.Font.SS_SUPER
       case spoiwo.model.enums.TypeOffset(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Type Offset = $value to XLSX - unsupported enum!")
     }
@@ -226,11 +225,11 @@ object Model2XlsxEnumConversions {
     import spoiwo.model.enums.Underline._
 
     underline match {
-      case Double           => DOUBLE
-      case DoubleAccounting => DOUBLE_ACCOUNTING
-      case Underline.None   => NONE
-      case Single           => SINGLE
-      case SingleAccounting => SINGLE_ACCOUNTING
+      case Double                                      => DOUBLE
+      case DoubleAccounting                            => DOUBLE_ACCOUNTING
+      case Underline.None                              => NONE
+      case Single                                      => SINGLE
+      case SingleAccounting                            => SINGLE_ACCOUNTING
       case spoiwo.model.enums.Underline(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Underline=$value to XLSX - unsupported enum!")
     }
@@ -239,11 +238,11 @@ object Model2XlsxEnumConversions {
   def convertUnderlineFormatting(underline: Underline): Byte = {
     import spoiwo.model.enums.Underline._
     underline match {
-      case Double           => Font.U_DOUBLE
-      case DoubleAccounting => Font.U_DOUBLE_ACCOUNTING
-      case Underline.None   => Font.U_NONE
-      case Single           => Font.U_SINGLE
-      case SingleAccounting => Font.U_SINGLE_ACCOUNTING
+      case Double                                      => Font.U_DOUBLE
+      case DoubleAccounting                            => Font.U_DOUBLE_ACCOUNTING
+      case Underline.None                              => Font.U_NONE
+      case Single                                      => Font.U_SINGLE
+      case SingleAccounting                            => Font.U_SINGLE_ACCOUNTING
       case spoiwo.model.enums.Underline(value: String) =>
         throw new IllegalArgumentException(s"Unable to convert Underline=$value to XLSX - unsupported enum!")
     }
@@ -253,11 +252,11 @@ object Model2XlsxEnumConversions {
     import VerticalAlignment._
     import spoiwo.model.enums.CellVerticalAlignment._
     verticalAlignment match {
-      case Bottom    => BOTTOM
-      case Center    => CENTER
-      case Disturbed => DISTRIBUTED
-      case Justify   => JUSTIFY
-      case Top       => TOP
+      case Bottom                                          => BOTTOM
+      case Center                                          => CENTER
+      case Disturbed                                       => DISTRIBUTED
+      case Justify                                         => JUSTIFY
+      case Top                                             => TOP
       case spoiwo.model.enums.CellVerticalAlignment(value) =>
         throw new IllegalArgumentException(s"Unable to convert VerticalAlignment=$value to XLSX - unsupported enum!")
     }

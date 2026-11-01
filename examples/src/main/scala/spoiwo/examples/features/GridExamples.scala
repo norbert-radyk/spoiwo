@@ -15,7 +15,7 @@ object GridExamples {
   def generateGrid(n: Int, m: Int, c: Color): Grid = {
     val cell = Cell("").withStyle(CellStyle(fillForegroundColor = c, fillPattern = CellFill.Solid))
     val row = Row().withCells(Seq.fill(m)(cell))
-    Grid { _ => Seq.fill(n)(row) }
+    Grid(_ => Seq.fill(n)(row))
   }
 
   def generateGridWithFormula(n: Int, m: Int, c: Color): Grid = {
@@ -42,19 +42,14 @@ object GridExamples {
     val grid = generateGrid(5, 5, Color.LightBlue)
     val gridWithMergedCells = Grid.addMergedRegion(grid, CellRange(2 -> 3, 2 -> 3))
     val rows = Grid.render(gridWithMergedCells)
-    Sheet(name = "new sheet")
-      .withRows(rows)
-      .withMergedRegions(gridWithMergedCells.mergedRegions)
-      .saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet").withRows(rows).withMergedRegions(gridWithMergedCells.mergedRegions).saveAsXlsx("test.xlsx")
   }
   def theSameAsAboveButWithHelpers(): Unit = {
     import Grid._
-    Sheet(name = "new sheet")
-      .withGrid(generateGrid(5, 5, Color.LightBlue).addMergedRegion(CellRange(2 -> 3, 2 -> 3)))
-      .saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet").withGrid(generateGrid(5, 5, Color.LightBlue).addMergedRegion(CellRange(2 -> 3, 2 -> 3))).saveAsXlsx("test.xlsx")
   }
 
-  //This will create an 5x5 blue, a 2x2 green and a 7x7 read area besides each other.
+  // This will create an 5x5 blue, a 2x2 green and a 7x7 read area besides each other.
   def horizontalCompose(): Unit = {
     import Grid._
     val g1 = generateGrid(5, 5, Color.LightBlue)
@@ -62,12 +57,10 @@ object GridExamples {
     val g3 = generateGrid(7, 7, Color.IndianRed)
 
     val composed = g1.addToRight(g3.addToLeft(g2))
-    Sheet(name = "new sheet")
-      .withGrid(composed)
-      .saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet").withGrid(composed).saveAsXlsx("test.xlsx")
   }
 
-  //This will create an 5x5 blue, a 2x2 green and a 7x7 read area under each other.
+  // This will create an 5x5 blue, a 2x2 green and a 7x7 read area under each other.
   def verticalCompose(): Unit = {
     import Grid._
     val g1 = generateGrid(5, 5, Color.LightBlue)
@@ -75,12 +68,10 @@ object GridExamples {
     val g3 = generateGrid(7, 7, Color.IndianRed)
 
     val composed = g1.addBelow(g3.addAbove(g2))
-    Sheet(name = "new sheet")
-      .withGrid(composed)
-      .saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet").withGrid(composed).saveAsXlsx("test.xlsx")
   }
 
-  //blue and green next to each other, the red below those, and the yellow next to all of the previous composition
+  // blue and green next to each other, the red below those, and the yellow next to all of the previous composition
   def biggerCompose(): Unit = {
     import Grid._
     val g1 = generateGrid(5, 5, Color.LightBlue)
@@ -89,20 +80,16 @@ object GridExamples {
     val g4 = generateGrid(12, 8, Color.LightYellow)
 
     val composed = g1.addToLeft(g2).addBelow(g3).addToLeft(g4)
-    Sheet(name = "new sheet")
-      .withGrid(composed)
-      .saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet").withGrid(composed).saveAsXlsx("test.xlsx")
   }
 
-  //if you write in the first line of the green areas the last line will copy the values
+  // if you write in the first line of the green areas the last line will copy the values
   def ifYouHaveFormulasThoseHandledToo(): Unit = {
     import Grid._
     val g1 = generateGrid(5, 5, Color.LightBlue)
     val g2 = generateGridWithFormula(6, 6, Color.Green)
     val composed = g1.addToRight(g2).addBelow(g2)
-    Sheet(name = "new sheet")
-      .withGrid(composed)
-      .saveAsXlsx("test.xlsx")
+    Sheet(name = "new sheet").withGrid(composed).saveAsXlsx("test.xlsx")
   }
 
   def main(args: Array[String]): Unit = {
