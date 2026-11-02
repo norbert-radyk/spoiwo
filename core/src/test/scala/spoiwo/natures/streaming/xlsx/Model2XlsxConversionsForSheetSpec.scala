@@ -205,6 +205,13 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     an[IllegalArgumentException] should be thrownBy convert(model)
   }
 
+  it should "apply the default date formats to date cells when no data format is set" in {
+    val model = Sheet(Row(Cell(java.time.LocalDate.of(2011, 11, 13)), Cell(java.time.LocalDateTime.of(2011, 11, 13, 15, 30))))
+    val row = convert(model).getRow(0)
+    row.getCell(0).getCellStyle.getDataFormat shouldBe 14
+    row.getCell(1).getCellStyle.getDataFormat shouldBe 22
+  }
+
   it should "auto-size a column" in {
     val model = Sheet(Row(Cell("A value wider than the default column"))).withColumns(Column(autoSized = true))
     convert(model).getColumnWidth(0) should not be defaultSheet.getColumnWidth(0)
