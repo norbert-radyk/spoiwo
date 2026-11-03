@@ -142,9 +142,10 @@ object Model2XlsxConversions extends BaseXlsx {
     writeToExistingSheet(s, workbook.createSheet(s.nameIn(workbook)))
   }
 
-  private[xlsx] def writeToExistingSheet(s: Sheet, sheet: XSSFSheet): XSSFSheet = {
-    val columns = updateColumnsWithIndexes(s)
+  private[xlsx] def writeToExistingSheet(modelSheet: Sheet, sheet: XSSFSheet): XSSFSheet = {
+    val columns = updateColumnsWithIndexes(modelSheet)
     val columnsMap = columns.map(c => c.index.get -> c).toMap
+    val s = withMergedRegionBorders(modelSheet, columnsMap, sheet)
 
     s.rows.foreach(row => convertRow(columnsMap, row, s, sheet))
     columns.foreach(c => convertColumn(c, sheet))
