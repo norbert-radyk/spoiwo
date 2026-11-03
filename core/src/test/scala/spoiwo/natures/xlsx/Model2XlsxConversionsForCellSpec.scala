@@ -81,6 +81,13 @@ class Model2XlsxConversionsForCellSpec extends AnyFlatSpec with Matchers {
     xlsx.getCellFormula shouldBe "1000/3+7"
   }
 
+  it should "return string cell when set up as text starting with '=' sign" in {
+    val model = Cell.text("=1000/3+7")
+    val xlsx = convert(model)
+    xlsx.getCellType shouldBe CellType.STRING
+    xlsx.getStringCellValue shouldBe "=1000/3+7"
+  }
+
   it should "return numeric cell when set up with double value" in {
     val model = Cell(90.45)
     val xlsx = convert(model)

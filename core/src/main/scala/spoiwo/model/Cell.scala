@@ -26,6 +26,9 @@ object Cell {
 
   lazy val Empty: Cell = apply(null)
 
+  /** A String value starting with '=' becomes a formula cell. For text that may come from users, use [[Cell.text]] so it is never evaluated as a
+    * formula.
+    */
   def apply[T: CellValueType](
       value: T,
       index: java.lang.Integer = null,
@@ -38,11 +41,9 @@ object Cell {
       case null      => BlankCell(indexOption, styleOption, styleInheritance)
       case v: String =>
         if (v.startsWith("=")) {
-          FormulaCell(v.drop(1), indexOption, styleOption, styleInheritance)
-        } else if (v.contains("\n")) {
-          StringCell(v, indexOption, styleOption.map(_.withWrapText), styleInheritance)
+          formula(v, index, style, styleInheritance)
         } else {
-          StringCell(v, indexOption, styleOption, styleInheritance)
+          text(v, index, style, styleInheritance)
         }
       case v: Double        => NumericCell(v, indexOption, styleOption, styleInheritance)
       case v: BigDecimal    => NumericCell(v.toDouble, indexOption, styleOption, styleInheritance)
@@ -57,6 +58,29 @@ object Cell {
       case unexpected       => StringCell(unexpected.toString, indexOption, styleOption, styleInheritance)
     }
   }
+
+  def text(
+      value: String,
+      index: java.lang.Integer = null,
+      style: CellStyle = null,
+      styleInheritance: CellStyleInheritance = CellStyleInheritance.CellThenRowThenColumnThenSheet
+  ): Cell = {
+    val indexOption = Option(index).map(_.intValue)
+    val styleOption = Option(style)
+    value match {
+      case null                  => BlankCell(indexOption, styleOption, styleInheritance)
+      case v if v.contains("\n") => StringCell(v, indexOption, styleOption.map(_.withWrapText), styleInheritance)
+      case v                     => StringCell(v, indexOption, styleOption, styleInheritance)
+    }
+  }
+
+  def formula(
+      formula: String,
+      index: java.lang.Integer = null,
+      style: CellStyle = null,
+      styleInheritance: CellStyleInheritance = CellStyleInheritance.CellThenRowThenColumnThenSheet
+  ): Cell =
+    FormulaCell(formula.stripPrefix("="), Option(index).map(_.intValue), Option(style), styleInheritance)
 }
 
 sealed trait Cell {
