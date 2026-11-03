@@ -280,12 +280,11 @@ object Model2XlsxConversions extends BaseXlsx {
     val (fromRow, toRow) = image.region.rowRange
 
     anchor.setCol1(fromColumn)
-    anchor.setCol2(toColumn)
+    anchor.setCol2(toColumn + 1)
     anchor.setRow1(fromRow)
-    anchor.setRow2(toRow)
+    anchor.setRow2(toRow + 1)
 
-    val pict = drawing.createPicture(anchor, pictureIdx)
-    pict.resize()
+    drawing.createPicture(anchor, pictureIdx)
     sheet
   }
 
