@@ -32,7 +32,8 @@ object Model2XlsxConversions extends BaseXlsx {
       cell.setCellFormula(null)
     }
 
-    val cellWithStyle = mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).flatMap(_.style), modelSheet.style)
+    val cellWithStyle =
+      withDefaultDateFormat(mergeStyle(c, modelRow.style, modelColumns.get(cellNumber).flatMap(_.style), modelSheet.style))
     cellWithStyle.style.foreach(s => cell.setCellStyle(convertCellStyle(s, cell.getRow.getSheet.getWorkbook.asInstanceOf[SXSSFWorkbook])))
 
     c match {

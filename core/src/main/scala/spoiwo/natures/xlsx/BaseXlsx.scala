@@ -1,7 +1,7 @@
 package spoiwo.natures.xlsx
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, ZoneId}
+import java.time.{LocalDate, LocalTime, ZoneId}
 import java.util.{Calendar, Date}
 import Model2XlsxEnumConversions._
 import org.apache.poi.ss.usermodel
@@ -15,6 +15,21 @@ trait BaseXlsx {
 
   private val FirstSupportedDate = LocalDate.of(1904, 1, 1)
   private val LastSupportedDate = LocalDate.of(9999, 12, 31)
+
+  // Excel built-in formats 14 and 22, which Excel displays using the viewer's regional settings
+  private val DefaultDateFormat = CellStyle(dataFormat = CellDataFormat("m/d/yy"))
+  private val DefaultDateTimeFormat = CellStyle(dataFormat = CellDataFormat("m/d/yy h:mm"))
+
+  protected[natures] def withDefaultDateFormat(cell: Cell): Cell = cell match {
+    case DateCell(value, _, _, _) =>
+      cell.withDefaultStyle(Some(defaultDateFormat(value.toInstant.atZone(ZoneId.systemDefault()).toLocalTime)))
+    case CalendarCell(value, _, _, _) =>
+      cell.withDefaultStyle(Some(defaultDateFormat(value.toInstant.atZone(value.getTimeZone.toZoneId).toLocalTime)))
+    case _ => cell
+  }
+
+  private def defaultDateFormat(time: LocalTime): CellStyle =
+    if (time == LocalTime.MIDNIGHT) DefaultDateFormat else DefaultDateTimeFormat
 
   protected[natures] def mergeStyle(
       cell: Cell,

@@ -181,6 +181,30 @@ class Model2XlsxConversionsForCellSpec extends AnyFlatSpec with Matchers {
     "1856-11-03" shouldBe xlsx.getStringCellValue
   }
 
+  it should "apply the default date format to a date without time when no data format is set" in {
+    convert(Cell(LocalDate.of(2011, 11, 13))).getCellStyle.getDataFormat shouldBe 14
+    val midnight = Calendar.getInstance()
+    midnight.setTime(Date.from(LocalDate.of(2011, 11, 13).atStartOfDay(ZoneId.systemDefault()).toInstant))
+    convert(Cell(midnight)).getCellStyle.getDataFormat shouldBe 14
+  }
+
+  it should "apply the default date and time format to a date with time when no data format is set" in {
+    convert(Cell(LocalDateTime.of(2011, 11, 13, 15, 30))).getCellStyle.getDataFormat shouldBe 22
+    val dateTime = Date.from(LocalDateTime.of(2011, 11, 13, 15, 30).atZone(ZoneId.systemDefault()).toInstant)
+    convert(Cell(dateTime)).getCellStyle.getDataFormat shouldBe 22
+  }
+
+  it should "keep the data format set on a date cell" in {
+    val model = Cell(LocalDate.of(2011, 11, 13), style = CellStyle(dataFormat = CellDataFormat("d.m.yyyy")))
+    convert(model).getCellStyle.getDataFormatString shouldBe "d.m.yyyy"
+  }
+
+  it should "keep the data format inherited from the column on a date cell" in {
+    val column = Column(index = 0, style = CellStyle(dataFormat = CellDataFormat("d.m.yyyy")))
+    val sheet = Sheet(Row(Cell(LocalDate.of(2011, 11, 13)))).withColumns(column)
+    sheet.convertAsXlsx().getSheetAt(0).getRow(0).getCell(0).getCellStyle.getDataFormatString shouldBe "d.m.yyyy"
+  }
+
   it should "apply 14pt Arial cell style for column when set explicitly" in {
     val column = Column(index = 0, style = CellStyle(font = Font(fontName = "Arial", height = 14 points)))
     val sheet = Sheet(Row(Cell("Test"))).withColumns(column)
