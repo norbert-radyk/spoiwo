@@ -64,6 +64,105 @@ trait BaseXlsx {
         )
     }
 
+  // Excel draws a merged region's border from its edge cells, which usually don't exist in the model.
+  // The top-left cell's borders are extended to every edge cell, creating the missing cells and rows.
+  protected[natures] def withMergedRegionBorders(
+      s: Sheet,
+      columns: Map[Int, Column],
+      sheet: usermodel.Sheet
+  ): Sheet = {
+    val rowsByIndex = withRowIndexes(s.rows, sheet).map(row => row.index.get -> withCellIndexes(row, sheet)).toMap
+
+    def resolvedCell(rowIndex: Int, columnIndex: Int, cell: Cell): Cell =
+      mergeStyle(
+        cell,
+        rowsByIndex.get(rowIndex).flatMap(_.style),
+        columns.get(columnIndex).flatMap(_.style),
+        s.style
+      )
+
+    def cellAt(rowIndex: Int, columnIndex: Int): Cell =
+      rowsByIndex.get(rowIndex).flatMap(_.cells.find(_.index.contains(columnIndex))).getOrElse(Cell.Empty.withIndex(columnIndex))
+
+    val edgeBorders: Map[(Int, Int), CellBorders] = (for {
+      region <- s.mergedRegions
+      (firstRow, lastRow) = region.rowRange
+      (firstColumn, lastColumn) = region.columnRange
+      borders <- resolvedCell(firstRow, firstColumn, cellAt(firstRow, firstColumn)).style.flatMap(_.borders).toList
+      rowIndex <- firstRow to lastRow
+      columnIndex <- firstColumn to lastColumn
+      if rowIndex == firstRow || rowIndex == lastRow || columnIndex == firstColumn || columnIndex == lastColumn
+    } yield (rowIndex, columnIndex) -> edgeOf(
+      borders,
+      left = columnIndex == firstColumn,
+      top = rowIndex == firstRow,
+      right = columnIndex == lastColumn,
+      bottom = rowIndex == lastRow
+    )).toMap
+
+    if (edgeBorders.isEmpty) {
+      s
+    } else {
+      val rowIndexes = (rowsByIndex.keySet ++ edgeBorders.keySet.map(_._1)).toList.sorted
+      val rows = rowIndexes.map { rowIndex =>
+        val row = rowsByIndex.getOrElse(rowIndex, Row(index = rowIndex))
+        val rowEdges = edgeBorders.collect { case ((r, c), borders) if r == rowIndex => c -> borders }
+        val cellIndexes = (row.cells.flatMap(_.index).toSet ++ rowEdges.keySet).toList.sorted
+        val cells = cellIndexes.map { columnIndex =>
+          val cell = cellAt(rowIndex, columnIndex)
+          rowEdges.get(columnIndex) match {
+            case None       => cell
+            case Some(edge) =>
+              val resolved = resolvedCell(rowIndex, columnIndex, cell)
+              val style = resolved.style.getOrElse(CellStyle.Default)
+              resolved.withStyle(style.withBorders(withEdge(style.borders.getOrElse(CellBorders()), edge)))
+          }
+        }
+        row.withCells(cells)
+      }
+      s.withRows(rows)
+    }
+  }
+
+  private def withRowIndexes(rows: List[Row], sheet: usermodel.Sheet): List[Row] =
+    if (rows.forall(_.index.isDefined)) {
+      rows
+    } else {
+      val firstIndex = if (sheet.rowIterator().hasNext) sheet.getLastRowNum + 1 else 0
+      rows.zipWithIndex.map { case (row, i) => row.withIndex(firstIndex + i) }
+    }
+
+  private def withCellIndexes(row: Row, sheet: usermodel.Sheet): Row =
+    if (row.cells.forall(_.index.isDefined)) {
+      row
+    } else {
+      val firstIndex = Option(sheet.getRow(row.index.get)).map(_.getLastCellNum.toInt).filter(_ >= 0).getOrElse(0)
+      row.withCells(row.cells.zipWithIndex.map { case (cell, i) => cell.withIndex(firstIndex + i) })
+    }
+
+  private def edgeOf(borders: CellBorders, left: Boolean, top: Boolean, right: Boolean, bottom: Boolean): CellBorders =
+    CellBorders(
+      leftStyle = borders.leftStyle.filter(_ => left),
+      leftColor = borders.leftColor.filter(_ => left),
+      topStyle = borders.topStyle.filter(_ => top),
+      topColor = borders.topColor.filter(_ => top),
+      rightStyle = borders.rightStyle.filter(_ => right),
+      rightColor = borders.rightColor.filter(_ => right),
+      bottomStyle = borders.bottomStyle.filter(_ => bottom),
+      bottomColor = borders.bottomColor.filter(_ => bottom)
+    )
+
+  private def withEdge(borders: CellBorders, edge: CellBorders): CellBorders = {
+    def side[A, B](edgeStyle: Option[A], edgeColor: Option[B], style: Option[A], color: Option[B]) =
+      if (edgeStyle.isDefined) (edgeStyle, edgeColor) else (style, color)
+
+    val (leftStyle, leftColor) = side(edge.leftStyle, edge.leftColor, borders.leftStyle, borders.leftColor)
+    val (topStyle, topColor) = side(edge.topStyle, edge.topColor, borders.topStyle, borders.topColor)
+    val (rightStyle, rightColor) = side(edge.rightStyle, edge.rightColor, borders.rightStyle, borders.rightColor)
+    val (bottomStyle, bottomColor) = side(edge.bottomStyle, edge.bottomColor, borders.bottomStyle, borders.bottomColor)
+    CellBorders(leftStyle, leftColor, topStyle, topColor, rightStyle, rightColor, bottomStyle, bottomColor)
+  }
+
   protected[natures] def convertColumn(c: Column, sheet: usermodel.Sheet): Unit = {
     val i = c.index.getOrElse(
       throw new IllegalArgumentException(

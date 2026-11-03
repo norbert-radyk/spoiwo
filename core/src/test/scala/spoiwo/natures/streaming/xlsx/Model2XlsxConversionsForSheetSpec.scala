@@ -3,12 +3,15 @@ package spoiwo.natures.streaming.xlsx
 import spoiwo.model.Height._
 import spoiwo.model.Width._
 import spoiwo.model._
+import spoiwo.model.enums.CellBorderStyle
 import spoiwo.natures.streaming.xlsx.Model2XlsxConversions._
 import spoiwo.natures.xlsx.Utils._
 import org.apache.poi.openxml4j.opc.OPCPackage
+import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.xssf.streaming.{SXSSFSheet, SXSSFWorkbook}
 import org.apache.poi.xssf.usermodel.{XSSFCellStyle, XSSFWorkbookFactory}
 
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import scala.language.postfixOps
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -223,6 +226,22 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     val model = Sheet(wideRow +: narrowRows: _*).withColumns(Column(autoSized = true))
     val inMemoryWidth = spoiwo.natures.xlsx.Model2XlsxConversions.XlsxSheet(model).convertAsXlsx().getSheetAt(0).getColumnWidth(0)
     convert(model).getColumnWidth(0) shouldBe inMemoryWidth
+  }
+
+  it should "extend the top-left cell's borders to a merged region whose rows were already flushed" in {
+    val thickBorders = CellStyle(borders = CellBorders().withStyle(CellBorderStyle.Thick))
+    val rows = Row(Cell("Header", style = thickBorders)) :: (1 to 200).map(i => Row().withCellValues(i)).toList
+    val w = workbook
+    convertSheet(Sheet(rows = rows).withMergedRegions(CellRange(0 -> 1, 0 -> 1)), w)
+
+    val out = new ByteArrayOutputStream()
+    w.write(out)
+    val written = XSSFWorkbookFactory.createWorkbook(OPCPackage.open(new ByteArrayInputStream(out.toByteArray)))
+    val bottomRight = written.getSheetAt(0).getRow(1).getCell(1).getCellStyle
+
+    bottomRight.getBorderRight shouldBe BorderStyle.THICK
+    bottomRight.getBorderBottom shouldBe BorderStyle.THICK
+    written.getSheetAt(0).getRow(1).getCell(0).getNumericCellValue shouldBe 1
   }
 
 }

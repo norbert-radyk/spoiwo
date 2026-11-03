@@ -13,6 +13,7 @@ import org.scalatest.matchers.should.Matchers
 import spoiwo.model.Height.HeightEnrichment
 import spoiwo.model.Width.WidthEnrichment
 import spoiwo.model._
+import spoiwo.model.enums.CellBorderStyle
 
 class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
 
@@ -191,6 +192,43 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     anchor.getCol2 shouldBe 4
     anchor.getDx2 shouldBe 0
     anchor.getDy2 shouldBe 0
+  }
+
+  private val thickBorders = CellStyle(borders = CellBorders().withStyle(CellBorderStyle.Thick))
+
+  private def borders(sheet: XSSFSheet, row: Int, column: Int): Option[String] =
+    Option(sheet.getRow(row)).flatMap(r => Option(r.getCell(column))).map { cell =>
+      val style = cell.getCellStyle
+      s"${style.getBorderTop}/${style.getBorderRight}/${style.getBorderBottom}/${style.getBorderLeft}"
+    }
+
+  it should "extend the top-left cell's borders to the edges of a merged region" in {
+    val xlsx = convert(Sheet(Row(Cell("A", style = thickBorders))).withMergedRegions(CellRange(0 -> 2, 0 -> 2)))
+
+    borders(xlsx, 0, 0) shouldBe Some("THICK/THICK/THICK/THICK")
+    borders(xlsx, 0, 1) shouldBe Some("THICK/NONE/NONE/NONE")
+    borders(xlsx, 0, 2) shouldBe Some("THICK/THICK/NONE/NONE")
+    borders(xlsx, 1, 0) shouldBe Some("NONE/NONE/NONE/THICK")
+    borders(xlsx, 1, 1) shouldBe None
+    borders(xlsx, 1, 2) shouldBe Some("NONE/THICK/NONE/NONE")
+    borders(xlsx, 2, 0) shouldBe Some("NONE/NONE/THICK/THICK")
+    borders(xlsx, 2, 1) shouldBe Some("NONE/NONE/THICK/NONE")
+    borders(xlsx, 2, 2) shouldBe Some("NONE/THICK/THICK/NONE")
+  }
+
+  it should "extend borders the top-left cell inherits from its row" in {
+    val model = Sheet(Row(style = thickBorders, Cell("A"), Cell("B"))).withMergedRegions(CellRange(0 -> 1, 0 -> 0))
+    val xlsx = convert(model)
+
+    borders(xlsx, 0, 1) shouldBe Some("THICK/THICK/THICK/THICK")
+    borders(xlsx, 1, 0) shouldBe Some("NONE/THICK/THICK/THICK")
+  }
+
+  it should "keep a merged region without borders unchanged" in {
+    val xlsx = convert(Sheet(Row(Cell("A"))).withMergedRegions(CellRange(0 -> 1, 0 -> 1)))
+
+    xlsx.getRow(0).getLastCellNum shouldBe 1
+    xlsx.getRow(1) shouldBe null
   }
 
   it should "not allow duplicate row indexes" in {
