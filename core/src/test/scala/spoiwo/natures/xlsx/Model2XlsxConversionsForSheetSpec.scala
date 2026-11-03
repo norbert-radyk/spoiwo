@@ -166,13 +166,13 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
     xlsxRow2.getCell(0).getStringCellValue shouldBe "OK"
   }
 
-  it should "have image in the correct position" in {
+  it should "fit the image to its cell range" in {
     val row1 = Row(index = 0)
     val row2 = Row(index = 1)
     val row3 = Row(index = 2)
     val model = Sheet(
       rows = row1 :: row2 :: row3 :: Nil,
-      images = Image(CellRange(2 -> 2, 2 -> 2), "core/src/test/resources/einstein.jpg") :: Nil
+      images = Image(CellRange(2 -> 5, 1 -> 3), "core/src/test/resources/einstein.jpg") :: Nil
     ).withColumns(Column(index = 0), Column(index = 1))
 
     val xlsx = convert(model)
@@ -184,8 +184,13 @@ class Model2XlsxConversionsForSheetSpec extends AnyFlatSpec with Matchers {
 
     pictures.size shouldBe 1
 
-    pictures.head.getClientAnchor.getRow1 shouldBe 2
-    pictures.head.getClientAnchor.getCol1 shouldBe 2
+    val anchor = pictures.head.getClientAnchor
+    anchor.getRow1 shouldBe 2
+    anchor.getCol1 shouldBe 1
+    anchor.getRow2 shouldBe 6
+    anchor.getCol2 shouldBe 4
+    anchor.getDx2 shouldBe 0
+    anchor.getDy2 shouldBe 0
   }
 
   it should "not allow duplicate row indexes" in {

@@ -199,6 +199,6 @@ class SpoiwoExamples {
     ).saveAsXlsx("workbook.xlsx")
 
   def insertImage() =
-    Sheet(name = "Sheet1", images = List(Image(CellRange(1 -> 1, 1 -> 1), "examples/src/main/resources/einstein.jpg"))).saveAsXlsx("workbook.xlsx")
+    Sheet(name = "Sheet1", images = List(Image(CellRange(1 -> 15, 1 -> 4), "examples/src/main/resources/einstein.jpg"))).saveAsXlsx("workbook.xlsx")
 
 }
